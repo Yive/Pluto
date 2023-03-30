@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Fri, 6 May 2022 15:29:09 -0700
+Subject: [PATCH] Cache GameEvent lookups
+
+
+diff --git a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
+index 25e4596e64b74ada86f210b06ba837be8efc21d1..f44c69e3174802a0ceec34970b4f4eb5999c0126 100644
+--- a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
++++ b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
+@@ -26,17 +26,27 @@ public class GameEventDispatcher {
+         this.level = world;
+     }
+ 
++    // Pluto start - Cache GameEvent lookups
++    private static final it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<net.minecraft.resources.ResourceLocation, org.bukkit.GameEvent> GAME_EVENT_CACHE = new it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<>();
+     public void post(GameEvent event, Vec3 emitterPos, GameEvent.Context emitter) {
+         int i = event.getNotificationRadius();
+         BlockPos blockposition = BlockPos.containing(emitterPos);
+         // CraftBukkit start
+-        GenericGameEvent event1 = new GenericGameEvent(org.bukkit.GameEvent.getByKey(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.GAME_EVENT.getKey(event))), new Location(this.level.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()), (emitter.sourceEntity() == null) ? null : emitter.sourceEntity().getBukkitEntity(), i, !Bukkit.isPrimaryThread());
++        net.minecraft.resources.ResourceLocation key = BuiltInRegistries.GAME_EVENT.getKey(event);
++        org.bukkit.GameEvent bukkitEvent = GAME_EVENT_CACHE.get(key);
++        if (bukkitEvent == null) {
++            bukkitEvent = org.bukkit.GameEvent.getByKey(CraftNamespacedKey.fromMinecraft(key));
++            GAME_EVENT_CACHE.put(key, bukkitEvent);
++        }
++        if (bukkitEvent != null) {
++        GenericGameEvent event1 = new GenericGameEvent(bukkitEvent, new Location(this.level.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()), (emitter.sourceEntity() == null) ? null : emitter.sourceEntity().getBukkitEntity(), i, !Bukkit.isPrimaryThread());
+         this.level.getCraftServer().getPluginManager().callEvent(event1);
+         if (event1.isCancelled()) {
+             return;
+         }
+         i = event1.getRadius();
+         // CraftBukkit end
++        } // Pluto end - Cache GameEvent lookups
+         int j = SectionPos.blockToSectionCoord(blockposition.getX() - i);
+         int k = SectionPos.blockToSectionCoord(blockposition.getY() - i);
+         int l = SectionPos.blockToSectionCoord(blockposition.getZ() - i);
