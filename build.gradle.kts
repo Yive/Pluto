@@ -2,6 +2,7 @@ import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 
 plugins {
     java
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.0" apply false
     id("io.papermc.paperweight.patcher") version "1.5.3"
 }
@@ -20,16 +21,6 @@ dependencies {
 }
 
 subprojects {
-    apply(plugin = "java")
-
-    java {
-        toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
-    }
-
-    tasks.withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
-        options.release.set(17)
-    }
 
     repositories {
         mavenLocal()
@@ -60,6 +51,58 @@ paperweight {
 
             apiOutputDir.set(layout.projectDirectory.dir("pluto-api"))
             serverOutputDir.set(layout.projectDirectory.dir("pluto-server"))
+        }
+    }
+}
+
+allprojects {
+    apply(plugin = "java")
+    apply(plugin = "maven-publish")
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    }
+
+    tasks.withType<JavaCompile>().configureEach {
+        options.encoding = Charsets.UTF_8.name()
+        options.release.set(17)
+    }
+    tasks.withType<Javadoc> {
+        options.encoding = Charsets.UTF_8.name()
+    }
+    tasks.withType<ProcessResources> {
+        filteringCharset = Charsets.UTF_8.name()
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "yiveRepo"
+                url = uri("https://repo.yive.dev/snapshots")
+                credentials(PasswordCredentials::class)
+            }
+        }
+    }
+}
+
+tasks.generateDevelopmentBundle {
+    apiCoordinates.set("dev.yive.pluto:pluto-api")
+    mojangApiCoordinates.set("io.papermc.paper:paper-mojangapi")
+    libraryRepositories.set(
+        listOf(
+            "https://repo.maven.apache.org/maven2/",
+            "https://repo.papermc.io/repository/maven-public/",
+            "https://repo.yive.dev/snapshots",
+        )
+    )
+}
+
+publishing {
+    publications.create<MavenPublication>("devBundle") {
+        artifact(tasks.generateDevelopmentBundle) {
+            artifactId = "dev-bundle"
         }
     }
 }

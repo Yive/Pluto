@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 16 Apr 2023 18:28:51 -0700
+Subject: [PATCH] Build fixes
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 3c8293f002f11b430083502362fdc801f44aa138..d1cc30e8181e915ec2d82e90d12ccc3775d6b618 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -97,6 +97,13 @@ tasks.jar {
+     }
+ }
+ 
++// Pluto start - Build fixes
++// Probably a terrible way to do this, but it works
++tasks.withType<PublishToMavenRepository>().configureEach {
++    enabled = false
++}
++// Pluto end - Build fixes
++
+ publishing {
+     publications.create<MavenPublication>("maven") {
+         artifact(tasks.shadowJar)
