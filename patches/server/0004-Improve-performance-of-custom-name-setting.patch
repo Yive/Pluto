@@ -5,10 +5,10 @@ Subject: [PATCH] Improve performance of custom name setting
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 57a0dbb23a32123d30c3b3572f4d129be9d97847..c8125bdfc75b4dd7bf81c353cf220589641a3acf 100644
+index 733158b6f2c2bd03fbe798562ff7bc33280548dc..2353bf0d1a7b1a43990dceb2feceb20182b20e5b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -963,7 +963,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -956,7 +956,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
              name = name.substring(0, 256);
          }
  

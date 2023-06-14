@@ -5,10 +5,10 @@ Subject: [PATCH] Optimise material matching
 
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index adb2416887cc3b544ec36c552bdf7105328c24a5..9bea9701cd19d0c8e0cbcad42bbaabf6d8de5091 100644
+index 03b47012447430a350e152920f754d993d4023db..12ccc034d7a9eff321bfc65a4987c6ff8fdd7020 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -5920,6 +5920,24 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5790,6 +5790,24 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          return matchMaterial(name, false);
      }
  
@@ -33,7 +33,7 @@ index adb2416887cc3b544ec36c552bdf7105328c24a5..9bea9701cd19d0c8e0cbcad42bbaabf6
      /**
       * Attempts to match the Material with the given name.
       * <p>
-@@ -5941,9 +5959,50 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5811,9 +5829,50 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
  
