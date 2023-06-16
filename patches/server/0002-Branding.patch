@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index f68d17739f1b10e73fd613c2bbba80e875478440..d8a1fd35cdea1701b4ec5431537266ffefbb2151 100644
+index cef43a2fa6f3c3b6a33e9e45ca05b8cd21494c68..001a074d71f1f8763e0b37ea4e5409fca5fdb827 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -7,7 +7,7 @@ plugins {
@@ -17,7 +17,7 @@ index f68d17739f1b10e73fd613c2bbba80e875478440..d8a1fd35cdea1701b4ec5431537266ff
      // Pufferfish start
      implementation("io.papermc.paper:paper-mojangapi:1.19.2-R0.1-SNAPSHOT") {
          exclude("io.papermc.paper", "paper-api")
-@@ -83,7 +83,7 @@ tasks.jar {
+@@ -84,7 +84,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -67,7 +67,7 @@ index 55d5e325006d5a948b98451b1e455bb8bb869cbb..985e97bc8965987949fab68d886b18be
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ac0684aebef870246e94f623f7a16066f8a3a418..46d9e9c54c38a51675c47b69d42d8417c96cd3d6 100644
+index c9ebcfffa6b958a117a2112ab181937dfcf48c1a..bbdade38ea387fc742b085628226b82f2283e6c0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -261,7 +261,7 @@ import javax.annotation.Nullable; // Paper
