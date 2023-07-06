@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 6 Jul 2023 08:07:46 -0700
+Subject: [PATCH] Decrease vertical range for supporting block check
+
+
+diff --git a/src/main/java/net/minecraft/world/level/BlockCollisions.java b/src/main/java/net/minecraft/world/level/BlockCollisions.java
+index 1b6f72932fbdd567a1534bcf15e8a610b00f974d..2579b0f537625bafa0e4085ecbde5b7dfff62de4 100644
+--- a/src/main/java/net/minecraft/world/level/BlockCollisions.java
++++ b/src/main/java/net/minecraft/world/level/BlockCollisions.java
+@@ -29,7 +29,13 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
+     private long cachedBlockGetterPos;
+     private final BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultProvider;
+ 
++    // Pluto start - Decrease vertical range for supporting block check
+     public BlockCollisions(CollisionGetter world, @Nullable Entity entity, AABB box, boolean forEntity, BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultFunction) {
++        this(world, entity, box, forEntity, resultFunction, false);
++    }
++
++    public BlockCollisions(CollisionGetter world, @Nullable Entity entity, AABB box, boolean forEntity, BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultFunction, boolean shrinkVerticalRange) {
++    // Pluto end - Decrease vertical range for supporting block check
+         this.context = entity == null ? CollisionContext.empty() : CollisionContext.of(entity);
+         this.pos = new BlockPos.MutableBlockPos();
+         this.entityShape = Shapes.create(box);
+@@ -39,8 +45,10 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
+         this.resultProvider = resultFunction;
+         int i = Mth.floor(box.minX - 1.0E-7D) - 1;
+         int j = Mth.floor(box.maxX + 1.0E-7D) + 1;
+-        int k = Mth.floor(box.minY - 1.0E-7D) - 1;
+-        int l = Mth.floor(box.maxY + 1.0E-7D) + 1;
++        // Pluto start - Decrease vertical range for supporting block check
++        int k = shrinkVerticalRange ? Mth.floor(box.minY - 1.0E-7D) : Mth.floor(box.minY - 1.0E-7D) - 1;
++        int l = shrinkVerticalRange ? Mth.floor(box.minY) : Mth.floor(box.maxY + 1.0E-7D) + 1;
++        // Pluto end - Decrease vertical range for supporting block check
+         int m = Mth.floor(box.minZ - 1.0E-7D) - 1;
+         int n = Mth.floor(box.maxZ + 1.0E-7D) + 1;
+         this.cursor = new Cursor3D(i, k, m, j, l, n);
+diff --git a/src/main/java/net/minecraft/world/level/CollisionGetter.java b/src/main/java/net/minecraft/world/level/CollisionGetter.java
+index c0dd933c8e64484c4ae0d4fa0f6e19969cf09b37..8ccd766513f2084ea00730f4c6f57ff0ffb4ff8f 100644
+--- a/src/main/java/net/minecraft/world/level/CollisionGetter.java
++++ b/src/main/java/net/minecraft/world/level/CollisionGetter.java
+@@ -105,7 +105,7 @@ public interface CollisionGetter extends BlockGetter {
+         double d = Double.MAX_VALUE;
+         BlockCollisions<BlockPos> blockCollisions = new BlockCollisions<>(this, entity, box, false, (pos, voxelShape) -> {
+             return pos;
+-        });
++        }, true); // Pluto - Decrease vertical range for supporting block check
+ 
+         while(blockCollisions.hasNext()) {
+             BlockPos blockPos2 = blockCollisions.next();
