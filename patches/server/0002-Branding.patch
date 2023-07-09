@@ -53,6 +53,37 @@ index 692c962193cf9fcc6801fc93f3220bdc673d527b..15bc3f3cb5bc1c4c545ba359a11a2b0c
  
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
+diff --git a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
+index 893d8c0946ef71a0561221dd76bffff0dc940d56..6b2aaa006f0fec18926344e582093e48744db048 100644
+--- a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
++++ b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
+@@ -27,11 +27,11 @@ import org.jetbrains.annotations.Nullable;
+ 
+ public class PufferfishVersionFetcher implements VersionFetcher {
+ 	
+-	private static final Logger LOGGER = Logger.getLogger("PufferfishVersionFetcher");
++	private static final Logger LOGGER = Logger.getLogger("PlutoVersionFetcher"); // Pluto - Branding
+ 	private static final HttpClient client = HttpClient.newHttpClient();
+ 	
+ 	private static final URI JENKINS_URI = URI.create("https://ci.pufferfish.host/job/Pufferfish-1.20/lastSuccessfulBuild/buildNumber");
+-	private static final String GITHUB_FORMAT = "https://api.github.com/repos/pufferfish-gg/Pufferfish/compare/ver/1.20...%s";
++	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.1...%s"; // Pluto - Branding
+ 	
+ 	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
+ 			.mapping(
+@@ -54,11 +54,7 @@ public class PufferfishVersionFetcher implements VersionFetcher {
+ 		} else {
+ 			final String versionString = parts[2];
+ 			
+-			try {
+-				component = this.fetchJenkinsVersion(Integer.parseInt(versionString));
+-			} catch (NumberFormatException e) {
+-				component = this.fetchGithubVersion(versionString.substring(1, versionString.length() - 1));
+-			}
++			component = this.fetchGithubVersion(versionString.substring(1, versionString.length() - 1)); // Pluto - Branding
+ 		}
+ 		
+ 		final @Nullable Component history = this.getHistory();
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
 index 7ca6c81afc99d42d2f39b4b6d7f5e8a18b58fba3..8afd53f9529437022af33a1228e0475d06ea5a77 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
