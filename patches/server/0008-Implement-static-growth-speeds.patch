@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Mon, 10 Jul 2023 11:35:13 -0700
+Subject: [PATCH] Implement static growth speeds
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 67ae406fc6e4cf15f6f2009d574f3bc4560519c7..08ba68de6b1509dc73cf3e4f3a4fe79a7e1f7acd 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -212,5 +212,20 @@ public class PlutoConfig {
+         private void shouldUseSupportingBlockLookupOptimisation() {
+             useSupportingBlockLookupOptimisation = getBoolean("entities.global.use-supporting-block-lookup-optimisation", useSupportingBlockLookupOptimisation);
+         }
++
++        public boolean useStaticGrowthSpeedStems = false;
++        public float staticGrowthSpeedStems = 1.0F;
++        public boolean useStaticGrowthSpeedCrops = false;
++        public float staticGrowthSpeedCrops = 1.0F;
++        public boolean useStaticGrowthSpeedPitchers = false;
++        public float staticGrowthSpeedPitchers = 1.0F;
++        private void shouldUseStaticGrowthSpeed() {
++            useStaticGrowthSpeedStems = getBoolean("blocks.stems.static-growth-speed.enabled", useStaticGrowthSpeedStems);
++            staticGrowthSpeedStems = (float) getDouble("blocks.stems.static-growth-speed.speed", staticGrowthSpeedStems);
++            useStaticGrowthSpeedCrops = getBoolean("blocks.crops.static-growth-speed.enabled", useStaticGrowthSpeedCrops);
++            staticGrowthSpeedCrops = (float) getDouble("blocks.crops.static-growth-speed.speed", staticGrowthSpeedCrops);
++            useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
++            staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+index decb8caa67bc5f4525e4d92fedf465a17171fceb..086f12363ead9c7766862143ab16936d6f6dea9b 100644
+--- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+@@ -74,7 +74,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
+             int i = this.getAge(state);
+ 
+             if (i < this.getMaxAge()) {
+-                float f = CropBlock.getGrowthSpeed(this, world, pos);
++                float f = world.plutoConfig().useStaticGrowthSpeedCrops ? world.plutoConfig().staticGrowthSpeedCrops : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds
+ 
+                 // Spigot start
+                 int modifier;
+diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+index d2e8aafb8db17f2426dd83353c0cfdeaf0d372aa..f2ed204783054d2016b33ca7f3e9dae22bb3f098 100644
+--- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+@@ -115,7 +115,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+ 
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        float f = CropBlock.getGrowthSpeed(this, world, pos);
++        float f = world.plutoConfig().useStaticGrowthSpeedPitchers ? world.plutoConfig().staticGrowthSpeedPitchers : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds
+         boolean bl = random.nextFloat() < (world.spigotConfig.pitcherPlantModifier / (100.0F * (Math.floor(25.0F / f) + 1))); // Paper
+         if (bl) {
+             this.grow(world, state, pos, 1);
+diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+index d95d5cd224b229fc34e271b56ca1dc9be13d6268..f9bded15cbc40c569ca9dd07e0ad9fe9acbf9238 100644
+--- a/src/main/java/net/minecraft/world/level/block/StemBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+@@ -51,7 +51,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+         if (world.getRawBrightness(pos, 0) >= 9) {
+-            float f = CropBlock.getGrowthSpeed(this, world, pos);
++            float f = world.plutoConfig().useStaticGrowthSpeedStems ? world.plutoConfig().staticGrowthSpeedStems : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds
+ 
+             if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? world.spigotConfig.pumpkinModifier : world.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / f) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
+                 int i = (Integer) state.getValue(StemBlock.AGE);
