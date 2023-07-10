@@ -4,21 +4,41 @@ Date: Sun, 8 Jan 2023 08:12:37 -0800
 Subject: [PATCH] Improve performance of custom name setting
 
 
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index c5a2be08cac1c6447b5c08e34a2a1bea66ab46d5..b6c7c5c713f993796ae57db90ff501ab87282bc0 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -197,5 +197,10 @@ public class PlutoConfig {
+         private void shouldUseGameEventCache() {
+             useGameEventCache = getBoolean("use-game-events-cache", useGameEventCache);
+         }
++
++        public boolean useCustomNameOptimisation = true;
++        private void shouldUseCustomNameOptimisation() {
++            useCustomNameOptimisation = getBoolean("use-custom-name-api-optimisation", useCustomNameOptimisation);
++        }
+     }
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index fc0dc8e607cc24020106ea1af92b4421a5f9393d..95b83c9e100477505672332438f6e91458ba319c 100644
+index fc0dc8e607cc24020106ea1af92b4421a5f9393d..48240453a5294cdcf858471b25e895dcef46f72b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -971,7 +971,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -971,6 +971,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
              name = name.substring(0, 256);
          }
  
--        this.getHandle().setCustomName(CraftChatMessage.fromStringOrNull(name));
-+        this.getHandle().setCustomName(CraftChatMessage.fromStringOrNull(name, false, true)); // Pluto - Improve performance of custom name setting
++        // Pluto start - Improve performance of custom name setting
++        if (this.getHandle().level().plutoConfig().useCustomNameOptimisation) {
++            this.getHandle().setCustomName(CraftChatMessage.fromStringOrNull(name, false, true));
++            return;
++        }
++        // Pluto end - Improve performance of custom name setting
++
+         this.getHandle().setCustomName(CraftChatMessage.fromStringOrNull(name));
      }
  
-     @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
-index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..2a78e3f47545e229be1e8bfbb99d85aefc4e5240 100644
+index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..022bffc505fdab19d3c6a5bfb9b3a3a95f8774b3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
 @@ -43,6 +43,7 @@ public final class CraftChatMessage {
@@ -29,13 +49,11 @@ index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..2a78e3f47545e229be1e8bfbb99d85ae
          private static final Pattern INCREMENTAL_PATTERN = Pattern.compile("(" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + "[0-9a-fk-orx])|((?:(?:https?):\\/\\/)?(?:[-\\w_\\.]{2,}\\.[a-z]{2,4}.*?(?=[\\.\\?!,;:]?(?:[" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + " \\n]|$))))|(\\n)", Pattern.CASE_INSENSITIVE);
          // Separate pattern with no group 3, new lines are part of previous string
          private static final Pattern INCREMENTAL_PATTERN_KEEP_NEWLINES = Pattern.compile("(" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + "[0-9a-fk-orx])|((?:(?:https?):\\/\\/)?(?:[-\\w_\\.]{2,}\\.[a-z]{2,4}.*?(?=[\\.\\?!,;:]?(?:[" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + " ]|$))))", Pattern.CASE_INSENSITIVE);
-@@ -57,8 +58,13 @@ public final class CraftChatMessage {
-         private int currentIndex;
-         private StringBuilder hex;
+@@ -59,6 +60,12 @@ public final class CraftChatMessage {
          private final String message;
--
-+        // Pluto start - Improve performance of custom name setting
+ 
          private StringMessage(String message, boolean keepNewlines, boolean plain) {
++        // Pluto start - Improve performance of custom name setting
 +            this(message, keepNewlines, plain, false);
 +        }
 +
@@ -44,7 +62,7 @@ index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..2a78e3f47545e229be1e8bfbb99d85ae
              this.message = message;
              if (message == null) {
                  this.output = new Component[]{this.currentChatComponent};
-@@ -66,7 +72,7 @@ public final class CraftChatMessage {
+@@ -66,7 +73,7 @@ public final class CraftChatMessage {
              }
              this.list.add(currentChatComponent);
  
@@ -53,7 +71,7 @@ index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..2a78e3f47545e229be1e8bfbb99d85ae
              String match = null;
              boolean needsAdd = false;
              boolean hasReset = false; // Paper
-@@ -190,6 +196,12 @@ public final class CraftChatMessage {
+@@ -190,6 +197,12 @@ public final class CraftChatMessage {
          return (message == null || message.isEmpty()) ? null : CraftChatMessage.fromString(message, keepNewlines)[0];
      }
  

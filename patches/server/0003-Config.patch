@@ -1,0 +1,271 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Mon, 10 Jul 2023 03:50:25 -0700
+Subject: [PATCH] Config
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..bc130bf79ba71102ae97e2daed5d5f3ea09f3a63
+--- /dev/null
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -0,0 +1,196 @@
++package dev.yive.pluto;
++
++import com.destroystokyo.paper.util.SneakyThrow;
++import org.bukkit.Bukkit;
++import org.bukkit.configuration.ConfigurationSection;
++import org.bukkit.configuration.file.YamlConfiguration;
++
++import java.io.File;
++import java.lang.reflect.Method;
++import java.lang.reflect.Modifier;
++import java.util.List;
++import java.util.logging.Level;
++
++public class PlutoConfig {
++    public static final int CURRENT_CONFIG_VERSION = 1;
++
++    private static final Object[] EMPTY = new Object[0];
++
++    private static File configFile;
++    public static YamlConfiguration config;
++    private static int configVersion;
++
++    public static void init(final File file) {
++        PlutoConfig.configFile = file;
++        final YamlConfiguration config = new YamlConfiguration();
++        config.options().copyDefaults(true);
++
++        if (!file.exists()) {
++            try {
++                file.createNewFile();
++            } catch (final Exception ex) {
++                Bukkit.getLogger().log(Level.SEVERE, "Failure to create pluto config", ex);
++            }
++        } else {
++            try {
++                config.load(file);
++            } catch (final Exception ex) {
++                Bukkit.getLogger().log(Level.SEVERE, "Failure to load pluto config", ex);
++                SneakyThrow.sneaky(ex);
++                throw new RuntimeException(ex);
++            }
++        }
++
++        PlutoConfig.load(config);
++    }
++
++    public static void load(final YamlConfiguration config) {
++        PlutoConfig.config = config;
++        PlutoConfig.configVersion = PlutoConfig.getInt("config-version-do-not-modify", CURRENT_CONFIG_VERSION);
++        PlutoConfig.set("config-version-do-not-modify", CURRENT_CONFIG_VERSION);
++
++        for (final Method method : PlutoConfig.class.getDeclaredMethods()) {
++            if (method.getReturnType() != void.class || method.getParameterCount() != 0 ||
++                    !Modifier.isPrivate(method.getModifiers()) || !Modifier.isStatic(method.getModifiers())) {
++                continue;
++            }
++
++            try {
++                method.setAccessible(true);
++                method.invoke(null, EMPTY);
++            } catch (final Exception ex) {
++                SneakyThrow.sneaky(ex);
++                throw new RuntimeException(ex);
++            }
++        }
++
++        try {
++            config.save(PlutoConfig.configFile);
++        } catch (final Exception ex) {
++            Bukkit.getLogger().log(Level.SEVERE, "Unable to save pluto config", ex);
++        }
++    }
++
++    static void remove(final String path) {
++        PlutoConfig.config.set(path, null);
++    }
++
++    static void set(final String path, final Object value) {
++        PlutoConfig.config.set(path, value);
++    }
++
++    static String getString(final String path, final String dfl) {
++        PlutoConfig.config.addDefault(path, dfl);
++        return PlutoConfig.config.getString(path, dfl);
++    }
++
++    static boolean getBoolean(final String path, final boolean dfl) {
++        PlutoConfig.config.addDefault(path, dfl);
++        return PlutoConfig.config.getBoolean(path, dfl);
++    }
++
++    static int getInt(final String path, final int dfl) {
++        PlutoConfig.config.addDefault(path, dfl);
++        return PlutoConfig.config.getInt(path, dfl);
++    }
++
++    static long getLong(final String path, final long dfl) {
++        PlutoConfig.config.addDefault(path, dfl);
++        return PlutoConfig.config.getLong(path, dfl);
++    }
++
++    static double getDouble(final String path, final double dfl) {
++        PlutoConfig.config.addDefault(path, dfl);
++        return PlutoConfig.config.getDouble(path, dfl);
++    }
++
++    static <T> List getList(String path, T def) {
++        config.addDefault(path, def);
++        return (List<T>) config.getList(path, config.getList(path));
++    }
++
++    public static final class WorldConfig {
++
++        public final String worldName;
++        public ConfigurationSection config;
++        ConfigurationSection worldDefaults;
++
++        public WorldConfig(final String worldName) {
++            this.worldName = worldName;
++            this.init();
++        }
++
++        public void init() {
++            this.worldDefaults = PlutoConfig.config.getConfigurationSection("world-settings.default");
++            if (this.worldDefaults == null) {
++                this.worldDefaults = PlutoConfig.config.createSection("world-settings.default");
++            }
++
++            String worldSectionPath = "world-settings.".concat(this.worldName);
++            ConfigurationSection section = PlutoConfig.config.getConfigurationSection(worldSectionPath);
++            if (section == null) {
++                section = PlutoConfig.config.createSection(worldSectionPath);
++            }
++            PlutoConfig.config.set(worldSectionPath, section);
++
++            this.load(section);
++        }
++
++        public void load(final ConfigurationSection config) {
++            this.config = config;
++
++            for (final Method method : WorldConfig.class.getDeclaredMethods()) {
++                if (method.getReturnType() != void.class || method.getParameterCount() != 0 ||
++                        !Modifier.isPrivate(method.getModifiers()) || Modifier.isStatic(method.getModifiers())) {
++                    continue;
++                }
++
++                try {
++                    method.setAccessible(true);
++                    method.invoke(this, EMPTY);
++                } catch (final Exception ex) {
++                    SneakyThrow.sneaky(ex);
++                    throw new RuntimeException(ex);
++                }
++            }
++
++            try {
++                PlutoConfig.config.save(PlutoConfig.configFile);
++            } catch (final Exception ex) {
++                Bukkit.getLogger().log(Level.SEVERE, "Unable to save pluto config", ex);
++            }
++        }
++
++        void remove(final String path) {
++            this.worldDefaults.set(path, null);
++            this.config.set(path, null);
++        }
++
++        void set(final String path, final Object val) {
++            this.worldDefaults.set(path, val);
++            if (this.config.get(path) != null) {
++                this.config.set(path, val);
++            }
++        }
++
++        boolean getBoolean(final String path, final boolean dfl) {
++            this.worldDefaults.addDefault(path, Boolean.valueOf(dfl));
++            return this.config.getBoolean(path, this.worldDefaults.getBoolean(path));
++        }
++
++        int getInt(final String path, final int dfl) {
++            this.worldDefaults.addDefault(path, Integer.valueOf(dfl));
++            return this.config.getInt(path, this.worldDefaults.getInt(path));
++        }
++
++        long getLong(final String path, final long dfl) {
++            this.worldDefaults.addDefault(path, Long.valueOf(dfl));
++            return this.config.getLong(path, this.worldDefaults.getLong(path));
++        }
++
++        double getDouble(final String path, final double dfl) {
++            this.worldDefaults.addDefault(path, Double.valueOf(dfl));
++            return this.config.getDouble(path, this.worldDefaults.getDouble(path));
++        }
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index 28af96ce4f9f1a83316b6fd9e1625c71b5874c3f..95bb41afa4b5b679d20b0eecbead0a50939733f6 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -223,6 +223,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         // Paper end
+         gg.pufferfish.pufferfish.PufferfishConfig.load(); // Pufferfish
+         gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
++        dev.yive.pluto.PlutoConfig.init((java.io.File) options.valueOf("pluto-settings")); // Pluto - Config
+ 
+         this.setPvpAllowed(dedicatedserverproperties.pvp);
+         this.setFlightAllowed(dedicatedserverproperties.allowFlight);
+diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
+index 30d8ec75203adc677e5fb91d9538baf52a0684ad..239ebe905ed3825fc0111c40a9a4a6aa0e502607 100644
+--- a/src/main/java/net/minecraft/world/level/Level.java
++++ b/src/main/java/net/minecraft/world/level/Level.java
+@@ -174,6 +174,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+         return this.paperConfig;
+     }
+     // Paper end
++    private final dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig; public dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig() { return this.plutoConfig; } // Pluto - Config
+ 
+     public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
+     public final co.aikar.timings.WorldTimingsHandler timings; // Paper
+@@ -287,6 +288,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+     protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - Async-Anti-Xray - Pass executor
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
+         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper
++        this.plutoConfig = new dev.yive.pluto.PlutoConfig.WorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Pluto - Config
+         this.generator = gen;
+         this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 14eec336b06750077a44ad0ead5dd722f1d39f09..15dab0538a135a59f919c0af100d5b67e0e41e9e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1056,6 +1056,7 @@ public final class CraftServer implements Server {
+ 
+         org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
+         this.console.paperConfigurations.reloadConfigs(this.console);
++        dev.yive.pluto.PlutoConfig.init((File) console.options.valueOf("pluto-settings")); // Pluto - Config
+         for (ServerLevel world : this.console.getAllLevels()) {
+             // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
+             world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
+index daed278d1bcf84ee42749f24e311b22b70015d79..ccf6118382be0ae2bcafcd17d804116ce9d1cea9 100644
+--- a/src/main/java/org/bukkit/craftbukkit/Main.java
++++ b/src/main/java/org/bukkit/craftbukkit/Main.java
+@@ -180,6 +180,14 @@ public class Main {
+                         .defaultsTo("Unknown Server")
+                         .describedAs("Name");
+                 // Paper end
++
++                // Pluto start - Config
++                acceptsAll(asList("pluto", "pluto-settings"), "File for pluto settings")
++                        .withRequiredArg()
++                        .ofType(File.class)
++                        .defaultsTo(new File("pluto.yml"))
++                        .describedAs("Yml file");
++                // Pluto end - Config
+             }
+         };
+ 

@@ -4,24 +4,39 @@ Date: Fri, 6 May 2022 15:29:09 -0700
 Subject: [PATCH] Cache GameEvent lookups
 
 
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..c5a2be08cac1c6447b5c08e34a2a1bea66ab46d5 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -192,5 +192,10 @@ public class PlutoConfig {
+             this.worldDefaults.addDefault(path, Double.valueOf(dfl));
+             return this.config.getDouble(path, this.worldDefaults.getDouble(path));
+         }
++
++        public boolean useGameEventCache = true;
++        private void shouldUseGameEventCache() {
++            useGameEventCache = getBoolean("use-game-events-cache", useGameEventCache);
++        }
+     }
+ }
 diff --git a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
-index f2d10d58617644a589ecec3e17358c1277795e5d..4ca9a2fdbef3eb186fa5290190071f353ac3b71e 100644
+index f2d10d58617644a589ecec3e17358c1277795e5d..d1050058776aca2cf2c8797583947ee86c918c5a 100644
 --- a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
 +++ b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
 @@ -26,17 +26,28 @@ public class GameEventDispatcher {
          this.level = world;
      }
  
-+    // Pluto start - Cache GameEvent lookups
-+    private static final it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<net.minecraft.resources.ResourceLocation, org.bukkit.GameEvent> GAME_EVENT_CACHE = new it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<>();
++    private static final it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<String, org.bukkit.GameEvent> GAME_EVENT_CACHE = new it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<>(); // Pluto - Cache GameEvent lookups
      public void post(GameEvent event, Vec3 emitterPos, GameEvent.Context emitter) {
          int i = event.getNotificationRadius();
          BlockPos blockposition = BlockPos.containing(emitterPos);
-+        net.minecraft.resources.ResourceLocation key = BuiltInRegistries.GAME_EVENT.getKey(event);
-+        org.bukkit.GameEvent bukkitEvent = GAME_EVENT_CACHE.get(key);
-+        if (bukkitEvent == null) {
-+            bukkitEvent = org.bukkit.GameEvent.getByKey(CraftNamespacedKey.fromMinecraft(key));
-+            GAME_EVENT_CACHE.put(key, bukkitEvent);
++        // Pluto start - Cache GameEvent lookups
++        org.bukkit.GameEvent bukkitEvent;
++        if (this.level.plutoConfig().useGameEventCache) {
++            bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(event.getName(), s -> org.bukkit.GameEvent.getByKey(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.GAME_EVENT.getKey(event))));
++        } else {
++            bukkitEvent = org.bukkit.GameEvent.getByKey(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.GAME_EVENT.getKey(event)));
 +        }
 +        if (bukkitEvent != null) {
          // CraftBukkit start
