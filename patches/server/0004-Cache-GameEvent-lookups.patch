@@ -5,7 +5,7 @@ Subject: [PATCH] Cache GameEvent lookups
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..c5a2be08cac1c6447b5c08e34a2a1bea66ab46d5 100644
+index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
 @@ -192,5 +192,10 @@ public class PlutoConfig {
@@ -15,7 +15,7 @@ index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..c5a2be08cac1c6447b5c08e34a2a1bea
 +
 +        public boolean useGameEventCache = true;
 +        private void shouldUseGameEventCache() {
-+            useGameEventCache = getBoolean("use-game-events-cache", useGameEventCache);
++            useGameEventCache = getBoolean("misc.use-game-events-cache", useGameEventCache);
 +        }
      }
  }

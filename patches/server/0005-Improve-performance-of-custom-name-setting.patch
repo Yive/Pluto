@@ -5,17 +5,17 @@ Subject: [PATCH] Improve performance of custom name setting
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index c5a2be08cac1c6447b5c08e34a2a1bea66ab46d5..b6c7c5c713f993796ae57db90ff501ab87282bc0 100644
+index 5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0..29192b350cb8638acf2c35480eb4ce603523f31e 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
 @@ -197,5 +197,10 @@ public class PlutoConfig {
          private void shouldUseGameEventCache() {
-             useGameEventCache = getBoolean("use-game-events-cache", useGameEventCache);
+             useGameEventCache = getBoolean("misc.use-game-events-cache", useGameEventCache);
          }
 +
 +        public boolean useCustomNameOptimisation = true;
 +        private void shouldUseCustomNameOptimisation() {
-+            useCustomNameOptimisation = getBoolean("use-custom-name-api-optimisation", useCustomNameOptimisation);
++            useCustomNameOptimisation = getBoolean("entities.global.use-custom-name-api-optimisation", useCustomNameOptimisation);
 +        }
      }
  }

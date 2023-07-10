@@ -5,7 +5,7 @@ Subject: [PATCH] Optimize map id lookups
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index b6c7c5c713f993796ae57db90ff501ab87282bc0..e83c3b330c3549abfea8de19b6aed2e02aafb9ef 100644
+index 29192b350cb8638acf2c35480eb4ce603523f31e..1d3d712b4b83f0867bc5b7eb3ccde2a388717dae 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
 @@ -109,6 +109,11 @@ public class PlutoConfig {
@@ -14,7 +14,7 @@ index b6c7c5c713f993796ae57db90ff501ab87282bc0..e83c3b330c3549abfea8de19b6aed2e0
  
 +    public static boolean useMapIdLookupOptimisation = true;
 +    private static void shouldUseMapIdLookupOptimisation() {
-+        useMapIdLookupOptimisation = getBoolean("use-map-id-lookup-optimisation", useMapIdLookupOptimisation);
++        useMapIdLookupOptimisation = getBoolean("items.maps.use-id-lookup-optimisation", useMapIdLookupOptimisation);
 +    }
 +
      public static final class WorldConfig {
