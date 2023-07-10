@@ -5,20 +5,19 @@ Subject: [PATCH] Build fixes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 0668648a49be0a999e739ddad66e6e101f166598..cef43a2fa6f3c3b6a33e9e45ca05b8cd21494c68 100644
+index 18bd50340f9e511781dae123cdb82bc16da97d55..e2c67612317ec06a315503bf5c41b1530aace10c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -99,6 +99,13 @@ tasks.jar {
-     }
+@@ -111,6 +111,12 @@ tasks.compileJava {
+     // incremental compilation is currently broken due to patched files having compiled counterparts already on the compile classpath
+     options.setIncremental(false)
  }
- 
 +// Pluto start - Build fixes
 +// Probably a terrible way to do this, but it works
 +tasks.withType<PublishToMavenRepository>().configureEach {
 +    enabled = false
 +}
 +// Pluto end - Build fixes
-+
+ 
  publishing {
      publications.create<MavenPublication>("maven") {
-         artifact(tasks.shadowJar)
