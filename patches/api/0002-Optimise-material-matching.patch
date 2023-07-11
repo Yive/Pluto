@@ -3,6 +3,12 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Wed, 18 Jan 2023 01:13:29 -0800
 Subject: [PATCH] Optimise material matching
 
+Plugins that make use of XMaterials will notice the biggest performance improvement from this... or at least ones that use a much older version of XMaterials.
+
+Results:
+GRASS-BLOCK:           398.990 ns/op -> 26.067 ns/op
+GRASS_BLOCK:           345.728 ns/op -> 10.408 ns/op
+minecraft:grass_block: 380.636 ns/op -> 29.693 ns/op
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
 index 03b47012447430a350e152920f754d993d4023db..12ccc034d7a9eff321bfc65a4987c6ff8fdd7020 100644

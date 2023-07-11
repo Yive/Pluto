@@ -3,6 +3,11 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Mon, 10 Jul 2023 13:20:01 -0700
 Subject: [PATCH] Always moist farmland
 
+Results at 10,000 randomTickSpeed and 18,432 farmland:
+always-moist - false: 42.3mspt
+always-moist - true:   1.5mspt
+
+Note: This will cause farmland to never dry out.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 index 08ba68de6b1509dc73cf3e4f3a4fe79a7e1f7acd..61fb771fc4da9de39dd9b5027d49af7648b63ed6 100644

@@ -3,6 +3,7 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Fri, 17 Feb 2023 16:31:50 -0800
 Subject: [PATCH] Optimize map id lookups
 
+Micro optimisation to avoid a double contains lookup on the CompoundTag
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 index 29192b350cb8638acf2c35480eb4ce603523f31e..1d3d712b4b83f0867bc5b7eb3ccde2a388717dae 100644

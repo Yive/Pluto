@@ -3,6 +3,7 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Mon, 10 Jul 2023 11:35:13 -0700
 Subject: [PATCH] Implement static growth speeds
 
+Allows control over the growth speed of certain plants instead of based off nearby blocks.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 index 67ae406fc6e4cf15f6f2009d574f3bc4560519c7..08ba68de6b1509dc73cf3e4f3a4fe79a7e1f7acd 100644

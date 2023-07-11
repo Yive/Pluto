@@ -3,6 +3,7 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Fri, 6 May 2022 15:29:09 -0700
 Subject: [PATCH] Cache GameEvent lookups
 
+This will build a cache of bukkit game events overtime as the lookup can be quite heavy with excessive vanilla game events being fired.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0 100644

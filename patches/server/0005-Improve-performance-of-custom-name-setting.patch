@@ -3,6 +3,8 @@ From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Sun, 8 Jan 2023 08:12:37 -0800
 Subject: [PATCH] Improve performance of custom name setting
 
+Removes the regex for links when applying a custom name to an entity.
+This can be a huge performance boost for certain plugins.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 index 5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0..29192b350cb8638acf2c35480eb4ce603523f31e 100644
