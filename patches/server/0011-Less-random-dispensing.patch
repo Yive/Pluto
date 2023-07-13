@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 13 Jul 2023 11:29:55 -0700
+Subject: [PATCH] Less random dispensing
+
+This will make dispensers and droppers iterate over their inventory from the fist slot to the last slot when finding a valid item.
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index c42c8a505fb27c9740e86587290ab187b1c049ab..0e00073870e0078c858b449e2fc873ed6b28a0e5 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -237,5 +237,10 @@ public class PlutoConfig {
+         private void cactusCheckSurvivalBeforeGrowth() {
+             cactusCheckSurvivalBeforeGrowth = getBoolean("blocks.cactus.check-survival-before-growth", cactusCheckSurvivalBeforeGrowth);
+         }
++
++        public boolean lessRandomDispensing = false;
++        private void lessRandomDispensing() {
++            lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
+index 881379681c39230a00b3a1f11cd87498984396c7..6483268dc8d5c831dabdcc02ffd9f4cf0d096c0c 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
+@@ -69,6 +69,14 @@ public class DispenserBlockEntity extends RandomizableContainerBlockEntity {
+ 
+     public int getRandomSlot(RandomSource random) {
+         this.unpackLootTable((Player) null);
++        // Pluto start - Less random dispensing
++        if (this.level != null && this.level.plutoConfig().lessRandomDispensing) {
++            for (int i = 0; i < this.items.size(); i++) {
++                if (!this.items.get(i).isEmpty()) return i;
++            }
++            return -1;
++        }
++        // Pluto end - Less random dispensing
+         int i = -1;
+         int j = 1;
+ 
