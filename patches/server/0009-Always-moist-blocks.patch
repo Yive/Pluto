@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Mon, 10 Jul 2023 13:20:01 -0700
-Subject: [PATCH] Always moist farmland
+Subject: [PATCH] Always moist blocks
 
 Results at 10,000 randomTickSpeed and 18,432 farmland:
 always-moist - false: 42.3mspt
@@ -10,22 +10,24 @@ always-moist - true:   1.5mspt
 Note: This will cause farmland to never dry out.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 08ba68de6b1509dc73cf3e4f3a4fe79a7e1f7acd..61fb771fc4da9de39dd9b5027d49af7648b63ed6 100644
+index 08ba68de6b1509dc73cf3e4f3a4fe79a7e1f7acd..e12189d4efbb29c5d3f67eea1a49fcf5be76e0f2 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -227,5 +227,10 @@ public class PlutoConfig {
+@@ -227,5 +227,12 @@ public class PlutoConfig {
              useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
              staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
          }
 +
 +        public boolean alwaysMoistFarmland = false;
-+        private void alwaysMoistFarmland() {
++        public boolean alwaysMoistSugarCane = false;
++        private void alwaysMoistBlocks() {
 +            alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
++            alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
 +        }
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/FarmBlock.java b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-index 5946f06f63b5694034bd027984a4925b0831d439..f17b5e19a304fc7d015d80173c75943edec77882 100644
+index 5946f06f63b5694034bd027984a4925b0831d439..e6f230de96bc3d150899b070381d43e60f54ee77 100644
 --- a/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 @@ -86,7 +86,7 @@ public class FarmBlock extends Block {
@@ -33,7 +35,19 @@ index 5946f06f63b5694034bd027984a4925b0831d439..f17b5e19a304fc7d015d80173c75943e
          int i = (Integer) state.getValue(FarmBlock.MOISTURE);
  
 -        if (!FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) {
-+        if (!world.plutoConfig().alwaysMoistFarmland && !FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) { // Pluto - Always moist farmland
++        if (!world.plutoConfig().alwaysMoistFarmland && !FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) { // Pluto - Always moist blocks
              if (i > 0) {
                  org.bukkit.craftbukkit.event.CraftEventFactory.handleMoistureChangeEvent(world, pos, (BlockState) state.setValue(FarmBlock.MOISTURE, i - 1), 2); // CraftBukkit
              } else if (!FarmBlock.shouldMaintainFarmland(world, pos)) {
+diff --git a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
+index c3f500580d257e1397f2eb7c47b063a6fe6bb405..5b4c3cbae8be04ba925081b4d2791f2d352dcf13 100644
+--- a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
+@@ -84,6 +84,7 @@ public class SugarCaneBlock extends Block {
+             return true;
+         } else {
+             if (iblockdata1.is(BlockTags.DIRT) || iblockdata1.is(BlockTags.SAND)) {
++                if (world instanceof ServerLevel level && level.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
+                 BlockPos blockposition1 = pos.below();
+                 Iterator iterator = Direction.Plane.HORIZONTAL.iterator();
+ 

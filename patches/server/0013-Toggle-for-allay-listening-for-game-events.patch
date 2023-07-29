@@ -9,10 +9,10 @@ Improves the performance drastically with large clusters of allays.
 This setting will break the vibration functionality for allays.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index b7c8ac1b202fec9a12b338f54eafd64e1833cc09..304a794fec9f97ad8019d43f29be727a7e621c44 100644
+index 08ce93cc7318673913bad2255ecb9432002df964..07c610b699b5e69c4fe54e4e8a55e8c0b91dc092 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -247,5 +247,10 @@ public class PlutoConfig {
+@@ -249,5 +249,10 @@ public class PlutoConfig {
          private void disableDropperInventoryMoveEvent() {
              disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
          }

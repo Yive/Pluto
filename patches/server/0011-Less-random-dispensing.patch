@@ -6,10 +6,10 @@ Subject: [PATCH] Less random dispensing
 This will make dispensers and droppers iterate over their inventory from the fist slot to the last slot when finding a valid item.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index c42c8a505fb27c9740e86587290ab187b1c049ab..0e00073870e0078c858b449e2fc873ed6b28a0e5 100644
+index 257953cae0826454e4e0f857d92643347648453b..9e36ece3d99373e8dba0891db31374bfbafd6fc9 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -237,5 +237,10 @@ public class PlutoConfig {
+@@ -239,5 +239,10 @@ public class PlutoConfig {
          private void cactusCheckSurvivalBeforeGrowth() {
              cactusCheckSurvivalBeforeGrowth = getBoolean("blocks.cactus.check-survival-before-growth", cactusCheckSurvivalBeforeGrowth);
          }
