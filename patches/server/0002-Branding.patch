@@ -76,10 +76,10 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..cec624c1259a4ec8c25adc0738e1d4b9
  	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
  			.mapping(
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 7ca6c81afc99d42d2f39b4b6d7f5e8a18b58fba3..8afd53f9529437022af33a1228e0475d06ea5a77 100644
+index 67cba5cf510e4a602121e10c015a491650127752..ed7b2273da75fa5a34aabbeb45584e84e2159980 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1695,7 +1695,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1694,7 +1694,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -89,7 +89,7 @@ index 7ca6c81afc99d42d2f39b4b6d7f5e8a18b58fba3..8afd53f9529437022af33a1228e0475d
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a774e6af15993a97a231d45b676e26fb1128f05f..5fea3a250cb75509857b8a3e26a348a3aa8653f8 100644
+index 74c46cea456f4a736325892bb7b4d0f1b35b62cd..ae61c90bac68235f9e4a92a9a0284b0f49fc1113 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -265,7 +265,7 @@ import javax.annotation.Nullable; // Paper
