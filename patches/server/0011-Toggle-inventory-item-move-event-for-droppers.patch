@@ -5,10 +5,10 @@ Subject: [PATCH] Toggle inventory item move event for droppers
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 9e36ece3d99373e8dba0891db31374bfbafd6fc9..08ce93cc7318673913bad2255ecb9432002df964 100644
+index b616444c252b0760b47b7a4abf4ea7ee3974a56f..d827dbf660786b84180d4b7218d4041221b00002 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -244,5 +244,10 @@ public class PlutoConfig {
+@@ -239,5 +239,10 @@ public class PlutoConfig {
          private void lessRandomDispensing() {
              lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
          }
