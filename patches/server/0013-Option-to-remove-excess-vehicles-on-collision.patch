@@ -1,0 +1,85 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 5 Oct 2023 17:05:01 -0700
+Subject: [PATCH] Option to remove excess vehicles on collision
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 9be3f142742240eafc028a203ae3d1810a646ce5..2b0d3213460c1fe7e813c8d64c5e9c10a4a3333f 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -249,5 +249,17 @@ public class PlutoConfig {
+         private void disableAllayGameEventListening() {
+             disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
+         }
++
++        public boolean removeExcessMinecarts = false;
++        public boolean removeExcessBoats = false;
++        public int excessMinecartsLimit = 10;
++        public int excessBoatsLimit = 10;
++
++        private void removeExcessVehicles() {
++            removeExcessMinecarts = getBoolean("entities.minecart.remove-excess.enabled", removeExcessMinecarts);
++            removeExcessBoats = getBoolean("entities.boat.remove-excess.enabled", removeExcessBoats);
++            excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
++            excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+index 9948a28dae4edba877c13ef0156be5ff58df3fa2..c70cf9000c114aeb5284cf1a5fd70e5e26f07e63 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+@@ -431,12 +431,19 @@ public abstract class AbstractMinecart extends Entity {
+                 this.level().getCraftServer().getPluginManager().callEvent(new org.bukkit.event.vehicle.VehicleMoveEvent(vehicle, from, to));
+             }
+             // CraftBukkit end
++            int minecartCount = 0; // Pluto - Option to remove excess vehicles on collision
+             if (this.getMinecartType() == AbstractMinecart.Type.RIDEABLE && this.getDeltaMovement().horizontalDistanceSqr() > 0.01D) {
+                 List<Entity> list = this.level().getEntities((Entity) this, this.getBoundingBox().inflate(0.20000000298023224D, 0.0D, 0.20000000298023224D), EntitySelector.pushableBy(this));
+ 
+                 if (!list.isEmpty()) {
+                     for (int l = 0; l < list.size(); ++l) {
+                         Entity entity = (Entity) list.get(l);
++                        // Pluto start - Option to remove excess vehicles on collision
++                        if (entity instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                            entity.discard();
++                            continue;
++                        }
++                        // Pluto end - Option to remove excess vehicles on collision
+ 
+                         if (!(entity instanceof Player) && !(entity instanceof IronGolem) && !(entity instanceof AbstractMinecart) && !this.isVehicle() && !entity.isPassenger()) {
+                             // CraftBukkit start
+@@ -468,6 +475,12 @@ public abstract class AbstractMinecart extends Entity {
+ 
+                 while (iterator.hasNext()) {
+                     Entity entity1 = (Entity) iterator.next();
++                    // Pluto start - Option to remove excess vehicles on collision
++                    if (entity1 instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                        entity1.discard();
++                        continue;
++                    }
++                    // Pluto end - Option to remove excess vehicles on collision
+ 
+                     if (!this.hasPassenger(entity1) && entity1.isPushable() && entity1 instanceof AbstractMinecart) {
+                         // CraftBukkit start
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index 2c5658df753ebc08f8531d4bdf22ff8f6ca77e94..3f8abe68af80f317cb313b58e7d5570b225ba544 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -424,8 +424,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+         if (!list.isEmpty()) {
+             boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
+ 
++            int boatCount = 0; // Pluto - Option to remove excess vehicles on collision
+             for (int j = 0; j < list.size(); ++j) {
+                 Entity entity = (Entity) list.get(j);
++                // Pluto start - Option to remove excess vehicles on collision
++                if (entity instanceof Boat && this.level().plutoConfig().removeExcessBoats && boatCount++ >= this.level().plutoConfig().excessBoatsLimit) {
++                    entity.discard();
++                    continue;
++                }
++                // Pluto end - Option to remove excess vehicles on collision
+ 
+                 if (!entity.hasPassenger((Entity) this)) {
+                     if (flag && this.getPassengers().size() < this.getMaxPassengers() && !entity.isPassenger() && this.hasEnoughSpaceFor(entity) && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
