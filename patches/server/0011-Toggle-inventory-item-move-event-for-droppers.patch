@@ -20,13 +20,13 @@ index b616444c252b0760b47b7a4abf4ea7ee3974a56f..d827dbf660786b84180d4b7218d40412
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/DropperBlock.java b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-index 801c4c120e98584bcf218a4ef9bd66d7d18c1097..6bf527aeb888f974c68c25392b201d75c5c074c2 100644
+index b1ba2c1da9d7b59a5316574deb8247406b55d28d..dc278ddd9fe9e0cf107e3f4ca53722e5d2c13e79 100644
 --- a/src/main/java/net/minecraft/world/level/block/DropperBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-@@ -57,6 +57,19 @@ public class DropperBlock extends DispenserBlock {
-                 if (iinventory == null) {
-                     itemstack1 = DropperBlock.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
-                 } else {
+@@ -65,6 +65,19 @@ public class DropperBlock extends DispenserBlock {
+                     if (iinventory == null) {
+                         itemstack1 = DropperBlock.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
+                     } else {
 +                    // Pluto start - Toggle inventory item move event for droppers
 +                    if (world.plutoConfig().disableDropperInventoryMoveEvent) {
 +                        itemstack1 = HopperBlockEntity.addItem(tileentitydispenser, iinventory, itemstack.copy().split(1), enumdirection.getOpposite());
@@ -40,6 +40,6 @@ index 801c4c120e98584bcf218a4ef9bd66d7d18c1097..6bf527aeb888f974c68c25392b201d75
 +                        return;
 +                    }
 +                    // Pluto end - Toggle inventory item move event for droppers
-                     // CraftBukkit start - Fire event when pushing items into other inventories
-                     CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copy().split(1));
+                         // CraftBukkit start - Fire event when pushing items into other inventories
+                         CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copy().split(1));
  

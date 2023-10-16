@@ -11,10 +11,10 @@ GRASS_BLOCK:           345.728 ns/op -> 10.408 ns/op
 minecraft:grass_block: 380.636 ns/op -> 29.693 ns/op
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 03b47012447430a350e152920f754d993d4023db..12ccc034d7a9eff321bfc65a4987c6ff8fdd7020 100644
+index da6e36a16e609272b60fc41ff69a6fa3c34926c0..1ee9c4d0377ee9f765753d361bf9265ad99ffff7 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -5790,6 +5790,24 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5793,6 +5793,24 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          return matchMaterial(name, false);
      }
  
@@ -39,7 +39,7 @@ index 03b47012447430a350e152920f754d993d4023db..12ccc034d7a9eff321bfc65a4987c6ff
      /**
       * Attempts to match the Material with the given name.
       * <p>
-@@ -5811,9 +5829,50 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5814,9 +5832,50 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
  

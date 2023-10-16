@@ -21,7 +21,7 @@ index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..5f4ab8e9399875b7be6d3af54ed605bd
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
-index 744160405680babbb83c99abcbe2dc89bf312398..ea2fd6df29381b5f18a208185653d257636f210b 100644
+index 744160405680babbb83c99abcbe2dc89bf312398..0d8a523964aeca275601fcadfc67fcf49569f801 100644
 --- a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
 +++ b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
 @@ -25,17 +25,28 @@ public class GameEventDispatcher {
@@ -35,7 +35,7 @@ index 744160405680babbb83c99abcbe2dc89bf312398..ea2fd6df29381b5f18a208185653d257
 +        // Pluto start - Cache GameEvent lookups
 +        org.bukkit.GameEvent bukkitEvent;
 +        if (this.level.plutoConfig().useGameEventCache) {
-+            bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(event.getName(), s -> org.bukkit.GameEvent.getByKey(org.bukkit.craftbukkit.util.CraftNamespacedKey.fromMinecraft(net.minecraft.core.registries.BuiltInRegistries.GAME_EVENT.getKey(event))));
++            bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(event.builtInRegistryHolder().key().location().getPath(), s -> CraftGameEvent.minecraftToBukkit(event));
 +        } else {
 +            bukkitEvent = CraftGameEvent.minecraftToBukkit(event);
 +        }

@@ -53,10 +53,10 @@ index 1b6f72932fbdd567a1534bcf15e8a610b00f974d..c72e7431682eca3f0404520a7769d35c
          int n = Mth.floor(box.maxZ + 1.0E-7D) + 1;
          this.cursor = new Cursor3D(i, k, m, j, l, n);
 diff --git a/src/main/java/net/minecraft/world/level/CollisionGetter.java b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-index c0dd933c8e64484c4ae0d4fa0f6e19969cf09b37..8ccd766513f2084ea00730f4c6f57ff0ffb4ff8f 100644
+index 5d66aadae51db1ae760812849bfc8740b82af9a9..14252c8298e1a85320197f11b99670aaaf29fb3b 100644
 --- a/src/main/java/net/minecraft/world/level/CollisionGetter.java
 +++ b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-@@ -105,7 +105,7 @@ public interface CollisionGetter extends BlockGetter {
+@@ -119,7 +119,7 @@ public interface CollisionGetter extends BlockGetter {
          double d = Double.MAX_VALUE;
          BlockCollisions<BlockPos> blockCollisions = new BlockCollisions<>(this, entity, box, false, (pos, voxelShape) -> {
              return pos;

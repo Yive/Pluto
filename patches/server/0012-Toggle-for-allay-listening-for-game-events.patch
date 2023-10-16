@@ -24,10 +24,10 @@ index d827dbf660786b84180d4b7218d4041221b00002..9be3f142742240eafc028a203ae3d181
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index 1a0eee3b766a5ce5623c32ed9c023a0f80db1d1a..59bf8f23838edf8f280bba63217e950bad4fe18d 100644
+index d241ca4d0295f9fce39c11197bd435cfac7f6e54..fc272595eca38511c48bef21e3651cdef9b821aa 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -421,6 +421,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+@@ -420,6 +420,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
      @Override
      public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> callback) {
          Level world = this.level();
