@@ -54,7 +54,7 @@ index 692c962193cf9fcc6801fc93f3220bdc673d527b..15bc3f3cb5bc1c4c545ba359a11a2b0c
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
-index 893d8c0946ef71a0561221dd76bffff0dc940d56..cec624c1259a4ec8c25adc0738e1d4b9fc4a4384 100644
+index 893d8c0946ef71a0561221dd76bffff0dc940d56..e9eda81dec28b8c9a92fce6881ca2fcd67291b39 100644
 --- a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
 +++ b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
 @@ -27,11 +27,13 @@ import org.jetbrains.annotations.Nullable;
@@ -69,8 +69,8 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..cec624c1259a4ec8c25adc0738e1d4b9
 -	private static final String GITHUB_FORMAT = "https://api.github.com/repos/pufferfish-gg/Pufferfish/compare/ver/1.20...%s";
 +
 +	// Pluto start - Branding
-+	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.20.1/lastSuccessfulBuild/buildNumber");
-+	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.1...%s";
++	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.20.2/lastSuccessfulBuild/buildNumber");
++	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.2...%s";
 +	// Pluto end - Branding
  	
  	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
