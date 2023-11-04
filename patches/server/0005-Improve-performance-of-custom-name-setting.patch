@@ -22,7 +22,7 @@ index 5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0..29192b350cb8638acf2c35480eb4ce60
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index f7ebddd35ff5a60a81034fd7de035ebba83e9517..ffe725070fb750ea4a7a01aa999c5aea0258176d 100644
+index 90b04377088fcaf128cb35843702d2f5ead4b7f6..36944a8d10f936429f0fdcfd7d98da0d775e0e1d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -981,6 +981,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -40,7 +40,7 @@ index f7ebddd35ff5a60a81034fd7de035ebba83e9517..ffe725070fb750ea4a7a01aa999c5aea
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
-index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..022bffc505fdab19d3c6a5bfb9b3a3a95f8774b3 100644
+index 7c36d2bd36926c0ae5a0db6a97bd47a85566cf26..86abde1cd53b951cfbaf5a384ba6a4e605355679 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
 @@ -43,6 +43,7 @@ public final class CraftChatMessage {
@@ -66,7 +66,7 @@ index 0f70be614f8f5350ad558d0ae645cdf0027e1e76..022bffc505fdab19d3c6a5bfb9b3a3a9
                  this.output = new Component[]{this.currentChatComponent};
 @@ -66,7 +73,7 @@ public final class CraftChatMessage {
              }
-             this.list.add(currentChatComponent);
+             this.list.add(this.currentChatComponent);
  
 -            Matcher matcher = (keepNewlines ? StringMessage.INCREMENTAL_PATTERN_KEEP_NEWLINES : StringMessage.INCREMENTAL_PATTERN).matcher(message);
 +            Matcher matcher = (noLinks ? StringMessage.INCREMENTAL_PATTERN_NO_LINKS : keepNewlines ? StringMessage.INCREMENTAL_PATTERN_KEEP_NEWLINES : StringMessage.INCREMENTAL_PATTERN).matcher(message); // Pluto - Improve performance of custom name setting
