@@ -5,10 +5,10 @@ Subject: [PATCH] Build fixes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 0330a20576c372c29ca4d98a2bc5b01e28303ac3..1e307fd29b2f55b15622b5d9ba6de584f25348e0 100644
+index b9c75a190dbd7a90ac5ef0fbc6e6fe34806acc4e..71fefbee6733b65ee26f409d8ccd0ea4a4aeaf6b 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -110,6 +110,7 @@ tasks.jar {
+@@ -127,6 +127,7 @@ tasks.jar {
  
  tasks.withType<Javadoc> {
      val options = options as StandardJavadocDocletOptions

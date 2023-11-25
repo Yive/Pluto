@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a5da0461a8e3e337ecc24420211b6cc7563cd0f1..ab21951558238b4d5ac94eb0d13def6159264f62 100644
+index 322231285600501f61b8495cc4a2b9adcc60c041..78a6a9918c60652c611615ef58966af655ddf514 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -76,7 +76,7 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..e9eda81dec28b8c9a92fce6881ca2fcd
  	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
  			.mapping(
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 371049c1236c6443384c0ce184e99d5b9f8e57c2..5860c5fb679dac81bf5e405d3df8ed2263f53c3a 100644
+index 58d076e2a8fa1cf56c4c8d15a502e85fcf48aa90..38cfa8329e43434417710dc626993b2e099ff0dc 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1699,7 +1699,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -89,10 +89,10 @@ index 371049c1236c6443384c0ce184e99d5b9f8e57c2..5860c5fb679dac81bf5e405d3df8ed22
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5a95dcc02241d6036ee520a6a7a05e8713c6081f..ec9993ad136de6e10a17018f72742bdbf9b3e4b1 100644
+index 697e74b4d966f7472f0cb3dcaca928cdde4714d7..f680400eabccbb0143afcaa047e38499827df7f5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -267,7 +267,7 @@ import javax.annotation.Nullable; // Paper
+@@ -269,7 +269,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
