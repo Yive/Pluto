@@ -27,12 +27,12 @@ index 762d897128778f86e9220f6ff7d94a470e3d1d95..53bb437b419077cbc8ee75d05db73e4a
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/FarmBlock.java b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-index 5946f06f63b5694034bd027984a4925b0831d439..e6f230de96bc3d150899b070381d43e60f54ee77 100644
+index 502dcba14da9d3dcefc61fdc349a4e1e1d94b478..852b912c46049cc8e7ad9d175f711ab37ed71647 100644
 --- a/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-@@ -86,7 +86,7 @@ public class FarmBlock extends Block {
-     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-         int i = (Integer) state.getValue(FarmBlock.MOISTURE);
+@@ -88,7 +88,7 @@ public class FarmBlock extends Block {
+         if (i > 0 && world.paperConfig().tickRates.wetFarmland != 1 && (world.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper
+         if (i == 0 && world.paperConfig().tickRates.dryFarmland != 1 && (world.paperConfig().tickRates.dryFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.dryFarmland != 0)) { return; } // Paper
  
 -        if (!FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) {
 +        if (!world.plutoConfig().alwaysMoistFarmland && !FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) { // Pluto - Always moist blocks
