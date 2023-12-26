@@ -7,4 +7,4 @@ pluginManagement {
 
 rootProject.name = "pluto"
 
-include("pluto-api", "pluto-server")
+include("pluto-api", "pluto-api-generator", "pluto-server")

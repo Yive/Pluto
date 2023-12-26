@@ -1,6 +1,7 @@
 # Pluto
 pluto-server
 pluto-api
+pluto-api-generator
 
 # Gradle
 .gradle/
