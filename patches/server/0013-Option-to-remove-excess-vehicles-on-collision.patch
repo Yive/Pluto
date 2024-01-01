@@ -27,10 +27,10 @@ index 9be3f142742240eafc028a203ae3d1810a646ce5..2b0d3213460c1fe7e813c8d64c5e9c10
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 44a6118d3bd67a95180f750c17967561946e2e87..6dddd929355e039e53b4e8b0ecac6c97c3672a3d 100644
+index c906ca07509939a06b9aaf2da0dafb172830a638..fa59cc09e4a211c6e0d494a3ee28988c136fc3d2 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -429,6 +429,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -381,6 +381,7 @@ public abstract class AbstractMinecart extends VehicleEntity {
                  this.level().getCraftServer().getPluginManager().callEvent(new org.bukkit.event.vehicle.VehicleMoveEvent(vehicle, from, to));
              }
              // CraftBukkit end
@@ -38,7 +38,7 @@ index 44a6118d3bd67a95180f750c17967561946e2e87..6dddd929355e039e53b4e8b0ecac6c97
              if (this.getMinecartType() == AbstractMinecart.Type.RIDEABLE && this.getDeltaMovement().horizontalDistanceSqr() > 0.01D) {
                  List<Entity> list = this.level().getEntities((Entity) this, this.getBoundingBox().inflate(0.20000000298023224D, 0.0D, 0.20000000298023224D), EntitySelector.pushableBy(this));
  
-@@ -437,6 +438,12 @@ public abstract class AbstractMinecart extends Entity {
+@@ -389,6 +390,12 @@ public abstract class AbstractMinecart extends VehicleEntity {
  
                      while (iterator.hasNext()) {
                          Entity entity = (Entity) iterator.next();
@@ -51,7 +51,7 @@ index 44a6118d3bd67a95180f750c17967561946e2e87..6dddd929355e039e53b4e8b0ecac6c97
  
                          if (!(entity instanceof Player) && !(entity instanceof IronGolem) && !(entity instanceof AbstractMinecart) && !this.isVehicle() && !entity.isPassenger()) {
                              // CraftBukkit start
-@@ -468,6 +475,12 @@ public abstract class AbstractMinecart extends Entity {
+@@ -420,6 +427,12 @@ public abstract class AbstractMinecart extends VehicleEntity {
  
                  while (iterator1.hasNext()) {
                      Entity entity1 = (Entity) iterator1.next();
@@ -65,10 +65,10 @@ index 44a6118d3bd67a95180f750c17967561946e2e87..6dddd929355e039e53b4e8b0ecac6c97
                      if (!this.hasPassenger(entity1) && entity1.isPushable() && entity1 instanceof AbstractMinecart) {
                          // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index 5c07da62c82bc70138f6cb5007629d6974be69ac..a1214bec2921236936182e4822434ad2d905b151 100644
+index c041c0b81be41cfd128c2f5ba56a5329d50b2efc..92cf284b24c8c9f7ba17fb06b80e47026cc205a0 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -469,8 +469,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -412,8 +412,15 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
              boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
              Iterator iterator = list.iterator();
  

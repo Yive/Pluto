@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 322231285600501f61b8495cc4a2b9adcc60c041..78a6a9918c60652c611615ef58966af655ddf514 100644
+index 1e1100d3fa59c5ec8d10ce5cfde593e1361112fb..6dedf6ffbf18d416bbca10d45cc36aee7df4faf9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -54,7 +54,7 @@ index 692c962193cf9fcc6801fc93f3220bdc673d527b..15bc3f3cb5bc1c4c545ba359a11a2b0c
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
-index 893d8c0946ef71a0561221dd76bffff0dc940d56..e9eda81dec28b8c9a92fce6881ca2fcd67291b39 100644
+index 893d8c0946ef71a0561221dd76bffff0dc940d56..cdf86a36a5b5f4385634352dbce099a9c8b5786f 100644
 --- a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
 +++ b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
 @@ -27,11 +27,13 @@ import org.jetbrains.annotations.Nullable;
@@ -69,17 +69,26 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..e9eda81dec28b8c9a92fce6881ca2fcd
 -	private static final String GITHUB_FORMAT = "https://api.github.com/repos/pufferfish-gg/Pufferfish/compare/ver/1.20...%s";
 +
 +	// Pluto start - Branding
-+	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.20.2/lastSuccessfulBuild/buildNumber");
-+	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.2...%s";
++	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.20.4/lastSuccessfulBuild/buildNumber");
++	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.4...%s";
 +	// Pluto end - Branding
  	
  	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
  			.mapping(
+@@ -112,7 +114,7 @@ public class PufferfishVersionFetcher implements VersionFetcher {
+ 	
+ 	private @NotNull Component getResponseMessage(final int versionDiff) {
+ 		return switch (Math.max(-1, Math.min(1, versionDiff))) {
+-			case -1 -> text("You are running an unsupported version of Pufferfish.", RED);
++			case -1 -> text("You are running an unsupported version of Pluto.", RED); // Pluto - Branding
+ 			case 0 -> text("You are on the latest version!", GREEN);
+ 			default -> text("You are running " + versionDiff + " version" + (versionDiff == 1 ? "" : "s") + " beyond. " +
+ 							"Please update your server when possible to maintain stability, security, and receive the latest optimizations.",
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 58d076e2a8fa1cf56c4c8d15a502e85fcf48aa90..38cfa8329e43434417710dc626993b2e099ff0dc 100644
+index 32f2c4bc66c4c891cf854d96b901b0f3046b34e9..368a49bbb070fbc1085412a3e256dfb7794c3d4d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1699,7 +1699,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1874,7 +1874,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -89,10 +98,10 @@ index 58d076e2a8fa1cf56c4c8d15a502e85fcf48aa90..38cfa8329e43434417710dc626993b2e
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 697e74b4d966f7472f0cb3dcaca928cdde4714d7..f680400eabccbb0143afcaa047e38499827df7f5 100644
+index 36c68a6e2bc49b5192fb4d27f174b520e59430c6..0d51be939c3256d3df53e9986563170dccde7980 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -269,7 +269,7 @@ import javax.annotation.Nullable; // Paper
+@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {

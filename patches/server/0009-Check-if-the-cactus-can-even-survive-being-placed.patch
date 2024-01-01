@@ -30,10 +30,10 @@ index 53bb437b419077cbc8ee75d05db73e4a59565612..a26a9020d51998bfd46995323655d6a4
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CactusBlock.java b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-index 0003fb51ae3a6575575e10b4c86719f3061e2577..092b0b9d1033bda078fedb6286f4264f4188245d 100644
+index a9629a102c4fa4e5720e63fcf4590e9231426c62..c55c9f778f5ced006a5351b359d17473594b123b 100644
 --- a/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-@@ -59,12 +59,30 @@ public class CactusBlock extends Block {
+@@ -66,12 +66,30 @@ public class CactusBlock extends Block {
  
                  int modifier = world.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
                  if (j >= 15 || (modifier != 100 && random.nextFloat() < (modifier / (100.0f * 16)))) { // Spigot - SPIGOT-7159: Better modifier resolution
@@ -64,7 +64,7 @@ index 0003fb51ae3a6575575e10b4c86719f3061e2577..092b0b9d1033bda078fedb6286f4264f
                      world.setBlock(pos, (BlockState) state.setValue(CactusBlock.AGE, j + 1), 4);
                  }
  
-@@ -93,6 +111,12 @@ public class CactusBlock extends Block {
+@@ -100,6 +118,12 @@ public class CactusBlock extends Block {
  
      @Override
      public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
