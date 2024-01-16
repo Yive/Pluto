@@ -207,11 +207,11 @@ index 0000000000000000000000000000000000000000..bc130bf79ba71102ae97e2daed5d5f3e
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 3b8c810a228a59bf02a8557b229e5eca56c16562..0dfec1fcfbbb7163280e9cdf158da7e23aac1c8f 100644
+index 80e1dcef1eeb33f553c7d771a00d463e99e3f147..d1428d06d08596fcc9905285d05499f931eedcef 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -223,6 +223,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
-         // Paper end
+         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // Paper - init PaperBrigadierProvider
          gg.pufferfish.pufferfish.PufferfishConfig.load(); // Pufferfish
          gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
 +        dev.yive.pluto.PlutoConfig.init((java.io.File) options.valueOf("pluto-settings")); // Pluto - Config
@@ -219,27 +219,27 @@ index 3b8c810a228a59bf02a8557b229e5eca56c16562..0dfec1fcfbbb7163280e9cdf158da7e2
          this.setPvpAllowed(dedicatedserverproperties.pvp);
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 2e14e03d01c97b9da97e8e15c663262d22b1b3fc..2e602a8a765c2511856d57ce1d1a8b01e3cf9a66 100644
+index 3bf4aa21e2ad602bf9d85d3fcd4f43e0357ef221..eb36c3087e8257218d17724799bf8a944f6f4ed0 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -177,6 +177,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
          return this.paperConfig;
      }
-     // Paper end
+     // Paper end - add paper world config
 +    private final dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig; public dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig() { return this.plutoConfig; } // Pluto - Config
  
      public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
      public final co.aikar.timings.WorldTimingsHandler timings; // Paper
 @@ -218,6 +219,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
-     protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - Async-Anti-Xray - Pass executor
+     protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - create paper world config; Async-Anti-Xray: Pass executor
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
-         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper
+         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 +        this.plutoConfig = new dev.yive.pluto.PlutoConfig.WorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Pluto - Config
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0d51be939c3256d3df53e9986563170dccde7980..4232c0a318aba3b2f8189441c6b7c3f7e15023fa 100644
+index ecf43ed435adec49ffd5557df4f333ed6f73cb22..7ffa6ba994c4bcfe8780050a259be28c75855b5d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1037,6 +1037,7 @@ public final class CraftServer implements Server {
@@ -251,7 +251,7 @@ index 0d51be939c3256d3df53e9986563170dccde7980..4232c0a318aba3b2f8189441c6b7c3f7
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index a74a8a027c99eef199c1a6a54232ac2c8ffb9d08..8d2be109534a06d43d37fb83f02510439d4a6d57 100644
+index ef8bbef6e4143b9432ee2ae2fb79e2aa2a9b84df..911a2c4bccfc891b4d9eeb2938da9570a162e1cb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -181,6 +181,14 @@ public class Main {
