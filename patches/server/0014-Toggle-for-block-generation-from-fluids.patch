@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 23 Jan 2024 13:11:42 -0800
+Subject: [PATCH] Toggle for block generation from fluids
+
+Pulled from my old 1.8/1.12 forks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 2b0d3213460c1fe7e813c8d64c5e9c10a4a3333f..958ecf15752e546cc51479168c1cbabaa3c4b70e 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -261,5 +261,10 @@ public class PlutoConfig {
+             excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
+             excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
+         }
++
++        public boolean disableBlockGenerationFromFluids = false;
++        private void disableBlockGenerationFromFluids() {
++            disableBlockGenerationFromFluids = getBoolean("blocks.fluids.disable-block-generation", disableBlockGenerationFromFluids);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
+index 2bd097203f1e92d3fc343f91dc37220e09dd5066..235baa001285e871f4f79c3074a7cffd12aab7dd 100644
+--- a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
+@@ -192,6 +192,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+                 BlockPos blockposition1 = pos.relative(enumdirection.getOpposite());
+ 
+                 if (world.getFluidState(blockposition1).is(FluidTags.WATER)) {
++                    if (world.plutoConfig().disableBlockGenerationFromFluids) return false; // Pluto - Toggle for block generation from fluids
+                     Block block = world.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
+ 
+                     // CraftBukkit start
+@@ -203,6 +204,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+                 }
+ 
+                 if (flag && world.getBlockState(blockposition1).is(Blocks.BLUE_ICE)) {
++                    if (world.plutoConfig().disableBlockGenerationFromFluids) return false; // Pluto - Toggle for block generation from fluids
+                     // CraftBukkit start
+                     if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(world, pos, Blocks.BASALT.defaultBlockState())) {
+                         this.fizz(world, pos);
+diff --git a/src/main/java/net/minecraft/world/level/material/LavaFluid.java b/src/main/java/net/minecraft/world/level/material/LavaFluid.java
+index 3bb4a9a1a6249e8ba2de237f801210e7f4fd5825..4df1656d27cb63c3d7b9595c819f1df9abf9503a 100644
+--- a/src/main/java/net/minecraft/world/level/material/LavaFluid.java
++++ b/src/main/java/net/minecraft/world/level/material/LavaFluid.java
+@@ -209,7 +209,7 @@ public abstract class LavaFluid extends FlowingFluid {
+             FluidState fluid1 = world.getFluidState(pos);
+ 
+             if (this.is(FluidTags.LAVA) && fluid1.is(FluidTags.WATER)) {
+-                if (state.getBlock() instanceof LiquidBlock) {
++                if (state.getBlock() instanceof LiquidBlock && !world.getMinecraftWorld().plutoConfig().disableBlockGenerationFromFluids) { // Pluto - Toggle for block generation from fluids
+                     // CraftBukkit start
+                     if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(world.getMinecraftWorld(), pos, Blocks.STONE.defaultBlockState(), 3)) {
+                         return;
