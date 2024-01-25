@@ -1,0 +1,149 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 25 Jan 2024 13:09:20 -0800
+Subject: [PATCH] Toggle for light lookups on certain flora
+
+Pulled from my old 1.8/1.12 forks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 6869d60b2e5ad7b4bfc098174a2b07497a0af746..52e7e2ce4d6399c0f921f6c5fa6d6307cc32c5bf 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -285,5 +285,24 @@ public class PlutoConfig {
+             itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
+             itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
+         }
++
++        public boolean cropIgnoreLightLevel = false;
++        public boolean mushroomIgnoreLightLevel = false;
++        public boolean stemIgnoreLightLevel = false;
++        public boolean bambooSaplingIgnoreLightLevel = false;
++        public boolean bambooStalkIgnoreLightLevel = false;
++        public boolean sweetBerryBushIgnoreLightLevel = false;
++        public boolean saplingIgnoreLightLevel = false;
++        public boolean pitcherCropIgnoreLightLevel = false;
++        private void ignoreLightLevels() {
++            cropIgnoreLightLevel = getBoolean("blocks.crops.ignore-light-level", cropIgnoreLightLevel);
++            mushroomIgnoreLightLevel = getBoolean("blocks.mushroom.ignore-light-level", mushroomIgnoreLightLevel);
++            stemIgnoreLightLevel = getBoolean("blocks.stems.ignore-light-level", stemIgnoreLightLevel);
++            bambooSaplingIgnoreLightLevel = getBoolean("blocks.bamboo-sapling.ignore-light-level", bambooSaplingIgnoreLightLevel);
++            bambooStalkIgnoreLightLevel = getBoolean("blocks.bamboo-stalk.ignore-light-level", bambooStalkIgnoreLightLevel);
++            sweetBerryBushIgnoreLightLevel = getBoolean("blocks.sweet-berry-bush.ignore-light-level", sweetBerryBushIgnoreLightLevel);
++            saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
++            pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/BambooSaplingBlock.java b/src/main/java/net/minecraft/world/level/block/BambooSaplingBlock.java
+index 8430f4ecee42e7112b7bafe04cec237b22dade88..6593a04817edf7cd781b6cb7904cf67716b9163a 100644
+--- a/src/main/java/net/minecraft/world/level/block/BambooSaplingBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BambooSaplingBlock.java
+@@ -45,7 +45,7 @@ public class BambooSaplingBlock extends Block implements BonemealableBlock {
+ 
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        if (random.nextFloat() < (world.spigotConfig.bambooModifier / (100.0f * 3)) && world.isEmptyBlock(pos.above()) && world.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
++        if (random.nextFloat() < (world.spigotConfig.bambooModifier / (100.0f * 3)) && world.isEmptyBlock(pos.above()) && (world.plutoConfig().bambooSaplingIgnoreLightLevel || world.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
+             this.growBamboo(world, pos);
+         }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java b/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
+index 1dd85da8da9e2040d740c5f573e7438380f9a7a8..1def1f2c1c8cb864f80e9d584b6e2fb9fc1292cd 100644
+--- a/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
+@@ -134,7 +134,7 @@ public class BambooStalkBlock extends Block implements BonemealableBlock {
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+         if ((Integer) state.getValue(BambooStalkBlock.STAGE) == 0) {
+-            if (random.nextFloat() < (world.spigotConfig.bambooModifier / (100.0f * 3)) && world.isEmptyBlock(pos.above()) && world.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
++            if (random.nextFloat() < (world.spigotConfig.bambooModifier / (100.0f * 3)) && world.isEmptyBlock(pos.above()) && (world.plutoConfig().bambooStalkIgnoreLightLevel || world.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
+                 int i = this.getHeightBelowUpToMax(world, pos) + 1;
+ 
+                 if (i < world.paperConfig().maxGrowthHeight.bamboo.max) { // Paper
+diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+index f04863588f82da55ca2b9ebdb502ac6da3e37b58..e1bf904693f96e1e036338f49a6ce516a72b915c 100644
+--- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+@@ -77,7 +77,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
+ 
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        if (world.getRawBrightness(pos, 0) >= 9) {
++        if (world.plutoConfig().cropIgnoreLightLevel || world.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
+             int i = this.getAge(state);
+ 
+             if (i < this.getMaxAge()) {
+@@ -173,7 +173,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
+     }
+ 
+     protected static boolean hasSufficientLight(LevelReader world, BlockPos pos) {
+-        return world.getRawBrightness(pos, 0) >= 8;
++        return (world instanceof ServerLevel serverLevel && serverLevel.plutoConfig().cropIgnoreLightLevel) || world.getRawBrightness(pos, 0) >= 8; // Pluto - Toggle for light lookups on certain flora
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/level/block/MushroomBlock.java b/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
+index 96f9ca2439a617b5f90b826d4fc99c857301b1c2..705a4437dcc8f6312b12692ce6a204832f880b9c 100644
+--- a/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
+@@ -95,7 +95,7 @@ public class MushroomBlock extends BushBlock implements BonemealableBlock {
+         BlockPos blockposition1 = pos.below();
+         BlockState iblockdata1 = world.getBlockState(blockposition1);
+ 
+-        return iblockdata1.is(BlockTags.MUSHROOM_GROW_BLOCK) ? true : world.getRawBrightness(pos, 0) < 13 && this.mayPlaceOn(iblockdata1, world, blockposition1);
++        return iblockdata1.is(BlockTags.MUSHROOM_GROW_BLOCK) ? true : ((world instanceof ServerLevel serverLevel && serverLevel.plutoConfig().mushroomIgnoreLightLevel) || world.getRawBrightness(pos, 0) < 13) && this.mayPlaceOn(iblockdata1, world, blockposition1); // Pluto - Toggle for light lookups on certain flora
+     }
+ 
+     public boolean growMushroom(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
+diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+index fd6b4eb84877d2cab234a41954636d1c3223e2d2..78749c2eca82863744c9aa4a514d0f06efedbfc1 100644
+--- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+@@ -144,7 +144,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+     }
+ 
+     private static boolean sufficientLight(LevelReader world, BlockPos pos) {
+-        return CropBlock.hasSufficientLight(world, pos);
++        return (world instanceof ServerLevel serverLevel && serverLevel.plutoConfig().pitcherCropIgnoreLightLevel) || CropBlock.hasSufficientLight(world, pos); // Pluto - Toggle for light lookups on certain flora
+     }
+ 
+     private static boolean isLower(BlockState state) {
+diff --git a/src/main/java/net/minecraft/world/level/block/SaplingBlock.java b/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
+index 836c86104ed4f0d375330c9123af5d502efefa4d..b5b965325fa0bceedaecaaacd39897325f8f2ff6 100644
+--- a/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
+@@ -54,7 +54,7 @@ public class SaplingBlock extends BushBlock implements BonemealableBlock {
+ 
+     @Override
+     public void randomTick(net.minecraft.world.level.block.state.BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        if (world.getMaxLocalRawBrightness(pos.above()) >= 9 && random.nextFloat() < (world.spigotConfig.saplingModifier / (100.0f * 7))) { // Spigot - SPIGOT-7159: Better modifier resolution
++        if ((world.plutoConfig().saplingIgnoreLightLevel || world.getMaxLocalRawBrightness(pos.above()) >= 9) && random.nextFloat() < (world.spigotConfig.saplingModifier / (100.0f * 7))) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
+             this.advanceTree(world, pos, state, random);
+         }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+index 4494ac1e8fe44b9107150f6288de91bb6121ec14..4cce5320a831757191282e49b26717e0494e224c 100644
+--- a/src/main/java/net/minecraft/world/level/block/StemBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+@@ -72,7 +72,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {
+ 
+     @Override
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        if (world.getRawBrightness(pos, 0) >= 9) {
++        if (world.plutoConfig().stemIgnoreLightLevel || world.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
+             float f = world.plutoConfig().useStaticGrowthSpeedStems ? world.plutoConfig().staticGrowthSpeedStems : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds
+ 
+             if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? world.spigotConfig.pumpkinModifier : world.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / f) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
+diff --git a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
+index f474ae7b3121de701f371b7d88e80086ec07d03d..cc1a5053c4d4f7d74c16a675a4974990d5b4f4c1 100644
+--- a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
+@@ -73,7 +73,7 @@ public class SweetBerryBushBlock extends BushBlock implements BonemealableBlock
+     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+         int i = (Integer) state.getValue(SweetBerryBushBlock.AGE);
+ 
+-        if (i < 3 && random.nextFloat() < (world.spigotConfig.sweetBerryModifier / (100.0f * 5)) && world.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
++        if (i < 3 && random.nextFloat() < (world.spigotConfig.sweetBerryModifier / (100.0f * 5)) && (world.plutoConfig().sweetBerryBushIgnoreLightLevel || world.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
+             BlockState iblockdata1 = (BlockState) state.setValue(SweetBerryBushBlock.AGE, i + 1);
+ 
+             if (!CraftEventFactory.handleBlockGrowEvent(world, pos, iblockdata1, 2)) return; // CraftBukkit
