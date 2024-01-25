@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 25 Jan 2024 14:35:41 -0800
+Subject: [PATCH] Option to disable entity target/goal selectors
+
+Pulled from my old 1.8/1.12 forks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 52e7e2ce4d6399c0f921f6c5fa6d6307cc32c5bf..a6b10edcc7baa6bad807a37a91923758702fb97b 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -304,5 +304,12 @@ public class PlutoConfig {
+             saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
+             pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
+         }
++
++        public boolean disableTargetSelector = false;
++        public boolean disableGoalSelector = false;
++        private void disableTargetSelector() {
++            disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
++            disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 2f3dc569ff9cdead48aa831c96c027cc7255d609..09b53a7aee603011c466b76234d2c28502b594c6 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -227,10 +227,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
+     public void inactiveTick() {
+         super.inactiveTick();
+         boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
+-        if (this.goalSelector.inactiveTick(this.activatedPriority, true) && !isThrottled) { // Pufferfish - pass activated priroity // Pufferfish - throttle inactive goal selector ticking
++        if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, true) && !isThrottled) { // Pufferfish - pass activated priroity // Pufferfish - throttle inactive goal selector ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tick();
+         }
+-        if (this.targetSelector.inactiveTick(this.activatedPriority, true)) { // Pufferfish - pass activated priority
++        if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, true)) { // Pufferfish - pass activated priority // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tick();
+         }
+     }
+@@ -914,20 +914,20 @@ public abstract class Mob extends LivingEntity implements Targeting {
+ 
+         if (i % 2 != 0 && this.tickCount > 1) {
+             this.level().getProfiler().push("targetSelector");
+-            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tickRunningGoals(false);
+             this.level().getProfiler().pop();
+             this.level().getProfiler().push("goalSelector");
+-            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tickRunningGoals(false);
+             this.level().getProfiler().pop();
+         } else {
+             this.level().getProfiler().push("targetSelector");
+-            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tick();
+             this.level().getProfiler().pop();
+             this.level().getProfiler().push("goalSelector");
+-            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tick();
+             this.level().getProfiler().pop();
+         }
