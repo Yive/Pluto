@@ -1,27 +1,29 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Tue, 23 Jan 2024 13:57:47 -0800
-Subject: [PATCH] Configurable entity activation interval
+Subject: [PATCH] Configurable entity activation
 
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 22ac1ba801306fe21eb95d51b389bc695410c987..ffc474e32fc8c1d16d7e2b4cee54abcc2eaf0bb1 100644
+index 22ac1ba801306fe21eb95d51b389bc695410c987..26069e5e29d3969e42f32cb6cbd3e918b1487512 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -271,5 +271,10 @@ public class PlutoConfig {
+@@ -271,5 +271,12 @@ public class PlutoConfig {
          private void disableNetherPortalGeneration() {
              disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
          }
 +
 +        public int entityActivationInterval = 1;
-+        private void entityActivationDelay() {
++        public boolean disableEntityActivation = false;
++        private void entityActivationConfiguration() {
 +            entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
++            disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
 +        }
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index c80dc73d7fd7d6cf3b87d1626129273e944d6649..d4cba53ac1b3417015af2a0a996ad9215c1ccc34 100644
+index c80dc73d7fd7d6cf3b87d1626129273e944d6649..8b7fa7683b83a86f37ad09549524ec53810b62e4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -896,7 +896,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -29,7 +31,7 @@ index c80dc73d7fd7d6cf3b87d1626129273e944d6649..d4cba53ac1b3417015af2a0a996ad921
              }
  
 -            org.spigotmc.ActivationRange.activateEntities(this); // Spigot
-+            if (MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) org.spigotmc.ActivationRange.activateEntities(this); // Spigot // Pluto - Configurable entity activation delay
++            if (!plutoConfig().disableEntityActivation && MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) org.spigotmc.ActivationRange.activateEntities(this); // Spigot // Pluto - Configurable entity activation
              this.timings.entityTick.startTiming(); // Spigot
              this.entityTickList.forEach((entity) -> {
                  entity.activatedPriorityReset = false; // Pufferfish - DAB

@@ -6,12 +6,12 @@ Subject: [PATCH] Configuration for item merging
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index ffc474e32fc8c1d16d7e2b4cee54abcc2eaf0bb1..6869d60b2e5ad7b4bfc098174a2b07497a0af746 100644
+index 26069e5e29d3969e42f32cb6cbd3e918b1487512..26f1264455c0a4e6c6ef244ac35cee902312487f 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -276,5 +276,14 @@ public class PlutoConfig {
-         private void entityActivationDelay() {
+@@ -278,5 +278,14 @@ public class PlutoConfig {
              entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
+             disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
          }
 +
 +        public boolean disableItemMergeCheckWhileMoving = false;
