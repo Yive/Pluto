@@ -31,7 +31,7 @@ index cf463751006b7d4dc4e7251b51c8d7f4b4497481..762d897128778f86e9220f6ff7d94a47
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
-index 9550ce8588c6aa3ba4cbbbb86912eae2b452eb01..f04863588f82da55ca2b9ebdb502ac6da3e37b58 100644
+index 5b96d1ae4bd8546311e986bc312b1f85883a67f4..3cc092cf55e9ca7f1729dc26a2c2dbcf37cb48f9 100644
 --- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
 @@ -81,7 +81,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
@@ -44,7 +44,7 @@ index 9550ce8588c6aa3ba4cbbbb86912eae2b452eb01..f04863588f82da55ca2b9ebdb502ac6d
                  // Spigot start
                  int modifier;
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index acaa13f195467c3ebe70677b8440a88369d41b06..fd6b4eb84877d2cab234a41954636d1c3223e2d2 100644
+index d20c009baf69d083bf8a14000028991b6518cd50..571d7e65d6ff54a20cbe676f1201742358b24401 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 @@ -118,7 +118,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
@@ -53,7 +53,7 @@ index acaa13f195467c3ebe70677b8440a88369d41b06..fd6b4eb84877d2cab234a41954636d1c
      public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 -        float f = CropBlock.getGrowthSpeed(this, world, pos);
 +        float f = world.plutoConfig().useStaticGrowthSpeedPitchers ? world.plutoConfig().staticGrowthSpeedPitchers : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds
-         boolean bl = random.nextFloat() < (world.spigotConfig.pitcherPlantModifier / (100.0F * (Math.floor(25.0F / f) + 1))); // Paper
+         boolean bl = random.nextFloat() < (world.spigotConfig.pitcherPlantModifier / (100.0F * (Math.floor(25.0F / f) + 1))); // Paper - Fix Spigot growth modifiers
          if (bl) {
              this.grow(world, state, pos, 1);
 diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java

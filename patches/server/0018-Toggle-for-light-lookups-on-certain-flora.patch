@@ -48,7 +48,7 @@ index 8430f4ecee42e7112b7bafe04cec237b22dade88..6593a04817edf7cd781b6cb7904cf677
          }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java b/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
-index 1dd85da8da9e2040d740c5f573e7438380f9a7a8..1def1f2c1c8cb864f80e9d584b6e2fb9fc1292cd 100644
+index e8dc4ea90d74036dacb0785fcb9125df192a4c22..f5526c664924f9c5e7aa3819c8681bae48064999 100644
 --- a/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BambooStalkBlock.java
 @@ -134,7 +134,7 @@ public class BambooStalkBlock extends Block implements BonemealableBlock {
@@ -59,9 +59,9 @@ index 1dd85da8da9e2040d740c5f573e7438380f9a7a8..1def1f2c1c8cb864f80e9d584b6e2fb9
 +            if (random.nextFloat() < (world.spigotConfig.bambooModifier / (100.0f * 3)) && world.isEmptyBlock(pos.above()) && (world.plutoConfig().bambooStalkIgnoreLightLevel || world.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
                  int i = this.getHeightBelowUpToMax(world, pos) + 1;
  
-                 if (i < world.paperConfig().maxGrowthHeight.bamboo.max) { // Paper
+                 if (i < world.paperConfig().maxGrowthHeight.bamboo.max) { // Paper - Configurable cactus/bamboo/reed growth height
 diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
-index f04863588f82da55ca2b9ebdb502ac6da3e37b58..e1bf904693f96e1e036338f49a6ce516a72b915c 100644
+index 3cc092cf55e9ca7f1729dc26a2c2dbcf37cb48f9..b5cd67a078d0d6c04e2a8b0b147ec874bc970416 100644
 --- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
 @@ -77,7 +77,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
@@ -96,7 +96,7 @@ index 96f9ca2439a617b5f90b826d4fc99c857301b1c2..705a4437dcc8f6312b12692ce6a20483
  
      public boolean growMushroom(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index fd6b4eb84877d2cab234a41954636d1c3223e2d2..78749c2eca82863744c9aa4a514d0f06efedbfc1 100644
+index 571d7e65d6ff54a20cbe676f1201742358b24401..bbab05ce403c98b3a244ec6ecc2a8d68eb19ee3a 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 @@ -144,7 +144,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
@@ -135,7 +135,7 @@ index 4494ac1e8fe44b9107150f6288de91bb6121ec14..4cce5320a831757191282e49b26717e0
  
              if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? world.spigotConfig.pumpkinModifier : world.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / f) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
 diff --git a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
-index f474ae7b3121de701f371b7d88e80086ec07d03d..cc1a5053c4d4f7d74c16a675a4974990d5b4f4c1 100644
+index 6c1ed9d37adb97b47f0288a5986b805ee0e13842..fa973c6703d3516c1522a6ccea23fdadc5c63faf 100644
 --- a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
 @@ -73,7 +73,7 @@ public class SweetBerryBushBlock extends BushBlock implements BonemealableBlock

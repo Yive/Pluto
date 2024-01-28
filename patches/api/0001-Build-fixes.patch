@@ -5,18 +5,9 @@ Subject: [PATCH] Build fixes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 80833c13a2d19e31d6f648e7ef5b3456025e767e..b17afe8d2fe8b3577a0468a6fc08f82b214cffc7 100644
+index 28a3ee2f2df6f93a894793abc03d357a9010a399..3d05874cbd7fe05cef23f75fd964aead6945c99f 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -79,7 +79,7 @@ dependencies {
- }
- 
- // Paper start
--val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("paper-api-generator/generated")
-+val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("pluto-api-generator/generated") // Pluto - Build fixes
- idea {
-     module {
-         generatedSourceDirs.add(generatedApiPath.toFile())
 @@ -130,6 +130,7 @@ tasks.jar {
  
  tasks.withType<Javadoc> {

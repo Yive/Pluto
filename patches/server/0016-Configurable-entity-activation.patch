@@ -23,10 +23,10 @@ index 22ac1ba801306fe21eb95d51b389bc695410c987..26069e5e29d3969e42f32cb6cbd3e918
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index c80dc73d7fd7d6cf3b87d1626129273e944d6649..8b7fa7683b83a86f37ad09549524ec53810b62e4 100644
+index dbe612427b894df9da1335b94163ba9b89b090c0..9536fee892a4147892dc7eabdd9179405bd942f9 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -896,7 +896,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -891,7 +891,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  gameprofilerfiller.pop();
              }
  

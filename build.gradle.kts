@@ -56,9 +56,9 @@ paperweight {
         patchTasks {
             register("PaperApiGenerator") {
                 isBareDirectory.set(true)
-                upstreamDirPath.set("../paper/paper-api-generator") // This is very jank, but I don't care.
+                upstreamDirPath.set("paper-api-generator/generated")
                 patchDir.set(layout.projectDirectory.dir("patches/paper-api-generator"))
-                outputDir.set(layout.projectDirectory.dir("pluto-api-generator"))
+                outputDir.set(layout.projectDirectory.dir("paper-api-generator/generated"))
             }
         }
     }

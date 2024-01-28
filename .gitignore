@@ -1,7 +1,8 @@
 # Pluto
 pluto-server
 pluto-api
-pluto-api-generator
+paper-api-generator
+!patches/paper-api-generator
 
 # Gradle
 .gradle/

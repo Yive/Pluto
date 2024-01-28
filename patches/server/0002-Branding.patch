@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 53fb07bd746ceafb51b7928d1b11fddae8fa1e77..25b4e4c53898fc6da4736ec0be96c23a925c4290 100644
+index c0fc4b2b36c8be0479be28a8c7325b61bef1e07d..5a1c0915028278dd3050bb40573d26379e5c72ac 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -85,20 +85,20 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..cdf86a36a5b5f4385634352dbce099a9
  			default -> text("You are running " + versionDiff + " version" + (versionDiff == 1 ? "" : "s") + " beyond. " +
  							"Please update your server when possible to maintain stability, security, and receive the latest optimizations.",
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 1343649cd77a42dd502747581050b401840a6efe..ce50b0a1933fdadf5d571d9db32a82c5c282b345 100644
+index 1dc91ef47d336abe06be1cfd90e8164605e5f37e..085de692b1071ac7d497baeb6bfe176a738460bb 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1860,7 +1860,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1862,7 +1862,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
--        return "Pufferfish"; // Pufferfish - Pufferfish > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
-+        return "Pluto"; // Pluto - Branding // Pufferfish - Pufferfish > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+-        return "Pufferfish"; // Pufferfish > // Paper
++        return "Pluto"; // Pluto - Branding // Pufferfish > // Paper
      }
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cfc41926305441cb36ed67a8cb7e327cd80ff301..ecf43ed435adec49ffd5557df4f333ed6f73cb22 100644
+index 8344f9f693879639c484edf575c7df14df616776..fc462745a2e3ea2dadf512c790a775eb45cbde71 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper

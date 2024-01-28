@@ -41,13 +41,13 @@ index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-index 3aa4cb526f04a171ace0b95d18ecebc9a002470a..f61944f69f205aed33fd2c7ff39dbf491f09e625 100644
+index f936f4664584f19bc6720c664035747721ea8231..4892ac8c4ee776d3f9f91fd55d704d66dac2bd75 100644
 --- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
 @@ -48,6 +48,7 @@ public abstract class BaseSpawner {
      public int requiredPlayerRange = 16;
      public int spawnRange = 4;
-     private int tickDelay = 0; // Paper
+     private int tickDelay = 0; // Paper - Configurable mob spawner tick rate
 +    public boolean wasApiUsed = false; // Pluto - Options for spawner settings | Just so that we don't overwrite custom spawners... hopefully
  
      public BaseSpawner() {}
@@ -55,10 +55,10 @@ index 3aa4cb526f04a171ace0b95d18ecebc9a002470a..f61944f69f205aed33fd2c7ff39dbf49
 @@ -88,7 +89,7 @@ public abstract class BaseSpawner {
          tickDelay = world.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
-         // Paper end
+         // Paper end - Configurable mob spawner tick rate
 -        if (this.isNearPlayer(world, pos)) {
 +        if (!world.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(world, pos)) { // Pluto - Options for spawner settings
-             if (this.spawnDelay < -tickDelay) {
+             if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
                  this.delay(world, pos);
              }
 @@ -115,7 +116,7 @@ public abstract class BaseSpawner {

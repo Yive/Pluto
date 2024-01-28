@@ -27,12 +27,12 @@ index 762d897128778f86e9220f6ff7d94a470e3d1d95..53bb437b419077cbc8ee75d05db73e4a
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/FarmBlock.java b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-index 59bbdead2ebd8965d222540c7243dde051bbcc4b..5aee7ee706c35dad1e038304178132122112e570 100644
+index 6e4c852c93f2418ea69e485ed3a10cbe3a6e3bd2..3505b6e24d1aa2445d0be562a6d3940a185ce0ed 100644
 --- a/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 @@ -95,7 +95,7 @@ public class FarmBlock extends Block {
-         if (i > 0 && world.paperConfig().tickRates.wetFarmland != 1 && (world.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper
-         if (i == 0 && world.paperConfig().tickRates.dryFarmland != 1 && (world.paperConfig().tickRates.dryFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.dryFarmland != 0)) { return; } // Paper
+         if (i > 0 && world.paperConfig().tickRates.wetFarmland != 1 && (world.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
+         if (i == 0 && world.paperConfig().tickRates.dryFarmland != 1 && (world.paperConfig().tickRates.dryFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.dryFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
  
 -        if (!FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) {
 +        if (!world.plutoConfig().alwaysMoistFarmland && !FarmBlock.isNearWater(world, pos) && !world.isRainingAt(pos.above())) { // Pluto - Always moist blocks
@@ -40,7 +40,7 @@ index 59bbdead2ebd8965d222540c7243dde051bbcc4b..5aee7ee706c35dad1e03830417813212
                  org.bukkit.craftbukkit.event.CraftEventFactory.handleMoistureChangeEvent(world, pos, (BlockState) state.setValue(FarmBlock.MOISTURE, i - 1), 2); // CraftBukkit
              } else if (!FarmBlock.shouldMaintainFarmland(world, pos)) {
 diff --git a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
-index ceaec1776067b7635c3952025f00f13f4ea86c88..176f7c2a2da6c3f7bc408efa7115ffa7e2901bb6 100644
+index 04957d461d0e968d443737068aaeec1d0bce78b2..8062184483143640337ccfaef25fbf164b54c406 100644
 --- a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
 @@ -91,6 +91,7 @@ public class SugarCaneBlock extends Block {
