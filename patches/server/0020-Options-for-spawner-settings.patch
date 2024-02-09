@@ -41,7 +41,7 @@ index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-index f936f4664584f19bc6720c664035747721ea8231..4892ac8c4ee776d3f9f91fd55d704d66dac2bd75 100644
+index f936f4664584f19bc6720c664035747721ea8231..dbe3537f940e467e3b27929d5fe75c8ba35b5815 100644
 --- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
 @@ -48,6 +48,7 @@ public abstract class BaseSpawner {
@@ -52,41 +52,14 @@ index f936f4664584f19bc6720c664035747721ea8231..4892ac8c4ee776d3f9f91fd55d704d66
  
      public BaseSpawner() {}
  
-@@ -88,7 +89,7 @@ public abstract class BaseSpawner {
+@@ -88,7 +89,20 @@ public abstract class BaseSpawner {
          tickDelay = world.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
 -        if (this.isNearPlayer(world, pos)) {
-+        if (!world.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(world, pos)) { // Pluto - Options for spawner settings
-             if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
-                 this.delay(world, pos);
-             }
-@@ -115,7 +116,7 @@ public abstract class BaseSpawner {
-                     double d1 = j >= 2 ? nbttaglist.getDouble(1) : (double) (pos.getY() + randomsource.nextInt(3) - 1);
-                     double d2 = j >= 3 ? nbttaglist.getDouble(2) : (double) pos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5D;
- 
--                    if (world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) {
-+                    if (!world.plutoConfig().spawnerCheckForBlockCollision || world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) { // Pluto - Options for spawner settings
-                         BlockPos blockposition1 = BlockPos.containing(d0, d1, d2);
- 
-                         if (mobspawnerdata.getCustomSpawnRules().isPresent()) {
-@@ -163,7 +164,7 @@ public abstract class BaseSpawner {
-                             return;
-                         }
- 
--                        int k = world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size();
-+                        int k = !world.plutoConfig().spawnerCheckForNearbyEntities ? 0 : world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size(); // Pluto - Options for spawner settings
- 
-                         if (k >= this.maxNearbyEntities) {
-                             this.delay(world, pos);
-@@ -288,9 +289,23 @@ public abstract class BaseSpawner {
-         }
- 
-         this.displayEntity = null;
 +
 +        // Pluto start - Options for spawner settings
-+        this.wasApiUsed = nbt.getBoolean("Pluto.WasApiUsed");
-+        if (!wasApiUsed && world != null && world.plutoConfig().spawnerSettingsEnabled) {
++        if (!wasApiUsed && world.plutoConfig().spawnerSettingsEnabled) {
 +            this.spawnDelay = world.plutoConfig().spawnerSpawnDelay;
 +            this.minSpawnDelay = world.plutoConfig().spawnerMinSpawnDelay;
 +            this.maxSpawnDelay = world.plutoConfig().spawnerMaxSpawnDelay;
@@ -96,6 +69,35 @@ index f936f4664584f19bc6720c664035747721ea8231..4892ac8c4ee776d3f9f91fd55d704d66
 +            this.spawnRange = world.plutoConfig().spawnerSpawnRange;
 +        }
 +        // Pluto end - Options for spawner settings
++
++        if (!world.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(world, pos)) { // Pluto - Options for spawner settings
+             if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
+                 this.delay(world, pos);
+             }
+@@ -115,7 +129,7 @@ public abstract class BaseSpawner {
+                     double d1 = j >= 2 ? nbttaglist.getDouble(1) : (double) (pos.getY() + randomsource.nextInt(3) - 1);
+                     double d2 = j >= 3 ? nbttaglist.getDouble(2) : (double) pos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5D;
+ 
+-                    if (world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) {
++                    if (!world.plutoConfig().spawnerCheckForBlockCollision || world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) { // Pluto - Options for spawner settings
+                         BlockPos blockposition1 = BlockPos.containing(d0, d1, d2);
+ 
+                         if (mobspawnerdata.getCustomSpawnRules().isPresent()) {
+@@ -163,7 +177,7 @@ public abstract class BaseSpawner {
+                             return;
+                         }
+ 
+-                        int k = world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size();
++                        int k = !world.plutoConfig().spawnerCheckForNearbyEntities ? 0 : world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size(); // Pluto - Options for spawner settings
+ 
+                         if (k >= this.maxNearbyEntities) {
+                             this.delay(world, pos);
+@@ -288,9 +302,12 @@ public abstract class BaseSpawner {
+         }
+ 
+         this.displayEntity = null;
++
++        this.wasApiUsed = nbt.getBoolean("Pluto.WasApiUsed"); // Pluto - Options for spawner settings
      }
  
      public CompoundTag save(CompoundTag nbt) {
