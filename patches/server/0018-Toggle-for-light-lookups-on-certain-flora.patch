@@ -83,7 +83,7 @@ index 3cc092cf55e9ca7f1729dc26a2c2dbcf37cb48f9..b5cd67a078d0d6c04e2a8b0b147ec874
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/level/block/MushroomBlock.java b/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
-index 96f9ca2439a617b5f90b826d4fc99c857301b1c2..705a4437dcc8f6312b12692ce6a204832f880b9c 100644
+index 1f27ae8abd5891a0b8057b454f2210b088b4e95a..183470e3adef6d9da25d7e723e3ad1ec662378eb 100644
 --- a/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/MushroomBlock.java
 @@ -95,7 +95,7 @@ public class MushroomBlock extends BushBlock implements BonemealableBlock {
@@ -109,10 +109,10 @@ index 571d7e65d6ff54a20cbe676f1201742358b24401..bbab05ce403c98b3a244ec6ecc2a8d68
  
      private static boolean isLower(BlockState state) {
 diff --git a/src/main/java/net/minecraft/world/level/block/SaplingBlock.java b/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
-index 836c86104ed4f0d375330c9123af5d502efefa4d..b5b965325fa0bceedaecaaacd39897325f8f2ff6 100644
+index 3ff0d08e4964aae82d8e51d3b8bf9aa002096f81..a100215e8d2d832d2033c7a28875bf8abee97926 100644
 --- a/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SaplingBlock.java
-@@ -54,7 +54,7 @@ public class SaplingBlock extends BushBlock implements BonemealableBlock {
+@@ -55,7 +55,7 @@ public class SaplingBlock extends BushBlock implements BonemealableBlock {
  
      @Override
      public void randomTick(net.minecraft.world.level.block.state.BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
@@ -135,10 +135,10 @@ index 4494ac1e8fe44b9107150f6288de91bb6121ec14..4cce5320a831757191282e49b26717e0
  
              if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? world.spigotConfig.pumpkinModifier : world.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / f) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
 diff --git a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
-index 6c1ed9d37adb97b47f0288a5986b805ee0e13842..fa973c6703d3516c1522a6ccea23fdadc5c63faf 100644
+index 62ed86114c1a6e724ccfea119a331356d0a22600..32d85631a81dc8ec07bebc82de2c43c49ad0c5e4 100644
 --- a/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SweetBerryBushBlock.java
-@@ -73,7 +73,7 @@ public class SweetBerryBushBlock extends BushBlock implements BonemealableBlock
+@@ -72,7 +72,7 @@ public class SweetBerryBushBlock extends BushBlock implements BonemealableBlock
      public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
          int i = (Integer) state.getValue(SweetBerryBushBlock.AGE);
  

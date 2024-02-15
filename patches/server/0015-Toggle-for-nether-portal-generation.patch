@@ -21,15 +21,15 @@ index 958ecf15752e546cc51479168c1cbabaa3c4b70e..22ac1ba801306fe21eb95d51b389bc69
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
-index e9ec8a8969651ea6760bf01c622c66efa7f6e7e5..6fe0767288353f95732537c6ec9dbcbd13634e26 100644
+index bd7cb2ddcac5cdc1d61899d12fc3383fd00598b1..e2664dfc00055fdaf5b6bc6614bf015f91a9bdb8 100644
 --- a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
-@@ -153,7 +153,7 @@ public abstract class BaseFireBlock extends Block {
-     public void onPlace(BlockState iblockdata, Level world, BlockPos blockposition, BlockState iblockdata1, boolean flag, net.minecraft.world.item.context.UseOnContext itemActionContext) {
-         // Paper end - ItemActionContext param
-         if (!iblockdata1.is(iblockdata.getBlock())) {
+@@ -157,7 +157,7 @@ public abstract class BaseFireBlock extends Block {
+     public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify, net.minecraft.world.item.context.UseOnContext context) {
+         // Paper end - UseOnContext param
+         if (!oldState.is(state.getBlock())) {
 -            if (BaseFireBlock.inPortalDimension(world)) {
 +            if (!world.plutoConfig().disableNetherPortalGeneration && BaseFireBlock.inPortalDimension(world)) { // Pluto - Toggle for nether portal generation
-                 Optional<PortalShape> optional = PortalShape.findEmptyPortalShape(world, blockposition, Direction.Axis.X);
+                 Optional<PortalShape> optional = PortalShape.findEmptyPortalShape(world, pos, Direction.Axis.X);
  
                  if (optional.isPresent()) {

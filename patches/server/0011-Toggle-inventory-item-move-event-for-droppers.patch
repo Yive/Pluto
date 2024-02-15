@@ -20,26 +20,26 @@ index b616444c252b0760b47b7a4abf4ea7ee3974a56f..d827dbf660786b84180d4b7218d40412
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/DropperBlock.java b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-index 675644974ae6fb5380a6496a2ac3ec4d1ef7c924..0854daf65b226f93a0a54c0284aaa57d3c4a7625 100644
+index 9a8a0fb958e8ec782111507bae957f854b2aac72..f6f22e4dca99c3a9be73224d8ee8f6416b83aa81 100644
 --- a/src/main/java/net/minecraft/world/level/block/DropperBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-@@ -72,6 +72,19 @@ public class DropperBlock extends DispenserBlock {
-                     if (iinventory == null) {
+@@ -73,6 +73,19 @@ public class DropperBlock extends DispenserBlock {
+                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(world, pos, itemstack, i)) return; // Paper - Add BlockPreDispenseEvent
                          itemstack1 = DropperBlock.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
                      } else {
-+                    // Pluto start - Toggle inventory item move event for droppers
-+                    if (world.plutoConfig().disableDropperInventoryMoveEvent) {
-+                        itemstack1 = HopperBlockEntity.addItem(tileentitydispenser, iinventory, itemstack.copy().split(1), enumdirection.getOpposite());
-+                        if (itemstack1.isEmpty()) {
-+                            itemstack1 = itemstack.copy();
-+                            itemstack1.shrink(1);
-+                        } else {
-+                            itemstack1 = itemstack.copy();
++                        // Pluto start - Toggle inventory item move event for droppers
++                        if (world.plutoConfig().disableDropperInventoryMoveEvent) {
++                            itemstack1 = HopperBlockEntity.addItem(tileentitydispenser, iinventory, itemstack.copy().split(1), enumdirection.getOpposite());
++                            if (itemstack1.isEmpty()) {
++                                itemstack1 = itemstack.copy();
++                                itemstack1.shrink(1);
++                            } else {
++                                itemstack1 = itemstack.copy();
++                            }
++                            tileentitydispenser.setItem(i, itemstack1);
++                            return;
 +                        }
-+                        tileentitydispenser.setItem(i, itemstack1);
-+                        return;
-+                    }
-+                    // Pluto end - Toggle inventory item move event for droppers
++                        // Pluto end - Toggle inventory item move event for droppers
                          // CraftBukkit start - Fire event when pushing items into other inventories
                          CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copy().split(1));
  

@@ -21,7 +21,7 @@ index 8c6a7cdee22d3e146e40022c3d95861e0524d5bb..49e859e7dcb3bf23541fd50424f32a5f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/TntBlock.java b/src/main/java/net/minecraft/world/level/block/TntBlock.java
-index 8eaf1eaf0f739a12baf6e3e9fe32c007eaba20ae..3925c210a2e03350f76063a07a442166611bdebe 100644
+index 5fa5e8c838720eb1491aea73d462f4bc7d779956..b1b64418740b864481df1a23e25e038ebbf76df0 100644
 --- a/src/main/java/net/minecraft/world/level/block/TntBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/TntBlock.java
 @@ -88,7 +88,7 @@ public class TntBlock extends Block {
@@ -31,5 +31,5 @@ index 8eaf1eaf0f739a12baf6e3e9fe32c007eaba20ae..3925c210a2e03350f76063a07a442166
 -        if (!world.isClientSide) {
 +        if (!world.isClientSide && !world.plutoConfig().disableTntChainReaction) { // Pluto - Option to disable TNT chain reactions
              // Paper start - TNTPrimeEvent
-             org.bukkit.block.Block tntBlock = io.papermc.paper.util.MCUtil.toBukkitBlock(world, pos);
+             org.bukkit.block.Block tntBlock = org.bukkit.craftbukkit.block.CraftBlock.at(world, pos);
              org.bukkit.entity.Entity source = explosion.source != null ? explosion.source.getBukkitEntity() : null;
