@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 01:35:04 -0800
+Subject: [PATCH] Configuration for block ticks
+
+Values below 1 will disable ticking the blockTicks list.
+The list is used by stuff such as observers and other redstone components.
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 1d5c771c26e8633f182f698ba2e716181475af09..d443e6e277d756b6aaabb66c88c3b1ed81220490 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -348,5 +348,10 @@ public class PlutoConfig {
+         private void disableFlapEvents() {
+             disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
+         }
++
++        public int blockTickingModulo = 1;
++        private void blockTicking() {
++            blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 9536fee892a4147892dc7eabdd9179405bd942f9..13bbcc459dbfe9bdb114d1638952c590e0e1e1d3 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -849,6 +849,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+         if (!this.isDebug() && flag) {
+             j = this.getGameTime();
+             gameprofilerfiller.push("blockTicks");
++            if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
+             this.blockTicks.tick(j, 65536, this::tickBlock);
+             gameprofilerfiller.popPush("fluidTicks");
+             this.fluidTicks.tick(j, 65536, this::tickFluid);
