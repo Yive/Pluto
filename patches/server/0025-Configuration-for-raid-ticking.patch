@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 03:23:27 -0800
+Subject: [PATCH] Configuration for raid ticking
+
+A value below 1 will stop all raid ticking
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index b6b6fefe1e76e47798c03b8417279d403136c171..289a2c6b0cb964db41422f135ce2fe24e1fba84c 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -358,5 +358,10 @@ public class PlutoConfig {
+         private void fluidTicking() {
+             fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
+         }
++
++        public int raidTickingModulo = 1;
++        private void raidTicking() {
++            raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index a737c5961b4e22807fc464eeb79109cc9485ac20..42f1870354168af1d11048d9f10c5da18db4bccc 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -861,6 +861,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+         gameprofilerfiller.popPush("raid");
+         if (flag) {
+             this.timings.raids.startTiming(); // Paper - timings
++            if (plutoConfig().raidTickingModulo > 0 && (plutoConfig().raidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().raidTickingModulo == 0)) // Pluto - Configuration for raid ticking
+             this.raids.tick();
+             this.timings.raids.stopTiming(); // Paper - timings
+         }
