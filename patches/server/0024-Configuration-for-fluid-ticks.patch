@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 02:33:47 -0800
+Subject: [PATCH] Configuration for fluid ticks
+
+Controls how often fluids are ticked, such as for spreading to new locations. A value below 1 will stop all fluid ticks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index d443e6e277d756b6aaabb66c88c3b1ed81220490..b6b6fefe1e76e47798c03b8417279d403136c171 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -353,5 +353,10 @@ public class PlutoConfig {
+         private void blockTicking() {
+             blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
+         }
++
++        public int fluidTickingModulo = 1;
++        private void fluidTicking() {
++            fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 13bbcc459dbfe9bdb114d1638952c590e0e1e1d3..a737c5961b4e22807fc464eeb79109cc9485ac20 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -852,6 +852,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+             if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
+             this.blockTicks.tick(j, 65536, this::tickBlock);
+             gameprofilerfiller.popPush("fluidTicks");
++            if (plutoConfig().fluidTickingModulo > 0 && (plutoConfig().fluidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().fluidTickingModulo == 0)) // Pluto - Configuration for fluid ticks
+             this.fluidTicks.tick(j, 65536, this::tickFluid);
+             gameprofilerfiller.pop();
+         }
