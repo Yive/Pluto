@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index c0fc4b2b36c8be0479be28a8c7325b61bef1e07d..5a1c0915028278dd3050bb40573d26379e5c72ac 100644
+index 26dc8760508aff735f91e81c2126d31b20bf95a9..42102fc396ba74b9208b6c21f383b8090d8ca212 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,7 +17,7 @@ index c0fc4b2b36c8be0479be28a8c7325b61bef1e07d..5a1c0915028278dd3050bb40573d2637
      // Pufferfish start
      implementation("io.papermc.paper:paper-mojangapi:1.19.2-R0.1-SNAPSHOT") {
          exclude("io.papermc.paper", "paper-api")
-@@ -89,7 +89,7 @@ tasks.jar {
+@@ -90,7 +90,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",

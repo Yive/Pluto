@@ -5,10 +5,10 @@ Subject: [PATCH] Build fixes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 2bb30cb0d8d476d5e5bb272ee59a90a4e80f0360..53fb07bd746ceafb51b7928d1b11fddae8fa1e77 100644
+index 0dab873b52e718ffb83c655b6467abe53c8fdb1d..26dc8760508aff735f91e81c2126d31b20bf95a9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -115,6 +115,13 @@ tasks.compileTestJava {
+@@ -116,6 +116,13 @@ tasks.compileTestJava {
  }
  // Paper end
  
