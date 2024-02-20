@@ -6,10 +6,10 @@ Subject: [PATCH] Option to disable TNT chain reactions
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 8c6a7cdee22d3e146e40022c3d95861e0524d5bb..49e859e7dcb3bf23541fd50424f32a5fcf943a24 100644
+index 8c2790fb1e320b63668d791d42f4465401721151..156035b25e316fb5be83812b0b28be8ddf01e2e9 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -338,5 +338,10 @@ public class PlutoConfig {
+@@ -340,5 +340,10 @@ public class PlutoConfig {
              spawnerRequiredPlayerRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.required-player-range", spawnerRequiredPlayerRange));
              spawnerSpawnRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-range", spawnerSpawnRange));
          }

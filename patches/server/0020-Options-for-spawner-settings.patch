@@ -6,10 +6,10 @@ Subject: [PATCH] Options for spawner settings
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e0524d5bb 100644
+index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c2790fb1e320b63668d791d42f4465401721151 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -313,5 +313,30 @@ public class PlutoConfig {
+@@ -313,5 +313,32 @@ public class PlutoConfig {
              disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
              disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
          }
@@ -18,7 +18,8 @@ index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e
 +        public boolean spawnerCheckForNearbyPlayers = true;
 +        public boolean spawnerCheckForNearbyEntities = true;
 +        public boolean spawnerCheckForBlockCollision = true;
-+        public int spawnerSpawnDelay = 20;
++        public boolean spawnerDisableBabySpawns = false;
++        public boolean spawnerDisableParticles = false;
 +        public int spawnerMinSpawnDelay = 200;
 +        public int spawnerMaxSpawnDelay = 800;
 +        public short spawnerSpawnCount = 4;
@@ -30,7 +31,8 @@ index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e
 +            spawnerCheckForNearbyPlayers = getBoolean("blocks.spawner.check-for-nearby-players", spawnerCheckForNearbyPlayers);
 +            spawnerCheckForNearbyEntities = getBoolean("blocks.spawner.check-for-nearby-entities", spawnerCheckForNearbyEntities);
 +            spawnerCheckForBlockCollision = getBoolean("blocks.spawner.check-for-block-collision", spawnerCheckForBlockCollision);
-+            spawnerSpawnDelay = getInt("blocks.spawner.spawn-delay", spawnerSpawnDelay);
++            spawnerDisableBabySpawns = getBoolean("blocks.spawner.disable-spawning-babies", spawnerDisableBabySpawns);
++            spawnerDisableParticles = getBoolean("blocks.spawner.disable-spawn-particles", spawnerDisableParticles);
 +            spawnerMinSpawnDelay = getInt("blocks.spawner.min-spawn-delay", spawnerMinSpawnDelay);
 +            spawnerMaxSpawnDelay = getInt("blocks.spawner.max-spawn-delay", spawnerMaxSpawnDelay);
 +            spawnerSpawnCount = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-count", spawnerSpawnCount));
@@ -41,7 +43,7 @@ index 86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f..8c6a7cdee22d3e146e40022c3d95861e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7aee8a1616f 100644
+index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3047c5b14 100644
 --- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
 @@ -48,6 +48,7 @@ public abstract class BaseSpawner {
@@ -52,7 +54,7 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7ae
  
      public BaseSpawner() {}
  
-@@ -88,7 +89,20 @@ public abstract class BaseSpawner {
+@@ -88,7 +89,19 @@ public abstract class BaseSpawner {
          tickDelay = world.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
@@ -60,7 +62,6 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7ae
 +
 +        // Pluto start - Options for spawner settings
 +        if (!wasApiUsed && world.plutoConfig().spawnerSettingsEnabled) {
-+            this.spawnDelay = world.plutoConfig().spawnerSpawnDelay;
 +            this.minSpawnDelay = world.plutoConfig().spawnerMinSpawnDelay;
 +            this.maxSpawnDelay = world.plutoConfig().spawnerMaxSpawnDelay;
 +            this.spawnCount = world.plutoConfig().spawnerSpawnCount;
@@ -74,7 +75,7 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7ae
              if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
                  this.delay(world, pos);
              }
-@@ -115,7 +129,7 @@ public abstract class BaseSpawner {
+@@ -115,7 +128,7 @@ public abstract class BaseSpawner {
                      double d1 = j >= 2 ? nbttaglist.getDouble(1) : (double) (pos.getY() + randomsource.nextInt(3) - 1);
                      double d2 = j >= 3 ? nbttaglist.getDouble(2) : (double) pos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5D;
  
@@ -83,7 +84,7 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7ae
                          BlockPos blockposition1 = BlockPos.containing(d0, d1, d2);
  
                          if (mobspawnerdata.getCustomSpawnRules().isPresent()) {
-@@ -156,7 +170,7 @@ public abstract class BaseSpawner {
+@@ -156,7 +169,7 @@ public abstract class BaseSpawner {
                              return;
                          }
  
@@ -92,7 +93,30 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..3f6a3e954295836167040e8a22e9f7ae
  
                          if (k >= this.maxNearbyEntities) {
                              this.delay(world, pos);
-@@ -281,9 +295,12 @@ public abstract class BaseSpawner {
+@@ -175,6 +188,14 @@ public abstract class BaseSpawner {
+                             if (mobspawnerdata.getEntityToSpawn().size() == 1 && mobspawnerdata.getEntityToSpawn().contains("id", 8)) {
+                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, (SpawnGroupData) null, (CompoundTag) null);
+                             }
++                            // Pluto start - Options for spawner settings
++                            // I wish I could put this higher up in the chain, but the baby
++                            // state only gets assigned after the finalizeSpawn method is called.
++                            if (world.plutoConfig().spawnerDisableBabySpawns && entityinsentient.isBaby()) {
++                                if (entityinsentient.getVehicle() != null) entityinsentient.getVehicle().discard(); // Due to jockeys
++                                continue;
++                            }
++                            // Pluto end - Options for spawner settings
+                             // Spigot Start
+                             if ( entityinsentient.level().spigotConfig.nerfSpawnerMobs )
+                             {
+@@ -196,6 +217,7 @@ public abstract class BaseSpawner {
+                             return;
+                         }
+ 
++                        if (world.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
+                         world.levelEvent(2004, pos, 0);
+                         world.gameEvent(entity, GameEvent.ENTITY_PLACE, blockposition1);
+                         if (entity instanceof Mob) {
+@@ -281,9 +303,12 @@ public abstract class BaseSpawner {
          }
  
          this.displayEntity = null;

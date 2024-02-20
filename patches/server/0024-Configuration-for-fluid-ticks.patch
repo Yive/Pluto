@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for fluid ticks
 Controls how often fluids are ticked, such as for spreading to new locations. A value below 1 will stop all fluid ticks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index d443e6e277d756b6aaabb66c88c3b1ed81220490..b6b6fefe1e76e47798c03b8417279d403136c171 100644
+index 78be3303cb54b5ea672e5a532df9e642ee735cc1..6bd4a06e28814b488454738816f30e7e71d58c87 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -353,5 +353,10 @@ public class PlutoConfig {
+@@ -355,5 +355,10 @@ public class PlutoConfig {
          private void blockTicking() {
              blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
          }

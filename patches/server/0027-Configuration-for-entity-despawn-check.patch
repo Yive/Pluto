@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for entity despawn check
 A value below 1 will disable the despawn check for entities. You really shouldn't, but you can.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 7078c5ce4a350194250fe3eae31ed64ecad431ee..c2f5f7d43ab34a26be3414c49a27d146e9b8ac69 100644
+index b150822b9d6da6b69e4f22de4231fd473cd43bfa..3969fe14813eeab89d372a6bb4e0985a1cb5a141 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -369,5 +369,10 @@ public class PlutoConfig {
+@@ -371,5 +371,10 @@ public class PlutoConfig {
              // TODO: Allow for disabling block even ticking
              blockEventTickingModulo = Math.min(1, getInt("blocks.global.block-event-ticking-modulo", blockEventTickingModulo));
          }
