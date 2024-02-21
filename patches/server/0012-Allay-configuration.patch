@@ -1,37 +1,53 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Yive <6853318+Yive@users.noreply.github.com>
 Date: Wed, 19 Jul 2023 23:46:51 -0700
-Subject: [PATCH] Toggle for allay listening for game events
+Subject: [PATCH] Allay configuration
 
+"entities.allay.disable-game-event-listener":
 Improves the performance drastically with large clusters of allays.
 115ms -> 25ms per tick with 1,000 allays.
 
 This setting will break the vibration functionality for allays.
 
+"entities.allay.disable-duplication":
+Disables the ability for players to duplicate their allays.
+This will help avoid needing to enable the above setting.
+
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index d827dbf660786b84180d4b7218d4041221b00002..9be3f142742240eafc028a203ae3d1810a646ce5 100644
+index d827dbf660786b84180d4b7218d4041221b00002..c62344f9cd099e7e32c0dd6e0a9bdde4d0e6df14 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -244,5 +244,10 @@ public class PlutoConfig {
+@@ -244,5 +244,12 @@ public class PlutoConfig {
          private void disableDropperInventoryMoveEvent() {
              disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
          }
 +
 +        public boolean disableAllayGameEventListening = false;
-+        private void disableAllayGameEventListening() {
++        public boolean disableAllayDuplication = false;
++        private void allayConfiguration() {
 +            disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
++            disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
 +        }
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index d241ca4d0295f9fce39c11197bd435cfac7f6e54..fc272595eca38511c48bef21e3651cdef9b821aa 100644
+index d241ca4d0295f9fce39c11197bd435cfac7f6e54..91f61378172abdaa79cebab2d4b55c3562ee72e2 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 @@ -420,6 +420,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
      @Override
      public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> callback) {
          Level world = this.level();
-+        if (world.plutoConfig().disableAllayGameEventListening) return; // Pluto - Toggle for allay listening for game events
++        if (world.plutoConfig().disableAllayGameEventListening) return; // Pluto - Allay Configuration
  
          if (world instanceof ServerLevel) {
              ServerLevel worldserver = (ServerLevel) world;
+@@ -554,7 +555,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+     }
+ 
+     public boolean canDuplicate() {
+-        return (Boolean) this.entityData.get(Allay.DATA_CAN_DUPLICATE);
++        return !this.level().plutoConfig().disableAllayDuplication && (Boolean) this.entityData.get(Allay.DATA_CAN_DUPLICATE); // Pluto - Allay configuration
+     }
+ 
+     private void removeInteractionItem(Player player, ItemStack stack) {

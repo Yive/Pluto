@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for block event ticking
 Block event ticking cannot be disabled currently.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 422c8748c82a344768624aae90a658ac1bb2b790..b150822b9d6da6b69e4f22de4231fd473cd43bfa 100644
+index 559161a5c533486c773031d4c823adaec1e6ffdf..fbf62766126582d52c719901aafce65c76bd57be 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -365,5 +365,11 @@ public class PlutoConfig {
+@@ -367,5 +367,11 @@ public class PlutoConfig {
          private void raidTicking() {
              raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
          }

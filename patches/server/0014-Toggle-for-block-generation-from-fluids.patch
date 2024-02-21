@@ -6,10 +6,10 @@ Subject: [PATCH] Toggle for block generation from fluids
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 2b0d3213460c1fe7e813c8d64c5e9c10a4a3333f..958ecf15752e546cc51479168c1cbabaa3c4b70e 100644
+index 346235c8c7d1583217f268c81544829063a1cd42..7ec0458650955ffe3ed12bc14569ac7d91d9b93a 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -261,5 +261,10 @@ public class PlutoConfig {
+@@ -263,5 +263,10 @@ public class PlutoConfig {
              excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
              excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
          }
@@ -21,7 +21,7 @@ index 2b0d3213460c1fe7e813c8d64c5e9c10a4a3333f..958ecf15752e546cc51479168c1cbaba
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-index 2bd097203f1e92d3fc343f91dc37220e09dd5066..235baa001285e871f4f79c3074a7cffd12aab7dd 100644
+index 9b3dcf1a4d4cece92a629506d341f6bfe79d13d0..0ac2f2b18cf0c633085635b962ae2dc84629b947 100644
 --- a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
 @@ -192,6 +192,7 @@ public class LiquidBlock extends Block implements BucketPickup {

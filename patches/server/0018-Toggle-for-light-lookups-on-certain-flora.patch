@@ -6,10 +6,10 @@ Subject: [PATCH] Toggle for light lookups on certain flora
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 26f1264455c0a4e6c6ef244ac35cee902312487f..a879ba27f2801c250176fc439f41069a3e1f20c4 100644
+index 1505bb360194172a485447fcabda8b4ce4e25c4b..69d8c72ede18b7f23d51ecb2c62aaf545c2249d9 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -287,5 +287,24 @@ public class PlutoConfig {
+@@ -289,5 +289,24 @@ public class PlutoConfig {
              itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
              itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
          }

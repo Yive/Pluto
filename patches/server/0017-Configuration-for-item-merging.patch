@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for item merging
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 26069e5e29d3969e42f32cb6cbd3e918b1487512..26f1264455c0a4e6c6ef244ac35cee902312487f 100644
+index 4ba7d0669804bc84a24e0c2bb8c178322b79a34a..1505bb360194172a485447fcabda8b4ce4e25c4b 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -278,5 +278,14 @@ public class PlutoConfig {
+@@ -280,5 +280,14 @@ public class PlutoConfig {
              entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
              disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
          }
@@ -25,7 +25,7 @@ index 26069e5e29d3969e42f32cb6cbd3e918b1487512..26f1264455c0a4e6c6ef244ac35cee90
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
-index a39db702063887cf530f272deaf4f334047cc7d4..6f081b2957952acb4ccfc5b714d82643f4bfb406 100644
+index eb0d6238588efa35fa868f26290547574a08eca2..0b8ddbbf7c9aa6d16e374237078978e67d71fdc6 100644
 --- a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
 @@ -197,10 +197,12 @@ public class ItemEntity extends Entity implements TraceableEntity {

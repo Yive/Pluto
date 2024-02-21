@@ -5,10 +5,10 @@ Subject: [PATCH] Option to disable flapping movement game event
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 156035b25e316fb5be83812b0b28be8ddf01e2e9..84b9793df4b4fd8109e00fa5fec67061ab7e7cf1 100644
+index b1675a7fddd2063a2bb66c683dc49044ab6e8201..8a7780669a09666a4b1fad3297ac2b8082f644fa 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -345,5 +345,10 @@ public class PlutoConfig {
+@@ -347,5 +347,10 @@ public class PlutoConfig {
          private void disableTntChainReaction() {
              disableTntChainReaction = getBoolean("blocks.tnt.disable-chain-reaction", disableTntChainReaction);
          }

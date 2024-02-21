@@ -7,10 +7,10 @@ Values below 1 will disable ticking the blockTicks list.
 The list is used by stuff such as observers and other redstone components.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 84b9793df4b4fd8109e00fa5fec67061ab7e7cf1..78be3303cb54b5ea672e5a532df9e642ee735cc1 100644
+index 8a7780669a09666a4b1fad3297ac2b8082f644fa..634e11d1f5a9353174caf7266bf38cb78063f878 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -350,5 +350,10 @@ public class PlutoConfig {
+@@ -352,5 +352,10 @@ public class PlutoConfig {
          private void disableFlapEvents() {
              disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
          }

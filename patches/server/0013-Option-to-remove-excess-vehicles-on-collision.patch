@@ -5,12 +5,12 @@ Subject: [PATCH] Option to remove excess vehicles on collision
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 9be3f142742240eafc028a203ae3d1810a646ce5..2b0d3213460c1fe7e813c8d64c5e9c10a4a3333f 100644
+index c62344f9cd099e7e32c0dd6e0a9bdde4d0e6df14..346235c8c7d1583217f268c81544829063a1cd42 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -249,5 +249,17 @@ public class PlutoConfig {
-         private void disableAllayGameEventListening() {
+@@ -251,5 +251,17 @@ public class PlutoConfig {
              disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
+             disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
          }
 +
 +        public boolean removeExcessMinecarts = false;
@@ -27,7 +27,7 @@ index 9be3f142742240eafc028a203ae3d1810a646ce5..2b0d3213460c1fe7e813c8d64c5e9c10
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index c906ca07509939a06b9aaf2da0dafb172830a638..fa59cc09e4a211c6e0d494a3ee28988c136fc3d2 100644
+index d514ec1e4cbdc579c3a61533998437903afdc8b6..41bed500799131ae1f0443ad97cdef97447a0092 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 @@ -381,6 +381,7 @@ public abstract class AbstractMinecart extends VehicleEntity {
@@ -65,7 +65,7 @@ index c906ca07509939a06b9aaf2da0dafb172830a638..fa59cc09e4a211c6e0d494a3ee28988c
                      if (!this.hasPassenger(entity1) && entity1.isPushable() && entity1 instanceof AbstractMinecart) {
                          // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index c041c0b81be41cfd128c2f5ba56a5329d50b2efc..92cf284b24c8c9f7ba17fb06b80e47026cc205a0 100644
+index db6aa75d642f4a7258f197933671907faf79c8f2..9bb51b6c3f78e177aea4931484d203f6fee95549 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 @@ -412,8 +412,15 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {

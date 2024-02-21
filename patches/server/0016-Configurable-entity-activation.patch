@@ -6,10 +6,10 @@ Subject: [PATCH] Configurable entity activation
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 22ac1ba801306fe21eb95d51b389bc695410c987..26069e5e29d3969e42f32cb6cbd3e918b1487512 100644
+index f5f460a112f497f90a3a3ac33c0c33cad3827a5b..4ba7d0669804bc84a24e0c2bb8c178322b79a34a 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -271,5 +271,12 @@ public class PlutoConfig {
+@@ -273,5 +273,12 @@ public class PlutoConfig {
          private void disableNetherPortalGeneration() {
              disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
          }

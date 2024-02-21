@@ -6,10 +6,10 @@ Subject: [PATCH] Option to disable entity target/goal selectors
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index a879ba27f2801c250176fc439f41069a3e1f20c4..86fa05c5af86697e92d2c4f1f46b9f9ec31e9c6f 100644
+index 69d8c72ede18b7f23d51ecb2c62aaf545c2249d9..370f68f341c06aed890445d0b696b90e74c9fc17 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -306,5 +306,12 @@ public class PlutoConfig {
+@@ -308,5 +308,12 @@ public class PlutoConfig {
              saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
              pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
          }
@@ -23,7 +23,7 @@ index a879ba27f2801c250176fc439f41069a3e1f20c4..86fa05c5af86697e92d2c4f1f46b9f9e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 2f3dc569ff9cdead48aa831c96c027cc7255d609..09b53a7aee603011c466b76234d2c28502b594c6 100644
+index 4be5ae6bfc7bbb8c928e13208dfcd7f455c56cfe..a0553a9748cd63d93efb1dc42aab09f493bcc1f7 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -227,10 +227,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
