@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Wed, 21 Feb 2024 07:30:25 -0800
+Subject: [PATCH] Shulker configuration
+
+Setting 'entities.shulker.disable-random-teleports' to true will also prevent splitting. It is the more efficient option if you want to disable splitting.
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 3969fe14813eeab89d372a6bb4e0985a1cb5a141..a7234a9444bfc6a986d5fe5a9a962003faf89a4c 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -376,5 +376,14 @@ public class PlutoConfig {
+         private void entityDespawning() {
+             entityDespawnCheckModulo = getInt("entities.global.despawn-check-modulo", entityDespawnCheckModulo);
+         }
++
++        public boolean disableShulkersDroppingContentsWhenDestroyed = false;
++        public boolean disableShulkerSplitting = false;
++        public boolean disableShulkerTeleporting = false;
++        private void shulkerSettings() {
++            disableShulkersDroppingContentsWhenDestroyed = getBoolean("entities.item.disable-dropping-shulker-box-contents-when-destroyed", disableShulkersDroppingContentsWhenDestroyed);
++            disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
++            disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Shulker.java b/src/main/java/net/minecraft/world/entity/monster/Shulker.java
+index f3c2a2ffb74daa89a516db4c188ce675c79932bf..081b21155250dd980ac2a05c68f47fe72742af30 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Shulker.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Shulker.java
+@@ -396,6 +396,7 @@ public class Shulker extends AbstractGolem implements VariantHolder<Optional<Dye
+     }
+ 
+     protected boolean teleportSomewhere() {
++        if (this.level().plutoConfig().disableShulkerTeleporting) return false; // Pluto - Shulker configuration
+         if (!this.isNoAi() && this.isAlive()) {
+             BlockPos blockposition = this.blockPosition();
+ 
+@@ -475,6 +476,7 @@ public class Shulker extends AbstractGolem implements VariantHolder<Optional<Dye
+         AABB axisalignedbb = this.getBoundingBox();
+ 
+         if (!this.isClosed() && this.teleportSomewhere()) {
++            if (this.level().plutoConfig().disableShulkerSplitting) return; // Pluto - Shulker configuration
+             int i = this.level().getEntities((EntityTypeTest) EntityType.SHULKER, axisalignedbb.inflate(8.0D), Entity::isAlive).size();
+             float f = (float) (i - 1) / 5.0F;
+ 
+diff --git a/src/main/java/net/minecraft/world/item/BlockItem.java b/src/main/java/net/minecraft/world/item/BlockItem.java
+index 8d2c0accadaf0c5d28e7db6e62a05f6c619cf02f..6215619803e03920d75bdfaf654390c79707b360 100644
+--- a/src/main/java/net/minecraft/world/item/BlockItem.java
++++ b/src/main/java/net/minecraft/world/item/BlockItem.java
+@@ -287,7 +287,7 @@ public class BlockItem extends Item {
+ 
+     @Override
+     public void onDestroyed(ItemEntity entity) {
+-        if (this.block instanceof ShulkerBoxBlock) {
++        if (this.block instanceof ShulkerBoxBlock && !entity.level().plutoConfig().disableShulkersDroppingContentsWhenDestroyed) { // Pluto - Shulker configuration
+             ItemStack itemstack = entity.getItem();
+             CompoundTag nbttagcompound = BlockItem.getBlockEntityData(itemstack);
+ 
