@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for raid ticking
 A value below 1 will stop all raid ticking
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 9e8c199f65d5544ae1fc6bf3e94f91d1eedde8ee..559161a5c533486c773031d4c823adaec1e6ffdf 100644
+index 03cb8e25e909b969afb70d8ffb129e03dc56713f..488a25e1cec14882d09495c3a28c19fdfe8a3862 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -362,5 +362,10 @@ public class PlutoConfig {
+@@ -364,5 +364,10 @@ public class PlutoConfig {
          private void fluidTicking() {
              fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
          }

@@ -6,10 +6,10 @@ Subject: [PATCH] Option to disable entity target/goal selectors
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 69d8c72ede18b7f23d51ecb2c62aaf545c2249d9..370f68f341c06aed890445d0b696b90e74c9fc17 100644
+index 96b151c9aa0bf4c3435db084c66936e4948b7655..9821c6f8ca145b4474663ae47e84d01f17e7c759 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -308,5 +308,12 @@ public class PlutoConfig {
+@@ -310,5 +310,12 @@ public class PlutoConfig {
              saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
              pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
          }

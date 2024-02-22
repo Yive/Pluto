@@ -15,10 +15,10 @@ Setting the gamerule "doTileDrop" to false was to simulate a server that has chu
 Note: This might increase the item output of a cacti farm, though in theory it should act the same as vanilla.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 53bb437b419077cbc8ee75d05db73e4a59565612..a26a9020d51998bfd46995323655d6a4dbf739ab 100644
+index ae5508c54d8851e483b6f83cd68695e8db97da38..04a9932d4137178c67563339ca78f7c2836b8392 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -229,5 +229,10 @@ public class PlutoConfig {
+@@ -231,5 +231,10 @@ public class PlutoConfig {
              alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
              alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
          }
@@ -30,7 +30,7 @@ index 53bb437b419077cbc8ee75d05db73e4a59565612..a26a9020d51998bfd46995323655d6a4
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CactusBlock.java b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-index a9629a102c4fa4e5720e63fcf4590e9231426c62..c55c9f778f5ced006a5351b359d17473594b123b 100644
+index ba4aaf850af36a84517c70581e141157c4f15b99..b24858577628fca32faa2f27e90608bfbd68def3 100644
 --- a/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 @@ -66,12 +66,30 @@ public class CactusBlock extends Block {

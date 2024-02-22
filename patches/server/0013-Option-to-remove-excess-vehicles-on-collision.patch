@@ -5,10 +5,10 @@ Subject: [PATCH] Option to remove excess vehicles on collision
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index c62344f9cd099e7e32c0dd6e0a9bdde4d0e6df14..346235c8c7d1583217f268c81544829063a1cd42 100644
+index 594c7e4715986f7fba9071f3f2f9885ea2023ddf..7e14c4ffd72436511ce8cc352d93a55ad1401849 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -251,5 +251,17 @@ public class PlutoConfig {
+@@ -253,5 +253,17 @@ public class PlutoConfig {
              disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
              disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
          }

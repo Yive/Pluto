@@ -10,10 +10,10 @@ always-moist - true:   1.5mspt
 Note: This will cause farmland to never dry out.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 762d897128778f86e9220f6ff7d94a470e3d1d95..53bb437b419077cbc8ee75d05db73e4a59565612 100644
+index 01c8e914393426e3f5e03df00fab0d293e8c26e3..ae5508c54d8851e483b6f83cd68695e8db97da38 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -222,5 +222,12 @@ public class PlutoConfig {
+@@ -224,5 +224,12 @@ public class PlutoConfig {
              useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
              staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
          }

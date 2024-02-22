@@ -6,10 +6,10 @@ Subject: [PATCH] Options for spawner settings
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 370f68f341c06aed890445d0b696b90e74c9fc17..687804c01adaa6f08616a443aea04f356adcaef1 100644
+index 9821c6f8ca145b4474663ae47e84d01f17e7c759..250be095a01a7402420aabd4d866e6606ec6b834 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -315,5 +315,32 @@ public class PlutoConfig {
+@@ -317,5 +317,32 @@ public class PlutoConfig {
              disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
              disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
          }

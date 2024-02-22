@@ -5,10 +5,10 @@ Subject: [PATCH] Configuration for entity inside block check frequency
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index d123e02c6855ee6d9006769c941e00369643ba76..edd260f11c30a298ebdb6da2c5badc4e179b8112 100644
+index d36477fb53709d160edb8c7bf64731d7347e60a0..d130bea050fbb861d26900ac89c5c9b56d3dfb99 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -392,5 +392,10 @@ public class PlutoConfig {
+@@ -394,5 +394,10 @@ public class PlutoConfig {
          private void entityPushing() {
              entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
          }

@@ -6,10 +6,10 @@ Subject: [PATCH] Shulker configuration
 Setting 'entities.shulker.disable-random-teleports' to true will also prevent splitting. It is the more efficient option if you want to disable splitting.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 33f1b2e37d425a3e5ee6cf263e825be6d0ea42e9..6d7dbc6592a02f3ff7483ca655b748992b317f0d 100644
+index 174dc26cca0fad4a19c86c7c6074a2b5f65adfe8..6bd6511bcbb2da30e9f5d464e7a2327d511f94ce 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -378,5 +378,14 @@ public class PlutoConfig {
+@@ -380,5 +380,14 @@ public class PlutoConfig {
          private void entityDespawning() {
              entityDespawnCheckModulo = getInt("entities.global.despawn-check-modulo", entityDespawnCheckModulo);
          }

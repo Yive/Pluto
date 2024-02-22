@@ -8,10 +8,10 @@ Drops the overall block lookups from ~15 down to 5 for a player entity.
 Roughly 10mspt improvement for 10,000 cows all within a 15 block radius of the player.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 29192b350cb8638acf2c35480eb4ce603523f31e..cf463751006b7d4dc4e7251b51c8d7f4b4497481 100644
+index 7944997d4acde68089bc85021037c6e297e5a543..79ec621f0b4014828c0dbf5d1f9ce12983a4d982 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -202,5 +202,10 @@ public class PlutoConfig {
+@@ -204,5 +204,10 @@ public class PlutoConfig {
          private void shouldUseCustomNameOptimisation() {
              useCustomNameOptimisation = getBoolean("entities.global.use-custom-name-api-optimisation", useCustomNameOptimisation);
          }

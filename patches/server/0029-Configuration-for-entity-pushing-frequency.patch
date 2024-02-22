@@ -5,10 +5,10 @@ Subject: [PATCH] Configuration for entity pushing frequency
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 6d7dbc6592a02f3ff7483ca655b748992b317f0d..d123e02c6855ee6d9006769c941e00369643ba76 100644
+index 6bd6511bcbb2da30e9f5d464e7a2327d511f94ce..d36477fb53709d160edb8c7bf64731d7347e60a0 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -387,5 +387,10 @@ public class PlutoConfig {
+@@ -389,5 +389,10 @@ public class PlutoConfig {
              disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
              disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
          }
