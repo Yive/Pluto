@@ -20,10 +20,10 @@ index d130bea050fbb861d26900ac89c5c9b56d3dfb99..e4eb690a364745b2df50782160a66953
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index af61d51d5af63cdfb217bbfbf5ed4674daa71565..4bb5c3ccffe879694428266348ae14a2038eadc1 100644
+index fdea0e12fb57de8fe405d3d0bfe79362f3051be7..d48dacfd4ea8e0105b640be8ba6fd4e6162bbd7a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1820,11 +1820,28 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1833,11 +1833,28 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public boolean isInWater() {
          return this.wasTouchingWater;
      }

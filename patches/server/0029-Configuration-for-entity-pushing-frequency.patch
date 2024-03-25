@@ -20,10 +20,10 @@ index 6bd6511bcbb2da30e9f5d464e7a2327d511f94ce..d36477fb53709d160edb8c7bf64731d7
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index aa9696facf7780313c322d01928aab7e6c92cc99..25ecd777f38e611c9765f3195462af23574d77c6 100644
+index 25e30408c964b5257f1cf945892bd668df38252b..df4ac3000140921cf90dfe283fe7c0e5221daba5 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3517,6 +3517,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3525,6 +3525,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
              this.checkAutoSpinAttack(axisalignedbb, this.getBoundingBox());
          }
  

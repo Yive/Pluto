@@ -23,10 +23,10 @@ index 96b151c9aa0bf4c3435db084c66936e4948b7655..9821c6f8ca145b4474663ae47e84d01f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 4be5ae6bfc7bbb8c928e13208dfcd7f455c56cfe..a0553a9748cd63d93efb1dc42aab09f493bcc1f7 100644
+index 4cf2963fdbe9003fd18ac8c2035ccded57c02abd..a19edeef424fe39b690a81d2a4a81aeab1264f0f 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -227,10 +227,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -228,10 +228,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
      public void inactiveTick() {
          super.inactiveTick();
          boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
@@ -39,7 +39,7 @@ index 4be5ae6bfc7bbb8c928e13208dfcd7f455c56cfe..a0553a9748cd63d93efb1dc42aab09f4
              this.targetSelector.tick();
          }
      }
-@@ -914,20 +914,20 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -915,20 +915,20 @@ public abstract class Mob extends LivingEntity implements Targeting {
  
          if (i % 2 != 0 && this.tickCount > 1) {
              this.level().getProfiler().push("targetSelector");

@@ -22,10 +22,10 @@ index 01f7fd798b01c783588db53d1618b8cd0b7b2978..7944997d4acde68089bc85021037c6e2
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 8698104e3eb98e2cc5da5de87a8f538860c1d91d..6d0d7ecf96997734649000a40ab857d3a0d7bd50 100644
+index 7cd7912cecbbbe2c32bfd9b85181115c6d316eb8..bf9882313031eaadd1c34ed03e10501c4f5ce756 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -645,6 +645,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -646,6 +646,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
              name = name.substring(0, 256);
          }
  

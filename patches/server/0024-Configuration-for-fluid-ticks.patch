@@ -21,14 +21,14 @@ index 04c52bcbc9b3096c967fc37ad526db25356e207e..03cb8e25e909b969afb70d8ffb129e03
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 13bbcc459dbfe9bdb114d1638952c590e0e1e1d3..a737c5961b4e22807fc464eeb79109cc9485ac20 100644
+index 340a0b88c6089c9a0dee849f2f0a3608960cd23a..cbee29fc240bbca0328ea42112ec0702733c7ff9 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -852,6 +852,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
-             this.blockTicks.tick(j, 65536, this::tickBlock);
+             this.blockTicks.tick(j, paperConfig().environment.maxBlockTicks, this::tickBlock); // Paper - configurable max block ticks
              gameprofilerfiller.popPush("fluidTicks");
 +            if (plutoConfig().fluidTickingModulo > 0 && (plutoConfig().fluidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().fluidTickingModulo == 0)) // Pluto - Configuration for fluid ticks
-             this.fluidTicks.tick(j, 65536, this::tickFluid);
+             this.fluidTicks.tick(j, paperConfig().environment.maxFluidTicks, this::tickFluid); // Paper - configurable max fluid ticks
              gameprofilerfiller.pop();
          }
