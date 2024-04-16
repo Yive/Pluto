@@ -44,10 +44,10 @@ index 5b96d1ae4bd8546311e986bc312b1f85883a67f4..3cc092cf55e9ca7f1729dc26a2c2dbcf
                  // Spigot start
                  int modifier;
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index d20c009baf69d083bf8a14000028991b6518cd50..571d7e65d6ff54a20cbe676f1201742358b24401 100644
+index 5f1ec3f69295760b7b8097916c82cbf9ddd49700..13900abac8cb07cde8aa3198f723df057629f8a2 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-@@ -118,7 +118,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+@@ -122,7 +122,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
  
      @Override
      public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {

@@ -96,10 +96,10 @@ index 1f27ae8abd5891a0b8057b454f2210b088b4e95a..183470e3adef6d9da25d7e723e3ad1ec
  
      public boolean growMushroom(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index 571d7e65d6ff54a20cbe676f1201742358b24401..bbab05ce403c98b3a244ec6ecc2a8d68eb19ee3a 100644
+index 13900abac8cb07cde8aa3198f723df057629f8a2..067cea44aa60d182354d0827766f6cd7fcd37065 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-@@ -144,7 +144,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+@@ -146,7 +146,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
      }
  
      private static boolean sufficientLight(LevelReader world, BlockPos pos) {

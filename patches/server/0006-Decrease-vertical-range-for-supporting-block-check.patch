@@ -23,13 +23,13 @@ index 7944997d4acde68089bc85021037c6e297e5a543..79ec621f0b4014828c0dbf5d1f9ce129
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BlockCollisions.java b/src/main/java/net/minecraft/world/level/BlockCollisions.java
-index 1b6f72932fbdd567a1534bcf15e8a610b00f974d..c72e7431682eca3f0404520a7769d35c3f240abb 100644
+index 012733f1808e96aecc3b2fd081e355905d1b0766..9547c57a451aa39c181e587365e863de46c59aef 100644
 --- a/src/main/java/net/minecraft/world/level/BlockCollisions.java
 +++ b/src/main/java/net/minecraft/world/level/BlockCollisions.java
-@@ -30,6 +30,12 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
-     private final BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultProvider;
- 
-     public BlockCollisions(CollisionGetter world, @Nullable Entity entity, AABB box, boolean forEntity, BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultFunction) {
+@@ -32,6 +32,12 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
+     public BlockCollisions(
+         CollisionGetter world, @Nullable Entity entity, AABB box, boolean forEntity, BiFunction<BlockPos.MutableBlockPos, VoxelShape, T> resultFunction
+     ) {
 +    // Pluto start - Decrease vertical range for supporting block check
 +        this(world, entity, box, forEntity, resultFunction, false);
 +    }
@@ -39,29 +39,29 @@ index 1b6f72932fbdd567a1534bcf15e8a610b00f974d..c72e7431682eca3f0404520a7769d35c
          this.context = entity == null ? CollisionContext.empty() : CollisionContext.of(entity);
          this.pos = new BlockPos.MutableBlockPos();
          this.entityShape = Shapes.create(box);
-@@ -41,6 +47,12 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
-         int j = Mth.floor(box.maxX + 1.0E-7D) + 1;
-         int k = Mth.floor(box.minY - 1.0E-7D) - 1;
-         int l = Mth.floor(box.maxY + 1.0E-7D) + 1;
+@@ -45,6 +51,12 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
+         int l = Mth.floor(box.maxY + 1.0E-7) + 1;
+         int m = Mth.floor(box.minZ - 1.0E-7) - 1;
+         int n = Mth.floor(box.maxZ + 1.0E-7) + 1;
 +        // Pluto start - Decrease vertical range for supporting block check
 +        if (shrinkVerticalRange && entity != null && entity.level().plutoConfig().useSupportingBlockLookupOptimisation) {
-+            k = Mth.floor(box.minY - 1.0E-7D);
++            k = Mth.floor(box.minY - 1.0E-7);
 +            l = Mth.floor(box.minY);
 +        }
 +        // Pluto end - Decrease vertical range for supporting block check
-         int m = Mth.floor(box.minZ - 1.0E-7D) - 1;
-         int n = Mth.floor(box.maxZ + 1.0E-7D) + 1;
          this.cursor = new Cursor3D(i, k, m, j, l, n);
+     }
+ 
 diff --git a/src/main/java/net/minecraft/world/level/CollisionGetter.java b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-index 5d66aadae51db1ae760812849bfc8740b82af9a9..14252c8298e1a85320197f11b99670aaaf29fb3b 100644
+index 160b4c8f40b7b1bc53a8c23b801c5248c13e9a40..643069a856c542282956c67211398e67929f2aa2 100644
 --- a/src/main/java/net/minecraft/world/level/CollisionGetter.java
 +++ b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-@@ -119,7 +119,7 @@ public interface CollisionGetter extends BlockGetter {
+@@ -111,7 +111,7 @@ public interface CollisionGetter extends BlockGetter {
+     default Optional<BlockPos> findSupportingBlock(Entity entity, AABB box) {
+         BlockPos blockPos = null;
          double d = Double.MAX_VALUE;
-         BlockCollisions<BlockPos> blockCollisions = new BlockCollisions<>(this, entity, box, false, (pos, voxelShape) -> {
-             return pos;
--        });
-+        }, true); // Pluto - Decrease vertical range for supporting block check
+-        BlockCollisions<BlockPos> blockCollisions = new BlockCollisions<>(this, entity, box, false, (pos, voxelShape) -> pos);
++        BlockCollisions<BlockPos> blockCollisions = new BlockCollisions<>(this, entity, box, false, (pos, voxelShape) -> pos, true); // Pluto - Decrease vertical range for supporting block check
  
-         while(blockCollisions.hasNext()) {
+         while (blockCollisions.hasNext()) {
              BlockPos blockPos2 = blockCollisions.next();
