@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     remapper("net.fabricmc:tiny-remapper:0.10.1:fat")
-    decompiler("org.vineflower:vineflower:1.11.0-20240412.144930-14")
+    decompiler("org.vineflower:vineflower:1.10.1")
     paperclip("io.papermc:paperclip:3.0.3")
 }
 
@@ -32,7 +32,7 @@ paperweight {
     serverProject.set(project(":pluto-server"))
 
     remapRepo.set("https://papermc.io/repo/repository/maven-public/")
-    decompileRepo.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    decompileRepo.set("https://papermc.io/repo/repository/maven-public/")
 
     useStandardUpstream("pufferfish") {
         url.set(github("pufferfish-gg", "Pufferfish"))
