@@ -9,7 +9,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/") {
+    maven("https://repo.papermc.io/repository/maven-public/") {
         content { onlyForConfigurations(PAPERCLIP_CONFIG) }
     }
 }
@@ -23,7 +23,7 @@ dependencies {
 subprojects {
     repositories {
         mavenCentral()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://jitpack.io")
     }
 }
@@ -31,8 +31,8 @@ subprojects {
 paperweight {
     serverProject.set(project(":pluto-server"))
 
-    remapRepo.set("https://papermc.io/repo/repository/maven-public/")
-    decompileRepo.set("https://papermc.io/repo/repository/maven-public/")
+    remapRepo.set("https://repo.papermc.io/repository/maven-public/")
+    decompileRepo.set("https://repo.papermc.io/repository/maven-public/")
 
     useStandardUpstream("pufferfish") {
         url.set(github("pufferfish-gg", "Pufferfish"))
