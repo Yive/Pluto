@@ -3,8 +3,7 @@ import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
-    id("io.papermc.paperweight.patcher") version "1.5.15"
+    id("io.papermc.paperweight.patcher") version "1.7.1"
 }
 
 repositories {
@@ -15,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    remapper("net.fabricmc:tiny-remapper:0.10.1:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
     decompiler("org.vineflower:vineflower:1.10.1")
     paperclip("io.papermc:paperclip:3.0.3")
 }
@@ -63,13 +62,13 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -83,7 +82,10 @@ allprojects {
             maven {
                 name = "yiveRepo"
                 url = uri("https://repo.yive.dev/snapshots")
-                credentials(PasswordCredentials::class)
+                credentials {
+                    username = (System.getenv("YIVE_REPO_USERNAME") ?: project.property("yiveRepoUsername")).toString()
+                    password = (System.getenv("YIVE_REPO_PASSWORD") ?: project.property("yiveRepoPassword")).toString()
+                }
             }
         }
     }
@@ -91,7 +93,6 @@ allprojects {
 
 tasks.generateDevelopmentBundle {
     apiCoordinates.set("dev.yive.pluto:pluto-api")
-    mojangApiCoordinates.set("io.papermc.paper:paper-mojangapi")
     libraryRepositories.set(
         listOf(
             "https://repo.maven.apache.org/maven2/",

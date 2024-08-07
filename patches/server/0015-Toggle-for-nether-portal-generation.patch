@@ -21,11 +21,11 @@ index 82eda2ec5660725b63929cafc60726e9b1ce17ae..0ea8b59e4d4b17d40f2d511ce1bc206a
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
-index bd7cb2ddcac5cdc1d61899d12fc3383fd00598b1..e2664dfc00055fdaf5b6bc6614bf015f91a9bdb8 100644
+index bdf432850f8228ed42b09afea79ecc5c1055c930..93dc070e27d7a1ebcc937a5c5dd3c328afe17161 100644
 --- a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
 @@ -157,7 +157,7 @@ public abstract class BaseFireBlock extends Block {
-     public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify, net.minecraft.world.item.context.UseOnContext context) {
+     protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify, @javax.annotation.Nullable net.minecraft.world.item.context.UseOnContext context) {
          // Paper end - UseOnContext param
          if (!oldState.is(state.getBlock())) {
 -            if (BaseFireBlock.inPortalDimension(world)) {

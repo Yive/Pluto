@@ -31,18 +31,18 @@ index b4d5059ed24ac98b1462b173e06ab1691fadac64..594c7e4715986f7fba9071f3f2f9885e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-index d241ca4d0295f9fce39c11197bd435cfac7f6e54..91f61378172abdaa79cebab2d4b55c3562ee72e2 100644
+index 98a759dbe46e2ead39af0f340c9b73c8f4ddce1e..95a54f596b2cfd8344d055a5f4ada00916515a3a 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -420,6 +420,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+@@ -402,6 +402,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
      @Override
      public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> callback) {
          Level world = this.level();
 +        if (world.plutoConfig().disableAllayGameEventListening) return; // Pluto - Allay Configuration
  
-         if (world instanceof ServerLevel) {
-             ServerLevel worldserver = (ServerLevel) world;
-@@ -554,7 +555,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+         if (world instanceof ServerLevel worldserver) {
+             callback.accept(this.dynamicVibrationListener, worldserver);
+@@ -534,7 +535,7 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
      }
  
      public boolean canDuplicate() {

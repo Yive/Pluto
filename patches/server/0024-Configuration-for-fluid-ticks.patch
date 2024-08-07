@@ -21,10 +21,10 @@ index 04c52bcbc9b3096c967fc37ad526db25356e207e..03cb8e25e909b969afb70d8ffb129e03
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 340a0b88c6089c9a0dee849f2f0a3608960cd23a..cbee29fc240bbca0328ea42112ec0702733c7ff9 100644
+index b21b8e3987d5451f11b9c18b8ae54a6ae10ec4e9..803779af55677013c806f8c09662c3a170d7afa4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -852,6 +852,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -673,6 +673,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
              if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
              this.blockTicks.tick(j, paperConfig().environment.maxBlockTicks, this::tickBlock); // Paper - configurable max block ticks
              gameprofilerfiller.popPush("fluidTicks");

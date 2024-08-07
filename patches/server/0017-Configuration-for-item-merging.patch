@@ -25,10 +25,10 @@ index afde9883093366b82c629a9691b43a2adc50d421..ea2d0e800724569d8e641989dc9205a5
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
-index c7f06c3cfb737bd17a706798bf9cf0e1af5f0cc0..7504b52c6ec85cf5106176a3726ea616b2c1ec24 100644
+index ea0d9335446b20073b9aafb9de453097355db79c..f4dcc6871f1a40f4a0b8c97359a7a995264ebf3b 100644
 --- a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
-@@ -198,10 +198,12 @@ public class ItemEntity extends Entity implements TraceableEntity {
+@@ -205,10 +205,12 @@ public class ItemEntity extends Entity implements TraceableEntity {
                  }
              }
  

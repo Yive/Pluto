@@ -31,7 +31,7 @@ index 79ec621f0b4014828c0dbf5d1f9ce12983a4d982..01c8e914393426e3f5e03df00fab0d29
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
-index 5b96d1ae4bd8546311e986bc312b1f85883a67f4..3cc092cf55e9ca7f1729dc26a2c2dbcf37cb48f9 100644
+index 112d2feba5f75a2a873b595617780515945c10e4..32291323266772fc177e753cba57228692dedd4d 100644
 --- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
 @@ -81,7 +81,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
@@ -57,12 +57,12 @@ index 5f1ec3f69295760b7b8097916c82cbf9ddd49700..13900abac8cb07cde8aa3198f723df05
          if (bl) {
              this.grow(world, state, pos, 1);
 diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java
-index 121a872cd750a87b779895687ae1abf5bb77b088..4494ac1e8fe44b9107150f6288de91bb6121ec14 100644
+index 924d80eb41d9a71d1e521c40742557251cf51832..fb7c081e57e1f5aa26fd7d5c5fce99da885cb163 100644
 --- a/src/main/java/net/minecraft/world/level/block/StemBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StemBlock.java
 @@ -73,7 +73,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {
      @Override
-     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+     protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
          if (world.getRawBrightness(pos, 0) >= 9) {
 -            float f = CropBlock.getGrowthSpeed(this, world, pos);
 +            float f = world.plutoConfig().useStaticGrowthSpeedStems ? world.plutoConfig().staticGrowthSpeedStems : CropBlock.getGrowthSpeed(this, world, pos); // Pluto - Static growth speeds

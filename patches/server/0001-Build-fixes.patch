@@ -5,10 +5,10 @@ Subject: [PATCH] Build fixes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 5d95b2006f5cd8c35cfc5c9ca0d8bed39570c8f0..ff9d4191c12cd8dbd1a15a8ec429bc7924e26795 100644
+index 46d58f871c98a9b86f1a03a291cac40031a63e0d..e26f0ad6d12aabd7f26433812a4874c7f941665b 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -112,6 +112,13 @@ tasks.compileTestJava {
+@@ -126,6 +126,13 @@ tasks.compileTestJava {
  }
  // Paper end
  
@@ -21,4 +21,4 @@ index 5d95b2006f5cd8c35cfc5c9ca0d8bed39570c8f0..ff9d4191c12cd8dbd1a15a8ec429bc79
 +
  publishing {
      publications.create<MavenPublication>("maven") {
-         artifact(tasks.shadowJar)
+     }

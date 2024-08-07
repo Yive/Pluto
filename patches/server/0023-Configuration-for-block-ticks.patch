@@ -22,10 +22,10 @@ index 674f3aaaa6916bbb143cbbe506fb88792cb21504..04c52bcbc9b3096c967fc37ad526db25
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 96a93bd5133dd232e44deb45abecafca37fe9db6..340a0b88c6089c9a0dee849f2f0a3608960cd23a 100644
+index 7f92f7a9e5b310117a0bd999f564bacfa4471979..b21b8e3987d5451f11b9c18b8ae54a6ae10ec4e9 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -849,6 +849,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -670,6 +670,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
          if (!this.isDebug() && flag) {
              j = this.getGameTime();
              gameprofilerfiller.push("blockTicks");

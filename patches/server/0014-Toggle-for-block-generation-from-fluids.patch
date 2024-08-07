@@ -21,10 +21,10 @@ index 7e14c4ffd72436511ce8cc352d93a55ad1401849..82eda2ec5660725b63929cafc60726e9
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-index 9b3dcf1a4d4cece92a629506d341f6bfe79d13d0..0ac2f2b18cf0c633085635b962ae2dc84629b947 100644
+index 84623c632d8c2f0fa7ec939c711316d757117d23..181cb14aa6ee9e992d0569b842547bbea5b9c60a 100644
 --- a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-@@ -192,6 +192,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+@@ -190,6 +190,7 @@ public class LiquidBlock extends Block implements BucketPickup {
                  BlockPos blockposition1 = pos.relative(enumdirection.getOpposite());
  
                  if (world.getFluidState(blockposition1).is(FluidTags.WATER)) {
@@ -32,7 +32,7 @@ index 9b3dcf1a4d4cece92a629506d341f6bfe79d13d0..0ac2f2b18cf0c633085635b962ae2dc8
                      Block block = world.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
  
                      // CraftBukkit start
-@@ -203,6 +204,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+@@ -201,6 +202,7 @@ public class LiquidBlock extends Block implements BucketPickup {
                  }
  
                  if (flag && world.getBlockState(blockposition1).is(Blocks.BLUE_ICE)) {

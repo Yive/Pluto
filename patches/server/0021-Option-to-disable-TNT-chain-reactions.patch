@@ -21,10 +21,10 @@ index 250be095a01a7402420aabd4d866e6606ec6b834..a4f3002832eb103ef62123f67d2e29e3
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/TntBlock.java b/src/main/java/net/minecraft/world/level/block/TntBlock.java
-index 5fa5e8c838720eb1491aea73d462f4bc7d779956..b1b64418740b864481df1a23e25e038ebbf76df0 100644
+index a3525ae6d83591664e1456f20d9732a8de0ec326..7b7cdf05cc14d88983942734565fa530af4f998b 100644
 --- a/src/main/java/net/minecraft/world/level/block/TntBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/TntBlock.java
-@@ -88,7 +88,7 @@ public class TntBlock extends Block {
+@@ -89,7 +89,7 @@ public class TntBlock extends Block {
  
      @Override
      public void wasExploded(Level world, BlockPos pos, Explosion explosion) {

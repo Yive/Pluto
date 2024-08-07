@@ -20,10 +20,10 @@ index a4f3002832eb103ef62123f67d2e29e3dc1e8b51..674f3aaaa6916bbb143cbbe506fb8879
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5c5c8fbd562b46f8699be97353447eaab36c007a..3ab5648d71391f91b452f07a9687071136e85bd5 100644
+index 3f7812c55dae82433336d6e091aa83434615fa04..0aa71448a6cd55e2c5a50d785012c3a0fc38bff1 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1379,7 +1379,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1367,7 +1367,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
              this.onFlap();

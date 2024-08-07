@@ -43,10 +43,10 @@ index 9821c6f8ca145b4474663ae47e84d01f17e7c759..250be095a01a7402420aabd4d866e660
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3047c5b14 100644
+index f57e1b78204dff661ad5d3ee93a88a00330af2dc..2853aa24dc31165954caa9838872928fd26ecce0 100644
 --- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-@@ -48,6 +48,7 @@ public abstract class BaseSpawner {
+@@ -50,6 +50,7 @@ public abstract class BaseSpawner {
      public int requiredPlayerRange = 16;
      public int spawnRange = 4;
      private int tickDelay = 0; // Paper - Configurable mob spawner tick rate
@@ -54,7 +54,7 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3
  
      public BaseSpawner() {}
  
-@@ -88,7 +89,19 @@ public abstract class BaseSpawner {
+@@ -90,7 +91,19 @@ public abstract class BaseSpawner {
          tickDelay = world.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
@@ -75,16 +75,16 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3
              if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
                  this.delay(world, pos);
              }
-@@ -115,7 +128,7 @@ public abstract class BaseSpawner {
+@@ -117,7 +130,7 @@ public abstract class BaseSpawner {
                      double d1 = j >= 2 ? nbttaglist.getDouble(1) : (double) (pos.getY() + randomsource.nextInt(3) - 1);
                      double d2 = j >= 3 ? nbttaglist.getDouble(2) : (double) pos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5D;
  
--                    if (world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) {
-+                    if (!world.plutoConfig().spawnerCheckForBlockCollision || world.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) { // Pluto - Options for spawner settings
+-                    if (world.noCollision(((EntityType) optional.get()).getSpawnAABB(d0, d1, d2))) {
++                    if (!world.plutoConfig().spawnerCheckForBlockCollision || world.noCollision(((EntityType) optional.get()).getSpawnAABB(d0, d1, d2))) { // Pluto - Options for spawner settings
                          BlockPos blockposition1 = BlockPos.containing(d0, d1, d2);
  
                          if (mobspawnerdata.getCustomSpawnRules().isPresent()) {
-@@ -156,7 +169,7 @@ public abstract class BaseSpawner {
+@@ -158,7 +171,7 @@ public abstract class BaseSpawner {
                              return;
                          }
  
@@ -93,10 +93,10 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3
  
                          if (k >= this.maxNearbyEntities) {
                              this.delay(world, pos);
-@@ -175,6 +188,14 @@ public abstract class BaseSpawner {
-                             if (mobspawnerdata.getEntityToSpawn().size() == 1 && mobspawnerdata.getEntityToSpawn().contains("id", 8)) {
-                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, (SpawnGroupData) null, (CompoundTag) null);
+@@ -180,6 +193,15 @@ public abstract class BaseSpawner {
+                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, (SpawnGroupData) null);
                              }
+ 
 +                            // Pluto start - Options for spawner settings
 +                            // I wish I could put this higher up in the chain, but the baby
 +                            // state only gets assigned after the finalizeSpawn method is called.
@@ -105,18 +105,19 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3
 +                                continue;
 +                            }
 +                            // Pluto end - Options for spawner settings
-                             // Spigot Start
-                             if ( entityinsentient.level().spigotConfig.nerfSpawnerMobs )
-                             {
-@@ -196,6 +217,7 @@ public abstract class BaseSpawner {
++
+                             Optional<net.minecraft.world.entity.EquipmentTable> optional1 = mobspawnerdata.getEquipment(); // CraftBukkit - decompile error
+ 
+                             Objects.requireNonNull(entityinsentient);
+@@ -205,6 +227,7 @@ public abstract class BaseSpawner {
                              return;
                          }
  
 +                        if (world.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
                          world.levelEvent(2004, pos, 0);
-                         world.gameEvent(entity, GameEvent.ENTITY_PLACE, blockposition1);
+                         world.gameEvent(entity, (Holder) GameEvent.ENTITY_PLACE, blockposition1);
                          if (entity instanceof Mob) {
-@@ -281,9 +303,12 @@ public abstract class BaseSpawner {
+@@ -290,9 +313,12 @@ public abstract class BaseSpawner {
          }
  
          this.displayEntity = null;
@@ -130,10 +131,10 @@ index 65c3e91ac4541c0150057dc9f012eb1ee566516e..0149c81b364ddc03808a88bee87fddc3
          if (spawnDelay > Short.MAX_VALUE) {
              nbt.putInt("Paper.Delay", this.spawnDelay);
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
-index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b148674f8 100644
+index 146dde200845abcbe11015dda2c826a1aa711e42..9f56d62dbe7d30aaf15431e967ac0fff574ad90d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
-@@ -157,6 +157,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -199,6 +199,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      @Override
      public void setDelay(int delay) {
          this.getSnapshot().getSpawner().spawnDelay = delay;
@@ -141,7 +142,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -168,6 +169,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -210,6 +211,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      public void setMinSpawnDelay(int spawnDelay) {
          Preconditions.checkArgument(spawnDelay <= this.getMaxSpawnDelay(), "Minimum Spawn Delay must be less than or equal to Maximum Spawn Delay");
          this.getSnapshot().getSpawner().minSpawnDelay = spawnDelay;
@@ -149,7 +150,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -180,6 +182,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -222,6 +224,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
          Preconditions.checkArgument(spawnDelay > 0, "Maximum Spawn Delay must be greater than 0.");
          Preconditions.checkArgument(spawnDelay >= this.getMinSpawnDelay(), "Maximum Spawn Delay must be greater than or equal to Minimum Spawn Delay");
          this.getSnapshot().getSpawner().maxSpawnDelay = spawnDelay;
@@ -157,7 +158,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -190,6 +193,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -232,6 +235,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      @Override
      public void setMaxNearbyEntities(int maxNearbyEntities) {
          this.getSnapshot().getSpawner().maxNearbyEntities = maxNearbyEntities;
@@ -165,7 +166,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -200,6 +204,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -242,6 +246,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      @Override
      public void setSpawnCount(int count) {
          this.getSnapshot().getSpawner().spawnCount = count;
@@ -173,7 +174,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -210,6 +215,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -252,6 +257,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      @Override
      public void setRequiredPlayerRange(int requiredPlayerRange) {
          this.getSnapshot().getSpawner().requiredPlayerRange = requiredPlayerRange;
@@ -181,7 +182,7 @@ index 0d39223d1eaa3fe7065eb9dc9f945ca965d3b43e..85edb27238d41fcd39df125542b27d3b
      }
  
      @Override
-@@ -220,6 +226,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+@@ -262,6 +268,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
      @Override
      public void setSpawnRange(int spawnRange) {
          this.getSnapshot().getSpawner().spawnRange = spawnRange;

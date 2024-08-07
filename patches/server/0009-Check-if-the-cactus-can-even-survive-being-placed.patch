@@ -30,7 +30,7 @@ index ae5508c54d8851e483b6f83cd68695e8db97da38..04a9932d4137178c67563339ca78f7c2
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CactusBlock.java b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-index ba4aaf850af36a84517c70581e141157c4f15b99..b24858577628fca32faa2f27e90608bfbd68def3 100644
+index ff4dda48116a2969704b355ff96407ba869b466e..6ab864915b17555ca1fd5de9f322028bb72c64d3 100644
 --- a/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 @@ -66,12 +66,30 @@ public class CactusBlock extends Block {
@@ -67,12 +67,12 @@ index ba4aaf850af36a84517c70581e141157c4f15b99..b24858577628fca32faa2f27e90608bf
 @@ -100,6 +118,12 @@ public class CactusBlock extends Block {
  
      @Override
-     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+     protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
 +    // Pluto start - Check if the cactus can even survive being placed
 +        return canSurvive(world, pos);
 +    }
 +
-+    public final boolean canSurvive(LevelReader world, BlockPos pos) {
++    protected final boolean canSurvive(LevelReader world, BlockPos pos) {
 +    // Pluto end - Check if the cactus can even survive being placed
          Iterator iterator = Direction.Plane.HORIZONTAL.iterator();
  

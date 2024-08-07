@@ -20,10 +20,10 @@ index 0c540b8854e249bf608381d727b9ec1f1a502456..b4d5059ed24ac98b1462b173e06ab169
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/DropperBlock.java b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-index 9a8a0fb958e8ec782111507bae957f854b2aac72..f6f22e4dca99c3a9be73224d8ee8f6416b83aa81 100644
+index 45fafee2cf1893dccf477939dad05e9e1938ec8c..60055ec52ac6c9432e82df3963a3f29408dc59ab 100644
 --- a/src/main/java/net/minecraft/world/level/block/DropperBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-@@ -73,6 +73,19 @@ public class DropperBlock extends DispenserBlock {
+@@ -74,6 +74,19 @@ public class DropperBlock extends DispenserBlock {
                          if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(world, pos, itemstack, i)) return; // Paper - Add BlockPreDispenseEvent
                          itemstack1 = DropperBlock.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
                      } else {
@@ -41,5 +41,5 @@ index 9a8a0fb958e8ec782111507bae957f854b2aac72..f6f22e4dca99c3a9be73224d8ee8f641
 +                        }
 +                        // Pluto end - Toggle inventory item move event for droppers
                          // CraftBukkit start - Fire event when pushing items into other inventories
-                         CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copy().split(1));
+                         CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copyWithCount(1));
  

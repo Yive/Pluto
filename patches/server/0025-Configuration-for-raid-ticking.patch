@@ -21,10 +21,10 @@ index 03cb8e25e909b969afb70d8ffb129e03dc56713f..488a25e1cec14882d09495c3a28c19fd
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a737c5961b4e22807fc464eeb79109cc9485ac20..42f1870354168af1d11048d9f10c5da18db4bccc 100644
+index 803779af55677013c806f8c09662c3a170d7afa4..0f3b49be81ac37ec2eace70cdc9fa2154d044f6d 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -861,6 +861,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -682,6 +682,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
          gameprofilerfiller.popPush("raid");
          if (flag) {
              this.timings.raids.startTiming(); // Paper - timings

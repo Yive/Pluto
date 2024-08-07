@@ -21,14 +21,14 @@ index 219f5936a0f08bd08055f03b7924a9d4903c46cc..174dc26cca0fad4a19c86c7c6074a2b5
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index b7937696c32d0fc1b380f1cf88fd91c2d21ce70b..9274bb3dd7a672ddbce99dc7f5a46b02d4e74b88 100644
+index 0e50b19c9ca1fc627eb0240b2b132ae5319884e0..5370a683f1a7058cb86a85fa9abf09fbf28e7abd 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -904,6 +904,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -725,6 +725,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
                          entity.discard();
                      } else if (!tickratemanager.isEntityFrozen(entity)) {
                          gameprofilerfiller.push("checkDespawn");
 +                        if (plutoConfig().entityDespawnCheckModulo > 0 && (plutoConfig().entityDespawnCheckModulo == 1 || MinecraftServer.currentTick % plutoConfig().entityDespawnCheckModulo == 0)) // Pluto - Configuration for entity despawn check
                          entity.checkDespawn();
                          gameprofilerfiller.pop();
-                         if (true || this.chunkSource.chunkMap.getDistanceManager().inEntityTickingRange(entity.chunkPosition().toLong())) { // Paper - now always true if in the ticking list
+                         if (true || this.chunkSource.chunkMap.getDistanceManager().inEntityTickingRange(entity.chunkPosition().toLong())) { // Paper - rewrite chunk system

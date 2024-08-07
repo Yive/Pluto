@@ -21,10 +21,10 @@ index 04a9932d4137178c67563339ca78f7c2836b8392..0c540b8854e249bf608381d727b9ec1f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
-index 881379681c39230a00b3a1f11cd87498984396c7..6483268dc8d5c831dabdcc02ffd9f4cf0d096c0c 100644
+index 431fb6a658c6aac43b6f9dbd1f578b83f261a4e3..45c190c972088b2da202d7dceca229b298d4dcfb 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
-@@ -69,6 +69,14 @@ public class DispenserBlockEntity extends RandomizableContainerBlockEntity {
+@@ -70,6 +70,14 @@ public class DispenserBlockEntity extends RandomizableContainerBlockEntity {
  
      public int getRandomSlot(RandomSource random) {
          this.unpackLootTable((Player) null);

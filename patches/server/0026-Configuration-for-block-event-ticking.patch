@@ -22,10 +22,10 @@ index 488a25e1cec14882d09495c3a28c19fdfe8a3862..219f5936a0f08bd08055f03b7924a9d4
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 42f1870354168af1d11048d9f10c5da18db4bccc..b7937696c32d0fc1b380f1cf88fd91c2d21ce70b 100644
+index 0f3b49be81ac37ec2eace70cdc9fa2154d044f6d..0e50b19c9ca1fc627eb0240b2b132ae5319884e0 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -873,6 +873,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -694,6 +694,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
          gameprofilerfiller.popPush("blockEvents");
          if (flag) {
              this.timings.doSounds.startTiming(); // Spigot

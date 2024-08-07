@@ -27,10 +27,10 @@ index 01c8e914393426e3f5e03df00fab0d293e8c26e3..ae5508c54d8851e483b6f83cd68695e8
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/FarmBlock.java b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-index 6e4c852c93f2418ea69e485ed3a10cbe3a6e3bd2..3505b6e24d1aa2445d0be562a6d3940a185ce0ed 100644
+index d59e33e7326489c6d55d316d0130f22235f4c63c..94eaac68ce49044773ede9536c39e6dcdcd95187 100644
 --- a/src/main/java/net/minecraft/world/level/block/FarmBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FarmBlock.java
-@@ -95,7 +95,7 @@ public class FarmBlock extends Block {
+@@ -96,7 +96,7 @@ public class FarmBlock extends Block {
          if (i > 0 && world.paperConfig().tickRates.wetFarmland != 1 && (world.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
          if (i == 0 && world.paperConfig().tickRates.dryFarmland != 1 && (world.paperConfig().tickRates.dryFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % world.paperConfig().tickRates.dryFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
  
@@ -40,7 +40,7 @@ index 6e4c852c93f2418ea69e485ed3a10cbe3a6e3bd2..3505b6e24d1aa2445d0be562a6d3940a
                  org.bukkit.craftbukkit.event.CraftEventFactory.handleMoistureChangeEvent(world, pos, (BlockState) state.setValue(FarmBlock.MOISTURE, i - 1), 2); // CraftBukkit
              } else if (!FarmBlock.shouldMaintainFarmland(world, pos)) {
 diff --git a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
-index 04957d461d0e968d443737068aaeec1d0bce78b2..8062184483143640337ccfaef25fbf164b54c406 100644
+index c48c622e92cedeaa46b929c7adfedec98dd5a3fb..dd203c7ace8181743ee1ff73199ff800996e8d1b 100644
 --- a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
 @@ -91,6 +91,7 @@ public class SugarCaneBlock extends Block {

@@ -21,27 +21,32 @@ index 6c64f94cbc9a436ee4326cd9e561a7a03c62e997..01f7fd798b01c783588db53d1618b8cd
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
-index 37ae0f928440af5b2fdfe68ad6c9c54e8c95c82c..36fa4531886d776844c79464bddfb02146579f8c 100644
+index df6c97be1b278c97a20390be5d3e60f429383702..d736679f7864ff9d7739b529bf140cf3fd359cbf 100644
 --- a/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
 +++ b/src/main/java/net/minecraft/world/level/gameevent/GameEventDispatcher.java
-@@ -25,17 +25,28 @@ public class GameEventDispatcher {
+@@ -26,17 +26,33 @@ public class GameEventDispatcher {
          this.level = world;
      }
  
 +    private static final it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<String, org.bukkit.GameEvent> GAME_EVENT_CACHE = new it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<>(); // Pluto - Cache GameEvent lookups
-     public void post(GameEvent event, Vec3 emitterPos, GameEvent.Context emitter) {
-         int i = event.getNotificationRadius();
+     public void post(Holder<GameEvent> event, Vec3 emitterPos, GameEvent.Context emitter) {
+         int i = ((GameEvent) event.value()).notificationRadius();
          BlockPos blockposition = BlockPos.containing(emitterPos);
 +        // Pluto start - Cache GameEvent lookups
 +        org.bukkit.GameEvent bukkitEvent;
 +        if (this.level.plutoConfig().useGameEventCache) {
-+            bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(event.builtInRegistryHolder().key().location().getPath(), s -> CraftGameEvent.minecraftToBukkit(event));
++            String name = event.getRegisteredName();
++            if (name.contains("[unregistered]")) {
++                bukkitEvent = CraftGameEvent.minecraftToBukkit(event.value());
++            } else {
++                bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(name, s -> CraftGameEvent.minecraftToBukkit(event.value()));
++            }
 +        } else {
-+            bukkitEvent = CraftGameEvent.minecraftToBukkit(event);
++            bukkitEvent = CraftGameEvent.minecraftToBukkit(event.value());
 +        }
 +        if (bukkitEvent != null) {
          // CraftBukkit start
--        GenericGameEvent event1 = new GenericGameEvent(CraftGameEvent.minecraftToBukkit(event), CraftLocation.toBukkit(blockposition, this.level.getWorld()), (emitter.sourceEntity() == null) ? null : emitter.sourceEntity().getBukkitEntity(), i, !Bukkit.isPrimaryThread());
+-        GenericGameEvent event1 = new GenericGameEvent(CraftGameEvent.minecraftToBukkit(event.value()), CraftLocation.toBukkit(blockposition, this.level.getWorld()), (emitter.sourceEntity() == null) ? null : emitter.sourceEntity().getBukkitEntity(), i, !Bukkit.isPrimaryThread());
 +        GenericGameEvent event1 = new GenericGameEvent(bukkitEvent, CraftLocation.toBukkit(blockposition, this.level.getWorld()), (emitter.sourceEntity() == null) ? null : emitter.sourceEntity().getBukkitEntity(), i, !Bukkit.isPrimaryThread());
 +        // Pluto end - Cache GameEvent lookups
          this.level.getCraftServer().getPluginManager().callEvent(event1);

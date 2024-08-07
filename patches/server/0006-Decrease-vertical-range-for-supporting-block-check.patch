@@ -23,7 +23,7 @@ index 7944997d4acde68089bc85021037c6e297e5a543..79ec621f0b4014828c0dbf5d1f9ce129
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BlockCollisions.java b/src/main/java/net/minecraft/world/level/BlockCollisions.java
-index 012733f1808e96aecc3b2fd081e355905d1b0766..9547c57a451aa39c181e587365e863de46c59aef 100644
+index cd89623a44f02d7db77f0d0f87545cf80841f403..1d25d86d4893304d02266264a9656207d852fddd 100644
 --- a/src/main/java/net/minecraft/world/level/BlockCollisions.java
 +++ b/src/main/java/net/minecraft/world/level/BlockCollisions.java
 @@ -32,6 +32,12 @@ public class BlockCollisions<T> extends AbstractIterator<T> {
@@ -53,10 +53,10 @@ index 012733f1808e96aecc3b2fd081e355905d1b0766..9547c57a451aa39c181e587365e863de
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/CollisionGetter.java b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-index 160b4c8f40b7b1bc53a8c23b801c5248c13e9a40..643069a856c542282956c67211398e67929f2aa2 100644
+index 1ad0c976c6e2d6d31397dff850a9de7c16d16fba..da6a1105eecbb435e1d7c1b088d6df911a6d93da 100644
 --- a/src/main/java/net/minecraft/world/level/CollisionGetter.java
 +++ b/src/main/java/net/minecraft/world/level/CollisionGetter.java
-@@ -111,7 +111,7 @@ public interface CollisionGetter extends BlockGetter {
+@@ -105,7 +105,7 @@ public interface CollisionGetter extends BlockGetter {
      default Optional<BlockPos> findSupportingBlock(Entity entity, AABB box) {
          BlockPos blockPos = null;
          double d = Double.MAX_VALUE;

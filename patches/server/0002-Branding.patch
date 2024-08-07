@@ -5,7 +5,7 @@ Subject: [PATCH] Branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 2abb23912a3f74abc8c2af3d8c1e381c98abe153..13ff30bb67eba7f03f2738ca4c2aaa55582dc97a 100644
+index e26f0ad6d12aabd7f26433812a4874c7f941665b..e3eefb91093e9ba94b10594c1b4bcce3cd67be5a 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -14,18 +14,29 @@ index 2abb23912a3f74abc8c2af3d8c1e381c98abe153..13ff30bb67eba7f03f2738ca4c2aaa55
  dependencies {
 -    implementation(project(":pufferfish-api")) // Pufferfish // Paper
 +    implementation(project(":pluto-api")) // Pluto - Branding // Pufferfish // Paper
-     // Pufferfish start
-     implementation("io.papermc.paper:paper-mojangapi:1.19.2-R0.1-SNAPSHOT") {
-         exclude("io.papermc.paper", "paper-api")
-@@ -91,7 +91,7 @@ tasks.jar {
+     // Paper start
+     implementation("org.jline:jline-terminal-jansi:3.21.0")
+     implementation("net.minecrell:terminalconsoleappender:1.3.0")
+@@ -100,14 +100,14 @@ tasks.jar {
+         val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
-             "Implementation-Title" to "CraftBukkit",
--            "Implementation-Version" to "git-Pufferfish-$implementationVersion", // Pufferfish
-+            "Implementation-Version" to "git-Pluto-$implementationVersion", // Pufferfish // Pluto - Branding
+-            "Implementation-Title" to "Pufferfish", // Pufferfish
++            "Implementation-Title" to "Pluto", // Pufferfish // Pluto - Branding
+             "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date, // Paper
-             "Specification-Title" to "Bukkit",
+-            "Specification-Title" to "Pufferfish", // Pufferfish
++            "Specification-Title" to "Pluto", // Pufferfish // Pluto - Branding
              "Specification-Version" to project.version,
+-            "Specification-Vendor" to "Pufferfish Studios LLC", // Pufferfish
+-            "Brand-Id" to "pufferfish:pufferfish", // Pufferfish
+-            "Brand-Name" to "Pufferfish", // Pufferfish
++            "Specification-Vendor" to "Yive", // Pufferfish // Pluto - Branding
++            "Brand-Id" to "yive:pluto", // Pufferfish // Pluto - Branding
++            "Brand-Name" to "Pluto", // Pufferfish // Pluto - Branding
+             "Build-Number" to (build ?: ""),
+             "Build-Time" to Instant.now().toString(),
+             "Git-Branch" to gitBranch, // Paper
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 index 692c962193cf9fcc6801fc93f3220bdc673d527b..15bc3f3cb5bc1c4c545ba359a11a2b0c6c0b50d5 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
@@ -54,10 +65,10 @@ index 692c962193cf9fcc6801fc93f3220bdc673d527b..15bc3f3cb5bc1c4c545ba359a11a2b0c
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
-index 893d8c0946ef71a0561221dd76bffff0dc940d56..cdf86a36a5b5f4385634352dbce099a9c8b5786f 100644
+index 06323dcc745aed16123980fc559d7b65c42f1e1c..1e7121ddb9fb650d7dc5ffbefe4e3b157951d04d 100644
 --- a/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
 +++ b/src/main/java/gg/pufferfish/pufferfish/PufferfishVersionFetcher.java
-@@ -27,11 +27,13 @@ import org.jetbrains.annotations.Nullable;
+@@ -28,11 +28,13 @@ import static net.kyori.adventure.text.format.NamedTextColor.RED;
  
  public class PufferfishVersionFetcher implements VersionFetcher {
  	
@@ -65,51 +76,50 @@ index 893d8c0946ef71a0561221dd76bffff0dc940d56..cdf86a36a5b5f4385634352dbce099a9
 +	private static final Logger LOGGER = Logger.getLogger("PlutoVersionFetcher"); // Pluto - Branding
  	private static final HttpClient client = HttpClient.newHttpClient();
 -	
--	private static final URI JENKINS_URI = URI.create("https://ci.pufferfish.host/job/Pufferfish-1.20/lastSuccessfulBuild/buildNumber");
--	private static final String GITHUB_FORMAT = "https://api.github.com/repos/pufferfish-gg/Pufferfish/compare/ver/1.20...%s";
+-	private static final URI JENKINS_URI = URI.create("https://ci.pufferfish.host/job/Pufferfish-1.21/lastSuccessfulBuild/buildNumber");
+-	private static final String GITHUB_FORMAT = "https://api.github.com/repos/pufferfish-gg/Pufferfish/compare/ver/1.21...%s";
 +
 +	// Pluto start - Branding
-+	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.20.4/lastSuccessfulBuild/buildNumber");
-+	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.20.4...%s";
++	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.21/lastSuccessfulBuild/buildNumber");
++	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.21...%s";
 +	// Pluto end - Branding
  	
  	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
  			.mapping(
-@@ -112,7 +114,7 @@ public class PufferfishVersionFetcher implements VersionFetcher {
+@@ -108,7 +110,7 @@ public class PufferfishVersionFetcher implements VersionFetcher {
  	
  	private @NotNull Component getResponseMessage(final int versionDiff) {
  		return switch (Math.max(-1, Math.min(1, versionDiff))) {
 -			case -1 -> text("You are running an unsupported version of Pufferfish.", RED);
 +			case -1 -> text("You are running an unsupported version of Pluto.", RED); // Pluto - Branding
  			case 0 -> text("You are on the latest version!", GREEN);
- 			default -> text("You are running " + versionDiff + " version" + (versionDiff == 1 ? "" : "s") + " beyond. " +
- 							"Please update your server when possible to maintain stability, security, and receive the latest optimizations.",
-diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 60dad77b824c9b6a45e3a3960eb9d995583f1d28..f4f224b7acd6f0b918dbc081158fa1243c7eff30 100644
---- a/src/main/java/net/minecraft/server/MinecraftServer.java
-+++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1872,7 +1872,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 			default -> text("You are running " + versionDiff + " version" + (versionDiff == 1 ? "" : "s") + " behind. " +
+ 							"Please update your server when possible to maintain stability and security, and to receive the latest optimizations.",
+diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+index 790bad0494454ca12ee152e3de6da3da634d9b20..30bb540941af11685d8f3f2913279b5dd89a0a67 100644
+--- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+@@ -32,6 +32,8 @@ public record ServerBuildInfoImpl(
  
-     @DontObfuscate
-     public String getServerModName() {
--        return "Pufferfish"; // Pufferfish > // Paper
-+        return "Pluto"; // Pluto - Branding // Pufferfish > // Paper
-     }
+     private static final String BRAND_PAPER_NAME = "Paper";
  
-     public SystemReport fillSystemReport(SystemReport details) {
-diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 18bfe2fb7efad66f5fae07a30593d640c597bf77..89f9db0df2ba605dec9f6719b63900cceb5eebda 100644
---- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-+++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -266,7 +266,7 @@ import javax.annotation.Nullable; // Paper
- import javax.annotation.Nonnull; // Paper
++    private static final String BRAND_PLUTO_NAME = "Pluto"; // Pluto - Branding
++
+     private static final String BUILD_DEV = "DEV";
  
- public final class CraftServer implements Server {
--    private final String serverName = "Pufferfish"; // Paper // Pufferfish
-+    private final String serverName = "Pluto"; // Paper // Pufferfish // Pluto - Branding
-     private final String serverVersion;
-     private final String bukkitVersion = Versioning.getBukkitVersion();
-     private final Logger logger = Logger.getLogger("Minecraft");
+     public ServerBuildInfoImpl() {
+@@ -42,9 +44,9 @@ public record ServerBuildInfoImpl(
+         this(
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
+                 .map(Key::key)
+-                .orElse(BRAND_PAPER_ID),
++                .orElse(BRAND_PLUTO_ID), // Pluto - Branding
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
+-                .orElse(BRAND_PAPER_NAME),
++                .orElse(BRAND_PLUTO_NAME), // Pluto - Branding
+             SharedConstants.getCurrentVersion().getId(),
+             SharedConstants.getCurrentVersion().getName(),
+             getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 index 80553face9c70c2a3d897681e7761df85b22d464..18077e79d664c60ec251599a29f4f148a22dc238 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
