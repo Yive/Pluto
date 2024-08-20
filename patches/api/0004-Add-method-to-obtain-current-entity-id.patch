@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 20 Aug 2024 00:47:52 -0700
+Subject: [PATCH] Add method to obtain current entity id
+
+
+diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
+index 330e3013eda204aa9b33d5e1c3104e0b595abdbc..547876bcaf040ca9d381d7ba9ff2531b44340884 100644
+--- a/src/main/java/org/bukkit/UnsafeValues.java
++++ b/src/main/java/org/bukkit/UnsafeValues.java
+@@ -190,6 +190,13 @@ public interface UnsafeValues {
+      */
+     public int nextEntityId();
+ 
++    // Pluto start - Add method to obtain current entity id
++    /**
++     * Returns the latest entity id.
++     */
++    public int currentEntityId();
++    // Pluto end - Add method to obtain current entity id
++
+     /**
+      * Just don't use it.
+      */

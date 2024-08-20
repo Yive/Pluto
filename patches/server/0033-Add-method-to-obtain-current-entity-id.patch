@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 20 Aug 2024 00:47:59 -0700
+Subject: [PATCH] Add method to obtain current entity id
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 41b8ea323145882d3d2885d0d9a7c54e9c6f491b..f0224a4c68e396c184664cea3fe128f328a2e954 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -5067,4 +5067,10 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         return ((net.minecraft.server.level.ServerChunkCache) level.getChunkSource()).isPositionTicking(this);
+     }
+     // Paper end - Expose entity id counter
++
++    // Pluto start - Add method to obtain current entity id
++    public static int currentEntityId() {
++        return ENTITY_COUNTER.get();
++    }
++    // Pluto end - Add method to obtain current entity id
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 65e27259c3a44512f395b750e93226bb36743ff5..c9a963959e3b12c74cc69480602ad4946426ae78 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -568,6 +568,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
+         return net.minecraft.world.entity.Entity.nextEntityId();
+     }
+ 
++    // Pluto start - Add method to obtain current entity id
++    @Override
++    public int currentEntityId() {
++        return net.minecraft.world.entity.Entity.currentEntityId();
++    }
++    // Pluto end - Add method to obtain current entity id
++
+     @Override
+     public String getMainLevelName() {
+         return ((net.minecraft.server.dedicated.DedicatedServer) net.minecraft.server.MinecraftServer.getServer()).getProperties().levelName;
