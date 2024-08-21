@@ -23,7 +23,7 @@ index 96b151c9aa0bf4c3435db084c66936e4948b7655..9821c6f8ca145b4474663ae47e84d01f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 7c207bd1da82255bf504f9212c08201fe9389f1a..bb9b9333170654ee71a0ad0f113541c4fb6e8461 100644
+index 16fbbfd47c494d9fdea844cdb767dd9f6fe5e171..bf569f7f7fae65efd2b15f4a33694c9205865caf 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -238,10 +238,10 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
@@ -39,7 +39,7 @@ index 7c207bd1da82255bf504f9212c08201fe9389f1a..bb9b9333170654ee71a0ad0f113541c4
              this.targetSelector.tick();
          }
      }
-@@ -927,20 +927,20 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -934,20 +934,20 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
  
          if (i % 2 != 0 && this.tickCount > 1) {
              gameprofilerfiller.push("targetSelector");
