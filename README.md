@@ -23,7 +23,7 @@ Maven:
     <dependency>
         <groupId>dev.yive</groupId>
         <artifactId>pluto</artifactId>
-        <version>1.20.4-R0.1-SNAPSHOT</version>
+        <version>1.21.1-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -37,7 +37,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'dev.yive:pluto:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'dev.yive:pluto:1.21.1-R0.1-SNAPSHOT'
 }
 ```
 
