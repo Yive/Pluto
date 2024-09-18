@@ -5,10 +5,10 @@ Subject: [PATCH] Add method to obtain current entity id
 
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 330e3013eda204aa9b33d5e1c3104e0b595abdbc..547876bcaf040ca9d381d7ba9ff2531b44340884 100644
+index 10c87b7c19ed3eab28fdce5f225df3767292ee0a..c00db88910f2538868c7daa96026ff3662962483 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -190,6 +190,13 @@ public interface UnsafeValues {
+@@ -219,6 +219,13 @@ public interface UnsafeValues {
       */
      public int nextEntityId();
  
