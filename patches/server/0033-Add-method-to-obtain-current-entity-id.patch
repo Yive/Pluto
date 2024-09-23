@@ -5,10 +5,10 @@ Subject: [PATCH] Add method to obtain current entity id
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 698a1bdbb8dd2f5a480feacd9a138db654ee6163..dff19bd87a5b5807c716ea73fd094a6a2fdd0cdc 100644
+index 4c47520f7f1f6f031a68d528c25188662d1a3506..1a55c9848426a1a0df31d7ffbde7c862cd76ab75 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -5067,4 +5067,10 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -5069,4 +5069,10 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
          return ((net.minecraft.server.level.ServerChunkCache) level.getChunkSource()).isPositionTicking(this);
      }
      // Paper end - Expose entity id counter
