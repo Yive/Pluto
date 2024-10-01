@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 1 Oct 2024 09:29:41 -0700
+Subject: [PATCH] TTL setting for entities from spawners
+
+See https://minecraft.wiki/w/Java_Edition_data_values#Entities for entity IDs
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index eed2561733b50c985b0a6f5d629a2f0e3c89abda..66779f732b30e4976fe004aa62996eaa99a96778 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -409,5 +409,17 @@ public class PlutoConfig {
+         private void disableInsideBlockXrayExploit() {
+             preventInsideBlockXrayExploit = getBoolean("entities.player.prevent-xray-exploits-inside-certain-blocks", preventInsideBlockXrayExploit);
+         }
++
++        private void spawnerTTL() {
++            // Set a few default ones to create the section
++            net.minecraft.world.entity.EntityType.ZOMBIE.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.ZOMBIE).getPath().toLowerCase(java.util.Locale.ROOT), -1);
++            net.minecraft.world.entity.EntityType.SNOW_GOLEM.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.SNOW_GOLEM).getPath().toLowerCase(java.util.Locale.ROOT), -1);
++
++            // These bypass setting the default entries to avoid a stupidly long section.
++            for (net.minecraft.world.entity.EntityType<?> type : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE) {
++                String path = "blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(type).getPath().toLowerCase(java.util.Locale.ROOT);
++                type.spawnerTTL = this.config.getInt(path, this.worldDefaults.getInt(path, -1));
++            }
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 1a55c9848426a1a0df31d7ffbde7c862cd76ab75..7847c781eb6f1cae369115b438fe20d36676e7e9 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -854,6 +854,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+             return;
+         }
+         // Pufferfish end - entity TTL
++
++        // Pluto start - TTL setting for entities from spawners
++        if (type != EntityType.PLAYER && spawnedViaMobSpawner && type.spawnerTTL >= 0 && this.tickCount >= type.spawnerTTL) {
++            discard();
++            return;
++        }
++        // Pluto end - TTL setting for entities from spawners
+         this.baseTick();
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
+index f9440014ab2fe753c16b9383f5fffbb8adb76e79..305f3c1b45a8e2fac443196682c3ec7bb22ca11a 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityType.java
++++ b/src/main/java/net/minecraft/world/entity/EntityType.java
+@@ -328,6 +328,8 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final float spawnDimensionsScale;
+     private final FeatureFlagSet requiredFeatures;
+ 
++    public int spawnerTTL = -1; // Pluto - TTL setting for entities from spawners
++
+     private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
+         return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) type.build(id)); // CraftBukkit - decompile error
+     }
