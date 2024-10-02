@@ -6,10 +6,10 @@ Subject: [PATCH] Toggle for nether portal generation
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 82eda2ec5660725b63929cafc60726e9b1ce17ae..0ea8b59e4d4b17d40f2d511ce1bc206aa796abce 100644
+index 7ec0458650955ffe3ed12bc14569ac7d91d9b93a..f5f460a112f497f90a3a3ac33c0c33cad3827a5b 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -270,5 +270,10 @@ public class PlutoConfig {
+@@ -268,5 +268,10 @@ public class PlutoConfig {
          private void disableBlockGenerationFromFluids() {
              disableBlockGenerationFromFluids = getBoolean("blocks.fluids.disable-block-generation", disableBlockGenerationFromFluids);
          }

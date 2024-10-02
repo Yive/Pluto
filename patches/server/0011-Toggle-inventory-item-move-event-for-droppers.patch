@@ -5,10 +5,10 @@ Subject: [PATCH] Toggle inventory item move event for droppers
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 0c540b8854e249bf608381d727b9ec1f1a502456..b4d5059ed24ac98b1462b173e06ab1691fadac64 100644
+index b616444c252b0760b47b7a4abf4ea7ee3974a56f..d827dbf660786b84180d4b7218d4041221b00002 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -241,5 +241,10 @@ public class PlutoConfig {
+@@ -239,5 +239,10 @@ public class PlutoConfig {
          private void lessRandomDispensing() {
              lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
          }
@@ -20,7 +20,7 @@ index 0c540b8854e249bf608381d727b9ec1f1a502456..b4d5059ed24ac98b1462b173e06ab169
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/DropperBlock.java b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
-index 45fafee2cf1893dccf477939dad05e9e1938ec8c..60055ec52ac6c9432e82df3963a3f29408dc59ab 100644
+index ddecf443df3679e3098eb54edd19585a0512e342..3e4e6a467600b83102ae3e4651df804e454984a2 100644
 --- a/src/main/java/net/minecraft/world/level/block/DropperBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
 @@ -74,6 +74,19 @@ public class DropperBlock extends DispenserBlock {

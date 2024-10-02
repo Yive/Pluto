@@ -14,10 +14,10 @@ Disables the ability for players to duplicate their allays.
 This will help avoid needing to enable the above setting.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index b4d5059ed24ac98b1462b173e06ab1691fadac64..594c7e4715986f7fba9071f3f2f9885ea2023ddf 100644
+index d827dbf660786b84180d4b7218d4041221b00002..c62344f9cd099e7e32c0dd6e0a9bdde4d0e6df14 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -246,5 +246,12 @@ public class PlutoConfig {
+@@ -244,5 +244,12 @@ public class PlutoConfig {
          private void disableDropperInventoryMoveEvent() {
              disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
          }

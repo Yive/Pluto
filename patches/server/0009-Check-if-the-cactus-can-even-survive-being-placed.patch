@@ -15,10 +15,10 @@ Setting the gamerule "doTileDrop" to false was to simulate a server that has chu
 Note: This might increase the item output of a cacti farm, though in theory it should act the same as vanilla.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index ae5508c54d8851e483b6f83cd68695e8db97da38..04a9932d4137178c67563339ca78f7c2836b8392 100644
+index 53bb437b419077cbc8ee75d05db73e4a59565612..a26a9020d51998bfd46995323655d6a4dbf739ab 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -231,5 +231,10 @@ public class PlutoConfig {
+@@ -229,5 +229,10 @@ public class PlutoConfig {
              alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
              alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
          }

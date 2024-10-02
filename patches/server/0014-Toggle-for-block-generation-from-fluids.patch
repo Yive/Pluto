@@ -6,10 +6,10 @@ Subject: [PATCH] Toggle for block generation from fluids
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 7e14c4ffd72436511ce8cc352d93a55ad1401849..82eda2ec5660725b63929cafc60726e9b1ce17ae 100644
+index 346235c8c7d1583217f268c81544829063a1cd42..7ec0458650955ffe3ed12bc14569ac7d91d9b93a 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -265,5 +265,10 @@ public class PlutoConfig {
+@@ -263,5 +263,10 @@ public class PlutoConfig {
              excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
              excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
          }

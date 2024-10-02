@@ -6,10 +6,10 @@ Subject: [PATCH] Cache GameEvent lookups
 This will build a cache of bukkit game events overtime as the lookup can be quite heavy with excessive vanilla game events being fired.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 6c64f94cbc9a436ee4326cd9e561a7a03c62e997..01f7fd798b01c783588db53d1618b8cd0b7b2978 100644
+index bc130bf79ba71102ae97e2daed5d5f3ea09f3a63..5f4ab8e9399875b7be6d3af54ed605bd89e3e5e0 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -194,5 +194,10 @@ public class PlutoConfig {
+@@ -192,5 +192,10 @@ public class PlutoConfig {
              this.worldDefaults.addDefault(path, Double.valueOf(dfl));
              return this.config.getDouble(path, this.worldDefaults.getDouble(path));
          }

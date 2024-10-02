@@ -6,10 +6,10 @@ Subject: [PATCH] Configurable entity activation
 Pulled from my old 1.8/1.12 forks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 0ea8b59e4d4b17d40f2d511ce1bc206aa796abce..afde9883093366b82c629a9691b43a2adc50d421 100644
+index f5f460a112f497f90a3a3ac33c0c33cad3827a5b..4ba7d0669804bc84a24e0c2bb8c178322b79a34a 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -275,5 +275,12 @@ public class PlutoConfig {
+@@ -273,5 +273,12 @@ public class PlutoConfig {
          private void disableNetherPortalGeneration() {
              disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
          }
@@ -23,7 +23,7 @@ index 0ea8b59e4d4b17d40f2d511ce1bc206aa796abce..afde9883093366b82c629a9691b43a2a
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 5a9712de8abe3c3ccd08c5699f89e3ce54b1f28d..7f92f7a9e5b310117a0bd999f564bacfa4471979 100644
+index 67d4b15143358c8947a7102a325dad66967e73a6..a675cde06745eef00c92a2f9ace14f9190088999 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -712,7 +712,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.

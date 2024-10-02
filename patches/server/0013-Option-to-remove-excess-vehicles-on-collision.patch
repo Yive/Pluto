@@ -5,10 +5,10 @@ Subject: [PATCH] Option to remove excess vehicles on collision
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 594c7e4715986f7fba9071f3f2f9885ea2023ddf..7e14c4ffd72436511ce8cc352d93a55ad1401849 100644
+index c62344f9cd099e7e32c0dd6e0a9bdde4d0e6df14..346235c8c7d1583217f268c81544829063a1cd42 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -253,5 +253,17 @@ public class PlutoConfig {
+@@ -251,5 +251,17 @@ public class PlutoConfig {
              disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
              disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
          }
@@ -27,7 +27,7 @@ index 594c7e4715986f7fba9071f3f2f9885ea2023ddf..7e14c4ffd72436511ce8cc352d93a55a
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index f403fc311a974558233028663dbe14c27b27d3f9..d92331d4dc5db2941afeb7c7331123e6c08b8d76 100644
+index a38ce400550893f63640e3bb5bb801ab40f06266..10d31ed526187b12d00194fd858c66f8e9f9efa9 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 @@ -378,6 +378,7 @@ public abstract class AbstractMinecart extends VehicleEntity {

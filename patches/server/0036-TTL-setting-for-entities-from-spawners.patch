@@ -6,10 +6,10 @@ Subject: [PATCH] TTL setting for entities from spawners
 See https://minecraft.wiki/w/Java_Edition_data_values#Entities for entity IDs
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index eed2561733b50c985b0a6f5d629a2f0e3c89abda..66779f732b30e4976fe004aa62996eaa99a96778 100644
+index 1e3b44fc7250e2138a1050bdaadec4d81c400009..725fcababb084f73eb5a7bb7515c24e9817af2e4 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -409,5 +409,17 @@ public class PlutoConfig {
+@@ -407,5 +407,17 @@ public class PlutoConfig {
          private void disableInsideBlockXrayExploit() {
              preventInsideBlockXrayExploit = getBoolean("entities.player.prevent-xray-exploits-inside-certain-blocks", preventInsideBlockXrayExploit);
          }

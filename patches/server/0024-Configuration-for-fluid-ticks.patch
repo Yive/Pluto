@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for fluid ticks
 Controls how often fluids are ticked, such as for spreading to new locations. A value below 1 will stop all fluid ticks
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 04c52bcbc9b3096c967fc37ad526db25356e207e..03cb8e25e909b969afb70d8ffb129e03dc56713f 100644
+index 634e11d1f5a9353174caf7266bf38cb78063f878..9e8c199f65d5544ae1fc6bf3e94f91d1eedde8ee 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -359,5 +359,10 @@ public class PlutoConfig {
+@@ -357,5 +357,10 @@ public class PlutoConfig {
          private void blockTicking() {
              blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
          }
@@ -21,7 +21,7 @@ index 04c52bcbc9b3096c967fc37ad526db25356e207e..03cb8e25e909b969afb70d8ffb129e03
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index b21b8e3987d5451f11b9c18b8ae54a6ae10ec4e9..803779af55677013c806f8c09662c3a170d7afa4 100644
+index d9482a9a595b84ed911bd9a79ca6d31c46d531de..d0bedba176249ddbd5fd3d459df33ebbc0195c89 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -673,6 +673,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.

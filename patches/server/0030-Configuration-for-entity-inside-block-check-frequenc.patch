@@ -5,10 +5,10 @@ Subject: [PATCH] Configuration for entity inside block check frequency
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index d36477fb53709d160edb8c7bf64731d7347e60a0..d130bea050fbb861d26900ac89c5c9b56d3dfb99 100644
+index d123e02c6855ee6d9006769c941e00369643ba76..edd260f11c30a298ebdb6da2c5badc4e179b8112 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -394,5 +394,10 @@ public class PlutoConfig {
+@@ -392,5 +392,10 @@ public class PlutoConfig {
          private void entityPushing() {
              entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
          }
@@ -20,7 +20,7 @@ index d36477fb53709d160edb8c7bf64731d7347e60a0..d130bea050fbb861d26900ac89c5c9b5
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 0aa71448a6cd55e2c5a50d785012c3a0fc38bff1..2822e923606a906749821e1fff6815bdb8575e1e 100644
+index 82ed95fabf106bfa00b93d66aa4a669b8c7e6f96..161d560bb4ed28ea04f55c3863d9cd83887273b9 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1278,6 +1278,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess

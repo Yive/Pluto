@@ -6,17 +6,16 @@ Subject: [PATCH] Config
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6c64f94cbc9a436ee4326cd9e561a7a03c62e997
+index 0000000000000000000000000000000000000000..bc130bf79ba71102ae97e2daed5d5f3ea09f3a63
 --- /dev/null
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -0,0 +1,198 @@
+@@ -0,0 +1,196 @@
 +package dev.yive.pluto;
 +
 +import com.destroystokyo.paper.util.SneakyThrow;
 +import org.bukkit.Bukkit;
 +import org.bukkit.configuration.ConfigurationSection;
 +import org.bukkit.configuration.file.YamlConfiguration;
-+import org.jetbrains.annotations.ApiStatus;
 +
 +import java.io.File;
 +import java.lang.reflect.Method;
@@ -24,7 +23,6 @@ index 0000000000000000000000000000000000000000..6c64f94cbc9a436ee4326cd9e561a7a0
 +import java.util.List;
 +import java.util.logging.Level;
 +
-+@Deprecated(forRemoval = true) @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
 +public class PlutoConfig {
 +    public static final int CURRENT_CONFIG_VERSION = 1;
 +
@@ -241,7 +239,7 @@ index d3cc65612c44f42ecae2e09b942438a03bc244bd..c87ed60ee4433ddacae4cfa95c9e54e9
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c8b82bc41f2042bb4b067f06265a3a22e51f7629..76b4e62e078f503dee4df80f9765c3279ec09e62 100644
+index b7af2d4300facf41a025c8ca322bf6541949b3ab..ba8bfa4367922e4ae9463ff24f62411565381e44 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1070,6 +1070,7 @@ public final class CraftServer implements Server {
@@ -253,7 +251,7 @@ index c8b82bc41f2042bb4b067f06265a3a22e51f7629..76b4e62e078f503dee4df80f9765c327
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 618f4b2e1d012b647b3e7bf359c8ecdd7f159e63..a6511ff893ccaa2ccab3ecbd078b89cae68b873e 100644
+index c1e88c31910e96ef07cece05046c0b55e708b52d..8c6ecfdcef08a28669d7e5407580aa86de758f38 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -183,6 +183,14 @@ public class Main {

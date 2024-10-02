@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for raid ticking
 A value below 1 will stop all raid ticking
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 03cb8e25e909b969afb70d8ffb129e03dc56713f..488a25e1cec14882d09495c3a28c19fdfe8a3862 100644
+index 9e8c199f65d5544ae1fc6bf3e94f91d1eedde8ee..559161a5c533486c773031d4c823adaec1e6ffdf 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -364,5 +364,10 @@ public class PlutoConfig {
+@@ -362,5 +362,10 @@ public class PlutoConfig {
          private void fluidTicking() {
              fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
          }
@@ -21,7 +21,7 @@ index 03cb8e25e909b969afb70d8ffb129e03dc56713f..488a25e1cec14882d09495c3a28c19fd
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 803779af55677013c806f8c09662c3a170d7afa4..0f3b49be81ac37ec2eace70cdc9fa2154d044f6d 100644
+index d0bedba176249ddbd5fd3d459df33ebbc0195c89..f945dc4ad51cbf0826322546248a76b5bed8e04a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -682,6 +682,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.

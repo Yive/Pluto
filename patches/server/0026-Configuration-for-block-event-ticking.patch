@@ -6,10 +6,10 @@ Subject: [PATCH] Configuration for block event ticking
 Block event ticking cannot be disabled currently.
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 488a25e1cec14882d09495c3a28c19fdfe8a3862..219f5936a0f08bd08055f03b7924a9d4903c46cc 100644
+index 559161a5c533486c773031d4c823adaec1e6ffdf..fbf62766126582d52c719901aafce65c76bd57be 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -369,5 +369,11 @@ public class PlutoConfig {
+@@ -367,5 +367,11 @@ public class PlutoConfig {
          private void raidTicking() {
              raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
          }
@@ -22,7 +22,7 @@ index 488a25e1cec14882d09495c3a28c19fdfe8a3862..219f5936a0f08bd08055f03b7924a9d4
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 0f3b49be81ac37ec2eace70cdc9fa2154d044f6d..0e50b19c9ca1fc627eb0240b2b132ae5319884e0 100644
+index f945dc4ad51cbf0826322546248a76b5bed8e04a..605ac9348784a1349c54564b0668c8838b2205bd 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -694,6 +694,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.

@@ -5,10 +5,10 @@ Subject: [PATCH] Optimise rain check
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index d130bea050fbb861d26900ac89c5c9b56d3dfb99..e4eb690a364745b2df50782160a669536816e863 100644
+index edd260f11c30a298ebdb6da2c5badc4e179b8112..fb5819263124dbf7d2e87e916e8781581d7d77ae 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -399,5 +399,10 @@ public class PlutoConfig {
+@@ -397,5 +397,10 @@ public class PlutoConfig {
          private void entityInsideBlockCheck() {
              entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
          }
@@ -20,7 +20,7 @@ index d130bea050fbb861d26900ac89c5c9b56d3dfb99..e4eb690a364745b2df50782160a66953
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2822e923606a906749821e1fff6815bdb8575e1e..41b8ea323145882d3d2885d0d9a7c54e9c6f491b 100644
+index 161d560bb4ed28ea04f55c3863d9cd83887273b9..4c47520f7f1f6f031a68d528c25188662d1a3506 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1881,11 +1881,28 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
