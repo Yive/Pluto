@@ -5,7 +5,7 @@ Maybe an optimised fork of Pufferfish. Mileage may vary per setup.
 I don't intend to provide much support for this project. I'll fix any bugs relating to my patches and maybe add certain patch requests, but this is mostly just so I can use it as a base for my private forks. If you want to use it, just make sure you test before uploading to production.
 
 ## Downloads
-You can download pre-compiled paperclip jars [here](https://ci.yive.dev/job/Pluto/job/1.20.4/)
+You can download pre-compiled paperclip jars [here](https://ci.yive.dev/job/Pluto/)
 
 ## API
 You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/1.20.4-R0.1-SNAPSHOT).
