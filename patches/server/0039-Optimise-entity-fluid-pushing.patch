@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 1 Aug 2024 19:02:42 -0700
+Subject: [PATCH] Optimise entity fluid pushing
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 7847c781eb6f1cae369115b438fe20d36676e7e9..e96b14a6b5f75f3e3b21ff238d814200b3d58476 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1948,10 +1948,8 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+     protected boolean updateInWaterStateAndDoFluidPushing() {
+         this.fluidHeight.clear();
+         this.updateInWaterStateAndDoWaterCurrentPushing();
+-        double d0 = this.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
+-        boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d0);
+ 
+-        return this.isInWater() || flag;
++        return this.isInWater() || this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, this.level().dimensionType().ultraWarm() ? LAVA_FAST_FLOW_SCALE : LAVA_SLOW_FLOW_SCALE); // Pluto - Optimise entity fluid pushing
+     }
+ 
+     void updateInWaterStateAndDoWaterCurrentPushing() {
