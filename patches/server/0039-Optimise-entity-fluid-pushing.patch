@@ -5,10 +5,10 @@ Subject: [PATCH] Optimise entity fluid pushing
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 7847c781eb6f1cae369115b438fe20d36676e7e9..e96b14a6b5f75f3e3b21ff238d814200b3d58476 100644
+index dad7ec913e60afefb49303467737a1d6c6ef2c82..fbd128465196a700ba9c86dafa8bda8bd29a3f30 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1948,10 +1948,8 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -1950,10 +1950,8 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      protected boolean updateInWaterStateAndDoFluidPushing() {
          this.fluidHeight.clear();
          this.updateInWaterStateAndDoWaterCurrentPushing();
