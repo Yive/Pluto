@@ -219,7 +219,7 @@ index 18bf9c42e76c8c35f57d74ea4adfa5b3bb53762f..f9cc31ff799a21f7ae2194291d99b663
          this.setPvpAllowed(dedicatedserverproperties.pvp);
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index d3cc65612c44f42ecae2e09b942438a03bc244bd..c87ed60ee4433ddacae4cfa95c9e54e9fdc095a0 100644
+index 2479b47186202de40cdb4ae773c696a4adee9bad..7148e852c653be9ec60c0d35a9654cb85ffe97ab 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -171,6 +171,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
@@ -239,10 +239,10 @@ index d3cc65612c44f42ecae2e09b942438a03bc244bd..c87ed60ee4433ddacae4cfa95c9e54e9
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b7af2d4300facf41a025c8ca322bf6541949b3ab..ba8bfa4367922e4ae9463ff24f62411565381e44 100644
+index c7df339aeb62ee627edaf1bb4c8474b61e357ba6..a08be5a061881c6ed43b9e83fe9d8f274dd2eff1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1070,6 +1070,7 @@ public final class CraftServer implements Server {
+@@ -1072,6 +1072,7 @@ public final class CraftServer implements Server {
  
          org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
@@ -251,7 +251,7 @@ index b7af2d4300facf41a025c8ca322bf6541949b3ab..ba8bfa4367922e4ae9463ff24f624115
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index c1e88c31910e96ef07cece05046c0b55e708b52d..8c6ecfdcef08a28669d7e5407580aa86de758f38 100644
+index b3ba6bccdbb08af27916f0c611c60b2595b90164..36cc4e834a331999d727aa503f2b5f84f0def634 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -183,6 +183,14 @@ public class Main {

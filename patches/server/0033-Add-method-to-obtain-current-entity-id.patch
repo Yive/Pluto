@@ -20,10 +20,10 @@ index f82cb4a2a1543c2323bdc5086ff09394534c44cf..77a76205402d5c3378ba7369d64fdfc6
 +    // Pluto end - Add method to obtain current entity id
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 9b780c241b2de8040eb251e55c8845cb9a6b7b89..71fdabcdbd31b28d5b7da1ec2be13a71d6a6ebc4 100644
+index 8fa2b2a67891d34ec95f7eed2a4118ddd8a5be15..a20883e8b43412dfba4743b77cd56317050eb736 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -597,6 +597,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -603,6 +603,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
          return net.minecraft.world.entity.Entity.nextEntityId();
      }
  
