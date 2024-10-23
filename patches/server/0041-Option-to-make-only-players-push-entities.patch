@@ -5,12 +5,12 @@ Subject: [PATCH] Option to make only players push entities
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 88047c33e85893f3eed5fe5f1a8dfecd28d1c9b0..00d9ce3fb352b13fc4c9ca9fba22ca020d537712 100644
+index eac2b2aba999b019fcf7f97aeb7a58685fdc0831..4589f17409e930c4f5d3bfad397f37218c238efc 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -424,5 +424,10 @@ public class PlutoConfig {
-         private void skipFailedDispenseLevelEvent() {
-             skipFailedDispenseLevelEvent = getBoolean("blocks.global.skip-failed-block-dispense-level-event", skipFailedDispenseLevelEvent);
+@@ -429,5 +429,10 @@ public class PlutoConfig {
+         private void useFluidPushingOptimisation() {
+             useFluidPushingOptimisation = getBoolean("entities.global.use-fluid-pushing-optimisation", useFluidPushingOptimisation);
          }
 +
 +        public boolean onlyPlayersPushEntities = false;

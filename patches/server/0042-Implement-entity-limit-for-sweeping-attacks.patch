@@ -5,10 +5,10 @@ Subject: [PATCH] Implement entity limit for sweeping attacks
 
 
 diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
-index 00d9ce3fb352b13fc4c9ca9fba22ca020d537712..1d489d9f5fc80a996227a09a5ee2d71006e1917f 100644
+index 4589f17409e930c4f5d3bfad397f37218c238efc..2bf144286598b55945a065500fa2b6cf157ca900 100644
 --- a/src/main/java/dev/yive/pluto/PlutoConfig.java
 +++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
-@@ -429,5 +429,10 @@ public class PlutoConfig {
+@@ -434,5 +434,10 @@ public class PlutoConfig {
          private void onlyPlayersPushEntities() {
              onlyPlayersPushEntities = getBoolean("entities.player.only-players-push-entities", onlyPlayersPushEntities);
          }
