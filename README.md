@@ -1,14 +1,26 @@
-# Pluto
-Maybe an optimised fork of Pufferfish. Mileage may vary per setup.
+<div align="center">
+  <h1>Pluto</h1>
+  <h3>Possibly an optimised fork of Pufferfish</h3>
+</div>
 
-## Support
-I don't intend to provide much support for this project. I'll fix any bugs relating to my patches and maybe add certain patch requests, but this is mostly just so I can use it as a base for my private forks. If you want to use it, just make sure you test before uploading to production.
+## Features
+| Feature                                                               | Description                                                                                                                                                                                        |
+|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Fork of [Pufferfish](https://github.com/pufferfish-gg/Pufferfish)** | Includes a bunch of performance patches.                                                                                                                                                           |
+| **Optimized Hoppers**                                                 | Certain entities will search for hoppers allowing for a higher capacity of hoppers.                                                                                                                |
+| **Optimisations for Farms**                                           | Certain farm related blocks can skip heavy tasks such as farmland searching for nearby water.                                                                                                      |
+| **Optimisations for Dropped Items**                                   | Dropped items can be configured to no longer try to merge on every single tick.                                                                                                                    |
+| **Exploit Prevention**                                                | Configuration for preventing x-ray methods with certain blocks or lag machines with excessive minecarts/boats.                                                                                     |
+| **Full Spawner Configuration**                                        | Full configuration for mob spawners that would normally require using an API.                                                                                                                      |
+| **Tick Skipping**                                                     | Whilst I don't recommend these, they unfortunately tend to be options in paid closed source forks. So now you've got access to some tick skipping methods for free.                                |
+| **Dev Tools Unlocker Implementation**                                 | Adds support for using the mod [Dev Tools Unlocker](https://modrinth.com/mod/dev-tools-unlocker).<br/>**Note:** Only enable this when you need it, clients without the mod will be unable to join. |
+| **Optimised Bukkit APIs**                                             | Some areas of the Bukkit API have been optimised to avoid plugins causing performance issues.                                                                                                      |
 
 ## Downloads
 You can download pre-compiled paperclip jars [here](https://ci.yive.dev/job/Pluto/)
 
 ## API
-You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/1.20.4-R0.1-SNAPSHOT).
+You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/1.21.1-R0.1-SNAPSHOT).
 
 Maven:
 ```xml
@@ -21,8 +33,8 @@ Maven:
 
 <dependencies>
     <dependency>
-        <groupId>dev.yive</groupId>
-        <artifactId>pluto</artifactId>
+        <groupId>dev.yive.pluto</groupId>
+        <artifactId>pluto-api</artifactId>
         <version>1.21.1-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
@@ -37,7 +49,17 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'dev.yive:pluto:1.21.1-R0.1-SNAPSHOT'
+    compileOnly 'dev.yive.pluto:pluto-api:1.21.1-R0.1-SNAPSHOT'
+}
+```
+Paperweight + Gradle KTS:
+```kts
+repositories {
+    maven("https://repo.yive.dev/snapshots")
+}
+
+dependencies {
+    paperweight.devBundle("dev.yive.pluto", "1.21.1-R0.1-SNAPSHOT")
 }
 ```
 
@@ -45,5 +67,5 @@ dependencies {
 
 ```bash
 ./gradlew applyPatches
-./gradlew createReobfPaperclipJar
+./gradlew createMojmapPaperclipJar
 ```
