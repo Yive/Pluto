@@ -1,0 +1,223 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Wed, 23 Oct 2024 00:52:48 -0700
+Subject: [PATCH] Entities search for hoppers
+
+This makes hoppers no longer search for container entities and dropped items.
+Dropped items and container entities (Container boats/minecrafts) will instead search for hoppers.
+
+The performance increase from this depends heavily on your server.
+If your server has more hoppers than dropped items at a time then you'll see an improvement.
+
+50k empty hoppers with stone slabs on them in a void world saw MSPT go from ~20mspt -> ~9mspt
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 0123ec7fc75a711781730268b07a2b702dbace81..cb9ce3746f3616739b20d7da676b2a468f619be4 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -444,5 +444,12 @@ public class PlutoConfig {
+         private void disableSprintParticles() {
+             disableSprintParticles = getBoolean("entities.global.particles.disable-sprint-particles", disableSprintParticles);
+         }
++
++        public boolean entitiesSearchForHoppers = false;
++        public int ticksBetweenEntitiesSearchForHoppers = 1;
++        private void entitiesSearchForHoppers() {
++            entitiesSearchForHoppers = getBoolean("entities.global.search-for-hoppers", entitiesSearchForHoppers);
++            ticksBetweenEntitiesSearchForHoppers = Math.max(1, getInt("entities.global.ticks-between-hopper-searches", ticksBetweenEntitiesSearchForHoppers));
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index f7d152a7321f5ebd4fe46255832defac83e8e557..134dbd90b34f4d937e43ce8581e431eb56e5f715 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -5092,4 +5092,36 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         return ENTITY_COUNTER.get();
+     }
+     // Pluto end - Add method to obtain current entity id
++
++    // Pluto start - Entities search for hoppers
++    @Nullable
++    public net.minecraft.world.level.block.entity.HopperBlockEntity findHopper() {
++        int originX = this.getBlockX();
++        int originY = this.getBlockY();
++        int originZ = this.getBlockZ();
++
++        BlockPos.MutableBlockPos adjacentPos = new BlockPos.MutableBlockPos();
++        net.minecraft.world.level.chunk.LevelChunk chunk = this.level().getChunkIfLoaded(originX >> 4, originZ >> 4);
++        if (chunk == null) return null;
++
++        for (int y = originY; y > originY - 2; --y) {
++            adjacentPos.set(originX, y, originZ);
++            net.minecraft.world.level.block.entity.HopperBlockEntity hopper = chunk.getBlockEntity(adjacentPos) instanceof net.minecraft.world.level.block.entity.HopperBlockEntity hopperBlockEntity ? hopperBlockEntity : null;
++            if (hopper == null) continue;
++            return hopper;
++        }
++        return null;
++    }
++
++    public boolean foundHopper() {
++        if (!this.level().plutoConfig().entitiesSearchForHoppers || tickCount % this.level().plutoConfig().ticksBetweenEntitiesSearchForHoppers != 0) return false;
++        net.minecraft.world.level.block.entity.HopperBlockEntity hopper = findHopper();
++        return hopper != null && hopper.canAcceptItems() && acceptItem(hopper);
++    }
++
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return false;
++    }
++    // Pluto end - Entities search for hoppers
++
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
+index a88d1f7a4d2fc90a37e29dcd1619d5eb6927812e..948f8674fdf7333fadfbf992bb85d1d8c0a4b04b 100644
+--- a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
++++ b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
+@@ -147,12 +147,19 @@ public class ItemEntity extends Entity implements TraceableEntity {
+         return 0.04D;
+     }
+ 
++    // Pluto start - Entities search for hoppers
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(hopper, this);
++    }
++    // Pluto end - Entities search for hoppers
++
+     @Override
+     public void tick() {
+         if (this.getItem().isEmpty()) {
+             this.discard(EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
+         } else {
+             super.tick();
++            if (foundHopper()) return; // Pluto - Entities search for hoppers
+             // Paper start - remove anti tick skipping measures / wall time - revert to vanilla
+             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+                 --this.pickupDelay;
+@@ -243,6 +250,7 @@ public class ItemEntity extends Entity implements TraceableEntity {
+     // Spigot start - copied from above
+     @Override
+     public void inactiveTick() {
++        if (foundHopper()) return; // Pluto - Entities search for hoppers
+         // Paper start - remove anti tick skipping measures / wall time - copied from above
+         if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+             --this.pickupDelay;
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
+index 9549eee0d92f322bd5232abd7e695213660c2e22..56ef73340822ca4955d3622ee2e3812bdf5785b8 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
+@@ -35,6 +35,27 @@ public abstract class AbstractMinecartContainer extends AbstractMinecart impleme
+     public ResourceKey<LootTable> lootTable;
+     public long lootTableSeed;
+ 
++    // Pluto start - Entities search for hoppers
++    @Override
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
++    }
++
++    @Override
++    public void tick() {
++        super.tick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++    // Pluto end - Entities search for hoppers
++
+     // Paper start - LootTable API
+     final com.destroystokyo.paper.loottable.PaperLootableInventoryData lootableData = new com.destroystokyo.paper.loottable.PaperLootableInventoryData();
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java b/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
+index c14019a131c90c699b8a76bada82592b66f0fa89..d1cea80fe008efec36df6ad14e173f5887ab824b 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
+@@ -43,6 +43,27 @@ public class ChestBoat extends Boat implements HasCustomInventoryScreen, Contain
+     private ResourceKey<LootTable> lootTable;
+     private long lootTableSeed;
+ 
++    // Pluto start - Entities search for hoppers | TODO: Move to AbstractChestBoat in 1.21.2
++    @Override
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
++    }
++
++    @Override
++    public void tick() {
++        super.tick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++    // Pluto end - Entities search for hoppers
++
+     public ChestBoat(EntityType<? extends Boat> type, Level world) {
+         super(type, world);
+         this.itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
+index cab403efd471bb61835224eea4e99570d34dcaaa..4801b44515bc25bbc35e5cd4d55ff698b013bc7d 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
+@@ -193,7 +193,10 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+     }
+     // Paper end - Perf: Optimize Hoppers
+ 
++    private boolean canAcceptItems = false; public boolean canAcceptItems() { return canAcceptItems; } // Pluto - Entities search for hoppers
++
+     private static boolean tryMoveItems(Level world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleansupplier) {
++        blockEntity.canAcceptItems = false; // Pluto - Entities search for hoppers
+         if (world.isClientSide) {
+             return false;
+         } else {
+@@ -206,6 +209,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+                 }
+ 
+                 if (fullState != HOPPER_IS_FULL || flag) { // Paper - Perf: Optimize Hoppers
++                    blockEntity.canAcceptItems = true; // Pluto - Entities search for hoppers
+                     flag |= booleansupplier.getAsBoolean();
+                 }
+ 
+@@ -546,9 +550,15 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+     }
+ 
+     public static boolean suckInItems(Level world, Hopper hopper) {
++    // Pluto start - Entities search for hoppers
++        return suckInItems(world, hopper, null);
++    }
++
++    public static boolean suckInItems(Level world, Hopper hopper, @Nullable Container iinventory) {
++    // Pluto end - Entities search for hoppers
+         BlockPos blockposition = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
+         BlockState iblockdata = world.getBlockState(blockposition);
+-        Container iinventory = HopperBlockEntity.getSourceContainer(world, hopper, blockposition, iblockdata);
++        if (iinventory == null) iinventory = HopperBlockEntity.getSourceContainer(world, hopper, blockposition, iblockdata); // Pluto - Entities search for hoppers
+ 
+         if (iinventory != null) {
+             Direction enumdirection = Direction.DOWN;
+@@ -566,6 +576,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+ 
+             return false;
+         } else {
++            if (world.plutoConfig().entitiesSearchForHoppers) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
+             boolean flag = hopper.isGridAligned() && iblockdata.isCollisionShapeFullBlock(world, blockposition) && !iblockdata.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
+ 
+             if (!flag) {
+@@ -873,6 +884,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+ 
+     @Nullable
+     private static Container getEntityContainer(Level world, double x, double y, double z) {
++        if (world.plutoConfig().entitiesSearchForHoppers) return null; // Pluto - Entities search for hoppers
+         List<Entity> list = world.getEntitiesOfClass((Class) Container.class, new AABB(x - 0.5D, y - 0.5D, z - 0.5D, x + 0.5D, y + 0.5D, z + 0.5D), EntitySelector.CONTAINER_ENTITY_SELECTOR); // Paper - Perf: Optimize hoppers
+ 
+         return !list.isEmpty() ? (Container) list.get(world.random.nextInt(list.size())) : null;
