@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 23 Jan 2024 14:34:32 -0800
+Subject: [PATCH] Configuration for item merging
+
+Pulled from my old 1.8/1.12 forks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 484d77bbd05afe3ef895d0bc4b664d0a827bff39..a9889a82aed6520e2ace566d843252beabee69da 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -275,5 +275,14 @@ public class PlutoConfig {
+             entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
+             disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
+         }
++
++        public boolean disableItemMergeCheckWhileMoving = false;
++        public int itemMergeMovingInterval = 2;
++        public int itemMergeStaticInterval = 40;
++        private void itemMergeConfiguration() {
++            disableItemMergeCheckWhileMoving = getBoolean("entities.item.disable-merge-check-when-moving", disableItemMergeCheckWhileMoving);
++            itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
++            itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
+index 4423973d4d9a2c3879d98d1d4c8b8c117c677ac5..a88d1f7a4d2fc90a37e29dcd1619d5eb6927812e 100644
+--- a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
++++ b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
+@@ -203,10 +203,12 @@ public class ItemEntity extends Entity implements TraceableEntity {
+                 }
+             }
+ 
+-            boolean flag = Mth.floor(this.xo) != Mth.floor(this.getX()) || Mth.floor(this.yo) != Mth.floor(this.getY()) || Mth.floor(this.zo) != Mth.floor(this.getZ());
+-            int i = flag ? 2 : 40;
++            // Pluto start - Configuration for item merging
++            boolean flag = this.xo != this.getX() || this.yo != this.getY() || this.zo != this.getZ(); // Flooring makes the movement check inconsistent
++            int i = flag ? this.level().plutoConfig().itemMergeMovingInterval : this.level().plutoConfig().itemMergeStaticInterval;
+ 
+-            if (this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
++            if ((!flag || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
++            // Pluto end - Configuration for item merging
+                 this.mergeWithNeighbours();
+             }
+ 

@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Wed, 21 Feb 2024 13:28:34 -0800
+Subject: [PATCH] Configuration for entity inside block check frequency
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 1ec90416909889276645eb6daef7292e7fee60af..fbb52a4c68f8bfadd0132536adef680b98aef66e 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -387,5 +387,10 @@ public class PlutoConfig {
+         private void entityPushing() {
+             entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
+         }
++
++        public int entityInsideBlockCheck = 1;
++        private void entityInsideBlockCheck() {
++            entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 75a80820f9ab4dfa7236645cebbc836fac7b45b2..dbaf7d6ca706e090146b471d7608fced4e47ed4c 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1280,6 +1280,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+                     }
+                 }
+ 
++                if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
+                 this.tryCheckInsideBlocks();
+                 float f = this.getBlockSpeedFactor();
+ 

@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 22 Oct 2024 23:10:22 -0700
+Subject: [PATCH] Option to disable sprint particles
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 544e8312ada96b87b32f794fa9e28ed644fc3000..4983dd713b907af946d9d58b7a76504f08158e58 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -434,5 +434,10 @@ public class PlutoConfig {
+         private void sweepingAttackLimit() {
+             sweepingAttackLimit = getInt("entities.player.sweeping-attack-entity-limit", sweepingAttackLimit);
+         }
++
++        public boolean disableSprintParticles = false;
++        private void disableSprintParticles() {
++            disableSprintParticles = getBoolean("entities.global.particles.disable-sprint-particles", disableSprintParticles);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 768f5f0f4cc041de2f4f2eb5600689585fb78f8b..f7d152a7321f5ebd4fe46255832defac83e8e557 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -889,7 +889,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         this.xRotO = this.getXRot();
+         this.yRotO = this.getYRot();
+         if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - // Moved up to postTick
+-        if (this.canSpawnSprintParticle()) {
++        if (!this.level.plutoConfig().disableSprintParticles && this.canSpawnSprintParticle()) { // Pluto - Option to disable sprint particles | More efficient to exit early to avoid canSpawnSprintParticle
+             this.spawnSprintParticle();
+         }
+ 
+@@ -2061,6 +2061,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+     }
+ 
+     protected void spawnSprintParticle() {
++        if (this.level.plutoConfig().disableSprintParticles) return; // Pluto - Option to disable sprint particles
+         BlockPos blockposition = this.getOnPosLegacy();
+         BlockState iblockdata = this.level().getBlockState(blockposition);
+ 

@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 13 Jul 2023 12:00:00 -0700
+Subject: [PATCH] Toggle inventory item move event for droppers
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index ef52664ac8f3f7361ddd33496fe7badc2c92de16..b150867b44d4ed976023d5364d0e3e823af6115c 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -234,5 +234,10 @@ public class PlutoConfig {
+         private void lessRandomDispensing() {
+             lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
+         }
++
++        public boolean disableDropperInventoryMoveEvent = false;
++        private void disableDropperInventoryMoveEvent() {
++            disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/DropperBlock.java b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
+index ddecf443df3679e3098eb54edd19585a0512e342..3e4e6a467600b83102ae3e4651df804e454984a2 100644
+--- a/src/main/java/net/minecraft/world/level/block/DropperBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/DropperBlock.java
+@@ -74,6 +74,19 @@ public class DropperBlock extends DispenserBlock {
+                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(world, pos, itemstack, i)) return; // Paper - Add BlockPreDispenseEvent
+                         itemstack1 = DropperBlock.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
+                     } else {
++                        // Pluto start - Toggle inventory item move event for droppers
++                        if (world.plutoConfig().disableDropperInventoryMoveEvent) {
++                            itemstack1 = HopperBlockEntity.addItem(tileentitydispenser, iinventory, itemstack.copy().split(1), enumdirection.getOpposite());
++                            if (itemstack1.isEmpty()) {
++                                itemstack1 = itemstack.copy();
++                                itemstack1.shrink(1);
++                            } else {
++                                itemstack1 = itemstack.copy();
++                            }
++                            tileentitydispenser.setItem(i, itemstack1);
++                            return;
++                        }
++                        // Pluto end - Toggle inventory item move event for droppers
+                         // CraftBukkit start - Fire event when pushing items into other inventories
+                         CraftItemStack oitemstack = CraftItemStack.asCraftMirror(itemstack.copyWithCount(1));
+ 

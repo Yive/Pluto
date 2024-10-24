@@ -1,0 +1,192 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 25 Jan 2024 15:32:57 -0800
+Subject: [PATCH] Options for spawner settings
+
+Pulled from my old 1.8/1.12 forks
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 4fa774fa938124fd91702b7b8068898e838b80b7..9cdc02da043391c0a9d027c42dec7a8366cf88ec 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -310,5 +310,32 @@ public class PlutoConfig {
+             disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
+             disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
+         }
++
++        public boolean spawnerSettingsEnabled = false;
++        public boolean spawnerCheckForNearbyPlayers = true;
++        public boolean spawnerCheckForNearbyEntities = true;
++        public boolean spawnerCheckForBlockCollision = true;
++        public boolean spawnerDisableBabySpawns = false;
++        public boolean spawnerDisableParticles = false;
++        public int spawnerMinSpawnDelay = 200;
++        public int spawnerMaxSpawnDelay = 800;
++        public short spawnerSpawnCount = 4;
++        public short spawnerMaxNearbyEntities = 6;
++        public short spawnerRequiredPlayerRange = 16;
++        public short spawnerSpawnRange = 4;
++        private void spawnerConfiguration() {
++            spawnerSettingsEnabled = getBoolean("blocks.spawner.enable-custom-settings", spawnerSettingsEnabled);
++            spawnerCheckForNearbyPlayers = getBoolean("blocks.spawner.check-for-nearby-players", spawnerCheckForNearbyPlayers);
++            spawnerCheckForNearbyEntities = getBoolean("blocks.spawner.check-for-nearby-entities", spawnerCheckForNearbyEntities);
++            spawnerCheckForBlockCollision = getBoolean("blocks.spawner.check-for-block-collision", spawnerCheckForBlockCollision);
++            spawnerDisableBabySpawns = getBoolean("blocks.spawner.disable-spawning-babies", spawnerDisableBabySpawns);
++            spawnerDisableParticles = getBoolean("blocks.spawner.disable-spawn-particles", spawnerDisableParticles);
++            spawnerMinSpawnDelay = getInt("blocks.spawner.min-spawn-delay", spawnerMinSpawnDelay);
++            spawnerMaxSpawnDelay = getInt("blocks.spawner.max-spawn-delay", spawnerMaxSpawnDelay);
++            spawnerSpawnCount = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-count", spawnerSpawnCount));
++            spawnerMaxNearbyEntities = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.max-nearby-entities", spawnerMaxNearbyEntities));
++            spawnerRequiredPlayerRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.required-player-range", spawnerRequiredPlayerRange));
++            spawnerSpawnRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-range", spawnerSpawnRange));
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
+index f57e1b78204dff661ad5d3ee93a88a00330af2dc..2853aa24dc31165954caa9838872928fd26ecce0 100644
+--- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
++++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
+@@ -50,6 +50,7 @@ public abstract class BaseSpawner {
+     public int requiredPlayerRange = 16;
+     public int spawnRange = 4;
+     private int tickDelay = 0; // Paper - Configurable mob spawner tick rate
++    public boolean wasApiUsed = false; // Pluto - Options for spawner settings | Just so that we don't overwrite custom spawners... hopefully
+ 
+     public BaseSpawner() {}
+ 
+@@ -90,7 +91,19 @@ public abstract class BaseSpawner {
+         tickDelay = world.paperConfig().tickRates.mobSpawner;
+         if (tickDelay == -1) { return; } // If disabled
+         // Paper end - Configurable mob spawner tick rate
+-        if (this.isNearPlayer(world, pos)) {
++
++        // Pluto start - Options for spawner settings
++        if (!wasApiUsed && world.plutoConfig().spawnerSettingsEnabled) {
++            this.minSpawnDelay = world.plutoConfig().spawnerMinSpawnDelay;
++            this.maxSpawnDelay = world.plutoConfig().spawnerMaxSpawnDelay;
++            this.spawnCount = world.plutoConfig().spawnerSpawnCount;
++            this.maxNearbyEntities = world.plutoConfig().spawnerMaxNearbyEntities;
++            this.requiredPlayerRange = world.plutoConfig().spawnerRequiredPlayerRange;
++            this.spawnRange = world.plutoConfig().spawnerSpawnRange;
++        }
++        // Pluto end - Options for spawner settings
++
++        if (!world.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(world, pos)) { // Pluto - Options for spawner settings
+             if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
+                 this.delay(world, pos);
+             }
+@@ -117,7 +130,7 @@ public abstract class BaseSpawner {
+                     double d1 = j >= 2 ? nbttaglist.getDouble(1) : (double) (pos.getY() + randomsource.nextInt(3) - 1);
+                     double d2 = j >= 3 ? nbttaglist.getDouble(2) : (double) pos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5D;
+ 
+-                    if (world.noCollision(((EntityType) optional.get()).getSpawnAABB(d0, d1, d2))) {
++                    if (!world.plutoConfig().spawnerCheckForBlockCollision || world.noCollision(((EntityType) optional.get()).getSpawnAABB(d0, d1, d2))) { // Pluto - Options for spawner settings
+                         BlockPos blockposition1 = BlockPos.containing(d0, d1, d2);
+ 
+                         if (mobspawnerdata.getCustomSpawnRules().isPresent()) {
+@@ -158,7 +171,7 @@ public abstract class BaseSpawner {
+                             return;
+                         }
+ 
+-                        int k = world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size();
++                        int k = !world.plutoConfig().spawnerCheckForNearbyEntities ? 0 : world.getEntities(EntityTypeTest.forExactClass(entity.getClass()), (new AABB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).inflate((double) this.spawnRange), EntitySelector.NO_SPECTATORS).size(); // Pluto - Options for spawner settings
+ 
+                         if (k >= this.maxNearbyEntities) {
+                             this.delay(world, pos);
+@@ -180,6 +193,15 @@ public abstract class BaseSpawner {
+                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, (SpawnGroupData) null);
+                             }
+ 
++                            // Pluto start - Options for spawner settings
++                            // I wish I could put this higher up in the chain, but the baby
++                            // state only gets assigned after the finalizeSpawn method is called.
++                            if (world.plutoConfig().spawnerDisableBabySpawns && entityinsentient.isBaby()) {
++                                if (entityinsentient.getVehicle() != null) entityinsentient.getVehicle().discard(); // Due to jockeys
++                                continue;
++                            }
++                            // Pluto end - Options for spawner settings
++
+                             Optional<net.minecraft.world.entity.EquipmentTable> optional1 = mobspawnerdata.getEquipment(); // CraftBukkit - decompile error
+ 
+                             Objects.requireNonNull(entityinsentient);
+@@ -205,6 +227,7 @@ public abstract class BaseSpawner {
+                             return;
+                         }
+ 
++                        if (world.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
+                         world.levelEvent(2004, pos, 0);
+                         world.gameEvent(entity, (Holder) GameEvent.ENTITY_PLACE, blockposition1);
+                         if (entity instanceof Mob) {
+@@ -290,9 +313,12 @@ public abstract class BaseSpawner {
+         }
+ 
+         this.displayEntity = null;
++
++        this.wasApiUsed = nbt.getBoolean("Pluto.WasApiUsed"); // Pluto - Options for spawner settings
+     }
+ 
+     public CompoundTag save(CompoundTag nbt) {
++        nbt.putBoolean("Pluto.WasApiUsed", this.wasApiUsed); // Pluto - Options for spawner settings
+         // Paper start
+         if (spawnDelay > Short.MAX_VALUE) {
+             nbt.putInt("Paper.Delay", this.spawnDelay);
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
+index 146dde200845abcbe11015dda2c826a1aa711e42..9f56d62dbe7d30aaf15431e967ac0fff574ad90d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
+@@ -199,6 +199,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     @Override
+     public void setDelay(int delay) {
+         this.getSnapshot().getSpawner().spawnDelay = delay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -210,6 +211,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     public void setMinSpawnDelay(int spawnDelay) {
+         Preconditions.checkArgument(spawnDelay <= this.getMaxSpawnDelay(), "Minimum Spawn Delay must be less than or equal to Maximum Spawn Delay");
+         this.getSnapshot().getSpawner().minSpawnDelay = spawnDelay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -222,6 +224,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+         Preconditions.checkArgument(spawnDelay > 0, "Maximum Spawn Delay must be greater than 0.");
+         Preconditions.checkArgument(spawnDelay >= this.getMinSpawnDelay(), "Maximum Spawn Delay must be greater than or equal to Minimum Spawn Delay");
+         this.getSnapshot().getSpawner().maxSpawnDelay = spawnDelay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -232,6 +235,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     @Override
+     public void setMaxNearbyEntities(int maxNearbyEntities) {
+         this.getSnapshot().getSpawner().maxNearbyEntities = maxNearbyEntities;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -242,6 +246,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     @Override
+     public void setSpawnCount(int count) {
+         this.getSnapshot().getSpawner().spawnCount = count;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -252,6 +257,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     @Override
+     public void setRequiredPlayerRange(int requiredPlayerRange) {
+         this.getSnapshot().getSpawner().requiredPlayerRange = requiredPlayerRange;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -262,6 +268,7 @@ public class CraftCreatureSpawner extends CraftBlockEntityState<SpawnerBlockEnti
+     @Override
+     public void setSpawnRange(int spawnRange) {
+         this.getSnapshot().getSpawner().spawnRange = spawnRange;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override

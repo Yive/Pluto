@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Mon, 4 Mar 2024 03:07:31 -0800
+Subject: [PATCH] Optimise rain check
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index fbb52a4c68f8bfadd0132536adef680b98aef66e..e6b6378f81e18e25bbfd4a987b22d2cbef976ca7 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -392,5 +392,10 @@ public class PlutoConfig {
+         private void entityInsideBlockCheck() {
+             entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
+         }
++
++        public int entityRainCheckRate = 10;
++        private void entityRainCheckModulo() {
++            entityRainCheckRate = Math.min(1, getInt("entities.global.rain-check-tick-rate", entityRainCheckRate));
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index dbaf7d6ca706e090146b471d7608fced4e47ed4c..f82cb4a2a1543c2323bdc5086ff09394534c44cf 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1883,11 +1883,28 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+     public boolean isInWater() {
+         return this.wasTouchingWater;
+     }
++    private int lastRainCheck = -1; private boolean lastRainCheckResult = false; // Pluto - Optimise rain check
+ 
+     public boolean isInRain() {
++        // Pluto start - Optimise rain check
++        if (this.tickCount - this.lastRainCheck < this.level().plutoConfig().entityRainCheckRate) {
++            return this.lastRainCheckResult;
++        }
++
++        this.lastRainCheck = this.tickCount;
++
++        // The nether & end can't have rain
++        // Both dimensions have skylight set to false.
++        if (!this.level().dimensionType().hasSkyLight()) {
++            this.lastRainCheckResult = false;
++            return false;
++        }
++
+         BlockPos blockposition = this.blockPosition();
+ 
+-        return this.level().isRainingAt(blockposition) || this.level().isRainingAt(BlockPos.containing((double) blockposition.getX(), this.getBoundingBox().maxY, (double) blockposition.getZ()));
++        this.lastRainCheckResult = this.level().isRainingAt(blockposition) || this.level().isRainingAt(BlockPos.containing((double) blockposition.getX(), this.getBoundingBox().maxY, (double) blockposition.getZ()));
++        return this.lastRainCheckResult;
++        // Pluto end - Optimise rain check
+     }
+ 
+     public boolean isInBubbleColumn() {

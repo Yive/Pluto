@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Fri, 18 Oct 2024 17:54:20 -0700
+Subject: [PATCH] Implement entity limit for sweeping attacks
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index e6ac11e68df4a46125eaf455688126d71641bb25..544e8312ada96b87b32f794fa9e28ed644fc3000 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -429,5 +429,10 @@ public class PlutoConfig {
+         private void onlyPlayersPushEntities() {
+             onlyPlayersPushEntities = getBoolean("entities.player.only-players-push-entities", onlyPlayersPushEntities);
+         }
++
++        public int sweepingAttackLimit = -1;
++        private void sweepingAttackLimit() {
++            sweepingAttackLimit = getInt("entities.player.sweeping-attack-entity-limit", sweepingAttackLimit);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
+index 09bcbc0ae36e4e69fee87a7e0c49acf496117a39..13c5a48ec696c73c56b8f6adf3c4f71bc98c86a3 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Player.java
++++ b/src/main/java/net/minecraft/world/entity/player/Player.java
+@@ -1370,8 +1370,11 @@ public abstract class Player extends LivingEntity {
+                             List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.0D, 0.25D, 1.0D));
+                             Iterator iterator = list.iterator();
+ 
++                            int entityCount = 1; // Pluto - Implement entity limit for sweeping attacks | Start at one due to original target
++
+                             while (iterator.hasNext()) {
+                                 entityliving2 = (LivingEntity) iterator.next();
++                                if (this.level().plutoConfig().sweepingAttackLimit != -1 && entityCount++ >= this.level().plutoConfig().sweepingAttackLimit) continue; // Pluto - Implement entity limit for sweeping attacks
+                                 if (entityliving2 != this && entityliving2 != target && !this.isAlliedTo((Entity) entityliving2) && (!(entityliving2 instanceof ArmorStand) || !((ArmorStand) entityliving2).isMarker()) && this.distanceToSqr((Entity) entityliving2) < 9.0D) {
+                                     float f7 = this.getEnchantedDamage(entityliving2, f6, damagesource) * f2;
+ 

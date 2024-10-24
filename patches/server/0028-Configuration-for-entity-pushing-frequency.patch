@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Wed, 21 Feb 2024 13:14:34 -0800
+Subject: [PATCH] Configuration for entity pushing frequency
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index d0b7cb3d55ac9913466412cb1a6cf5ff79344508..1ec90416909889276645eb6daef7292e7fee60af 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -382,5 +382,10 @@ public class PlutoConfig {
+             disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
+             disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
+         }
++
++        public int entityPushingModulo = 1;
++        private void entityPushing() {
++            entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 5132e108df37ca97ba94b8b72c0ef292cbb2ec94..ac2a9e23c25ccbaf8cee7834c266bcf66abbf11c 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -3576,6 +3576,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+             this.checkAutoSpinAttack(axisalignedbb, this.getBoundingBox());
+         }
+ 
++        if (this.level().plutoConfig().entityPushingModulo > 0 && (this.level().plutoConfig().entityPushingModulo == 1 || this.tickCount % this.level().plutoConfig().entityPushingModulo == 0)) // Pluto - Configuration for entity pushing frequency
+         this.pushEntities();
+         this.level().getProfiler().pop();
+         // Paper start - Add EntityMoveEvent

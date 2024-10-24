@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sat, 8 Jun 2024 22:25:31 -0700
+Subject: [PATCH] Skip setting stats when there has been an overflow
+
+When a player reaches the max 32bit integer, it will result in console spam from certain plugins
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
+index ccee1f637db5b8c34a5c125938edaa1361233e4d..511e9e1300994c2a0246c76eff49e4bef7c26705 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
+@@ -225,6 +225,7 @@ public enum CraftStatistic {
+     }
+ 
+     public static void setStatistic(ServerStatsCounter manager, Statistic statistic, int newValue, ServerPlayer player) {
++        if (newValue < 0) return; // Pluto - Skip setting stats when there has been an overflow
+         Preconditions.checkArgument(statistic != null, "Statistic cannot be null");
+         Preconditions.checkArgument(statistic.getType() == Type.UNTYPED, "Must supply additional parameter for this statistic");
+         Preconditions.checkArgument(newValue >= 0, "Value must be greater than or equal to 0");
+@@ -267,6 +268,7 @@ public enum CraftStatistic {
+     }
+ 
+     public static void setStatistic(ServerStatsCounter manager, Statistic statistic, Material material, int newValue, ServerPlayer player) {
++        if (newValue < 0) return; // Pluto - Skip setting stats when there has been an overflow
+         Preconditions.checkArgument(statistic != null, "Statistic cannot be null");
+         Preconditions.checkArgument(material != null, "Material cannot be null");
+         Preconditions.checkArgument(newValue >= 0, "Value must be greater than or equal to 0");
+@@ -311,6 +313,7 @@ public enum CraftStatistic {
+     }
+ 
+     public static void setStatistic(ServerStatsCounter manager, Statistic statistic, EntityType entityType, int newValue, ServerPlayer player) {
++        if (newValue < 0) return; // Pluto - Skip setting stats when there has been an overflow
+         Preconditions.checkArgument(statistic != null, "Statistic cannot be null");
+         Preconditions.checkArgument(entityType != null, "EntityType cannot be null");
+         Preconditions.checkArgument(newValue >= 0, "Value must be greater than or equal to 0");

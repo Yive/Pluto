@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 1 Aug 2024 19:02:42 -0700
+Subject: [PATCH] Optimise entity fluid pushing
+
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index 155bdf50c129ebf50f8bc158ece96a03f8fabe9e..93c442f661f74d9139d5ee3939665f5aadff6b4e 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -419,5 +419,10 @@ public class PlutoConfig {
+         private void skipFailedDispenseLevelEvent() {
+             skipFailedDispenseLevelEvent = getBoolean("blocks.global.skip-failed-block-dispense-level-event", skipFailedDispenseLevelEvent);
+         }
++
++        public boolean useFluidPushingOptimisation = true;
++        private void useFluidPushingOptimisation() {
++            useFluidPushingOptimisation = getBoolean("entities.global.use-fluid-pushing-optimisation", useFluidPushingOptimisation);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index dad7ec913e60afefb49303467737a1d6c6ef2c82..768f5f0f4cc041de2f4f2eb5600689585fb78f8b 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1951,6 +1951,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         this.fluidHeight.clear();
+         this.updateInWaterStateAndDoWaterCurrentPushing();
+         double d0 = this.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
++
++        // Pluto start - Optimise entity fluid pushing
++        if (level.plutoConfig().useFluidPushingOptimisation) {
++            return this.isInWater() || this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d0);
++        }
++        // Pluto end - Optimise entity fluid pushing
++
+         boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d0);
+ 
+         return this.isInWater() || flag;

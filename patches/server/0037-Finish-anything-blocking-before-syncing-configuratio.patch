@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Tue, 8 Oct 2024 23:21:15 -0700
+Subject: [PATCH] Finish anything blocking before syncing configuration change
+
+syncAfterConfigurationChange Has an insane rate of causing server crashes
+
+diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
+index 4a8356a714ed50d4a32bcf046a2e16491bef014b..e1e4b33c2224ac2e4e25b44aea12db28cef07161 100644
+--- a/src/main/java/net/minecraft/network/Connection.java
++++ b/src/main/java/net/minecraft/network/Connection.java
+@@ -345,6 +345,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+ 
+     private static void syncAfterConfigurationChange(ChannelFuture future) {
+         try {
++            if (ca.spottedleaf.moonrise.common.util.TickThread.isTickThread()) net.minecraft.server.MinecraftServer.getServer().managedBlock(future::isDone); // Pluto - Finish anything blocking before syncing configuration change
+             future.syncUninterruptibly();
+         } catch (Exception exception) {
+             if (exception instanceof ClosedChannelException) {

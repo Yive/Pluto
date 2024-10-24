@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 05:09:30 -0800
+Subject: [PATCH] Configuration for block event ticking
+
+Block event ticking cannot be disabled currently.
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index db54c74fcf72e64ad4b2aa1a9cc9a010329cb720..353ac97f1323b7f78b464df6614b96f293b1c911 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -362,5 +362,11 @@ public class PlutoConfig {
+         private void raidTicking() {
+             raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
+         }
++
++        public int blockEventTickingModulo = 1;
++        private void blockEventTicking() {
++            // TODO: Allow for disabling block even ticking
++            blockEventTickingModulo = Math.min(1, getInt("blocks.global.block-event-ticking-modulo", blockEventTickingModulo));
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 6591716170c191581dab33daf3cb2fc17a005f86..848b7b2f085b74acb0db62379cf3289dc6074626 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -694,6 +694,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
+         gameprofilerfiller.popPush("blockEvents");
+         if (flag) {
+             this.timings.doSounds.startTiming(); // Spigot
++            if (plutoConfig().blockEventTickingModulo > 0 && (plutoConfig().blockEventTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockEventTickingModulo == 0)) // Pluto - Configuration for block event ticking
+             this.runBlockEvents();
+             this.timings.doSounds.stopTiming(); // Spigot
+         }

@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 01:35:04 -0800
+Subject: [PATCH] Configuration for block ticks
+
+Values below 1 will disable ticking the blockTicks list.
+The list is used by stuff such as observers and other redstone components.
+
+diff --git a/src/main/java/dev/yive/pluto/PlutoConfig.java b/src/main/java/dev/yive/pluto/PlutoConfig.java
+index ac22413df335736439996c27799d71ab04b1f0ac..3ce4faa60abcb2f116cd0f6f3fd560a1480f2b28 100644
+--- a/src/main/java/dev/yive/pluto/PlutoConfig.java
++++ b/src/main/java/dev/yive/pluto/PlutoConfig.java
+@@ -347,5 +347,10 @@ public class PlutoConfig {
+         private void disableFlapEvents() {
+             disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
+         }
++
++        public int blockTickingModulo = 1;
++        private void blockTicking() {
++            blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
++        }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index c9299bfe82796dc9a8001c9ab54966a8a3ce58cd..bc9bf51fe4dcc1805eb51441533253034fcf670b 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -670,6 +670,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
+         if (!this.isDebug() && flag) {
+             j = this.getGameTime();
+             gameprofilerfiller.push("blockTicks");
++            if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
+             this.blockTicks.tick(j, paperConfig().environment.maxBlockTicks, this::tickBlock); // Paper - configurable max block ticks
+             gameprofilerfiller.popPush("fluidTicks");
+             this.fluidTicks.tick(j, paperConfig().environment.maxFluidTicks, this::tickFluid); // Paper - configurable max fluid ticks
