@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Thu, 24 Oct 2024 16:20:23 -0700
+Subject: [PATCH] Small hopper optimisations
+
+Rather small improvement, but depending on how many hoppers you have, it can provide up to a 6 mspt improvement
+
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
+index 4801b44515bc25bbc35e5cd4d55ff698b013bc7d..e7ad6f0a6ff74bceb6eb388b5e7af090100dd964 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
+@@ -809,6 +809,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+         // CraftBukkit start
+         BlockPos searchPosition = pos.relative(blockEntity.facing);
+         Container inventory = HopperBlockEntity.getContainerAt(world, searchPosition);
++        if (HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
+ 
+         CraftBlock hopper = CraftBlock.at(world, pos);
+         CraftBlock searchBlock = CraftBlock.at(world, searchPosition);
+@@ -820,6 +821,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+     private static Container getSourceContainer(Level world, Hopper hopper, BlockPos pos, BlockState state) {
+         // CraftBukkit start
+         Container inventory = HopperBlockEntity.getContainerAt(world, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
++        if (HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
+ 
+         BlockPos blockPosition = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
+         CraftBlock hopper1 = CraftBlock.at(world, blockPosition);
+@@ -858,14 +860,20 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+ 
+     @Nullable
+     private static Container getBlockContainer(Level world, BlockPos pos, BlockState state) {
+-        if ( !world.spigotConfig.hopperCanLoadChunks && !world.hasChunkAt( pos ) ) return null; // Spigot
++        // Pluto start - Small hopper optimisations
++        net.minecraft.world.level.chunk.LevelChunk chunk = null;
++        if (!world.spigotConfig.hopperCanLoadChunks) {
++            chunk = world.getChunkIfLoaded(pos);
++            if (chunk == null) return null;
++        }
++        // Pluto end - Small hopper optimisations
+         Block block = state.getBlock();
+ 
+         if (block instanceof WorldlyContainerHolder) {
+             return ((WorldlyContainerHolder) block).getContainer(state, world, pos);
+         } else {
+             if (state.hasBlockEntity()) {
+-                BlockEntity tileentity = world.getBlockEntity(pos);
++                BlockEntity tileentity = chunk == null ? world.getBlockEntity(pos) : world.isOutsideBuildHeight(pos) ? null : chunk.getBlockEntity(pos, net.minecraft.world.level.chunk.LevelChunk.EntityCreationType.IMMEDIATE); // Pluto - Small hopper optimisations
+ 
+                 if (tileentity instanceof Container) {
+                     Container iinventory = (Container) tileentity;
