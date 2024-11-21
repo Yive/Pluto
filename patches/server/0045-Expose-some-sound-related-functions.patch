@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Wed, 20 Nov 2024 18:26:50 -0800
+Subject: [PATCH] Expose some sound related functions
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index b608edae14c86e8277bf7df3d88b538818684c2d..6d131b0f272a7799aeae22b4bcd0695f7282556e 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -2798,6 +2798,11 @@ public abstract class LivingEntity extends Entity implements Attackable {
+ 
+     }
+ 
++    // Pluto start - Expose some sound related functions
++    public float getSoundVolume0() { return getSoundVolume(); }
++    public float getVoicePitch0() { return getVoicePitch(); }
++    // Pluto end - Expose some sound related functions
++
+     public float getSoundVolume() {
+         return 1.0F;
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 57b71a3894638253c6d24d4967a96768834bb02b..7f0ec0b125852c4c999b792ee97951f0ef3d208d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -1192,4 +1192,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         return this.getHandle().canUseSlot(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
+     }
+     // Paper end - Expose canUseSlot
++
++    // Pluto start - Expose some sound related functions
++    @Override
++    public float getSoundVolume() {
++        return this.getHandle().getSoundVolume0();
++    }
++
++    @Override
++    public float getVoicePitch() {
++        return this.getHandle().getVoicePitch0();
++    }
++    // Pluto end - Expose some sound related functions
++
+ }
