@@ -21,14 +21,14 @@ index f867010621a22ca310b35d78704ac0feceacf706..db54c74fcf72e64ad4b2aa1a9cc9a010
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index c24c2c702835612b532e745c21bbe34233698739..6591716170c191581dab33daf3cb2fc17a005f86 100644
+index d8ddf2ffbedb6479c3ffa6b82e8137219301f708..93ade924c9fbb2b7b614ba579044401518385f68 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -682,6 +682,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
+@@ -766,6 +766,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
+ 
          gameprofilerfiller.popPush("raid");
          if (flag) {
-             this.timings.raids.startTiming(); // Paper - timings
 +            if (plutoConfig().raidTickingModulo > 0 && (plutoConfig().raidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().raidTickingModulo == 0)) // Pluto - Configuration for raid ticking
              this.raids.tick();
-             this.timings.raids.stopTiming(); // Paper - timings
          }
+ 

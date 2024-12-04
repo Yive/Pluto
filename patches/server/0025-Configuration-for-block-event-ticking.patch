@@ -22,14 +22,14 @@ index db54c74fcf72e64ad4b2aa1a9cc9a010329cb720..353ac97f1323b7f78b464df6614b96f2
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 6591716170c191581dab33daf3cb2fc17a005f86..848b7b2f085b74acb0db62379cf3289dc6074626 100644
+index 93ade924c9fbb2b7b614ba579044401518385f68..1c47bf5f72017c5a245a447b7584309fbbfb4a1e 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -694,6 +694,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
+@@ -774,6 +774,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
+         this.getChunkSource().tick(shouldKeepTicking, true);
          gameprofilerfiller.popPush("blockEvents");
          if (flag) {
-             this.timings.doSounds.startTiming(); // Spigot
 +            if (plutoConfig().blockEventTickingModulo > 0 && (plutoConfig().blockEventTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockEventTickingModulo == 0)) // Pluto - Configuration for block event ticking
              this.runBlockEvents();
-             this.timings.doSounds.stopTiming(); // Spigot
          }
+ 

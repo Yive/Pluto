@@ -23,15 +23,14 @@ index 704a856f3af76a6d8ce09b8f30586a32b2f5fb1c..484d77bbd05afe3ef895d0bc4b664d0a
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 2a8ffcdd262ea73844500846c6401cdda7153d61..c9299bfe82796dc9a8001c9ab54966a8a3ce58cd 100644
+index 59f90878ec9f110d78bce998deb1dcd2830b0f08..7e9888a9f047205d8be9b437c44ea5a6c8abcc68 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -712,7 +712,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
+@@ -790,6 +790,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
                  gameprofilerfiller.pop();
              }
  
--            org.spigotmc.ActivationRange.activateEntities(this); // Spigot
-+            if (!plutoConfig().disableEntityActivation && MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) org.spigotmc.ActivationRange.activateEntities(this); // Spigot // Pluto - Configurable entity activation
-             this.timings.entityTick.startTiming(); // Spigot
++            if (!plutoConfig().disableEntityActivation && MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) // Pluto - Configurable entity activation
+             org.spigotmc.ActivationRange.activateEntities(this); // Spigot
              this.entityTickList.forEach((entity) -> {
                  entity.activatedPriorityReset = false; // Pufferfish - DAB

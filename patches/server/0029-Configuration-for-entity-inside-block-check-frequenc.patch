@@ -20,14 +20,14 @@ index 1ec90416909889276645eb6daef7292e7fee60af..fbb52a4c68f8bfadd0132536adef680b
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 75a80820f9ab4dfa7236645cebbc836fac7b45b2..dbaf7d6ca706e090146b471d7608fced4e47ed4c 100644
+index e95a75ecf446c3d1c603d726d228fc413ea73e39..7a7aac520ff4dd234f93117c9827080c2b36a218 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1280,6 +1280,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
-                     }
-                 }
+@@ -1355,6 +1355,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+             }
  
-+                if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
-                 this.tryCheckInsideBlocks();
-                 float f = this.getBlockSpeedFactor();
- 
+             this.movementThisTick.add(new Entity.Movement(lastRenderPos, pos));
++            if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
+             this.checkInsideBlocks(this.movementThisTick, this.blocksInside);
+             boolean flag = Iterables.any(this.blocksInside, (iblockdata1) -> {
+                 return iblockdata1.is(BlockTags.FIRE) || iblockdata1.is(Blocks.LAVA);

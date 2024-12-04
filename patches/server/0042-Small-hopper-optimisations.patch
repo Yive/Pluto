@@ -6,7 +6,7 @@ Subject: [PATCH] Small hopper optimisations
 Rather small improvement, but depending on how many hoppers you have, it can provide up to a 6 mspt improvement
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
-index 4801b44515bc25bbc35e5cd4d55ff698b013bc7d..e7ad6f0a6ff74bceb6eb388b5e7af090100dd964 100644
+index 7465248a651d996690c79430839805532d1a20c2..aa7f13287a8628e97c4100ea86602f7082ccccfd 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 @@ -809,6 +809,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen

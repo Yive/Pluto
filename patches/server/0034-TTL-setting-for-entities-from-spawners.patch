@@ -28,33 +28,33 @@ index aec0c5d373574cf674b97b99c8f25364bcd41195..a1f8dfc0b65df188e917ab52cfb4c46f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 77a76205402d5c3378ba7369d64fdfc6ed5eb435..dad7ec913e60afefb49303467737a1d6c6ef2c82 100644
+index dc466f9508a2b4fe6eff1a9c10f105cfd3283159..c16c8fd2c4fcd360201ced542febd0f67c5d682a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -854,6 +854,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -879,6 +879,14 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
              return;
          }
-         // Pufferfish end - entity TTL
+         // Paper end - entity despawn time limit
 +
 +        // Pluto start - TTL setting for entities from spawners
 +        if (type != EntityType.PLAYER && spawnedViaMobSpawner && type.spawnerTTL >= 0 && this.tickCount >= type.spawnerTTL) {
-+            discard();
++            this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN);
 +            return;
 +        }
 +        // Pluto end - TTL setting for entities from spawners
++
          this.baseTick();
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index f9440014ab2fe753c16b9383f5fffbb8adb76e79..305f3c1b45a8e2fac443196682c3ec7bb22ca11a 100644
+index 7e7603680310976312050aaff5bdaa805901617f..e4c5c5047d62ef32084441d3438e6848e59afe4f 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
-@@ -328,6 +328,8 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -392,6 +392,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final EntityDimensions dimensions;
      private final float spawnDimensionsScale;
      private final FeatureFlagSet requiredFeatures;
- 
 +    public int spawnerTTL = -1; // Pluto - TTL setting for entities from spawners
-+
-     private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
-         return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) type.build(id)); // CraftBukkit - decompile error
-     }
+ 
+     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType.Builder<T> type) {
+         return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, key, type.build(key));

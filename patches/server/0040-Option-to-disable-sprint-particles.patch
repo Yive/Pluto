@@ -20,19 +20,19 @@ index 544e8312ada96b87b32f794fa9e28ed644fc3000..4983dd713b907af946d9d58b7a76504f
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 768f5f0f4cc041de2f4f2eb5600689585fb78f8b..f7d152a7321f5ebd4fe46255832defac83e8e557 100644
+index 3bfa086910b501e40c177382bf17266d30aab7cb..26db481d510d617ce08e33794d438394ab2b97cd 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -889,7 +889,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
-         this.xRotO = this.getXRot();
-         this.yRotO = this.getYRot();
+@@ -914,7 +914,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         }
+ 
          if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - // Moved up to postTick
 -        if (this.canSpawnSprintParticle()) {
 +        if (!this.level.plutoConfig().disableSprintParticles && this.canSpawnSprintParticle()) { // Pluto - Option to disable sprint particles | More efficient to exit early to avoid canSpawnSprintParticle
              this.spawnSprintParticle();
          }
  
-@@ -2061,6 +2061,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -2142,6 +2142,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      }
  
      protected void spawnSprintParticle() {

@@ -21,10 +21,10 @@ index 35345e3b31e7774f77ffb3135f7a73096b292d53..833de11165ffcdbbe9c8f254005c0581
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-index 84623c632d8c2f0fa7ec939c711316d757117d23..181cb14aa6ee9e992d0569b842547bbea5b9c60a 100644
+index a2d023ff011f71f80032f02430a53d6a08a23623..d43a6ec255ba5cdbaf623b57247c49006562cbb8 100644
 --- a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-@@ -190,6 +190,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+@@ -193,6 +193,7 @@ public class LiquidBlock extends Block implements BucketPickup {
                  BlockPos blockposition1 = pos.relative(enumdirection.getOpposite());
  
                  if (world.getFluidState(blockposition1).is(FluidTags.WATER)) {
@@ -32,7 +32,7 @@ index 84623c632d8c2f0fa7ec939c711316d757117d23..181cb14aa6ee9e992d0569b842547bbe
                      Block block = world.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
  
                      // CraftBukkit start
-@@ -201,6 +202,7 @@ public class LiquidBlock extends Block implements BucketPickup {
+@@ -204,6 +205,7 @@ public class LiquidBlock extends Block implements BucketPickup {
                  }
  
                  if (flag && world.getBlockState(blockposition1).is(Blocks.BLUE_ICE)) {
@@ -41,10 +41,10 @@ index 84623c632d8c2f0fa7ec939c711316d757117d23..181cb14aa6ee9e992d0569b842547bbe
                      if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(world, pos, Blocks.BASALT.defaultBlockState())) {
                          this.fizz(world, pos);
 diff --git a/src/main/java/net/minecraft/world/level/material/LavaFluid.java b/src/main/java/net/minecraft/world/level/material/LavaFluid.java
-index 3bb4a9a1a6249e8ba2de237f801210e7f4fd5825..4df1656d27cb63c3d7b9595c819f1df9abf9503a 100644
+index 884db3e64cb22ed765beec8f11ea309fcf810207..7ace3512d763b92ba22e042cd814c0968550778d 100644
 --- a/src/main/java/net/minecraft/world/level/material/LavaFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/LavaFluid.java
-@@ -209,7 +209,7 @@ public abstract class LavaFluid extends FlowingFluid {
+@@ -210,7 +210,7 @@ public abstract class LavaFluid extends FlowingFluid {
              FluidState fluid1 = world.getFluidState(pos);
  
              if (this.is(FluidTags.LAVA) && fluid1.is(FluidTags.WATER)) {

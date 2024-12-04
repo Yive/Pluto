@@ -23,10 +23,10 @@ index f8754db49f87b429305b3752d6f30ecd0973ba3e..4fa774fa938124fd91702b7b8068898e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 1f3a55d34f58964fb1f642ad59c9d7b7aa6fa4ff..106e6c56bc93bcc48bdfcaf17fa06fa825457ab7 100644
+index 237eed7259f0cedf5b96ea54c195c3359d286064..ff4d259a0f8b5b9310f171f409910ae14cb7c354 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -238,10 +238,10 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -241,10 +241,10 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
      public void inactiveTick() {
          super.inactiveTick();
          boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
@@ -39,7 +39,7 @@ index 1f3a55d34f58964fb1f642ad59c9d7b7aa6fa4ff..106e6c56bc93bcc48bdfcaf17fa06fa8
              this.targetSelector.tick();
          }
      }
-@@ -931,20 +931,20 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -929,20 +929,20 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
  
          if (i % 2 != 0 && this.tickCount > 1) {
              gameprofilerfiller.push("targetSelector");

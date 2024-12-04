@@ -5,10 +5,10 @@ Subject: [PATCH] Expose some sound related functions
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index b608edae14c86e8277bf7df3d88b538818684c2d..6d131b0f272a7799aeae22b4bcd0695f7282556e 100644
+index 76d2ede135f33fda260896d3da6937a0e8cd19a7..03de8f15efb45768e28c5dc5ea5d8a1d81f0cdd9 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -2798,6 +2798,11 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -2901,6 +2901,11 @@ public abstract class LivingEntity extends Entity implements Attackable {
  
      }
  
@@ -21,10 +21,10 @@ index b608edae14c86e8277bf7df3d88b538818684c2d..6d131b0f272a7799aeae22b4bcd0695f
          return 1.0F;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 57b71a3894638253c6d24d4967a96768834bb02b..7f0ec0b125852c4c999b792ee97951f0ef3d208d 100644
+index d0c409f4efad289e3e325f44b500fc72589d89d4..3cff3066944a87b411792b72483e4e7f341fc0c6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1192,4 +1192,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1211,4 +1211,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          return this.getHandle().canUseSlot(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
      }
      // Paper end - Expose canUseSlot

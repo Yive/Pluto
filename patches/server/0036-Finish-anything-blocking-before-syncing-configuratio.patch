@@ -6,7 +6,7 @@ Subject: [PATCH] Finish anything blocking before syncing configuration change
 syncAfterConfigurationChange Has an insane rate of causing server crashes
 
 diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
-index 4a8356a714ed50d4a32bcf046a2e16491bef014b..e1e4b33c2224ac2e4e25b44aea12db28cef07161 100644
+index e693a003ea8f022eef8b49e4332025b769333b30..321cdc1b13f518e3e064ff0fffa5edbcceaf7cd8 100644
 --- a/src/main/java/net/minecraft/network/Connection.java
 +++ b/src/main/java/net/minecraft/network/Connection.java
 @@ -345,6 +345,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {

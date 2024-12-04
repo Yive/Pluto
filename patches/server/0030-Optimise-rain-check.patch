@@ -20,10 +20,10 @@ index fbb52a4c68f8bfadd0132536adef680b98aef66e..e6b6378f81e18e25bbfd4a987b22d2cb
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index dbaf7d6ca706e090146b471d7608fced4e47ed4c..f82cb4a2a1543c2323bdc5086ff09394534c44cf 100644
+index 7a7aac520ff4dd234f93117c9827080c2b36a218..a13bf7cb89400e00b1c05ea97d7dee6f00bd8421 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1883,11 +1883,28 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -1963,11 +1963,28 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      public boolean isInWater() {
          return this.wasTouchingWater;
      }

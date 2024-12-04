@@ -29,10 +29,10 @@ index 4983dd713b907af946d9d58b7a76504f08158e58..202dbbe5c6e39d36d0693146ffff6c7c
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f7d152a7321f5ebd4fe46255832defac83e8e557..134dbd90b34f4d937e43ce8581e431eb56e5f715 100644
+index 26db481d510d617ce08e33794d438394ab2b97cd..65e7534b721aa060709c98b4314bf2a224870b06 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -5092,4 +5092,36 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -5368,4 +5368,36 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
          return ENTITY_COUNTER.get();
      }
      // Pluto end - Add method to obtain current entity id
@@ -70,7 +70,7 @@ index f7d152a7321f5ebd4fe46255832defac83e8e557..134dbd90b34f4d937e43ce8581e431eb
 +
  }
 diff --git a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
-index a88d1f7a4d2fc90a37e29dcd1619d5eb6927812e..948f8674fdf7333fadfbf992bb85d1d8c0a4b04b 100644
+index 3e8504e18c1f090c1d6b22b5a4f52e3bd8b546d4..65af4dbf2186c3e5056aa3b600cf47a73adc96c5 100644
 --- a/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/item/ItemEntity.java
 @@ -147,12 +147,19 @@ public class ItemEntity extends Entity implements TraceableEntity {
@@ -93,7 +93,7 @@ index a88d1f7a4d2fc90a37e29dcd1619d5eb6927812e..948f8674fdf7333fadfbf992bb85d1d8
              // Paper start - remove anti tick skipping measures / wall time - revert to vanilla
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  --this.pickupDelay;
-@@ -243,6 +250,7 @@ public class ItemEntity extends Entity implements TraceableEntity {
+@@ -244,6 +251,7 @@ public class ItemEntity extends Entity implements TraceableEntity {
      // Spigot start - copied from above
      @Override
      public void inactiveTick() {
@@ -101,11 +101,42 @@ index a88d1f7a4d2fc90a37e29dcd1619d5eb6927812e..948f8674fdf7333fadfbf992bb85d1d8
          // Paper start - remove anti tick skipping measures / wall time - copied from above
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              --this.pickupDelay;
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
+index 1f4cc08e84a23213bb9786ea09ad77caeec2d336..9fc702741db983bf46df337a1610b9c1af5a4b29 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
+@@ -283,4 +283,26 @@ public abstract class AbstractChestBoat extends AbstractBoat implements HasCusto
+         return this.getBukkitEntity().getLocation();
+     }
+     // CraftBukkit end
++
++    // Pluto start - Entities search for hoppers | TODO: Move to AbstractChestBoat in 1.21.2
++    @Override
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
++    }
++
++    @Override
++    public void tick() {
++        super.tick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++    // Pluto end - Entities search for hoppers
++
+ }
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
-index 9549eee0d92f322bd5232abd7e695213660c2e22..56ef73340822ca4955d3622ee2e3812bdf5785b8 100644
+index d528e8e4aea266c495377365f01e314001eb1970..50a30764208f854a023fb284b08e26378ec418c2 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
-@@ -35,6 +35,27 @@ public abstract class AbstractMinecartContainer extends AbstractMinecart impleme
+@@ -36,6 +36,27 @@ public abstract class AbstractMinecartContainer extends AbstractMinecart impleme
      public ResourceKey<LootTable> lootTable;
      public long lootTableSeed;
  
@@ -133,40 +164,8 @@ index 9549eee0d92f322bd5232abd7e695213660c2e22..56ef73340822ca4955d3622ee2e3812b
      // Paper start - LootTable API
      final com.destroystokyo.paper.loottable.PaperLootableInventoryData lootableData = new com.destroystokyo.paper.loottable.PaperLootableInventoryData();
  
-diff --git a/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java b/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
-index c14019a131c90c699b8a76bada82592b66f0fa89..d1cea80fe008efec36df6ad14e173f5887ab824b 100644
---- a/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
-+++ b/src/main/java/net/minecraft/world/entity/vehicle/ChestBoat.java
-@@ -43,6 +43,27 @@ public class ChestBoat extends Boat implements HasCustomInventoryScreen, Contain
-     private ResourceKey<LootTable> lootTable;
-     private long lootTableSeed;
- 
-+    // Pluto start - Entities search for hoppers | TODO: Move to AbstractChestBoat in 1.21.2
-+    @Override
-+    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
-+        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
-+    }
-+
-+    @Override
-+    public void tick() {
-+        super.tick();
-+        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
-+        foundHopper();
-+    }
-+
-+    @Override
-+    public void inactiveTick() {
-+        super.inactiveTick();
-+        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
-+        foundHopper();
-+    }
-+    // Pluto end - Entities search for hoppers
-+
-     public ChestBoat(EntityType<? extends Boat> type, Level world) {
-         super(type, world);
-         this.itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
-index cab403efd471bb61835224eea4e99570d34dcaaa..4801b44515bc25bbc35e5cd4d55ff698b013bc7d 100644
+index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..7465248a651d996690c79430839805532d1a20c2 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 @@ -193,7 +193,10 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen

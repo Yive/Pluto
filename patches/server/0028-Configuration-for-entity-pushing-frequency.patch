@@ -20,14 +20,14 @@ index d0b7cb3d55ac9913466412cb1a6cf5ff79344508..1ec90416909889276645eb6daef7292e
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 5132e108df37ca97ba94b8b72c0ef292cbb2ec94..ac2a9e23c25ccbaf8cee7834c266bcf66abbf11c 100644
+index e21e549e8102477aae599487acc6dd39616d6c26..100d5e7f41c82009aca4046e1b534325010a07fb 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3576,6 +3576,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3716,6 +3716,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
              this.checkAutoSpinAttack(axisalignedbb, this.getBoundingBox());
          }
  
 +        if (this.level().plutoConfig().entityPushingModulo > 0 && (this.level().plutoConfig().entityPushingModulo == 1 || this.tickCount % this.level().plutoConfig().entityPushingModulo == 0)) // Pluto - Configuration for entity pushing frequency
          this.pushEntities();
-         this.level().getProfiler().pop();
+         gameprofilerfiller.pop();
          // Paper start - Add EntityMoveEvent

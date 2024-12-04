@@ -31,7 +31,7 @@ index 29192b350cb8638acf2c35480eb4ce603523f31e..5c12e0ca933e1a38ce856cd366097caa
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
-index 112d2feba5f75a2a873b595617780515945c10e4..32291323266772fc177e753cba57228692dedd4d 100644
+index 1ada5ed825501666addacf527a513ab7bd4a3a58..5a10db376e95874ade53b9b3884a0d7cc5096c4a 100644
 --- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
 @@ -81,7 +81,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
@@ -44,10 +44,10 @@ index 112d2feba5f75a2a873b595617780515945c10e4..32291323266772fc177e753cba572286
                  // Spigot start
                  int modifier;
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index 5f1ec3f69295760b7b8097916c82cbf9ddd49700..13900abac8cb07cde8aa3198f723df057629f8a2 100644
+index 640e439524cc1e5960ba99f8bd555c7dee8edbf5..042b346167806de2ff4971a289a1b97cc6fb77fc 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-@@ -122,7 +122,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+@@ -131,7 +131,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
  
      @Override
      public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
@@ -57,7 +57,7 @@ index 5f1ec3f69295760b7b8097916c82cbf9ddd49700..13900abac8cb07cde8aa3198f723df05
          if (bl) {
              this.grow(world, state, pos, 1);
 diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java
-index 924d80eb41d9a71d1e521c40742557251cf51832..fb7c081e57e1f5aa26fd7d5c5fce99da885cb163 100644
+index 76109aceb24a4719d49c1a55e3621cf2a63bbe16..eb3ac074f605b430e13928aa00819fad8a9af8aa 100644
 --- a/src/main/java/net/minecraft/world/level/block/StemBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StemBlock.java
 @@ -73,7 +73,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {

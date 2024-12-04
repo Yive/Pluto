@@ -43,7 +43,7 @@ index 4fa774fa938124fd91702b7b8068898e838b80b7..9cdc02da043391c0a9d027c42dec7a83
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/BaseSpawner.java b/src/main/java/net/minecraft/world/level/BaseSpawner.java
-index f57e1b78204dff661ad5d3ee93a88a00330af2dc..2853aa24dc31165954caa9838872928fd26ecce0 100644
+index 7de66aa435dd36899b80f4ecc64480680e474d94..1b3711081fda249a51705c32ad460ecee333487b 100644
 --- a/src/main/java/net/minecraft/world/level/BaseSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/BaseSpawner.java
 @@ -50,6 +50,7 @@ public abstract class BaseSpawner {
@@ -94,7 +94,7 @@ index f57e1b78204dff661ad5d3ee93a88a00330af2dc..2853aa24dc31165954caa9838872928f
                          if (k >= this.maxNearbyEntities) {
                              this.delay(world, pos);
 @@ -180,6 +193,15 @@ public abstract class BaseSpawner {
-                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, (SpawnGroupData) null);
+                                 ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, (SpawnGroupData) null);
                              }
  
 +                            // Pluto start - Options for spawner settings

@@ -20,10 +20,10 @@ index 155bdf50c129ebf50f8bc158ece96a03f8fabe9e..93c442f661f74d9139d5ee3939665f5a
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index dad7ec913e60afefb49303467737a1d6c6ef2c82..768f5f0f4cc041de2f4f2eb5600689585fb78f8b 100644
+index c16c8fd2c4fcd360201ced542febd0f67c5d682a..3bfa086910b501e40c177382bf17266d30aab7cb 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1951,6 +1951,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -2032,6 +2032,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
          this.fluidHeight.clear();
          this.updateInWaterStateAndDoWaterCurrentPushing();
          double d0 = this.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;

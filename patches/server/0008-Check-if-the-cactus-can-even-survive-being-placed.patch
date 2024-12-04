@@ -30,10 +30,10 @@ index fcc4e7723cfe2706ea68d0d3532de99222abcf89..5f9fc484b73cc2220cdfdb6e9cdc49be
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/CactusBlock.java b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-index ff4dda48116a2969704b355ff96407ba869b466e..6ab864915b17555ca1fd5de9f322028bb72c64d3 100644
+index c045b1cccf0047dbef8c04d5a28d31d53389054f..0cc0149e53c3d9b3da1e3b47dc1d00ce7dfaed80 100644
 --- a/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-@@ -66,12 +66,30 @@ public class CactusBlock extends Block {
+@@ -67,12 +67,30 @@ public class CactusBlock extends Block {
  
                  int modifier = world.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
                  if (j >= 15 || (modifier != 100 && random.nextFloat() < (modifier / (100.0f * 16)))) { // Spigot - SPIGOT-7159: Better modifier resolution
@@ -53,7 +53,7 @@ index ff4dda48116a2969704b355ff96407ba869b466e..6ab864915b17555ca1fd5de9f322028b
                      BlockState iblockdata1 = (BlockState) state.setValue(CactusBlock.AGE, 0);
  
                      world.setBlock(pos, iblockdata1, 4);
-                     world.neighborChanged(iblockdata1, blockposition1, this, pos, false);
+                     world.neighborChanged(iblockdata1, blockposition1, this, (Orientation) null, false);
                  } else if (modifier == 100 || random.nextFloat() < (modifier / (100.0f * 16))) { // Spigot - SPIGOT-7159: Better modifier resolution
 +                    // Pluto start - Check if the cactus can even survive being placed
 +                    if (world.plutoConfig().cactusCheckSurvivalBeforeGrowth) {
@@ -64,7 +64,7 @@ index ff4dda48116a2969704b355ff96407ba869b466e..6ab864915b17555ca1fd5de9f322028b
                      world.setBlock(pos, (BlockState) state.setValue(CactusBlock.AGE, j + 1), 4);
                  }
  
-@@ -100,6 +118,12 @@ public class CactusBlock extends Block {
+@@ -101,6 +119,12 @@ public class CactusBlock extends Block {
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {

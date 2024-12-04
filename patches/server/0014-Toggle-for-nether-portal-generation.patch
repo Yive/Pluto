@@ -21,10 +21,10 @@ index 833de11165ffcdbbe9c8f254005c05813009aefa..704a856f3af76a6d8ce09b8f30586a32
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
-index 8b5918dc07f17ae5001c03dc743128fd9520b819..f02b667887567cb9a64b193d52ca5ed1b1431aec 100644
+index 0cf4133849ed8ff6d4038cc41ede9d3645b31da1..a686c0567ff2505b30b8343a8c4955941425a65b 100644
 --- a/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BaseFireBlock.java
-@@ -151,7 +151,7 @@ public abstract class BaseFireBlock extends Block {
+@@ -161,7 +161,7 @@ public abstract class BaseFireBlock extends Block {
      @Override
      protected void onPlace(BlockState iblockdata, Level world, BlockPos blockposition, BlockState iblockdata1, boolean flag, UseOnContext context) { // CraftBukkit - context
          if (!iblockdata1.is(iblockdata.getBlock())) {
