@@ -102,7 +102,7 @@ index 3e8504e18c1f090c1d6b22b5a4f52e3bd8b546d4..65af4dbf2186c3e5056aa3b600cf47a7
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              --this.pickupDelay;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
-index 1f4cc08e84a23213bb9786ea09ad77caeec2d336..9fc702741db983bf46df337a1610b9c1af5a4b29 100644
+index 1f4cc08e84a23213bb9786ea09ad77caeec2d336..ea8bbcb1ee6434b4dc7b12ba177dd65a42a7b6e9 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
 @@ -283,4 +283,26 @@ public abstract class AbstractChestBoat extends AbstractBoat implements HasCusto
@@ -110,7 +110,7 @@ index 1f4cc08e84a23213bb9786ea09ad77caeec2d336..9fc702741db983bf46df337a1610b9c1
      }
      // CraftBukkit end
 +
-+    // Pluto start - Entities search for hoppers | TODO: Move to AbstractChestBoat in 1.21.2
++    // Pluto start - Entities search for hoppers
 +    @Override
 +    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
 +        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
@@ -165,7 +165,7 @@ index d528e8e4aea266c495377365f01e314001eb1970..50a30764208f854a023fb284b08e2637
      final com.destroystokyo.paper.loottable.PaperLootableInventoryData lootableData = new com.destroystokyo.paper.loottable.PaperLootableInventoryData();
  
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
-index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..7465248a651d996690c79430839805532d1a20c2 100644
+index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..b1b8251f73f64a539c5e470f849ae00a7f12c3de 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 @@ -193,7 +193,10 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
@@ -208,7 +208,7 @@ index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..7465248a651d996690c7943083980553
  
              return false;
          } else {
-+            if (world.plutoConfig().entitiesSearchForHoppers) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
++            if (world.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
              boolean flag = hopper.isGridAligned() && iblockdata.isCollisionShapeFullBlock(world, blockposition) && !iblockdata.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
  
              if (!flag) {
