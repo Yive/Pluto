@@ -165,7 +165,7 @@ index d528e8e4aea266c495377365f01e314001eb1970..50a30764208f854a023fb284b08e2637
      final com.destroystokyo.paper.loottable.PaperLootableInventoryData lootableData = new com.destroystokyo.paper.loottable.PaperLootableInventoryData();
  
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
-index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..b1b8251f73f64a539c5e470f849ae00a7f12c3de 100644
+index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..581708da60447d5ccbff08431b4b4fbebeb64b6a 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 @@ -193,7 +193,10 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
@@ -212,11 +212,50 @@ index 5ebbdb94d9b91c442ff60eb6872f740ebd790fa0..b1b8251f73f64a539c5e470f849ae00a
              boolean flag = hopper.isGridAligned() && iblockdata.isCollisionShapeFullBlock(world, blockposition) && !iblockdata.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
  
              if (!flag) {
-@@ -873,6 +884,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+@@ -808,7 +819,7 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+     @Nullable
+     private static Container getSourceContainer(Level world, Hopper hopper, BlockPos pos, BlockState state) {
+         // CraftBukkit start
+-        Container inventory = HopperBlockEntity.getContainerAt(world, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
++        Container inventory = HopperBlockEntity.getContainerAt(world, hopper, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ(), false); // Pluto - Entities search for hoppers
+ 
+         BlockPos blockPosition = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
+         CraftBlock hopper1 = CraftBlock.at(world, blockPosition);
+@@ -825,21 +836,21 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
  
      @Nullable
-     private static Container getEntityContainer(Level world, double x, double y, double z) {
-+        if (world.plutoConfig().entitiesSearchForHoppers) return null; // Pluto - Entities search for hoppers
+     public static Container getContainerAt(Level world, BlockPos pos) {
+-        return HopperBlockEntity.getContainerAt(world, pos, world.getBlockState(pos), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, true);
++        return HopperBlockEntity.getContainerAt(world, null, pos, world.getBlockState(pos), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, true); // Pluto - Entities search for hoppers
+     }
+ 
+     @Nullable
+     private static Container getContainerAt(Level world, BlockPos pos, BlockState state, double x, double y, double z) {
+         // Paper start - Perf: Optimize Hoppers
+-        return HopperBlockEntity.getContainerAt(world, pos, state, x, y, z, false);
++        return HopperBlockEntity.getContainerAt(world, null, pos, state, x, y, z, false); // Pluto - Entities search for hoppers
+     }
+     @Nullable
+-    private static Container getContainerAt(Level world, BlockPos pos, BlockState state, double x, double y, double z, boolean optimizeEntities) {
++    private static Container getContainerAt(Level world, Hopper hopper, BlockPos pos, BlockState state, double x, double y, double z, boolean optimizeEntities) { // Pluto - Entities search for hoppers
+         // Paper end - Perf: Optimize Hoppers
+         Container iinventory = HopperBlockEntity.getBlockContainer(world, pos, state);
+ 
+         if (iinventory == null && (!optimizeEntities || !world.paperConfig().hopper.ignoreOccludingBlocks || !state.getBukkitMaterial().isOccluding())) { // Paper - Perf: Optimize Hoppers
+-            iinventory = HopperBlockEntity.getEntityContainer(world, x, y, z);
++            iinventory = HopperBlockEntity.getEntityContainer(world, hopper, x, y, z); // Pluto - Entities search for hoppers
+         }
+ 
+         return iinventory;
+@@ -872,7 +883,10 @@ public class HopperBlockEntity extends RandomizableContainerBlockEntity implemen
+     }
+ 
+     @Nullable
+-    private static Container getEntityContainer(Level world, double x, double y, double z) {
++    // Pluto start - Entities search for hoppers
++    private static Container getEntityContainer(Level world, Hopper hopper, double x, double y, double z) {
++        if (world.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return null;
++        // Pluto end - Entities search for hoppers
          List<Entity> list = world.getEntitiesOfClass((Class) Container.class, new AABB(x - 0.5D, y - 0.5D, z - 0.5D, x + 0.5D, y + 0.5D, z + 0.5D), EntitySelector.CONTAINER_ENTITY_SELECTOR); // Paper - Perf: Optimize hoppers
  
          return !list.isEmpty() ? (Container) list.get(world.random.nextInt(list.size())) : null;
