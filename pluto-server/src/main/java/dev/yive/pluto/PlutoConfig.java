@@ -263,5 +263,10 @@ public class PlutoConfig {
         private void disableBlockGenerationFromFluids() {
             disableBlockGenerationFromFluids = getBoolean("blocks.fluids.disable-block-generation", disableBlockGenerationFromFluids);
         }
+
+        public boolean disableNetherPortalGeneration = false;
+        private void disableNetherPortalGeneration() {
+            disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
+        }
     }
 }
