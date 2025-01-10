@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/UnsafeValues.java
++++ b/src/main/java/org/bukkit/UnsafeValues.java
+@@ -273,6 +_,13 @@
+      */
+     @NotNull Entity deserializeEntity(byte @NotNull [] data, @NotNull World world, boolean preserveUUID, boolean preservePassengers);
+ 
++    // Pluto start - Add method to obtain current entity id
++    /**
++     * Returns the latest entity id.
++     */
++    public int currentEntityId();
++    // Pluto end - Add method to obtain current entity id
++
+     /**
+      * Creates and returns the next EntityId available.
+      * <p>
