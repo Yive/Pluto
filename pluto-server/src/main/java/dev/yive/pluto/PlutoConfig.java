@@ -275,5 +275,14 @@ public class PlutoConfig {
             entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
             disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
         }
+
+        public boolean disableItemMergeCheckWhileMoving = false;
+        public int itemMergeMovingInterval = 2;
+        public int itemMergeStaticInterval = 40;
+        private void itemMergeConfiguration() {
+            disableItemMergeCheckWhileMoving = getBoolean("entities.item.disable-merge-check-when-moving", disableItemMergeCheckWhileMoving);
+            itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
+            itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
+        }
     }
 }
