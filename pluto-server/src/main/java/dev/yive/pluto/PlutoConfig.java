@@ -217,5 +217,12 @@ public class PlutoConfig {
             useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
             staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
         }
+
+        public boolean alwaysMoistFarmland = false;
+        public boolean alwaysMoistSugarCane = false;
+        private void alwaysMoistBlocks() {
+            alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
+            alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
+        }
     }
 }
