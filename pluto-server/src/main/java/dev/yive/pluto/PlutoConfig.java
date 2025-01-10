@@ -224,5 +224,10 @@ public class PlutoConfig {
             alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
             alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
         }
+
+        public boolean cactusCheckSurvivalBeforeGrowth = false;
+        private void cactusCheckSurvivalBeforeGrowth() {
+            cactusCheckSurvivalBeforeGrowth = getBoolean("blocks.cactus.check-survival-before-growth", cactusCheckSurvivalBeforeGrowth);
+        }
     }
 }
