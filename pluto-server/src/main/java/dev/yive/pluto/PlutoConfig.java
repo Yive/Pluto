@@ -239,5 +239,12 @@ public class PlutoConfig {
         private void disableDropperInventoryMoveEvent() {
             disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
         }
+
+        public boolean disableAllayGameEventListening = false;
+        public boolean disableAllayDuplication = false;
+        private void allayConfiguration() {
+            disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
+            disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
+        }
     }
 }
