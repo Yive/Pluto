@@ -303,5 +303,12 @@ public class PlutoConfig {
             saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
             pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
         }
+
+        public boolean disableTargetSelector = false;
+        public boolean disableGoalSelector = false;
+        private void disableTargetSelector() {
+            disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
+            disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
+        }
     }
 }
