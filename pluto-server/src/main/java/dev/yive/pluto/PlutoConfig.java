@@ -197,5 +197,10 @@ public class PlutoConfig {
         private void shouldUseGameEventCache() {
             useGameEventCache = getBoolean("misc.use-game-events-cache", useGameEventCache);
         }
+
+        public boolean useCustomNameOptimisation = true;
+        private void shouldUseCustomNameOptimisation() {
+            useCustomNameOptimisation = getBoolean("entities.global.use-custom-name-api-optimisation", useCustomNameOptimisation);
+        }
     }
 }
