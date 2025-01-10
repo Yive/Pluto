@@ -268,5 +268,12 @@ public class PlutoConfig {
         private void disableNetherPortalGeneration() {
             disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
         }
+
+        public int entityActivationInterval = 1;
+        public boolean disableEntityActivation = false;
+        private void entityActivationConfiguration() {
+            entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
+            disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
+        }
     }
 }

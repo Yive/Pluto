@@ -1,0 +1,10 @@
+--- a/net/minecraft/server/level/ServerLevel.java
++++ b/net/minecraft/server/level/ServerLevel.java
+@@ -794,6 +_,7 @@
+                 profilerFiller.pop();
+             }
+ 
++            if (!plutoConfig().disableEntityActivation && MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) // Pluto - Configurable entity activation
+             io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
+             this.entityTickList
+                 .forEach(
