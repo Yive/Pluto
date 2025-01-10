@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
-    id("io.papermc.paperweight.patcher") version "2.0.0-beta.12"
+    id("io.papermc.paperweight.patcher") version "2.0.0-SNAPSHOT" // Using local build of PR-279
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"

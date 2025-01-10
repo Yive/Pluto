@@ -18,7 +18,7 @@
  
 +    // Pluto start - Branding
 +    val pluto = forks.register("pluto") {
-+        // forks = pufferfish // This for whatever reason will cause a stackoverflow. I probably messed up somewhere in my updated Pufferfish fork or here.
++        forks = pufferfish
 +        upstream.patchRepo("paperServer") {
 +            upstreamRepo = pufferfish.patchedRepo("paperServer")
 +            patchesDir = rootDirectory.dir("pluto-server/paper-patches")
