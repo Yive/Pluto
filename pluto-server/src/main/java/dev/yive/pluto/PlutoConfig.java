@@ -202,5 +202,20 @@ public class PlutoConfig {
         private void shouldUseCustomNameOptimisation() {
             useCustomNameOptimisation = getBoolean("entities.global.use-custom-name-api-optimisation", useCustomNameOptimisation);
         }
+
+        public boolean useStaticGrowthSpeedStems = false;
+        public float staticGrowthSpeedStems = 1.0F;
+        public boolean useStaticGrowthSpeedCrops = false;
+        public float staticGrowthSpeedCrops = 1.0F;
+        public boolean useStaticGrowthSpeedPitchers = false;
+        public float staticGrowthSpeedPitchers = 1.0F;
+        private void shouldUseStaticGrowthSpeed() {
+            useStaticGrowthSpeedStems = getBoolean("blocks.stems.static-growth-speed.enabled", useStaticGrowthSpeedStems);
+            staticGrowthSpeedStems = (float) getDouble("blocks.stems.static-growth-speed.speed", staticGrowthSpeedStems);
+            useStaticGrowthSpeedCrops = getBoolean("blocks.crops.static-growth-speed.enabled", useStaticGrowthSpeedCrops);
+            staticGrowthSpeedCrops = (float) getDouble("blocks.crops.static-growth-speed.speed", staticGrowthSpeedCrops);
+            useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
+            staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
+        }
     }
 }

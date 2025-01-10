@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/CropBlock.java
++++ b/net/minecraft/world/level/block/CropBlock.java
+@@ -87,7 +_,7 @@
+         if (level.getRawBrightness(pos, 0) >= 9) {
+             int age = this.getAge(state);
+             if (age < this.getMaxAge()) {
+-                float growthSpeed = getGrowthSpeed(this, level, pos);
++                float growthSpeed = level.plutoConfig().useStaticGrowthSpeedCrops ? level.plutoConfig().staticGrowthSpeedCrops : getGrowthSpeed(this, level, pos); // Pluto - Static growth speeds
+                 // Spigot start
+                 int modifier = 100;
+                 if (this == Blocks.BEETROOTS) {
