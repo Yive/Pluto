@@ -258,5 +258,10 @@ public class PlutoConfig {
             excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
             excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
         }
+
+        public boolean disableBlockGenerationFromFluids = false;
+        private void disableBlockGenerationFromFluids() {
+            disableBlockGenerationFromFluids = getBoolean("blocks.fluids.disable-block-generation", disableBlockGenerationFromFluids);
+        }
     }
 }
