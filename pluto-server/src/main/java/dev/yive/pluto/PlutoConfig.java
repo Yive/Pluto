@@ -246,5 +246,17 @@ public class PlutoConfig {
             disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
             disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
         }
+
+        public boolean removeExcessMinecarts = false;
+        public boolean removeExcessBoats = false;
+        public int excessMinecartsLimit = 10;
+        public int excessBoatsLimit = 10;
+
+        private void removeExcessVehicles() {
+            removeExcessMinecarts = getBoolean("entities.minecart.remove-excess.enabled", removeExcessMinecarts);
+            removeExcessBoats = getBoolean("entities.boat.remove-excess.enabled", removeExcessBoats);
+            excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
+            excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
+        }
     }
 }
