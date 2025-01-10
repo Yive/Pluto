@@ -310,5 +310,32 @@ public class PlutoConfig {
             disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
             disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
         }
+
+        public boolean spawnerSettingsEnabled = false;
+        public boolean spawnerCheckForNearbyPlayers = true;
+        public boolean spawnerCheckForNearbyEntities = true;
+        public boolean spawnerCheckForBlockCollision = true;
+        public boolean spawnerDisableBabySpawns = false;
+        public boolean spawnerDisableParticles = false;
+        public int spawnerMinSpawnDelay = 200;
+        public int spawnerMaxSpawnDelay = 800;
+        public short spawnerSpawnCount = 4;
+        public short spawnerMaxNearbyEntities = 6;
+        public short spawnerRequiredPlayerRange = 16;
+        public short spawnerSpawnRange = 4;
+        private void spawnerConfiguration() {
+            spawnerSettingsEnabled = getBoolean("blocks.spawner.enable-custom-settings", spawnerSettingsEnabled);
+            spawnerCheckForNearbyPlayers = getBoolean("blocks.spawner.check-for-nearby-players", spawnerCheckForNearbyPlayers);
+            spawnerCheckForNearbyEntities = getBoolean("blocks.spawner.check-for-nearby-entities", spawnerCheckForNearbyEntities);
+            spawnerCheckForBlockCollision = getBoolean("blocks.spawner.check-for-block-collision", spawnerCheckForBlockCollision);
+            spawnerDisableBabySpawns = getBoolean("blocks.spawner.disable-spawning-babies", spawnerDisableBabySpawns);
+            spawnerDisableParticles = getBoolean("blocks.spawner.disable-spawn-particles", spawnerDisableParticles);
+            spawnerMinSpawnDelay = getInt("blocks.spawner.min-spawn-delay", spawnerMinSpawnDelay);
+            spawnerMaxSpawnDelay = getInt("blocks.spawner.max-spawn-delay", spawnerMaxSpawnDelay);
+            spawnerSpawnCount = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-count", spawnerSpawnCount));
+            spawnerMaxNearbyEntities = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.max-nearby-entities", spawnerMaxNearbyEntities));
+            spawnerRequiredPlayerRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.required-player-range", spawnerRequiredPlayerRange));
+            spawnerSpawnRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-range", spawnerSpawnRange));
+        }
     }
 }

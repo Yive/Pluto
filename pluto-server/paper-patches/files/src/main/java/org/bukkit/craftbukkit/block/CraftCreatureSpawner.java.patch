@@ -1,0 +1,66 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
+@@ -61,6 +_,7 @@
+ 
+         RandomSource rand = (this.isPlaced()) ? this.getWorldHandle().getRandom() : RandomSource.create();
+         this.getSnapshot().setEntityId(CraftEntityType.bukkitToMinecraft(entityType), rand);
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -199,6 +_,7 @@
+     @Override
+     public void setDelay(int delay) {
+         this.getSnapshot().getSpawner().spawnDelay = delay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -210,6 +_,7 @@
+     public void setMinSpawnDelay(int spawnDelay) {
+         Preconditions.checkArgument(spawnDelay <= this.getMaxSpawnDelay(), "Minimum Spawn Delay must be less than or equal to Maximum Spawn Delay");
+         this.getSnapshot().getSpawner().minSpawnDelay = spawnDelay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -222,6 +_,7 @@
+         Preconditions.checkArgument(spawnDelay > 0, "Maximum Spawn Delay must be greater than 0.");
+         Preconditions.checkArgument(spawnDelay >= this.getMinSpawnDelay(), "Maximum Spawn Delay must be greater than or equal to Minimum Spawn Delay");
+         this.getSnapshot().getSpawner().maxSpawnDelay = spawnDelay;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -232,6 +_,7 @@
+     @Override
+     public void setMaxNearbyEntities(int maxNearbyEntities) {
+         this.getSnapshot().getSpawner().maxNearbyEntities = maxNearbyEntities;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -242,6 +_,7 @@
+     @Override
+     public void setSpawnCount(int count) {
+         this.getSnapshot().getSpawner().spawnCount = count;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -252,6 +_,7 @@
+     @Override
+     public void setRequiredPlayerRange(int requiredPlayerRange) {
+         this.getSnapshot().getSpawner().requiredPlayerRange = requiredPlayerRange;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
+@@ -262,6 +_,7 @@
+     @Override
+     public void setSpawnRange(int spawnRange) {
+         this.getSnapshot().getSpawner().spawnRange = spawnRange;
++        this.getSnapshot().getSpawner().wasApiUsed = true; // Pluto - Options for spawner settings
+     }
+ 
+     @Override
