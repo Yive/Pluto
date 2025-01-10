@@ -284,5 +284,24 @@ public class PlutoConfig {
             itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
             itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
         }
+
+        public boolean cropIgnoreLightLevel = false;
+        public boolean mushroomIgnoreLightLevel = false;
+        public boolean stemIgnoreLightLevel = false;
+        public boolean bambooSaplingIgnoreLightLevel = false;
+        public boolean bambooStalkIgnoreLightLevel = false;
+        public boolean sweetBerryBushIgnoreLightLevel = false;
+        public boolean saplingIgnoreLightLevel = false;
+        public boolean pitcherCropIgnoreLightLevel = false;
+        private void ignoreLightLevels() {
+            cropIgnoreLightLevel = getBoolean("blocks.crops.ignore-light-level", cropIgnoreLightLevel);
+            mushroomIgnoreLightLevel = getBoolean("blocks.mushroom.ignore-light-level", mushroomIgnoreLightLevel);
+            stemIgnoreLightLevel = getBoolean("blocks.stems.ignore-light-level", stemIgnoreLightLevel);
+            bambooSaplingIgnoreLightLevel = getBoolean("blocks.bamboo-sapling.ignore-light-level", bambooSaplingIgnoreLightLevel);
+            bambooStalkIgnoreLightLevel = getBoolean("blocks.bamboo-stalk.ignore-light-level", bambooStalkIgnoreLightLevel);
+            sweetBerryBushIgnoreLightLevel = getBoolean("blocks.sweet-berry-bush.ignore-light-level", sweetBerryBushIgnoreLightLevel);
+            saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
+            pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
+        }
     }
 }

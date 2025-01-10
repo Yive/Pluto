@@ -1,7 +1,11 @@
 --- a/net/minecraft/world/level/block/CropBlock.java
 +++ b/net/minecraft/world/level/block/CropBlock.java
-@@ -87,7 +_,7 @@
-         if (level.getRawBrightness(pos, 0) >= 9) {
+@@ -84,10 +_,10 @@
+ 
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+-        if (level.getRawBrightness(pos, 0) >= 9) {
++        if (level.plutoConfig().cropIgnoreLightLevel || level.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
              int age = this.getAge(state);
              if (age < this.getMaxAge()) {
 -                float growthSpeed = getGrowthSpeed(this, level, pos);
@@ -9,3 +13,12 @@
                  // Spigot start
                  int modifier = 100;
                  if (this == Blocks.BEETROOTS) {
+@@ -176,7 +_,7 @@
+     }
+ 
+     protected static boolean hasSufficientLight(LevelReader level, BlockPos pos) {
+-        return level.getRawBrightness(pos, 0) >= 8;
++        return (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().cropIgnoreLightLevel) || level.getRawBrightness(pos, 0) >= 8; // Pluto - Toggle for light lookups on certain flora
+     }
+ 
+     @Override
