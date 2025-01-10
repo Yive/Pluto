@@ -1,59 +1,18 @@
-# Pluto
-pluto-server
-pluto-api
-paper-api-generator
-!patches/paper-api-generator
+# Ignore Gradle project-specific cache directory
+.gradle
 
-# Gradle
-.gradle/
-build/
+# Ignore Gradle build output directory
+build
 
-# Eclipse stuff
-.classpath
-.project
-.settings/
+/run
 
-# VSCode stuff
-.vscode/
+/pluto-server/build.gradle.kts
+/pluto-server/src/minecraft
+/paper-server
+/pufferfish-server
+/pluto-api/build.gradle.kts
+/paper-api
+/paper-api-generator
+/pufferfish-api
 
-# netbeans
-nbproject/
-nbactions.xml
-
-# we use maven!
-build.xml
-
-# maven
-target/
-dependency-reduced-pom.xml
-
-# vim
-.*.sw[a-p]
-
-# various other potential build files
-build/
-bin/
-dist/
-manifest.mf
-
-# Mac filesystem dust
-.DS_Store/
-.DS_Store
-
-# intellij
-*.iml
-*.ipr
-*.iws
 .idea/
-out/
-
-# Linux temp files
-*~
-
-# other stuff
-mc-dev
-.idea
-testserver
-run
-
-!gradle/wrapper/gradle-wrapper.jar

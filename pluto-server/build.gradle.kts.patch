@@ -1,0 +1,68 @@
+--- a/pufferfish-server/build.gradle.kts
++++ b/pufferfish-server/build.gradle.kts
+@@ -23,6 +_,7 @@
+ 
+     // Pufferfish start
+     val pufferfish = forks.register("pufferfish") {
++        rootDirectory = upstreamsDirectory().map { it.dir("pufferfish") } // Pluto - Branding
+         upstream.patchDir("paperServer") {
+             upstreamPath = "paper-server"
+             excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
+@@ -30,10 +_,27 @@
+             outputDir = rootDirectory.dir("paper-server")
+         }
+     }
+-
+-    activeFork = pufferfish
+     // Pufferfish end
+ 
++    // Pluto start - Branding
++    val pluto = forks.register("pluto") {
++        // forks = pufferfish // This for whatever reason will cause a stackoverflow. I probably messed up somewhere in my updated Pufferfish fork or here.
++        upstream.patchRepo("paperServer") {
++            upstreamRepo = pufferfish.patchedRepo("paperServer")
++            patchesDir = rootDirectory.dir("pluto-server/paper-patches")
++            outputDir = rootDirectory.dir("paper-server")
++        }
++        upstream.patchDir("pufferfishServer") {
++            upstreamPath = "pufferfish-server"
++            excludes = setOf("src/minecraft", "paper-patches", "minecraft-patches", "build.gradle.kts", "build.gradle.kts.patch")
++            patchesDir = rootDirectory.dir("pluto-server/pufferfish-patches")
++            outputDir = rootDirectory.dir("pufferfish-server")
++        }
++    }
++
++    activeFork = pluto
++    // Pluto end - Branding
++
+     paper {
+         paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") } // Pufferfish
+     }
+@@ -123,10 +_,18 @@
+     main {
+         java { srcDir("../paper-server/src/main/java") }
+         resources { srcDir("../paper-server/src/main/resources") }
++        // Pluto start - Branding
++        java { srcDir("../pufferfish-server/src/main/java") }
++        resources { srcDir("../pufferfish-server/src/main/resources") }
++        // Pluto end - Branding
+     }
+     test {
+         java { srcDir("../paper-server/src/test/java") }
+         resources { srcDir("../paper-server/src/test/resources") }
++        // Pluto start - Branding
++        java { srcDir("../pufferfish-server/src/test/java") }
++        resources { srcDir("../pufferfish-server/src/test/resources") }
++        // Pluto end - Branding
+     }
+ }
+ 
+@@ -151,7 +_,7 @@
+ }
+ 
+ dependencies {
+-    implementation(project(":pufferfish-api")) // Pufferfish
++    implementation(project(":pluto-api")) // Pufferfish // Pluto - Branding
+     implementation("ca.spottedleaf:concurrentutil:0.0.2")
+     implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
+     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
