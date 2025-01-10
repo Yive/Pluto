@@ -192,5 +192,10 @@ public class PlutoConfig {
             this.worldDefaults.addDefault(path, Double.valueOf(dfl));
             return this.config.getDouble(path, this.worldDefaults.getDouble(path));
         }
+
+        public boolean useGameEventCache = true;
+        private void shouldUseGameEventCache() {
+            useGameEventCache = getBoolean("misc.use-game-events-cache", useGameEventCache);
+        }
     }
 }

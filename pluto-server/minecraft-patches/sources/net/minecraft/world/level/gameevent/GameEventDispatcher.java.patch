@@ -1,0 +1,38 @@
+--- a/net/minecraft/world/level/gameevent/GameEventDispatcher.java
++++ b/net/minecraft/world/level/gameevent/GameEventDispatcher.java
+@@ -25,17 +_,34 @@
+         this.level = level;
+     }
+ 
++    private static final it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<String, org.bukkit.GameEvent> GAME_EVENT_CACHE = new it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap<>(); // Pluto - Cache GameEvent lookups
+     public void post(Holder<GameEvent> gameEvent, Vec3 pos, GameEvent.Context context) {
+         int notificationRadius = gameEvent.value().notificationRadius();
+         BlockPos blockPos = BlockPos.containing(pos);
++        // Pluto start - Cache GameEvent lookups
++        org.bukkit.GameEvent bukkitEvent;
++        if (this.level.plutoConfig().useGameEventCache) {
++            String name = gameEvent.getRegisteredName();
++            if (name.contains("[unregistered]")) {
++                bukkitEvent = CraftGameEvent.minecraftToBukkit(gameEvent.value());
++            } else {
++                bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(name, s -> CraftGameEvent.minecraftToBukkit(gameEvent.value()));
++            }
++        } else {
++            bukkitEvent = CraftGameEvent.minecraftToBukkit(gameEvent.value());
++        }
++        if (bukkitEvent != null) {
++        // Pluto end - Cache GameEvent lookups
+         // CraftBukkit start
+-        GenericGameEvent apiEvent = new GenericGameEvent(CraftGameEvent.minecraftToBukkit(gameEvent.value()), CraftLocation.toBukkit(blockPos, this.level.getWorld()), (context.sourceEntity() == null) ? null : context.sourceEntity().getBukkitEntity(), notificationRadius, !Bukkit.isPrimaryThread());
++        GenericGameEvent apiEvent = new GenericGameEvent(bukkitEvent, CraftLocation.toBukkit(blockPos, this.level.getWorld()), (context.sourceEntity() == null) ? null : context.sourceEntity().getBukkitEntity(), notificationRadius, !Bukkit.isPrimaryThread()); // Pluto - Cache GameEvent lookups
++
+         this.level.getCraftServer().getPluginManager().callEvent(apiEvent);
+         if (apiEvent.isCancelled()) {
+             return;
+         }
+         notificationRadius = apiEvent.getRadius();
+         // CraftBukkit end
++        } // Pluto - Cache GameEvent lookups
+         int sectionPosCoord = SectionPos.blockToSectionCoord(blockPos.getX() - notificationRadius);
+         int sectionPosCoord1 = SectionPos.blockToSectionCoord(blockPos.getY() - notificationRadius);
+         int sectionPosCoord2 = SectionPos.blockToSectionCoord(blockPos.getZ() - notificationRadius);
