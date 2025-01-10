@@ -1,0 +1,22 @@
+--- a/net/minecraft/world/level/block/DropperBlock.java
++++ b/net/minecraft/world/level/block/DropperBlock.java
+@@ -66,6 +_,19 @@
+                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(level, pos, item, randomSlot)) return; // Paper - Add BlockPreDispenseEvent
+                         itemStack = DISPENSE_BEHAVIOUR.dispense(blockSource, item);
+                     } else {
++                        // Pluto start - Toggle inventory item move event for droppers
++                        if (level.plutoConfig().disableDropperInventoryMoveEvent) {
++                            itemStack = HopperBlockEntity.addItem(dispenserBlockEntity, containerAt, item.copy().split(1), direction.getOpposite());
++                            if (itemStack.isEmpty()) {
++                                itemStack = item.copy();
++                                itemStack.shrink(1);
++                            } else {
++                                itemStack = item.copy();
++                            }
++                            dispenserBlockEntity.setItem(randomSlot, itemStack);
++                            return;
++                        }
++                        // Pluto end - Toggle inventory item move event for droppers
+                         // CraftBukkit start - Fire event when pushing items into other inventories
+                         org.bukkit.craftbukkit.inventory.CraftItemStack oitemstack = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1));
+ 

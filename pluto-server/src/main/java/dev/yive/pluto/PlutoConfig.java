@@ -234,5 +234,10 @@ public class PlutoConfig {
         private void lessRandomDispensing() {
             lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
         }
+
+        public boolean disableDropperInventoryMoveEvent = false;
+        private void disableDropperInventoryMoveEvent() {
+            disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
+        }
     }
 }
