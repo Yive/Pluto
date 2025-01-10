@@ -229,5 +229,10 @@ public class PlutoConfig {
         private void cactusCheckSurvivalBeforeGrowth() {
             cactusCheckSurvivalBeforeGrowth = getBoolean("blocks.cactus.check-survival-before-growth", cactusCheckSurvivalBeforeGrowth);
         }
+
+        public boolean lessRandomDispensing = false;
+        private void lessRandomDispensing() {
+            lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
+        }
     }
 }
