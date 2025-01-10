@@ -1,0 +1,16 @@
+--- a/src/main/java/io/papermc/paper/ServerBuildInfo.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfo.java
+@@ -19,6 +_,13 @@
+      */
+     Key BRAND_PAPER_ID = Key.key("papermc", "paper");
+ 
++    // Pluto start - Branding
++    /**
++     * The brand id for Pluto.
++     */
++    Key BRAND_PLUTO_ID = Key.key("yive", "pluto");
++    // Pluto end - Branding
++
+     /**
+      * Gets the {@code ServerBuildInfo}.
+      *
