@@ -1,0 +1,23 @@
+--- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+@@ -32,6 +_,8 @@
+ 
+     private static final String BRAND_PAPER_NAME = "Paper";
+ 
++    private static final String BRAND_PLUTO_NAME = "Pluto"; // Pluto - Branding
++
+     private static final String BUILD_DEV = "DEV";
+ 
+     public ServerBuildInfoImpl() {
+@@ -42,9 +_,9 @@
+         this(
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
+                 .map(Key::key)
+-                .orElse(BRAND_PAPER_ID),
++                .orElse(BRAND_PLUTO_ID), // Pluto - Branding
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
+-                .orElse(BRAND_PAPER_NAME),
++                .orElse(BRAND_PLUTO_NAME), // Pluto - Branding
+             SharedConstants.getCurrentVersion().getId(),
+             SharedConstants.getCurrentVersion().getName(),
+             getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
