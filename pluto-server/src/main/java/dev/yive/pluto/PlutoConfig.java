@@ -352,5 +352,10 @@ public class PlutoConfig {
         private void blockTicking() {
             blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
         }
+
+        public int fluidTickingModulo = 1;
+        private void fluidTicking() {
+            fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
+        }
     }
 }
