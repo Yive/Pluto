@@ -397,5 +397,10 @@ public class PlutoConfig {
         private void entityRainCheckModulo() {
             entityRainCheckRate = Math.min(1, getInt("entities.global.rain-check-tick-rate", entityRainCheckRate));
         }
+
+        public boolean preventInsideBlockXrayExploit = false;
+        private void disableInsideBlockXrayExploit() {
+            preventInsideBlockXrayExploit = getBoolean("entities.player.prevent-xray-exploits-inside-certain-blocks", preventInsideBlockXrayExploit);
+        }
     }
 }

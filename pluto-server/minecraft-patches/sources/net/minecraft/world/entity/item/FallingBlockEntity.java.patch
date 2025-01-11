@@ -1,0 +1,24 @@
+--- a/net/minecraft/world/entity/item/FallingBlockEntity.java
++++ b/net/minecraft/world/entity/item/FallingBlockEntity.java
+@@ -211,6 +_,21 @@
+                                     return;
+                                 }
+                                 // CraftBukkit end
++
++                                // Pluto start - Prevent x-ray exploits when players are inside certain blocks
++                                if (this.level().plutoConfig().preventInsideBlockXrayExploit) {
++                                    org.bukkit.Material material = this.level().getBlockState(blockPos.below()).getBukkitMaterial();
++                                    if (material == org.bukkit.Material.COMPOSTER || material.toString().contains("CAULDRON")) { // Yes I know this is terrible
++                                        this.discard(EntityRemoveEvent.Cause.DESPAWN);
++                                        if (this.dropItem && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
++                                            this.callOnBrokenAfterFall(block, blockPos);
++                                            this.spawnAtLocation(serverLevel, block);
++                                        }
++                                        return;
++                                    }
++                                }
++                                // Pluto end - Prevent x-ray exploits when players are inside certain blocks
++
+                                 if (this.level().setBlock(blockPos, this.blockState, 3)) {
+                                     ((ServerLevel)this.level())
+                                         .getChunkSource()
