@@ -1,0 +1,44 @@
+--- a/net/minecraft/server/level/ServerLevel.java
++++ b/net/minecraft/server/level/ServerLevel.java
+@@ -761,14 +_,17 @@
+         if (!this.isDebug() && runsNormally) {
+             long l = this.getGameTime();
+             profilerFiller.push("blockTicks");
++            if (plutoConfig().blockTickingModulo > 0 && (plutoConfig().blockTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockTickingModulo == 0)) // Pluto - Configuration for block ticks
+             this.blockTicks.tick(l, paperConfig().environment.maxBlockTicks, this::tickBlock); // Paper - configurable max block ticks
+             profilerFiller.popPush("fluidTicks");
++            if (plutoConfig().fluidTickingModulo > 0 && (plutoConfig().fluidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().fluidTickingModulo == 0)) // Pluto - Configuration for fluid ticks
+             this.fluidTicks.tick(l, paperConfig().environment.maxFluidTicks, this::tickFluid); // Paper - configurable max fluid ticks
+             profilerFiller.pop();
+         }
+ 
+         profilerFiller.popPush("raid");
+         if (runsNormally) {
++            if (plutoConfig().raidTickingModulo > 0 && (plutoConfig().raidTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().raidTickingModulo == 0)) // Pluto - Configuration for raid ticking
+             this.raids.tick();
+         }
+ 
+@@ -776,6 +_,7 @@
+         this.getChunkSource().tick(hasTimeLeft, true);
+         profilerFiller.popPush("blockEvents");
+         if (runsNormally) {
++            if (plutoConfig().blockEventTickingModulo > 0 && (plutoConfig().blockEventTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockEventTickingModulo == 0)) // Pluto - Configuration for block event ticking
+             this.runBlockEvents();
+         }
+ 
+@@ -794,6 +_,7 @@
+                 profilerFiller.pop();
+             }
+ 
++            if (!plutoConfig().disableEntityActivation && MinecraftServer.currentTick % plutoConfig().entityActivationInterval == 0) // Pluto - Configurable entity activation
+             io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
+             this.entityTickList
+                 .forEach(
+@@ -802,6 +_,7 @@
+                         if (!entity.isRemoved()) {
+                             if (!tickRateManager.isEntityFrozen(entity)) {
+                                 profilerFiller.push("checkDespawn");
++                                if (plutoConfig().entityDespawnCheckModulo > 0 && (plutoConfig().entityDespawnCheckModulo == 1 || MinecraftServer.currentTick % plutoConfig().entityDespawnCheckModulo == 0)) // Pluto - Configuration for entity despawn check
+                                 entity.checkDespawn();
+                                 profilerFiller.pop();
+                                 if (true) { // Paper - rewrite chunk system

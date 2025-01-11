@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/item/BlockItem.java
++++ b/net/minecraft/world/item/BlockItem.java
+@@ -264,6 +_,7 @@
+     public void onDestroyed(ItemEntity itemEntity) {
+         ItemContainerContents itemContainerContents = itemEntity.getItem().set(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
+         if (itemContainerContents != null) {
++            if (itemEntity.level().plutoConfig().disableShulkersDroppingContentsWhenDestroyed && this.getBlock() instanceof ShulkerBoxBlock) return; // Pluto - Shulker configuration
+             ItemUtils.onContainerDestroyed(itemEntity, itemContainerContents.nonEmptyItemsCopy());
+         }
+     }

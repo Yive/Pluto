@@ -1,0 +1,47 @@
+--- a/net/minecraft/world/entity/item/ItemEntity.java
++++ b/net/minecraft/world/entity/item/ItemEntity.java
+@@ -128,6 +_,7 @@
+     @Override
+     public void inactiveTick() {
+         super.inactiveTick();
++        if (foundHopper()) return; // Pluto - Entities search for hoppers
+         if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+             this.pickupDelay--;
+         }
+@@ -147,12 +_,19 @@
+     }
+     // Paper end - EAR 2
+ 
++    // Pluto start - Entities search for hoppers
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(hopper, this);
++    }
++    // Pluto end - Entities search for hoppers
++
+     @Override
+     public void tick() {
+         if (this.getItem().isEmpty()) {
+             this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
+         } else {
+             super.tick();
++            if (foundHopper()) return; // Pluto - Entities search for hoppers
+             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+                 this.pickupDelay--;
+             }
+@@ -199,11 +_,11 @@
+                 }
+             }
+ 
+-            boolean flag = Mth.floor(this.xo) != Mth.floor(this.getX())
+-                || Mth.floor(this.yo) != Mth.floor(this.getY())
+-                || Mth.floor(this.zo) != Mth.floor(this.getZ());
+-            int i = flag ? 2 : 40;
+-            if (this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
++            // Pluto start - Configuration for item merging
++            boolean flag = this.xo != this.getX() || this.yo != this.getY() || this.zo != this.getZ(); // Flooring makes the movement check inconsistent
++            int i = flag ? this.level().plutoConfig().itemMergeMovingInterval : this.level().plutoConfig().itemMergeStaticInterval;
++            if ((!flag || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
++            // Pluto end - Configuration for item merging
+                 this.mergeWithNeighbours();
+             }
+ 

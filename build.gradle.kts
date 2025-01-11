@@ -1,74 +1,80 @@
-import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
-    `maven-publish`
-    id("io.papermc.paperweight.patcher") version "1.7.4"
+    id("io.papermc.paperweight.patcher") version "2.0.0-beta.13"
 }
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        content { onlyForConfigurations(PAPERCLIP_CONFIG) }
+val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
+
+paperweight {
+    upstreams.register("pufferfish") {
+        repo = github("Yive", "Pufferfish")
+        ref = providers.gradleProperty("pufferfishRef")
+
+        patchFile {
+            path = "pufferfish-server/build.gradle.kts"
+            outputFile = file("pluto-server/build.gradle.kts")
+            patchFile = file("pluto-server/build.gradle.kts.patch")
+        }
+        patchFile {
+            path = "pufferfish-api/build.gradle.kts"
+            outputFile = file("pluto-api/build.gradle.kts")
+            patchFile = file("pluto-api/build.gradle.kts.patch")
+        }
+        patchRepo("paperApi") {
+            upstreamPath = "paper-api"
+            patchesDir = file("pluto-api/paper-patches")
+            outputDir = file("paper-api")
+        }
+        patchRepo("paperApiGenerator") {
+            upstreamPath = "paper-api-generator"
+            patchesDir = file("pluto-api-generator/paper-patches")
+            outputDir = file("paper-api-generator")
+        }
+        patchDir("pufferfishApi") {
+            upstreamPath = "pufferfish-api"
+            excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches")
+            patchesDir = file("pluto-api/pufferfish-patches")
+            outputDir = file("pufferfish-api")
+        }
     }
-}
-
-dependencies {
-    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
-    decompiler("org.vineflower:vineflower:1.10.1")
-    paperclip("io.papermc:paperclip:3.0.3")
 }
 
 subprojects {
-    repositories {
-        mavenCentral()
-        maven("https://repo.papermc.io/repository/maven-public/")
-        maven("https://jitpack.io")
-    }
-}
-
-paperweight {
-    serverProject.set(project(":pluto-server"))
-
-    remapRepo.set("https://repo.papermc.io/repository/maven-public/")
-    decompileRepo.set("https://repo.papermc.io/repository/maven-public/")
-
-    useStandardUpstream("pufferfish") {
-        url.set(github("pufferfish-gg", "Pufferfish"))
-        ref.set(providers.gradleProperty("pufferfishRef"))
-
-        withStandardPatcher {
-            apiSourceDirPath.set("pufferfish-api")
-            serverSourceDirPath.set("pufferfish-server")
-
-            apiOutputDir.set(layout.projectDirectory.dir("pluto-api"))
-            serverOutputDir.set(layout.projectDirectory.dir("pluto-server"))
-        }
-
-        patchTasks {
-            register("PaperApiGenerator") {
-                isBareDirectory.set(true)
-                upstreamDirPath.set("paper-api-generator/generated")
-                patchDir.set(layout.projectDirectory.dir("patches/paper-api-generator"))
-                outputDir.set(layout.projectDirectory.dir("paper-api-generator/generated"))
-            }
-        }
-    }
-}
-
-allprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "maven-publish")
 
-    java {
+    extensions.configure<JavaPluginExtension> {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 
-    tasks.withType<JavaCompile>().configureEach {
+    repositories {
+        mavenCentral()
+        maven(paperMavenPublicUrl)
+        maven("https://oss.sonatype.org/content/groups/public/")
+        maven("https://ci.emc.gs/nexus/content/groups/aikar/")
+        maven("https://repo.aikar.co/content/groups/aikar")
+        maven("https://repo.md-5.net/content/repositories/releases/")
+        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+        maven("https://jitpack.io")
+    }
+
+    dependencies {
+        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+    }
+
+    tasks.withType<AbstractArchiveTask>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
+    tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(21)
+        options.release = 21
+        options.isFork = true
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -76,8 +82,15 @@ allprojects {
     tasks.withType<ProcessResources> {
         filteringCharset = Charsets.UTF_8.name()
     }
+    tasks.withType<Test> {
+        testLogging {
+            showStackTraces = true
+            exceptionFormat = TestExceptionFormat.FULL
+            events(TestLogEvent.STANDARD_OUT)
+        }
+    }
 
-    publishing {
+    extensions.configure<PublishingExtension> {
         repositories {
             maven {
                 name = "yiveRepo"
@@ -87,25 +100,6 @@ allprojects {
                     password = (System.getenv("YIVE_REPO_PASSWORD") ?: project.property("yiveRepoPassword")).toString()
                 }
             }
-        }
-    }
-}
-
-tasks.generateDevelopmentBundle {
-    apiCoordinates.set("dev.yive.pluto:pluto-api")
-    libraryRepositories.set(
-        listOf(
-            "https://repo.maven.apache.org/maven2/",
-            "https://repo.papermc.io/repository/maven-public/",
-            "https://repo.yive.dev/snapshots",
-        )
-    )
-}
-
-publishing {
-    publications.create<MavenPublication>("devBundle") {
-        artifact(tasks.generateDevelopmentBundle) {
-            artifactId = "dev-bundle"
         }
     }
 }

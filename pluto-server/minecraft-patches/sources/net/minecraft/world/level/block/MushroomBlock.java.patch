@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/MushroomBlock.java
++++ b/net/minecraft/world/level/block/MushroomBlock.java
+@@ -85,7 +_,7 @@
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+         BlockPos blockPos = pos.below();
+         BlockState blockState = level.getBlockState(blockPos);
+-        return blockState.is(BlockTags.MUSHROOM_GROW_BLOCK) || level.getRawBrightness(pos, 0) < 13 && this.mayPlaceOn(blockState, level, blockPos);
++        return blockState.is(BlockTags.MUSHROOM_GROW_BLOCK) || ((level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().mushroomIgnoreLightLevel) || level.getRawBrightness(pos, 0) < 13) && this.mayPlaceOn(blockState, level, blockPos); // Pluto - Toggle for light lookups on certain flora
+     }
+ 
+     public boolean growMushroom(ServerLevel level, BlockPos pos, BlockState state, RandomSource random) {

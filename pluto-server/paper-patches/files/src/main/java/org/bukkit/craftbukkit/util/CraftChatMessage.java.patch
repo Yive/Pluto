@@ -1,0 +1,35 @@
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
+@@ -43,7 +_,10 @@
+         return ChatColor.getByChar(format.code);
+     }
+ 
++    public static Component fromStringOrNull(String message, boolean keepNewlines, boolean noLinks) { return (message == null || message.isEmpty()) ? null : noLinks ? new StringMessage(message, keepNewlines, false, true).getOutput()[0] : CraftChatMessage.fromString(message, keepNewlines)[0]; } // Pluto end - Improve performance of custom name setting
++
+     private static final class StringMessage {
++        private static final Pattern INCREMENTAL_PATTERN_NO_LINKS = Pattern.compile("(" + ChatColor.COLOR_CHAR + "[0-9a-fk-orx])|(\\n)", Pattern.CASE_INSENSITIVE); // Pluto - Improve performance of custom name setting
+         private static final Pattern INCREMENTAL_PATTERN = Pattern.compile("(" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + "[0-9a-fk-orx])|((?:(?:https?):\\/\\/)?(?:[-\\w_\\.]{2,}\\.[a-z]{2,4}.*?(?=[\\.\\?!,;:]?(?:[" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + " \\n]|$))))|(\\n)", Pattern.CASE_INSENSITIVE);
+         // Separate pattern with no group 3, new lines are part of previous string
+         private static final Pattern INCREMENTAL_PATTERN_KEEP_NEWLINES = Pattern.compile("(" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + "[0-9a-fk-orx])|((?:(?:https?):\\/\\/)?(?:[-\\w_\\.]{2,}\\.[a-z]{2,4}.*?(?=[\\.\\?!,;:]?(?:[" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + " ]|$))))", Pattern.CASE_INSENSITIVE);
+@@ -60,6 +_,12 @@
+         private final String message;
+ 
+         private StringMessage(String message, boolean keepNewlines, boolean plain) {
++            // Pluto start - Improve performance of custom name setting
++            this(message, keepNewlines, plain, false);
++        }
++
++        private StringMessage(String message, boolean keepNewlines, boolean plain, boolean noLinks) {
++            // Pluto end - Improve performance of custom name setting
+             this.message = message;
+             if (message == null) {
+                 this.output = new Component[]{this.currentChatComponent};
+@@ -67,7 +_,7 @@
+             }
+             this.list.add(this.currentChatComponent);
+ 
+-            Matcher matcher = (keepNewlines ? StringMessage.INCREMENTAL_PATTERN_KEEP_NEWLINES : StringMessage.INCREMENTAL_PATTERN).matcher(message);
++            Matcher matcher = (noLinks ? StringMessage.INCREMENTAL_PATTERN_NO_LINKS : keepNewlines ? StringMessage.INCREMENTAL_PATTERN_KEEP_NEWLINES : StringMessage.INCREMENTAL_PATTERN).matcher(message); // Pluto - Improve performance of custom name setting
+             String match = null;
+             boolean needsAdd = false;
+             boolean hasReset = false; // Paper - Improve Legacy Component serialization size

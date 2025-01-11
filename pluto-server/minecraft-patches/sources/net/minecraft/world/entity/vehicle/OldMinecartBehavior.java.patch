@@ -1,0 +1,33 @@
+--- a/net/minecraft/world/entity/vehicle/OldMinecartBehavior.java
++++ b/net/minecraft/world/entity/vehicle/OldMinecartBehavior.java
+@@ -405,10 +_,17 @@
+     @Override
+     public boolean pushAndPickupEntities() {
+         AABB aabb = this.minecart.getBoundingBox().inflate(0.2F, 0.0, 0.2F);
++        int minecartCount = 0; // Pluto - Option to remove excess vehicles on collision
+         if (this.minecart.isRideable() && this.getDeltaMovement().horizontalDistanceSqr() >= 0.01) {
+             List<Entity> entities = this.level().getEntities(this.minecart, aabb, EntitySelector.pushableBy(this.minecart));
+             if (!entities.isEmpty()) {
+                 for (Entity entity : entities) {
++                    // Pluto start - Option to remove excess vehicles on collision
++                    if (entity instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                        entity.discard();
++                        continue;
++                    }
++                    // Pluto end - Option to remove excess vehicles on collision
+                     if (!(entity instanceof Player)
+                         && !(entity instanceof IronGolem)
+                         && !(entity instanceof AbstractMinecart)
+@@ -436,6 +_,12 @@
+             }
+         } else {
+             for (Entity entity1 : this.level().getEntities(this.minecart, aabb)) {
++                // Pluto start - Option to remove excess vehicles on collision
++                if (entity1 instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                    entity1.discard();
++                    continue;
++                }
++                // Pluto end - Option to remove excess vehicles on collision
+                 if (!this.minecart.hasPassenger(entity1) && entity1.isPushable() && entity1 instanceof AbstractMinecart) {
+                     // CraftBukkit start
+                     org.bukkit.event.vehicle.VehicleEntityCollisionEvent collisionEvent = new org.bukkit.event.vehicle.VehicleEntityCollisionEvent(

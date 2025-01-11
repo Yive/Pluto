@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/level/block/SugarCaneBlock.java
++++ b/net/minecraft/world/level/block/SugarCaneBlock.java
+@@ -94,6 +_,7 @@
+             return true;
+         } else {
+             if (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.SAND)) {
++                if (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
+                 BlockPos blockPos = pos.below();
+ 
+                 for (Direction direction : Direction.Plane.HORIZONTAL) {

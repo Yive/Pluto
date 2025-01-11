@@ -1,0 +1,40 @@
+--- a/net/minecraft/world/entity/Mob.java
++++ b/net/minecraft/world/entity/Mob.java
+@@ -221,10 +_,10 @@
+     public void inactiveTick() {
+         super.inactiveTick();
+         boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
+-        if (this.goalSelector.inactiveTick(this.activatedPriority, true) && !isThrottled) { // Pufferfish - pass activated priroity // Pufferfish - throttle inactive goal selector ticking
++        if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, true) && !isThrottled) { // Pufferfish - pass activated priroity // Pufferfish - throttle inactive goal selector ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tick();
+         }
+-        if (this.targetSelector.inactiveTick(this.activatedPriority, true)) { // Pufferfish - pass activated priority
++        if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, true)) { // Pufferfish - pass activated priority // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tick();
+         }
+     }
+@@ -863,20 +_,20 @@
+         int i = this.tickCount + this.getId();
+         if (i % 2 != 0 && this.tickCount > 1) {
+             profilerFiller.push("targetSelector");
+-            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tickRunningGoals(false);
+             profilerFiller.pop();
+             profilerFiller.push("goalSelector");
+-            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tickRunningGoals(false);
+             profilerFiller.pop();
+         } else {
+             profilerFiller.push("targetSelector");
+-            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableTargetSelector && this.targetSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.targetSelector.tick();
+             profilerFiller.pop();
+             profilerFiller.push("goalSelector");
+-            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking
++            if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, false)) // Pufferfish - use this to alternate ticking // Pluto - Option to disable entity target/goal selectors
+             this.goalSelector.tick();
+             profilerFiller.pop();
+         }

@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
++++ b/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
+@@ -31,6 +_,27 @@
+         super(entityType, level);
+     }
+ 
++    // Pluto start - Entities search for hoppers
++    @Override
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
++    }
++
++    @Override
++    public void tick() {
++        super.tick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++    // Pluto end - Entities search for hoppers
++
+     @Override
+     public void destroy(ServerLevel level, DamageSource damageSource) {
+         super.destroy(level, damageSource);
