@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/level/block/TntBlock.java
++++ b/net/minecraft/world/level/block/TntBlock.java
+@@ -83,6 +_,7 @@
+ 
+     @Override
+     public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
++        if (level.plutoConfig().disableTntChainReaction) return; // Pluto - Option to disable TNT chain reactions
+         // Paper start - TNTPrimeEvent
+         org.bukkit.block.Block tntBlock = org.bukkit.craftbukkit.block.CraftBlock.at(level, pos);
+         org.bukkit.entity.Entity source = explosion.getDirectSourceEntity() != null ? explosion.getDirectSourceEntity().getBukkitEntity() : null;

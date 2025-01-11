@@ -337,5 +337,10 @@ public class PlutoConfig {
             spawnerRequiredPlayerRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.required-player-range", spawnerRequiredPlayerRange));
             spawnerSpawnRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-range", spawnerSpawnRange));
         }
+
+        public boolean disableTntChainReaction = false;
+        private void disableTntChainReaction() {
+            disableTntChainReaction = getBoolean("blocks.tnt.disable-chain-reaction", disableTntChainReaction);
+        }
     }
 }
