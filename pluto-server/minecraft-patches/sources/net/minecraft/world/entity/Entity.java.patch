@@ -17,3 +17,32 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
+@@ -1854,10 +_,26 @@
+         return this.wasTouchingWater;
+     }
+ 
++    private int lastRainCheck = -1; private boolean lastRainCheckResult = false; // Pluto - Optimise rain check
+     public boolean isInRain() {
++        // Pluto start - Optimise rain check
++        if (this.tickCount - this.lastRainCheck < this.level().plutoConfig().entityRainCheckRate) {
++            return this.lastRainCheckResult;
++        }
++
++        this.lastRainCheck = this.tickCount;
++
++        // The nether & end can't have rain
++        // Both dimensions have skylight set to false.
++        if (!this.level().dimensionType().hasSkyLight()) {
++            this.lastRainCheckResult = false;
++            return false;
++        }
++
+         BlockPos blockPos = this.blockPosition();
+-        return this.level().isRainingAt(blockPos)
+-            || this.level().isRainingAt(BlockPos.containing(blockPos.getX(), this.getBoundingBox().maxY, blockPos.getZ()));
++        this.lastRainCheckResult = this.level().isRainingAt(blockPos) || this.level().isRainingAt(BlockPos.containing((double) blockPos.getX(), this.getBoundingBox().maxY, (double) blockPos.getZ()));
++        return this.lastRainCheckResult;
++        // Pluto end - Optimise rain check
+     }
+ 
+     public boolean isInBubbleColumn() {

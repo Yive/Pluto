@@ -392,5 +392,10 @@ public class PlutoConfig {
         private void entityInsideBlockCheck() {
             entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
         }
+
+        public int entityRainCheckRate = 10;
+        private void entityRainCheckModulo() {
+            entityRainCheckRate = Math.min(1, getInt("entities.global.rain-check-tick-rate", entityRainCheckRate));
+        }
     }
 }
