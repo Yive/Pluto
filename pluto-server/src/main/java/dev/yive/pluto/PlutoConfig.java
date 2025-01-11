@@ -424,5 +424,10 @@ public class PlutoConfig {
         private void useFluidPushingOptimisation() {
             useFluidPushingOptimisation = getBoolean("entities.global.use-fluid-pushing-optimisation", useFluidPushingOptimisation);
         }
+
+        public boolean onlyPlayersPushEntities = false;
+        private void onlyPlayersPushEntities() {
+            onlyPlayersPushEntities = getBoolean("entities.player.only-players-push-entities", onlyPlayersPushEntities);
+        }
     }
 }
