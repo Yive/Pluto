@@ -34,3 +34,11 @@
              io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
              this.entityTickList
                  .forEach(
+@@ -802,6 +_,7 @@
+                         if (!entity.isRemoved()) {
+                             if (!tickRateManager.isEntityFrozen(entity)) {
+                                 profilerFiller.push("checkDespawn");
++                                if (plutoConfig().entityDespawnCheckModulo > 0 && (plutoConfig().entityDespawnCheckModulo == 1 || MinecraftServer.currentTick % plutoConfig().entityDespawnCheckModulo == 0)) // Pluto - Configuration for entity despawn check
+                                 entity.checkDespawn();
+                                 profilerFiller.pop();
+                                 if (true) { // Paper - rewrite chunk system

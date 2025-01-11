@@ -368,5 +368,10 @@ public class PlutoConfig {
             // TODO: Allow for disabling block event ticking
             blockEventTickingModulo = Math.min(1, getInt("blocks.global.block-event-ticking-modulo", blockEventTickingModulo));
         }
+
+        public int entityDespawnCheckModulo = 1;
+        private void entityDespawning() {
+            entityDespawnCheckModulo = getInt("entities.global.despawn-check-modulo", entityDespawnCheckModulo);
+        }
     }
 }
