@@ -92,12 +92,14 @@ subprojects {
 
     extensions.configure<PublishingExtension> {
         repositories {
-            /*
-            maven("https://repo.papermc.io/repository/maven-snapshots/") {
-                name = "paperSnapshots"
-                credentials(PasswordCredentials::class)
+            maven {
+                name = "yiveRepo"
+                url = uri("https://repo.yive.dev/snapshots")
+                credentials {
+                    username = (System.getenv("YIVE_REPO_USERNAME") ?: project.property("yiveRepoUsername")).toString()
+                    password = (System.getenv("YIVE_REPO_PASSWORD") ?: project.property("yiveRepoPassword")).toString()
+                }
             }
-             */
         }
     }
 }
