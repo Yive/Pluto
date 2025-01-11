@@ -439,5 +439,12 @@ public class PlutoConfig {
         private void disableSprintParticles() {
             disableSprintParticles = getBoolean("entities.global.particles.disable-sprint-particles", disableSprintParticles);
         }
+
+        public boolean entitiesSearchForHoppers = false;
+        public int ticksBetweenEntitiesSearchForHoppers = 1;
+        private void entitiesSearchForHoppers() {
+            entitiesSearchForHoppers = getBoolean("entities.global.search-for-hoppers", entitiesSearchForHoppers);
+            ticksBetweenEntitiesSearchForHoppers = Math.max(1, getInt("entities.global.ticks-between-hopper-searches", ticksBetweenEntitiesSearchForHoppers));
+        }
     }
 }

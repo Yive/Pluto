@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
++++ b/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
+@@ -36,6 +_,27 @@
+         super(entityType, level, dropItem);
+     }
+ 
++    // Pluto start - Entities search for hoppers
++    @Override
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.suckInItems(this.level(), hopper, this);
++    }
++
++    @Override
++    public void tick() {
++        super.tick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (!this.level().plutoConfig().entitiesSearchForHoppers) return;
++        foundHopper();
++    }
++    // Pluto end - Entities search for hoppers
++
+     @Override
+     protected float getSinglePassengerXOffset() {
+         return 0.15F;

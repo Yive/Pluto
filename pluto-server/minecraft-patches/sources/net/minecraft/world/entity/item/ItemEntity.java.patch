@@ -1,5 +1,33 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
+@@ -128,6 +_,7 @@
+     @Override
+     public void inactiveTick() {
+         super.inactiveTick();
++        if (foundHopper()) return; // Pluto - Entities search for hoppers
+         if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+             this.pickupDelay--;
+         }
+@@ -147,12 +_,19 @@
+     }
+     // Paper end - EAR 2
+ 
++    // Pluto start - Entities search for hoppers
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(hopper, this);
++    }
++    // Pluto end - Entities search for hoppers
++
+     @Override
+     public void tick() {
+         if (this.getItem().isEmpty()) {
+             this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
+         } else {
+             super.tick();
++            if (foundHopper()) return; // Pluto - Entities search for hoppers
+             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
+                 this.pickupDelay--;
+             }
 @@ -199,11 +_,11 @@
                  }
              }

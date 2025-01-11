@@ -84,7 +84,7 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
-@@ -5074,6 +_,12 @@
+@@ -5074,6 +_,43 @@
              return this.save;
          }
      }
@@ -94,6 +94,37 @@
 +        return ENTITY_COUNTER.get();
 +    }
 +    // Pluto end - Add method to obtain current entity id
++
++    // Pluto start - Entities search for hoppers
++    @Nullable
++    public net.minecraft.world.level.block.entity.HopperBlockEntity findHopper() {
++        int originX = this.getBlockX();
++        int originY = this.getBlockY();
++        int originZ = this.getBlockZ();
++
++        BlockPos.MutableBlockPos adjacentPos = new BlockPos.MutableBlockPos();
++        net.minecraft.world.level.chunk.LevelChunk chunk = this.level().getChunkIfLoaded(originX >> 4, originZ >> 4);
++        if (chunk == null) return null;
++
++        for (int y = originY; y > originY - 2; --y) {
++            adjacentPos.set(originX, y, originZ);
++            net.minecraft.world.level.block.entity.HopperBlockEntity hopper = chunk.getBlockEntity(adjacentPos) instanceof net.minecraft.world.level.block.entity.HopperBlockEntity hopperBlockEntity ? hopperBlockEntity : null;
++            if (hopper == null) continue;
++            return hopper;
++        }
++        return null;
++    }
++
++    public boolean foundHopper() {
++        if (!this.level().plutoConfig().entitiesSearchForHoppers || tickCount % this.level().plutoConfig().ticksBetweenEntitiesSearchForHoppers != 0) return false;
++        net.minecraft.world.level.block.entity.HopperBlockEntity hopper = findHopper();
++        return hopper != null && hopper.canAcceptItems() && acceptItem(hopper);
++    }
++
++    public boolean acceptItem(net.minecraft.world.level.block.entity.HopperBlockEntity hopper) {
++        return false;
++    }
++    // Pluto end - Entities search for hoppers
  
      // Paper start - Expose entity id counter
      public static int nextEntityId() {
