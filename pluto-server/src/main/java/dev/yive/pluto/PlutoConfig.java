@@ -373,5 +373,14 @@ public class PlutoConfig {
         private void entityDespawning() {
             entityDespawnCheckModulo = getInt("entities.global.despawn-check-modulo", entityDespawnCheckModulo);
         }
+
+        public boolean disableShulkersDroppingContentsWhenDestroyed = false;
+        public boolean disableShulkerSplitting = false;
+        public boolean disableShulkerTeleporting = false;
+        private void shulkerSettings() {
+            disableShulkersDroppingContentsWhenDestroyed = getBoolean("entities.item.disable-dropping-shulker-box-contents-when-destroyed", disableShulkersDroppingContentsWhenDestroyed);
+            disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
+            disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
+        }
     }
 }
