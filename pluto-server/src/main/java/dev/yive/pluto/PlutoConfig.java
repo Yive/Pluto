@@ -414,5 +414,10 @@ public class PlutoConfig {
                 type.spawnerTTL = this.config.getInt(path, this.worldDefaults.getInt(path, -1));
             }
         }
+
+        public boolean skipFailedDispenseLevelEvent = false;
+        private void skipFailedDispenseLevelEvent() {
+            skipFailedDispenseLevelEvent = getBoolean("blocks.global.skip-failed-block-dispense-level-event", skipFailedDispenseLevelEvent);
+        }
     }
 }
