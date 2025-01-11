@@ -387,5 +387,10 @@ public class PlutoConfig {
         private void entityPushing() {
             entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
         }
+
+        public int entityInsideBlockCheck = 1;
+        private void entityInsideBlockCheck() {
+            entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
+        }
     }
 }

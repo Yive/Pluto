@@ -1,5 +1,13 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
+@@ -1276,6 +_,7 @@
+             this.movementThisTick.add(new Entity.Movement(oldPosition, position));
+             List<Entity.Movement> list = List.copyOf(this.movementThisTick);
+             this.movementThisTick.clear();
++            if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
+             this.checkInsideBlocks(list, this.blocksInside);
+             boolean flag = Iterables.any(this.blocksInside, state -> state.is(BlockTags.FIRE) || state.is(Blocks.LAVA));
+             this.blocksInside.clear();
 @@ -1343,7 +_,7 @@
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
