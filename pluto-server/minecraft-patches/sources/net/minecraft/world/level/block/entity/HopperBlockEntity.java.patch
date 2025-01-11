@@ -43,12 +43,21 @@
              boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
-@@ -747,7 +_,7 @@
+@@ -732,6 +_,7 @@
+         // CraftBukkit start
+         BlockPos searchPosition = pos.relative(blockEntity.facing);
+         Container inventory = getContainerAt(level, searchPosition);
++        if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
+ 
+         org.bukkit.craftbukkit.block.CraftBlock hopper = org.bukkit.craftbukkit.block.CraftBlock.at(level, pos);
+         org.bukkit.craftbukkit.block.CraftBlock searchBlock = org.bukkit.craftbukkit.block.CraftBlock.at(level, searchPosition);
+@@ -747,7 +_,8 @@
      @Nullable
      private static Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
          // CraftBukkit start
 -        final Container inventory = HopperBlockEntity.getContainerAt(level, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
 +        final Container inventory = HopperBlockEntity.getContainerAt(level, hopper, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ(), false); // Pluto - Entities search for hoppers
++        if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
  
          final BlockPos blockPosition = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
          org.bukkit.craftbukkit.block.CraftBlock hopperBlock = org.bukkit.craftbukkit.block.CraftBlock.at(level, blockPosition);
@@ -77,6 +86,26 @@
          }
  
          return blockContainer;
+@@ -789,11 +_,17 @@
+ 
+     @Nullable
+     private static Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
+-        if (!level.spigotConfig.hopperCanLoadChunks && !level.hasChunkAt(pos)) return null; // Spigot
++        // Pluto start - Small hopper optimisations
++        net.minecraft.world.level.chunk.LevelChunk chunk = null;
++        if (!level.spigotConfig.hopperCanLoadChunks) {
++            chunk = level.getChunkIfLoaded(pos);
++            if (chunk == null) return null;
++        }
++        // Pluto end - Small hopper optimisations
+         Block block = state.getBlock();
+         if (block instanceof WorldlyContainerHolder) {
+             return ((WorldlyContainerHolder)block).getContainer(state, level, pos);
+-        } else if (state.hasBlockEntity() && level.getBlockEntity(pos) instanceof Container container) {
++        } else if (state.hasBlockEntity() && (chunk == null ? level.getBlockEntity(pos) : chunk.getBlockEntity(pos, net.minecraft.world.level.chunk.LevelChunk.EntityCreationType.IMMEDIATE)) instanceof Container container) { // Pluto - Small hopper optimisations
+             if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
+                 container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
+             }
 @@ -805,7 +_,10 @@
      }
  
