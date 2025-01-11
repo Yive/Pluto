@@ -357,5 +357,10 @@ public class PlutoConfig {
         private void fluidTicking() {
             fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
         }
+
+        public int raidTickingModulo = 1;
+        private void raidTicking() {
+            raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
+        }
     }
 }
