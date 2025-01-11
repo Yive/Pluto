@@ -1,0 +1,19 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -1211,4 +_,16 @@
+         return this.getHandle().canUseSlot(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
+     }
+     // Paper end - Expose canUseSlot
++
++    // Pluto start - Expose some sound related functions
++    @Override
++    public float getSoundVolume() {
++        return this.getHandle().plutoGetSoundVolume();
++    }
++
++    @Override
++    public float getVoicePitch() {
++        return this.getHandle().plutoGetVoicePitch();
++    }
++    // Pluto end - Expose some sound related functions
+ }

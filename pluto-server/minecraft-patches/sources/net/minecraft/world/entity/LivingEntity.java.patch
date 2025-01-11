@@ -1,5 +1,17 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -2765,6 +_,11 @@
+         }
+     }
+ 
++    // Pluto start - Expose some sound related functions
++    public float plutoGetSoundVolume() { return getSoundVolume(); }
++    public float plutoGetVoicePitch() { return getVoicePitch(); }
++    // Pluto end - Expose some sound related functions
++
+     public float getSoundVolume() {
+         return 1.0F;
+     }
 @@ -3503,6 +_,7 @@
              this.checkAutoSpinAttack(boundingBox, this.getBoundingBox());
          }
