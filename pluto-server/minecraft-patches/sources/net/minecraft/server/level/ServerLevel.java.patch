@@ -18,6 +18,14 @@
              this.raids.tick();
          }
  
+@@ -776,6 +_,7 @@
+         this.getChunkSource().tick(hasTimeLeft, true);
+         profilerFiller.popPush("blockEvents");
+         if (runsNormally) {
++            if (plutoConfig().blockEventTickingModulo > 0 && (plutoConfig().blockEventTickingModulo == 1 || MinecraftServer.currentTick % plutoConfig().blockEventTickingModulo == 0)) // Pluto - Configuration for block event ticking
+             this.runBlockEvents();
+         }
+ 
 @@ -794,6 +_,7 @@
                  profilerFiller.pop();
              }

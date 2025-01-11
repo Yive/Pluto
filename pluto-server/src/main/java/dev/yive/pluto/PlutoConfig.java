@@ -362,5 +362,11 @@ public class PlutoConfig {
         private void raidTicking() {
             raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
         }
+
+        public int blockEventTickingModulo = 1;
+        private void blockEventTicking() {
+            // TODO: Allow for disabling block event ticking
+            blockEventTickingModulo = Math.min(1, getInt("blocks.global.block-event-ticking-modulo", blockEventTickingModulo));
+        }
     }
 }
