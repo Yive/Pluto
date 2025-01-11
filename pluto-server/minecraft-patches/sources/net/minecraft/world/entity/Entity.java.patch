@@ -1,5 +1,20 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
+@@ -819,6 +_,14 @@
+             return;
+         }
+         // Paper end - entity despawn time limit
++
++        // Pluto start - TTL setting for entities from spawners
++        if (type != EntityType.PLAYER && spawnedViaMobSpawner && type.spawnerTTL >= 0 && this.tickCount >= type.spawnerTTL) {
++            this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN);
++            return;
++        }
++        // Pluto end - TTL setting for entities from spawners
++
+         this.baseTick();
+     }
+ 
 @@ -1276,6 +_,7 @@
              this.movementThisTick.add(new Entity.Movement(oldPosition, position));
              List<Entity.Movement> list = List.copyOf(this.movementThisTick);
