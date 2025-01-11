@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -685,6 +_,13 @@
+         return compound;
+     }
+ 
++    // Pluto start - Add method to obtain current entity id
++    @Override
++    public int currentEntityId() {
++        return net.minecraft.world.entity.Entity.currentEntityId();
++    }
++    // Pluto end - Add method to obtain current entity id
++
+     @Override
+     public int nextEntityId() {
+         return net.minecraft.world.entity.Entity.nextEntityId();

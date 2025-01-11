@@ -46,3 +46,16 @@
      }
  
      public boolean isInBubbleColumn() {
+@@ -5074,6 +_,12 @@
+             return this.save;
+         }
+     }
++
++    // Pluto start - Add method to obtain current entity id
++    public static int currentEntityId() {
++        return ENTITY_COUNTER.get();
++    }
++    // Pluto end - Add method to obtain current entity id
+ 
+     // Paper start - Expose entity id counter
+     public static int nextEntityId() {
