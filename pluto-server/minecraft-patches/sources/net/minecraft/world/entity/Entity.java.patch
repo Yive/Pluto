@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -1343,7 +_,7 @@
+     protected void processFlappingMovement() {
+         if (this.isFlapping()) {
+             this.onFlap();
+-            if (this.getMovementEmission().emitsEvents()) {
++            if (!this.level().plutoConfig().disableFlapEvents && this.getMovementEmission().emitsEvents()) { // Pluto - Option to disable flapping movement game event
+                 this.gameEvent(GameEvent.FLAP);
+             }
+         }

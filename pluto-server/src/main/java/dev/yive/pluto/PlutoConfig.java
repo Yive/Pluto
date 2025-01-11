@@ -342,5 +342,10 @@ public class PlutoConfig {
         private void disableTntChainReaction() {
             disableTntChainReaction = getBoolean("blocks.tnt.disable-chain-reaction", disableTntChainReaction);
         }
+
+        public boolean disableFlapEvents = false;
+        private void disableFlapEvents() {
+            disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
+        }
     }
 }
