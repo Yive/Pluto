@@ -382,5 +382,10 @@ public class PlutoConfig {
             disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
             disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
         }
+
+        public int entityPushingModulo = 1;
+        private void entityPushing() {
+            entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
+        }
     }
 }

@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/LivingEntity.java
++++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -3503,6 +_,7 @@
+             this.checkAutoSpinAttack(boundingBox, this.getBoundingBox());
+         }
+ 
++        if (this.level().plutoConfig().entityPushingModulo > 0 && (this.level().plutoConfig().entityPushingModulo == 1 || this.tickCount % this.level().plutoConfig().entityPushingModulo == 0)) // Pluto - Configuration for entity pushing frequency
+         this.pushEntities();
+         profilerFiller.pop();
+         // Paper start - Add EntityMoveEvent
