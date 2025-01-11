@@ -347,5 +347,10 @@ public class PlutoConfig {
         private void disableFlapEvents() {
             disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
         }
+
+        public int blockTickingModulo = 1;
+        private void blockTicking() {
+            blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
+        }
     }
 }
