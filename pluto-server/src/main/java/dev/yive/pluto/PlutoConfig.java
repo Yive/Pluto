@@ -429,5 +429,10 @@ public class PlutoConfig {
         private void onlyPlayersPushEntities() {
             onlyPlayersPushEntities = getBoolean("entities.player.only-players-push-entities", onlyPlayersPushEntities);
         }
+
+        public int sweepingAttackLimit = -1;
+        private void sweepingAttackLimit() {
+            sweepingAttackLimit = getInt("entities.player.sweeping-attack-entity-limit", sweepingAttackLimit);
+        }
     }
 }

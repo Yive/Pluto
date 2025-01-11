@@ -1,0 +1,13 @@
+--- a/net/minecraft/world/entity/player/Player.java
++++ b/net/minecraft/world/entity/player/Player.java
+@@ -1317,8 +_,10 @@
+                             if (flag3) {
+                                 float f5 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * f;
+ 
++                                int entityCount = 1; // Pluto - Implement entity limit for sweeping attacks | Start at one due to original target
+                                 for (LivingEntity livingEntity2 : this.level()
+                                     .getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.0, 0.25, 1.0))) {
++                                    if (this.level().plutoConfig().sweepingAttackLimit != -1 && entityCount++ >= this.level().plutoConfig().sweepingAttackLimit) continue; // Pluto - Implement entity limit for sweeping attacks
+                                     if (livingEntity2 != this
+                                         && livingEntity2 != target
+                                         && !this.isAlliedTo(livingEntity2)
