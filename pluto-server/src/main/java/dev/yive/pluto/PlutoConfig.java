@@ -434,5 +434,10 @@ public class PlutoConfig {
         private void sweepingAttackLimit() {
             sweepingAttackLimit = getInt("entities.player.sweeping-attack-entity-limit", sweepingAttackLimit);
         }
+
+        public boolean disableSprintParticles = false;
+        private void disableSprintParticles() {
+            disableSprintParticles = getBoolean("entities.global.particles.disable-sprint-particles", disableSprintParticles);
+        }
     }
 }

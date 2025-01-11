@@ -15,6 +15,15 @@
          this.baseTick();
      }
  
+@@ -845,7 +_,7 @@
+         }
+ 
+         if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - // Moved up to postTick
+-        if (this.canSpawnSprintParticle()) {
++        if (!this.level.plutoConfig().disableSprintParticles && this.canSpawnSprintParticle()) { // Pluto - Option to disable sprint particles | More efficient to exit early to avoid canSpawnSprintParticle
+             this.spawnSprintParticle();
+         }
+ 
 @@ -1276,6 +_,7 @@
              this.movementThisTick.add(new Entity.Movement(oldPosition, position));
              List<Entity.Movement> list = List.copyOf(this.movementThisTick);
