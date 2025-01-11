@@ -419,5 +419,10 @@ public class PlutoConfig {
         private void skipFailedDispenseLevelEvent() {
             skipFailedDispenseLevelEvent = getBoolean("blocks.global.skip-failed-block-dispense-level-event", skipFailedDispenseLevelEvent);
         }
+
+        public boolean useFluidPushingOptimisation = true;
+        private void useFluidPushingOptimisation() {
+            useFluidPushingOptimisation = getBoolean("entities.global.use-fluid-pushing-optimisation", useFluidPushingOptimisation);
+        }
     }
 }

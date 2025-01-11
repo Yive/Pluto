@@ -61,6 +61,20 @@
      }
  
      public boolean isInBubbleColumn() {
+@@ -1898,6 +_,13 @@
+         this.fluidHeight.clear();
+         this.updateInWaterStateAndDoWaterCurrentPushing();
+         double d = this.level().dimensionType().ultraWarm() ? 0.007 : 0.0023333333333333335;
++
++        // Pluto start - Optimise entity fluid pushing
++        if (level.plutoConfig().useFluidPushingOptimisation) {
++            return this.isInWater() || this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
++        }
++        // Pluto end - Optimise entity fluid pushing
++
+         boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
+         return this.isInWater() || flag;
+     }
 @@ -5074,6 +_,12 @@
              return this.save;
          }
