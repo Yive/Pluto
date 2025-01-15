@@ -1,24 +1,13 @@
 --- a/pufferfish-server/build.gradle.kts
 +++ b/pufferfish-server/build.gradle.kts
-@@ -23,6 +_,7 @@
- 
-     // Pufferfish start
-     val pufferfish = forks.register("pufferfish") {
-+        rootDirectory = upstreamsDirectory().map { it.dir("pufferfish") } // Pluto - Branding
-         upstream.patchDir("paperServer") {
-             upstreamPath = "paper-server"
-             excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
-@@ -31,13 +_,30 @@
+@@ -30,9 +_,26 @@
+             outputDir = rootDirectory.dir("paper-server")
          }
      }
- 
--    activeFork = pufferfish
 -
-     paper {
-         paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
-     }
+-    activeFork = pufferfish
      // Pufferfish end
- 
++
 +    // Pluto start - Branding
 +    val pluto = forks.register("pluto") {
 +        forks = pufferfish
@@ -37,11 +26,10 @@
 +
 +    activeFork = pluto
 +    // Pluto end - Branding
-+
+ 
      spigot {
          buildDataRef = "3edaf46ec1eed4115ce1b18d2846cded42577e42"
-         packageVersion = "v1_21_R3" // also needs to be updated in MappingEnvironment
-@@ -123,10 +_,18 @@
+@@ -119,10 +_,18 @@
      main {
          java { srcDir("../paper-server/src/main/java") }
          resources { srcDir("../paper-server/src/main/resources") }
@@ -60,7 +48,7 @@
      }
  }
  
-@@ -151,7 +_,7 @@
+@@ -147,7 +_,7 @@
  }
  
  dependencies {
@@ -69,7 +57,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -234,14 +_,14 @@
+@@ -230,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
