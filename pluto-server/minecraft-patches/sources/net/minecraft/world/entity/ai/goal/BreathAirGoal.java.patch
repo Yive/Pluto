@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/ai/goal/BreathAirGoal.java
++++ b/net/minecraft/world/entity/ai/goal/BreathAirGoal.java
+@@ -73,6 +_,6 @@
+ 
+     private boolean givesAir(LevelReader level, BlockPos pos) {
+         BlockState blockState = level.getBlockState(pos);
+-        return (level.getFluidState(pos).isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN)) && blockState.isPathfindable(PathComputationType.LAND);
++        return (blockState.getFluidState().isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN)) && blockState.isPathfindable(PathComputationType.LAND); // Pluto - Decrease chunk/block lookups
+     }
+ }

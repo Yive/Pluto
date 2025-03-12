@@ -11,3 +11,19 @@
              if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? level.spigotConfig.pumpkinModifier : level.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / growthSpeed) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
                  int ageValue = state.getValue(AGE);
                  if (ageValue < 7) {
+@@ -88,8 +_,13 @@
+                 } else {
+                     Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+                     BlockPos blockPos = pos.relative(randomDirection);
+-                    BlockState blockState = level.getBlockState(blockPos.below());
+-                    if (level.getBlockState(blockPos).isAir() && (blockState.is(Blocks.FARMLAND) || blockState.is(BlockTags.DIRT))) {
++                    // Pluto start - Decrease chunk/block lookups
++                    net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
++                    if (chunk == null) return;
++
++                    BlockState blockState;
++                    if (chunk.getBlockState(blockPos).isAir() && ((blockState = chunk.getBlockState(blockPos.below())).is(Blocks.FARMLAND) || blockState.is(BlockTags.DIRT))) {
++                        // Pluto end - Decrease chunk/block lookups
+                         Registry<Block> registry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
+                         Optional<Block> optional = registry.getOptional(this.fruit);
+                         Optional<Block> optional1 = registry.getOptional(this.attachedStem);

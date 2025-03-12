@@ -1,0 +1,26 @@
+--- a/net/minecraft/world/level/block/CampfireBlock.java
++++ b/net/minecraft/world/level/block/CampfireBlock.java
+@@ -279,16 +_,21 @@
+     }
+ 
+     public static boolean isSmokeyPos(Level level, BlockPos pos) {
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
++        if (chunk == null) return false;
++        // Pluto end - Decrease chunk/block lookups
++
+         for (int i = 1; i <= 5; i++) {
+             BlockPos blockPos = pos.below(i);
+-            BlockState blockState = level.getBlockState(blockPos);
++            BlockState blockState = chunk.getBlockState(blockPos); // Pluto - Decrease chunk/block lookups
+             if (isLitCampfire(blockState)) {
+                 return true;
+             }
+ 
+             boolean flag = Shapes.joinIsNotEmpty(VIRTUAL_FENCE_POST, blockState.getCollisionShape(level, pos, CollisionContext.empty()), BooleanOp.AND);
+             if (flag) {
+-                BlockState blockState1 = level.getBlockState(blockPos.below());
++                BlockState blockState1 = chunk.getBlockState(blockPos.below()); // Pluto - Decrease chunk/block lookups
+                 return isLitCampfire(blockState1);
+             }
+         }

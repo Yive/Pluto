@@ -1,5 +1,23 @@
 --- a/net/minecraft/world/level/block/CactusBlock.java
 +++ b/net/minecraft/world/level/block/CactusBlock.java
+@@ -49,10 +_,15 @@
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+         BlockPos blockPos = pos.above();
+-        if (level.isEmptyBlock(blockPos)) {
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
++        if (chunk == null) return;
++
++        if (chunk.getBlockState(blockPos).isAir()) {
++            // Pluto end - Decrease chunk/block lookups
+             int i = 1;
+ 
+-            while (level.getBlockState(pos.below(i)).is(this)) {
++            while (chunk.getBlockState(pos.below(i)).is(this)) { // Pluto - Decrease chunk/block lookups
+                 i++;
+             }
+ 
 @@ -61,11 +_,28 @@
  
                  int modifier = level.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
@@ -29,7 +47,7 @@
                      level.setBlock(pos, state.setValue(AGE, Integer.valueOf(ageValue + 1)), 4);
                  }
              }
-@@ -102,6 +_,12 @@
+@@ -102,9 +_,15 @@
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
@@ -41,4 +59,8 @@
 +        // Pluto end - Check if the cactus can even survive being placed
          for (Direction direction : Direction.Plane.HORIZONTAL) {
              BlockState blockState = level.getBlockState(pos.relative(direction));
-             if (blockState.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA)) {
+-            if (blockState.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA)) {
++            if (blockState.isSolid() || blockState.getFluidState().is(FluidTags.LAVA)) { // Pluto - Decrease chunk/block lookups
+                 return false;
+             }
+         }

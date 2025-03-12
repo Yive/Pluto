@@ -1,6 +1,24 @@
 --- a/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/net/minecraft/world/level/block/SugarCaneBlock.java
-@@ -94,6 +_,7 @@
+@@ -49,10 +_,15 @@
+ 
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+-        if (level.isEmptyBlock(pos.above())) {
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
++        if (chunk == null) return;
++
++        if (chunk.getBlockState(pos.above()).isAir()) {
++            // Pluto end - Decrease chunk/block lookups
+             int i = 1;
+ 
+-            while (level.getBlockState(pos.below(i)).is(this)) {
++            while (chunk.getBlockState(pos.below(i)).is(this)) { // Pluto - Decrease chunk/block lookups
+                 i++;
+             }
+ 
+@@ -94,11 +_,12 @@
              return true;
          } else {
              if (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.SAND)) {
@@ -8,3 +26,9 @@
                  BlockPos blockPos = pos.below();
  
                  for (Direction direction : Direction.Plane.HORIZONTAL) {
+                     BlockState blockState1 = level.getBlockState(blockPos.relative(direction));
+-                    FluidState fluidState = level.getFluidState(blockPos.relative(direction));
++                    FluidState fluidState = blockState1.getFluidState(); // Pluto - Decrease chunk/block lookups
+                     if (fluidState.is(FluidTags.WATER) || blockState1.is(Blocks.FROSTED_ICE)) {
+                         return true;
+                     }

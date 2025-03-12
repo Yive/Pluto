@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/entity/ai/behavior/RamTarget.java
++++ b/net/minecraft/world/entity/ai/behavior/RamTarget.java
+@@ -113,7 +_,12 @@
+     private boolean hasRammedHornBreakingBlock(ServerLevel level, Goat owner) {
+         Vec3 vec3 = owner.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize();
+         BlockPos blockPos = BlockPos.containing(owner.position().add(vec3));
+-        return level.getBlockState(blockPos).is(BlockTags.SNAPS_GOAT_HORN) || level.getBlockState(blockPos.above()).is(BlockTags.SNAPS_GOAT_HORN);
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
++        if (chunk == null) return false;
++
++        return chunk.getBlockState(blockPos).is(BlockTags.SNAPS_GOAT_HORN) || chunk.getBlockState(blockPos.above()).is(BlockTags.SNAPS_GOAT_HORN);
++        // Pluto end - Decrease chunk/block lookups
+     }
+ 
+     protected void finishRam(ServerLevel level, Goat owner) {

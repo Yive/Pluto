@@ -1,5 +1,33 @@
 --- a/net/minecraft/world/level/block/BambooStalkBlock.java
 +++ b/net/minecraft/world/level/block/BambooStalkBlock.java
+@@ -92,11 +_,16 @@
+     @Nullable
+     @Override
+     public BlockState getStateForPlacement(BlockPlaceContext context) {
+-        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = context.getLevel().getChunkIfLoaded(context.getClickedPos());
++        if (chunk == null) return null;
++
++        FluidState fluidState = chunk.getFluidState(context.getClickedPos());
++        // Pluto end - Decrease chunk/block lookups
+         if (!fluidState.isEmpty()) {
+             return null;
+         } else {
+-            BlockState blockState = context.getLevel().getBlockState(context.getClickedPos().below());
++            BlockState blockState = chunk.getBlockState(context.getClickedPos().below()); // Pluto - Decrease chunk/block lookups
+             if (blockState.is(BlockTags.BAMBOO_PLANTABLE_ON)) {
+                 if (blockState.is(Blocks.BAMBOO_SAPLING)) {
+                     return this.defaultBlockState().setValue(AGE, Integer.valueOf(0));
+@@ -104,7 +_,7 @@
+                     int i = blockState.getValue(AGE) > 0 ? 1 : 0;
+                     return this.defaultBlockState().setValue(AGE, Integer.valueOf(i));
+                 } else {
+-                    BlockState blockState1 = context.getLevel().getBlockState(context.getClickedPos().above());
++                    BlockState blockState1 = chunk.getBlockState(context.getClickedPos().above()); // Pluto - Decrease chunk/block lookups
+                     return blockState1.is(Blocks.BAMBOO)
+                         ? this.defaultBlockState().setValue(AGE, blockState1.getValue(AGE))
+                         : Blocks.BAMBOO_SAPLING.defaultBlockState();
 @@ -130,7 +_,7 @@
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -9,3 +37,20 @@
                  int i = this.getHeightBelowUpToMax(level, pos) + 1;
                  if (i < level.paperConfig().maxGrowthHeight.bamboo.max) { // Paper - Configurable cactus/bamboo/reed growth height
                      this.growBamboo(state, level, pos, random, i);
+@@ -202,9 +_,14 @@
+     }
+ 
+     protected void growBamboo(BlockState state, Level level, BlockPos pos, RandomSource random, int age) {
+-        BlockState blockState = level.getBlockState(pos.below());
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
++        if (chunk == null) return;
++
++        BlockState blockState = chunk.getBlockState(pos.below());
+         BlockPos blockPos = pos.below(2);
+-        BlockState blockState1 = level.getBlockState(blockPos);
++        BlockState blockState1 = chunk.getBlockState(blockPos);
++        // Pluto start - Decrease chunk/block lookups
+         BambooLeaves bambooLeaves = BambooLeaves.NONE;
+         boolean shouldUpdateOthers = false; // CraftBukkit
+         if (age >= 1) {

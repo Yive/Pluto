@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/entity/ai/behavior/TryFindWater.java
++++ b/net/minecraft/world/entity/ai/behavior/TryFindWater.java
+@@ -32,10 +_,14 @@
+ 
+                         for (BlockPos blockPos3 : BlockPos.withinManhattan(blockPos2, range, range, range)) {
+                             if (blockPos3.getX() != blockPos2.getX() || blockPos3.getZ() != blockPos2.getZ()) {
+-                                BlockState blockState = mob.level().getBlockState(blockPos3.above());
+-                                BlockState blockState1 = mob.level().getBlockState(blockPos3);
++                                // Pluto start - Decrease chunk/block lookups
++                                net.minecraft.world.level.chunk.LevelChunk chunk = mob.level().getChunkIfLoaded(blockPos3);
++                                if (chunk == null) continue;
++
++                                BlockState blockState1 = chunk.getBlockState(blockPos3);
++                                // Pluto end - Decrease chunk/block lookups
+                                 if (blockState1.is(Blocks.WATER)) {
+-                                    if (blockState.isAir()) {
++                                    if (chunk.getBlockState(blockPos3.above()).isAir()) { // Pluto - Decrease chunk/block lookups
+                                         blockPos = blockPos3.immutable();
+                                         break;
+                                     }

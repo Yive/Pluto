@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/material/FlowingFluid.java
++++ b/net/minecraft/world/level/material/FlowingFluid.java
+@@ -146,7 +_,7 @@
+ 
+     protected boolean isSolidFace(BlockGetter level, BlockPos neighborPos, Direction side) {
+         BlockState blockState = level.getBlockState(neighborPos);
+-        FluidState fluidState = level.getFluidState(neighborPos);
++        FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
+         return !fluidState.getType().isSame(this)
+             && (side == Direction.UP || !(blockState.getBlock() instanceof IceBlock) && blockState.isFaceSturdy(level, neighborPos, side));
+     }

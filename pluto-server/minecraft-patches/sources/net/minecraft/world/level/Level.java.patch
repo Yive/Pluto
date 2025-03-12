@@ -16,3 +16,46 @@
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
+@@ -1869,8 +_,11 @@
+     public abstract Collection<EnderDragonPart> dragonParts();
+ 
+     public void blockEntityChanged(BlockPos pos) {
+-        if (this.hasChunkAt(pos)) {
+-            this.getChunkAt(pos).markUnsaved();
++        // Pluto start - Decrease chunk/block lookups
++        LevelChunk chunk = this.getChunkIfLoaded(pos);
++        if (chunk != null) {
++            chunk.markUnsaved();
++            // Pluto end - Decrease chunk/block lookups
+         }
+     }
+ 
+@@ -1986,8 +_,11 @@
+     public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
+         for (Direction direction : Direction.Plane.HORIZONTAL) {
+             BlockPos blockPos = pos.relative(direction);
+-            if (this.hasChunkAt(blockPos)) {
+-                BlockState blockState = this.getBlockState(blockPos);
++            // Pluto start - Decrease chunk/block lookups
++            LevelChunk chunk = this.getChunkIfLoaded(blockPos);
++            if (chunk != null) {
++                BlockState blockState = chunk.getBlockState(blockPos);
++                // Pluto end - Decrease chunk/block lookups
+                 if (blockState.is(Blocks.COMPARATOR)) {
+                     this.neighborChanged(blockState, blockPos, block, null, false);
+                 } else if (blockState.isRedstoneConductor(this, blockPos)) {
+@@ -2005,9 +_,12 @@
+     public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
+         long l = 0L;
+         float f = 0.0F;
+-        if (this.hasChunkAt(pos)) {
++        // Pluto start - Decrease chunk/block lookups
++        LevelChunk chunk = this.getChunkIfLoaded(pos);
++        if (chunk != null) {
++            // Pluto end - Decrease chunk/block lookups
+             f = this.getMoonBrightness();
+-            l = this.getChunkAt(pos).getInhabitedTime();
++            l = chunk.getInhabitedTime(); // Pluto - Decrease chunk/block lookups
+         }
+ 
+         return new DifficultyInstance(this.getDifficulty(), this.getDayTime(), l, f);

@@ -1,10 +1,13 @@
 --- a/net/minecraft/world/level/material/LavaFluid.java
 +++ b/net/minecraft/world/level/material/LavaFluid.java
-@@ -209,7 +_,7 @@
+@@ -207,9 +_,8 @@
+     @Override
+     protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
          if (direction == Direction.DOWN) {
-             FluidState fluidState1 = level.getFluidState(pos);
-             if (this.is(FluidTags.LAVA) && fluidState1.is(FluidTags.WATER)) {
+-            FluidState fluidState1 = level.getFluidState(pos);
+-            if (this.is(FluidTags.LAVA) && fluidState1.is(FluidTags.WATER)) {
 -                if (blockState.getBlock() instanceof LiquidBlock) {
++            if (this.is(FluidTags.LAVA) && level.getFluidState(pos).is(FluidTags.WATER)) { // Pluto - Decrease chunk/block lookups
 +                if (blockState.getBlock() instanceof LiquidBlock && !level.getMinecraftWorld().plutoConfig().disableBlockGenerationFromFluids) { // Pluto - Toggle for block generation from fluids
                      // CraftBukkit start
                      if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level.getMinecraftWorld(), pos, Blocks.STONE.defaultBlockState(), 3)) {

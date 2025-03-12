@@ -1,0 +1,44 @@
+--- a/net/minecraft/world/entity/ai/behavior/HarvestFarmland.java
++++ b/net/minecraft/world/entity/ai/behavior/HarvestFarmland.java
+@@ -80,10 +_,14 @@
+     }
+ 
+     private boolean validPos(BlockPos pos, ServerLevel serverLevel) {
+-        BlockState blockState = serverLevel.getBlockState(pos);
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.LevelChunk chunk = serverLevel.getChunkIfLoaded(pos);
++        if (chunk == null) return false;
++
++        BlockState blockState = chunk.getBlockState(pos);
+         Block block = blockState.getBlock();
+-        Block block1 = serverLevel.getBlockState(pos.below()).getBlock();
+-        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && block1 instanceof FarmBlock;
++        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && chunk.getBlockState(pos.below()).getBlock() instanceof FarmBlock;
++        // Pluto end - Decrease chunk/block lookups
+     }
+ 
+     @Override
+@@ -106,16 +_,20 @@
+     protected void tick(ServerLevel level, Villager owner, long gameTime) {
+         if (this.aboveFarmlandPos == null || this.aboveFarmlandPos.closerToCenterThan(owner.position(), 1.0)) {
+             if (this.aboveFarmlandPos != null && gameTime > this.nextOkStartTime) {
+-                BlockState blockState = level.getBlockState(this.aboveFarmlandPos);
++                // Pluto start - Decrease chunk/block lookups
++                net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(this.aboveFarmlandPos);
++                if (chunk == null) return;
++
++                BlockState blockState = chunk.getBlockState(this.aboveFarmlandPos);
+                 Block block = blockState.getBlock();
+-                Block block1 = level.getBlockState(this.aboveFarmlandPos.below()).getBlock();
++                // Pluto end - Decrease chunk/block lookups
+                 if (block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState)) {
+                     if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(owner, this.aboveFarmlandPos, blockState.getFluidState().createLegacyBlock())) { // CraftBukkit // Paper - fix wrong block state
+                     level.destroyBlock(this.aboveFarmlandPos, true, owner);
+                     } // CraftBukkit
+                 }
+ 
+-                if (blockState.isAir() && block1 instanceof FarmBlock && owner.hasFarmSeeds()) {
++                if (blockState.isAir() && chunk.getBlockState(this.aboveFarmlandPos.below()).getBlock() instanceof FarmBlock && owner.hasFarmSeeds()) { // Pluto - Decrease chunk/block lookups
+                     SimpleContainer inventory = owner.getInventory();
+ 
+                     for (int i = 0; i < inventory.getContainerSize(); i++) {

@@ -1,0 +1,23 @@
+--- a/net/minecraft/world/entity/ai/behavior/TryLaySpawnOnWaterNearLand.java
++++ b/net/minecraft/world/entity/ai/behavior/TryLaySpawnOnWaterNearLand.java
+@@ -28,10 +_,17 @@
+ 
+                             for (Direction direction : Direction.Plane.HORIZONTAL) {
+                                 BlockPos blockPos1 = blockPos.relative(direction);
+-                                if (level.getBlockState(blockPos1).getCollisionShape(level, blockPos1).getFaceShape(Direction.UP).isEmpty()
+-                                    && level.getFluidState(blockPos1).is(Fluids.WATER)) {
++                                // Pluto start - Decrease chunk/block lookups
++                                net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos1);
++                                if (chunk == null) continue;
++
++                                BlockState state = chunk.getBlockState(blockPos1);
++
++                                if (state.getCollisionShape(level, blockPos1).getFaceShape(Direction.UP).isEmpty()
++                                    && state.getFluidState().is(Fluids.WATER)) {
++                                    // Pluto end - Decrease chunk/block lookups
+                                     BlockPos blockPos2 = blockPos1.above();
+-                                    if (level.getBlockState(blockPos2).isAir()) {
++                                    if (chunk.getBlockState(blockPos2).isAir()) { // Pluto - Decrease chunk/block lookups
+                                         BlockState blockState = spawnBlock.defaultBlockState();
+                                         // CraftBukkit start
+                                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(entity, blockPos2, blockState)) {
