@@ -12,6 +12,15 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class PlutoConfig {
+    public static final List<String> CONFIG_HEADER = List.of(
+            "Configuration file for Pluto.",
+            "A lot of these configuration options are geared towards performance.",
+            "Some can change gameplay so make sure to test before applying to production.",
+            "",
+            "Github: https://github.com/Yive/Pluto",
+            "Downloads: https://ci.yive.dev/job/Pluto/",
+            ""
+    );
     public static final int CURRENT_CONFIG_VERSION = 1;
 
     private static final Object[] EMPTY = new Object[0];
@@ -23,6 +32,7 @@ public class PlutoConfig {
     public static void init(final File file) {
         PlutoConfig.configFile = file;
         final YamlConfiguration config = new YamlConfiguration();
+        config.options().setHeader(CONFIG_HEADER);
         config.options().copyDefaults(true);
 
         if (!file.exists()) {
@@ -69,6 +79,10 @@ public class PlutoConfig {
         } catch (final Exception ex) {
             Bukkit.getLogger().log(Level.SEVERE, "Unable to save pluto config", ex);
         }
+    }
+
+    static void setComments(final String path, final List<String> comments) {
+        PlutoConfig.config.setComments(path, comments);
     }
 
     static void remove(final String path) {
@@ -161,6 +175,10 @@ public class PlutoConfig {
             }
         }
 
+        void setComments(final String path, final List<String> comments) {
+            this.worldDefaults.setComments(path, comments);
+        }
+
         void remove(final String path) {
             this.worldDefaults.set(path, null);
             this.config.set(path, null);
@@ -195,25 +213,59 @@ public class PlutoConfig {
 
         public boolean useGameEventCache = true;
         private void shouldUseGameEventCache() {
+            setComments("misc.use-game-events-cache",
+                    List.of(
+                            "Makes use of a cache for mojang game events when converting to bukkit based game events",
+                            "This will provide a performance boost due to no longer converting the mojang game event to bukkit."
+                    )
+            );
             useGameEventCache = getBoolean("misc.use-game-events-cache", useGameEventCache);
         }
 
         public boolean useCustomNameOptimisation = true;
         private void shouldUseCustomNameOptimisation() {
+            setComments("entities.global.use-custom-name-api-optimisation",
+                    List.of(
+                            "Optimises the Bukkit API function Nameable#setCustomName",
+                            "This will provide a performance boost due to no longer containing the regex to convert the text into a clickable link."
+                    )
+            );
             useCustomNameOptimisation = getBoolean("entities.global.use-custom-name-api-optimisation", useCustomNameOptimisation);
         }
 
-        public boolean useStaticGrowthSpeedStems = false;
-        public float staticGrowthSpeedStems = 1.0F;
         public boolean useStaticGrowthSpeedCrops = false;
         public float staticGrowthSpeedCrops = 1.0F;
+        public boolean useStaticGrowthSpeedStems = false;
+        public float staticGrowthSpeedStems = 1.0F;
         public boolean useStaticGrowthSpeedPitchers = false;
         public float staticGrowthSpeedPitchers = 1.0F;
         private void shouldUseStaticGrowthSpeed() {
-            useStaticGrowthSpeedStems = getBoolean("blocks.stems.static-growth-speed.enabled", useStaticGrowthSpeedStems);
-            staticGrowthSpeedStems = (float) getDouble("blocks.stems.static-growth-speed.speed", staticGrowthSpeedStems);
+            setComments("blocks.crops.static-growth-speed",
+                    List.of(
+                            "Controls the growth speed of crops (wheat, potatoes, etc...)",
+                            "This will provide a performance boost, but it will change gameplay.",
+                            "Enabling this will prevent the growth speed boost from alternating rows",
+                            "See: https://web.archive.org/web/20210602144319/https://twitter.com/Xilefian/status/1400099375939047424"
+                    )
+            );
             useStaticGrowthSpeedCrops = getBoolean("blocks.crops.static-growth-speed.enabled", useStaticGrowthSpeedCrops);
             staticGrowthSpeedCrops = (float) getDouble("blocks.crops.static-growth-speed.speed", staticGrowthSpeedCrops);
+
+            setComments("blocks.stems.static-growth-speed",
+                    List.of(
+                            "Controls the growth speed of stems (melon/pumpkin)",
+                            "Crops comment goes into more detail."
+                    )
+            );
+            useStaticGrowthSpeedStems = getBoolean("blocks.stems.static-growth-speed.enabled", useStaticGrowthSpeedStems);
+            staticGrowthSpeedStems = (float) getDouble("blocks.stems.static-growth-speed.speed", staticGrowthSpeedStems);
+
+            setComments("blocks.pitcher-plant.static-growth-speed",
+                    List.of(
+                            "Controls the growth speed of pitcher plant",
+                            "Crops comment goes into more detail."
+                    )
+            );
             useStaticGrowthSpeedPitchers = getBoolean("blocks.pitcher-plant.static-growth-speed.enabled", useStaticGrowthSpeedPitchers);
             staticGrowthSpeedPitchers = (float) getDouble("blocks.pitcher-plant.static-growth-speed.speed", staticGrowthSpeedPitchers);
         }
@@ -221,29 +273,75 @@ public class PlutoConfig {
         public boolean alwaysMoistFarmland = false;
         public boolean alwaysMoistSugarCane = false;
         private void alwaysMoistBlocks() {
+            setComments("blocks.farmland.always-moist",
+                    List.of(
+                            "Makes all farmland always wet.",
+                            "This will provide a performance boost,",
+                            "but it means farmland doesn't dry out."
+                    )
+            );
             alwaysMoistFarmland = getBoolean("blocks.farmland.always-moist", alwaysMoistFarmland);
+
+            setComments("blocks.sugarcane.always-moist",
+                    List.of(
+                            "Makes all sugar cane assume they're near water.",
+                            "This provides a performance improvement, but it also",
+                            "creates a bug allow players to place it on any solid block." // TODO: Fix this bug with a toggle for build servers
+                    )
+            );
             alwaysMoistSugarCane = getBoolean("blocks.sugarcane.always-moist", alwaysMoistSugarCane);
         }
 
         public boolean cactusCheckSurvivalBeforeGrowth = false;
         private void cactusCheckSurvivalBeforeGrowth() {
+            setComments("blocks.cactus.check-survival-before-growth",
+                    List.of(
+                            "Does an early check for if the cactus will instantly break on growth.",
+                            "This will provide a performance boost for servers with cactus farms,",
+                            "but it could also increase the output of cacti on the server."
+                    )
+            );
             cactusCheckSurvivalBeforeGrowth = getBoolean("blocks.cactus.check-survival-before-growth", cactusCheckSurvivalBeforeGrowth);
         }
 
         public boolean lessRandomDispensing = false;
         private void lessRandomDispensing() {
+            setComments("blocks.dispenser.less-random-dispensing",
+                    List.of(
+                            "Dispenses the first non-empty slot in a dispenser/dropper.",
+                            "This will remove the random aspect of dispensers/droppers."
+                    )
+            );
             lessRandomDispensing = getBoolean("blocks.dispenser.less-random-dispensing", lessRandomDispensing);
         }
 
         public boolean disableDropperInventoryMoveEvent = false;
         private void disableDropperInventoryMoveEvent() {
+            setComments("blocks.dropper.disable-move-event",
+                    List.of(
+                            "Prevents the server from firing the InventoryMoveEvent from droppers.",
+                            "This will provide a performance boost, but prevent",
+                            "plugins from knowing when an item moves from a dropper.",
+                            "This is similar to the hopper setting from Paper."
+                    )
+            );
             disableDropperInventoryMoveEvent = getBoolean("blocks.dropper.disable-move-event", disableDropperInventoryMoveEvent);
         }
 
         public boolean disableAllayGameEventListening = false;
         public boolean disableAllayDuplication = false;
         private void allayConfiguration() {
+            setComments("entities.allay.disable-game-event-listener",
+                    List.of(
+                            "Prevents allys from listening for game events.",
+                            "This will provide a performance boost,",
+                            "but prevent allays from interacting with jukeboxes.",
+                            "Only use this as a last ditch effort in improving allay performance."
+                    )
+            );
             disableAllayGameEventListening = getBoolean("entities.allay.disable-game-event-listener", disableAllayGameEventListening);
+
+            setComments("entities.allay.disable-duplication", List.of("Prevents allays from breeding."));
             disableAllayDuplication = getBoolean("entities.allay.disable-duplication", disableAllayDuplication);
         }
 
@@ -253,26 +351,56 @@ public class PlutoConfig {
         public int excessBoatsLimit = 10;
 
         private void removeExcessVehicles() {
+            setComments("entities.minecart.remove-excess",
+                    List.of(
+                            "Removes excess amounts of minecarts when a lot are colliding with each other.",
+                            "This will provide a performance boost and prevent crash attempts.",
+                            "It is unlikely real players will have large clusters of minecarts together."
+                    )
+            );
             removeExcessMinecarts = getBoolean("entities.minecart.remove-excess.enabled", removeExcessMinecarts);
-            removeExcessBoats = getBoolean("entities.boat.remove-excess.enabled", removeExcessBoats);
             excessMinecartsLimit = getInt("entities.minecart.remove-excess.limit", excessMinecartsLimit);
+
+            setComments("entities.boat.remove-excess",
+                    List.of(
+                            "Removes excess amounts of boats when a lot are colliding with each other.",
+                            "This will provide a performance boost and prevent crash attempts.",
+                            "It is unlikely real players will have large clusters of boats together."
+                    )
+            );
+            removeExcessBoats = getBoolean("entities.boat.remove-excess.enabled", removeExcessBoats);
             excessBoatsLimit = getInt("entities.boat.remove-excess.limit", excessBoatsLimit);
         }
 
         public boolean disableBlockGenerationFromFluids = false;
         private void disableBlockGenerationFromFluids() {
+            setComments("blocks.fluids.disable-block-generation", List.of("Prevents water and lava from generating blocks when touching."));
             disableBlockGenerationFromFluids = getBoolean("blocks.fluids.disable-block-generation", disableBlockGenerationFromFluids);
         }
 
         public boolean disableNetherPortalGeneration = false;
         private void disableNetherPortalGeneration() {
+            setComments("blocks.fire.disable-nether-portal-generation", List.of("Prevents activating nether portals with fire."));
             disableNetherPortalGeneration = getBoolean("blocks.fire.disable-nether-portal-generation", disableNetherPortalGeneration);
         }
 
         public int entityActivationInterval = 1;
         public boolean disableEntityActivation = false;
         private void entityActivationConfiguration() {
+            setComments("entities.global.activation-interval",
+                    List.of(
+                            "Tick interval for when an entities within activation range will get activated.",
+                            "1 = vanilla (every tick)"
+                    )
+            );
             entityActivationInterval = Math.min(1, getInt("entities.global.activation-interval", entityActivationInterval));
+
+            setComments("entities.global.disable-activation",
+                    List.of(
+                            "Prevents entities from ever being activated.",
+                            "Could be useful in lobbies or creative servers."
+                    )
+            );
             disableEntityActivation = getBoolean("entities.global.disable-activation", disableEntityActivation);
         }
 
@@ -280,8 +408,32 @@ public class PlutoConfig {
         public int itemMergeMovingInterval = 2;
         public int itemMergeStaticInterval = 40;
         private void itemMergeConfiguration() {
+            setComments("entities.item.disable-merge-check-when-moving",
+                    List.of(
+                            "Prevents dropped items searching for other dropped items to merge with whilst moving.",
+                            "This can provide a performance improvement, but this depends on the type of bases players have.",
+                            "Could cause worse performance if players have dropped items flowing in water loops."
+                    )
+            );
             disableItemMergeCheckWhileMoving = getBoolean("entities.item.disable-merge-check-when-moving", disableItemMergeCheckWhileMoving);
+
+            setComments("entities.item.merge-check-moving-interval",
+                    List.of(
+                            "Tick interval for how often a dropped item will search for other dropped items whilst moving.",
+                            "Most servers should tweak this over using disable-merge-check-when-moving",
+                            "This will provide a performance improvement for most cases.",
+                            "2 = default (vanilla)"
+                    )
+            );
             itemMergeMovingInterval = getInt("entities.item.merge-check-moving-interval", itemMergeMovingInterval);
+
+            setComments("entities.item.merge-check-static-interval",
+                    List.of(
+                            "Tick interval for how often a dropped item will search for other dropped items whilst not moving.",
+                            "This will provide a performance improvement for most cases.",
+                            "40 = default (vanilla)"
+                    )
+            );
             itemMergeStaticInterval = getInt("entities.item.merge-check-static-interval", itemMergeStaticInterval);
         }
 
@@ -294,20 +446,91 @@ public class PlutoConfig {
         public boolean saplingIgnoreLightLevel = false;
         public boolean pitcherCropIgnoreLightLevel = false;
         private void ignoreLightLevels() {
+            setComments("blocks.crops.ignore-light-level",
+                    List.of(
+                            "Makes crops ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             cropIgnoreLightLevel = getBoolean("blocks.crops.ignore-light-level", cropIgnoreLightLevel);
+
+            setComments("blocks.mushroom.ignore-light-level",
+                    List.of(
+                            "Makes mushrooms ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             mushroomIgnoreLightLevel = getBoolean("blocks.mushroom.ignore-light-level", mushroomIgnoreLightLevel);
+
+            setComments("blocks.stems.ignore-light-level",
+                    List.of(
+                            "Makes stems ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             stemIgnoreLightLevel = getBoolean("blocks.stems.ignore-light-level", stemIgnoreLightLevel);
+
+            setComments("blocks.bamboo-sapling.ignore-light-level",
+                    List.of(
+                            "Makes bamboo saplings ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             bambooSaplingIgnoreLightLevel = getBoolean("blocks.bamboo-sapling.ignore-light-level", bambooSaplingIgnoreLightLevel);
+
+            setComments("blocks.bamboo-stalk.ignore-light-level",
+                    List.of(
+                            "Makes bamboo stalks ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             bambooStalkIgnoreLightLevel = getBoolean("blocks.bamboo-stalk.ignore-light-level", bambooStalkIgnoreLightLevel);
+
+            setComments("blocks.sweet-berry-bush.ignore-light-level",
+                    List.of(
+                            "Makes berry bushes ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             sweetBerryBushIgnoreLightLevel = getBoolean("blocks.sweet-berry-bush.ignore-light-level", sweetBerryBushIgnoreLightLevel);
+
+            setComments("blocks.sapling.ignore-light-level",
+                    List.of(
+                            "Makes saplings ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             saplingIgnoreLightLevel = getBoolean("blocks.sapling.ignore-light-level", saplingIgnoreLightLevel);
+
+            setComments("blocks.pitcher-plant.ignore-light-level",
+                    List.of(
+                            "Makes pitcher plants ignore light levels and grow no matter how dark the surroundings are",
+                            "This might improve performance, but this was more useful in older versions."
+                    )
+            );
             pitcherCropIgnoreLightLevel = getBoolean("blocks.pitcher-plant.ignore-light-level", pitcherCropIgnoreLightLevel);
         }
 
         public boolean disableTargetSelector = false;
         public boolean disableGoalSelector = false;
         private void disableTargetSelector() {
+            setComments("entities.global.disable-target-selector",
+                    List.of(
+                            "Disables the target selector for all entities",
+                            "This will improve performance by getting rid of their targeting AI,",
+                            "but also makes all entities blind in terms of seeing other entities."
+                    )
+            );
             disableTargetSelector = getBoolean("entities.global.disable-target-selector", disableTargetSelector);
+
+            setComments("entities.global.disable-goal-selector",
+                    List.of(
+                            "Disables the goal selector for all entities",
+                            "This will improve performance by getting rid of their goal AI,",
+                            "but this means that entities will have no goals in life.",
+                            "Just being motionless and only targeting nearby entities"
+                    )
+            );
             disableGoalSelector = getBoolean("entities.global.disable-goal-selector", disableGoalSelector);
         }
 
@@ -319,91 +542,300 @@ public class PlutoConfig {
         public boolean spawnerDisableParticles = false;
         public int spawnerMinSpawnDelay = 200;
         public int spawnerMaxSpawnDelay = 800;
+        // TODO: Check if Mojang no longer saves/loads the following as shorts.
         public short spawnerSpawnCount = 4;
         public short spawnerMaxNearbyEntities = 6;
         public short spawnerRequiredPlayerRange = 16;
         public short spawnerSpawnRange = 4;
         private void spawnerConfiguration() {
+            setComments("blocks.spawner.enable-custom-settings",
+                    List.of(
+                            "This will allow configuration of default spawner values.",
+                            "Obviously this will cause spawners to act differently from vanilla if changed.",
+                            "Most of these will improve performance, but it depends on how you configure them.",
+                            "Spawners that get modified via the Bukkit API will keep the changes from the API.",
+                            "Note: spawner ttl ignores what 'enable-custom-settings' is set to."
+                    )
+            );
             spawnerSettingsEnabled = getBoolean("blocks.spawner.enable-custom-settings", spawnerSettingsEnabled);
+
+            setComments("blocks.spawner.check-for-nearby-players",
+                    List.of(
+                            "Controls if the spawner will check for nearby players before spawning an entity.",
+                            "This setting is not related to 'enable-custom-settings'",
+                            "default = true"
+                    )
+            );
             spawnerCheckForNearbyPlayers = getBoolean("blocks.spawner.check-for-nearby-players", spawnerCheckForNearbyPlayers);
+
+            setComments("blocks.spawner.check-for-nearby-entities",
+                    List.of(
+                            "Controls if the spawner will check for nearby entities before spawning an entity.",
+                            "This setting is not related to 'enable-custom-settings'",
+                            "default = true"
+                    )
+            );
             spawnerCheckForNearbyEntities = getBoolean("blocks.spawner.check-for-nearby-entities", spawnerCheckForNearbyEntities);
+
+            setComments("blocks.spawner.check-for-block-collision",
+                    List.of(
+                            "Controls if the spawner will check for spawn points that have no collision before spawning an entity",
+                            "This setting is not related to 'enable-custom-settings'",
+                            "default = true"
+                    )
+            );
             spawnerCheckForBlockCollision = getBoolean("blocks.spawner.check-for-block-collision", spawnerCheckForBlockCollision);
+
+            setComments("blocks.spawner.check-for-block-collision",
+                    List.of(
+                            "Prevents spawners from spawning babies such as zombie jockeys",
+                            "This setting is not related to 'enable-custom-settings'",
+                            "default = false"
+                    )
+            );
             spawnerDisableBabySpawns = getBoolean("blocks.spawner.disable-spawning-babies", spawnerDisableBabySpawns);
+
+            setComments("blocks.spawner.disable-spawn-particles",
+                    List.of(
+                            "Disables the spawn particles",
+                            "This setting is not related to 'enable-custom-settings'",
+                            "default = false"
+                    )
+            );
             spawnerDisableParticles = getBoolean("blocks.spawner.disable-spawn-particles", spawnerDisableParticles);
+
+            setComments("blocks.spawner.min-spawn-delay",
+                    List.of(
+                            "Controls the minimum spawn delay before spawning an entity",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 200"
+                    )
+            );
             spawnerMinSpawnDelay = getInt("blocks.spawner.min-spawn-delay", spawnerMinSpawnDelay);
+
+            setComments("blocks.spawner.max-spawn-delay",
+                    List.of(
+                            "Controls the minimum spawn delay before spawning an entity",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 800"
+                    )
+            );
             spawnerMaxSpawnDelay = getInt("blocks.spawner.max-spawn-delay", spawnerMaxSpawnDelay);
+
+            setComments("blocks.spawner.spawn-count",
+                    List.of(
+                            "Controls the amount of entities that will spawn",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 4"
+                    )
+            );
             spawnerSpawnCount = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-count", spawnerSpawnCount));
+
+            setComments("blocks.spawner.max-nearby-entities",
+                    List.of(
+                            "Controls the amount of entities that will prevent spawners from spawning entities",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 6"
+                    )
+            );
             spawnerMaxNearbyEntities = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.max-nearby-entities", spawnerMaxNearbyEntities));
+
+            setComments("blocks.spawner.required-player-range",
+                    List.of(
+                            "Controls how close a player needs to be for the spawner to spawn entities",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 16"
+                    )
+            );
             spawnerRequiredPlayerRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.required-player-range", spawnerRequiredPlayerRange));
+
+            setComments("blocks.spawner.spawn-range",
+                    List.of(
+                            "Controls how far away entities can spawn from the spawner itself",
+                            "This setting requires 'enable-custom-settings' to be set to true.",
+                            "vanilla/default = 4"
+                    )
+            );
             spawnerSpawnRange = (short) Math.min(Short.MAX_VALUE, getInt("blocks.spawner.spawn-range", spawnerSpawnRange));
         }
 
         public boolean disableTntChainReaction = false;
         private void disableTntChainReaction() {
+            setComments("blocks.tnt.disable-chain-reaction", List.of("Prevents explosions from igniting TNT."));
             disableTntChainReaction = getBoolean("blocks.tnt.disable-chain-reaction", disableTntChainReaction);
         }
 
         public boolean disableFlapEvents = false;
         private void disableFlapEvents() {
+            setComments("entities.global.disable-flapping-game-event",
+                    List.of(
+                            "Prevents flying entities throwing FLAP game events.",
+                            "This will provide a huge performance boost for allay clusters,",
+                            "it will also provide a minor performance boost for bees.",
+                            "Obviously sculk sensors will no longer detect their flaps."
+                    )
+            );
             disableFlapEvents = getBoolean("entities.global.disable-flapping-game-event", false);
         }
 
         public int blockTickingModulo = 1;
         private void blockTicking() {
+            setComments("blocks.global.block-ticking-modulo",
+                    List.of(
+                            "Allows tick skipping for block ticking.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, -1 = disable block ticking entirely"
+                    )
+            );
             blockTickingModulo = getInt("blocks.global.block-ticking-modulo", blockTickingModulo);
         }
 
         public int fluidTickingModulo = 1;
         private void fluidTicking() {
+            setComments("blocks.fluids.fluid-ticking-modulo",
+                    List.of(
+                            "Allows tick skipping for fluid ticking.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, -1 = disable fluid ticking entirely"
+                    )
+            );
             fluidTickingModulo = getInt("blocks.fluids.fluid-ticking-modulo", fluidTickingModulo);
         }
 
         public int raidTickingModulo = 1;
         private void raidTicking() {
+            setComments("misc.raids.raid-ticking-modulo",
+                    List.of(
+                            "Allows tick skipping for raid ticking.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, -1 = disable raid ticking entirely"
+                    )
+            );
             raidTickingModulo = getInt("misc.raids.raid-ticking-modulo", raidTickingModulo);
         }
 
         public int blockEventTickingModulo = 1;
         private void blockEventTicking() {
-            // TODO: Allow for disabling block event ticking
+            setComments("blocks.global.block-event-ticking-modulo",
+                    List.of(
+                            "Allows tick skipping for block event ticking.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, the value can't go below 1"
+                    )
+            );
             blockEventTickingModulo = Math.min(1, getInt("blocks.global.block-event-ticking-modulo", blockEventTickingModulo));
         }
 
         public int entityDespawnCheckModulo = 1;
         private void entityDespawning() {
+            setComments("entities.global.despawn-check-modulo",
+                    List.of(
+                            "Allows tick skipping for entity despawn checks.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, -1 = entirely disable entity despawning"
+                    )
+            );
             entityDespawnCheckModulo = getInt("entities.global.despawn-check-modulo", entityDespawnCheckModulo);
+        }
+
+        public int entityPushingModulo = 1;
+        private void entityPushing() {
+            setComments("entities.global.pushing-modulo",
+                    List.of(
+                            "Allows tick skipping for entity pushing.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "Even though I don't recommend tick skipping, this setting is recommended if you want to disable entity pushing all together.",
+                            "1 = vanilla, -1 = entirely disable entity pushing"
+                    )
+            );
+            entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
+        }
+
+        public int entityInsideBlockCheck = 1;
+        private void entityInsideBlockCheck() {
+            setComments("entities.global.inside-block-check-modulo",
+                    List.of(
+                            "Allows tick skipping for entity inside block checks.",
+                            "This can provide a performance improvement, but also can drastically change gameplay.",
+                            "Only touch this setting if you know what you're doing when it comes to tick skipping.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, -1 = entirely disable entities checking if they're inside a block"
+                    )
+            );
+            entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
         }
 
         public boolean disableShulkersDroppingContentsWhenDestroyed = false;
         public boolean disableShulkerSplitting = false;
         public boolean disableShulkerTeleporting = false;
         private void shulkerSettings() {
+            setComments("entities.item.disable-dropping-shulker-box-contents-when-destroyed", List.of("Prevents shulker boxes from dropping items when broken."));
             disableShulkersDroppingContentsWhenDestroyed = getBoolean("entities.item.disable-dropping-shulker-box-contents-when-destroyed", disableShulkersDroppingContentsWhenDestroyed);
+
+            setComments("entities.shulker.disable-splitting-from-bullets",
+                    List.of(
+                            "Prevents shulkers from splitting when hit by their own bullet.",
+                            "This will prevent players from abusing shulker farms"
+                    )
+            );
             disableShulkerSplitting = getBoolean("entities.shulker.disable-splitting-from-bullets", disableShulkerSplitting);
+
+            setComments("entities.shulker.disable-random-teleports",
+                    List.of(
+                            "Prevents shulkers from teleporting.",
+                            "This setting will also prevent shulker splitting if set to true."
+                    )
+            );
             disableShulkerTeleporting = getBoolean("entities.shulker.disable-random-teleports", disableShulkerTeleporting);
-        }
-
-        public int entityPushingModulo = 1;
-        private void entityPushing() {
-            entityPushingModulo = getInt("entities.global.pushing-modulo", entityPushingModulo);
-        }
-
-        public int entityInsideBlockCheck = 1;
-        private void entityInsideBlockCheck() {
-            entityInsideBlockCheck = getInt("entities.global.inside-block-check-modulo", entityInsideBlockCheck);
         }
 
         public int entityRainCheckRate = 10;
         private void entityRainCheckModulo() {
+            setComments("entities.global.rain-check-tick-rate",
+                    List.of(
+                            "Interval for how often entities will check for rain.",
+                            "This can provide a performance improvement.",
+                            "Though will cause entities that are on fire to have a delay on being extinguished from rain.",
+                            "I don't really recommend this setting, but closed source paid server jars always include tick skipping.",
+                            "1 = vanilla, 10 = default, the value can't go below 1"
+                    )
+            );
             entityRainCheckRate = Math.min(1, getInt("entities.global.rain-check-tick-rate", entityRainCheckRate));
         }
 
         public boolean preventInsideBlockXrayExploit = false;
         private void disableInsideBlockXrayExploit() {
+            setComments("entities.player.prevent-xray-exploits-inside-certain-blocks",
+                    List.of(
+                            "Prevents players from briefly having x-ray when falling blocks land on their head.",
+                            "This will only affect players standing in cauldrons or composters",
+                            "When enabled, the falling block will act as if it landed on a torch (aka spawns a dropped item)"
+                    )
+            );
             preventInsideBlockXrayExploit = getBoolean("entities.player.prevent-xray-exploits-inside-certain-blocks", preventInsideBlockXrayExploit);
         }
 
         private void spawnerTTL() {
+            setComments("blocks.spawner.ttl",
+                    List.of(
+                            "This section will make entities spawned from spawners have a time to live rate in ticks.",
+                            "See the resource location column in https://minecraft.wiki/w/Entity#Types_of_entities",
+                            "This is case sensitive so ZOMBIFIED_PIGLIN won't work, but zombified_piglin will.",
+                            "-1 will disable the ttl, but deleting the entry will do that too.",
+                            "The settings in this section are not related to 'enable-custom-settings'"
+                    )
+            );
             // Set a few default ones to create the section
             net.minecraft.world.entity.EntityType.ZOMBIE.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.ZOMBIE).getPath().toLowerCase(java.util.Locale.ROOT), -1);
             net.minecraft.world.entity.EntityType.SNOW_GOLEM.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.SNOW_GOLEM).getPath().toLowerCase(java.util.Locale.ROOT), -1);
@@ -417,38 +849,85 @@ public class PlutoConfig {
 
         public boolean skipFailedDispenseLevelEvent = false;
         private void skipFailedDispenseLevelEvent() {
+            setComments("blocks.global.skip-failed-block-dispense-level-event",
+                    List.of(
+                            "Allows for disabling dispensers/droppers from firing the SOUND_DISPENSER_FAIL level event.",
+                            "This can provide a performance improvement, but also means dispensers/droppers will only make sounds on successful dispenses"
+                    )
+            );
             skipFailedDispenseLevelEvent = getBoolean("blocks.global.skip-failed-block-dispense-level-event", skipFailedDispenseLevelEvent);
         }
 
         public boolean useFluidPushingOptimisation = true;
         private void useFluidPushingOptimisation() {
+            setComments("entities.global.use-fluid-pushing-optimisation",
+                    List.of(
+                            "Optimises the fluid pushing checks on entities by not doing the same check for lava if the entity is already in water.",
+                            "This should provide a performance improvement by doing one less fluid lookup per entity.",
+                            "Note: Might cause issues with fluid pushing in general, but I've only been told this by one person using this setting.",
+                            "I've never experienced the bug they had despite running this setting for years."
+                    )
+            );
             useFluidPushingOptimisation = getBoolean("entities.global.use-fluid-pushing-optimisation", useFluidPushingOptimisation);
         }
 
         public boolean onlyPlayersPushEntities = false;
         private void onlyPlayersPushEntities() {
+            setComments("entities.player.only-players-push-entities",
+                    List.of(
+                            "Makes it so that only players can push entities.",
+                            "Will conflict with 'entities.global.pushing-modulo' if that is set to -1"
+                    )
+            );
             onlyPlayersPushEntities = getBoolean("entities.player.only-players-push-entities", onlyPlayersPushEntities);
         }
 
         public int sweepingAttackLimit = -1;
         private void sweepingAttackLimit() {
+            setComments("entities.player.sweeping-attack-entity-limit",
+                    List.of(
+                            "Limits the amount of mobs sweeping edge can damage at once.",
+                            "-1 = no limit (aka vanilla)"
+                    )
+            );
             sweepingAttackLimit = getInt("entities.player.sweeping-attack-entity-limit", sweepingAttackLimit);
         }
 
         public boolean disableSprintParticles = false;
         private void disableSprintParticles() {
+            setComments("entities.global.particles.disable-sprint-particles", List.of("Disables sprint particles from entities."));
             disableSprintParticles = getBoolean("entities.global.particles.disable-sprint-particles", disableSprintParticles);
         }
 
         public boolean entitiesSearchForHoppers = false;
         public int ticksBetweenEntitiesSearchForHoppers = 1;
         private void entitiesSearchForHoppers() {
+            setComments("entities.global.search-for-hoppers",
+                    List.of(
+                            "Disables hoppers searching for dropped items / container entities.",
+                            "This will provide a big performance improvement if your server has a lot of hoppers",
+                            "It is not recommended though if your server has more dropped items / container entities than hoppers."
+                    )
+            );
             entitiesSearchForHoppers = getBoolean("entities.global.search-for-hoppers", entitiesSearchForHoppers);
+
+            setComments("entities.global.ticks-between-hopper-searches",
+                    List.of(
+                            "Controls how often certain entities will search for hoppers.",
+                            "Requires: search-for-hoppers to be set to true"
+                    )
+            );
             ticksBetweenEntitiesSearchForHoppers = Math.max(1, getInt("entities.global.ticks-between-hopper-searches", ticksBetweenEntitiesSearchForHoppers));
         }
 
         public boolean onlyTickImportantPlayerInventorySlots = false;
         private void onlyTickImportantPlayerInventorySlots() {
+            setComments("entities.player.only-tick-important-inventory-slots",
+                    List.of(
+                            "Only the players hands and armour will be ticked versus the whole inventory",
+                            "Can improve performance due to the ticked slots going from 41 to 6 slots."
+                    )
+            );
             onlyTickImportantPlayerInventorySlots = getBoolean("entities.player.only-tick-important-inventory-slots", onlyTickImportantPlayerInventorySlots);
         }
     }
