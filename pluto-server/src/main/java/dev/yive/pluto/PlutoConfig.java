@@ -446,5 +446,10 @@ public class PlutoConfig {
             entitiesSearchForHoppers = getBoolean("entities.global.search-for-hoppers", entitiesSearchForHoppers);
             ticksBetweenEntitiesSearchForHoppers = Math.max(1, getInt("entities.global.ticks-between-hopper-searches", ticksBetweenEntitiesSearchForHoppers));
         }
+
+        public boolean onlyTickImportantPlayerInventorySlots = false;
+        private void onlyTickImportantPlayerInventorySlots() {
+            onlyTickImportantPlayerInventorySlots = getBoolean("entities.player.only-tick-important-inventory-slots", onlyTickImportantPlayerInventorySlots);
+        }
     }
 }

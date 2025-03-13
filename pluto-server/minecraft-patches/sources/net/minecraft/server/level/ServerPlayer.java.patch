@@ -1,0 +1,18 @@
+--- a/net/minecraft/server/level/ServerPlayer.java
++++ b/net/minecraft/server/level/ServerPlayer.java
+@@ -865,6 +_,15 @@
+                 super.tick();
+             }
+ 
++            // Pluto start - Only tick inventory slots that are important
++            // This drops the ticked inventory slots from 41 -> 6.
++            if (this.level().plutoConfig().onlyTickImportantPlayerInventorySlots) {
++                for (ItemStack item : this.getAllSlots()) { // TODO: Mojang may change this to include the main inventory.
++                    if (item.isEmpty()) continue;
++                    synchronizeSpecialItemUpdates(item);
++                }
++            } else
++            // Pluto end - Only tick inventory slots that are important
+             for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
+                 ItemStack item = this.getInventory().getItem(i);
+                 if (!item.isEmpty()) {
