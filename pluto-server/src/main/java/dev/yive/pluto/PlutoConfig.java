@@ -21,7 +21,7 @@ public class PlutoConfig {
             "Downloads: https://ci.yive.dev/job/Pluto/",
             ""
     );
-    public static final int CURRENT_CONFIG_VERSION = 1;
+    public static final int CURRENT_CONFIG_VERSION = 2;
 
     private static final Object[] EMPTY = new Object[0];
 
@@ -831,7 +831,7 @@ public class PlutoConfig {
                     List.of(
                             "This section will make entities spawned from spawners have a time to live rate in ticks.",
                             "See the resource location column in https://minecraft.wiki/w/Entity#Types_of_entities",
-                            "This is case sensitive so ZOMBIFIED_PIGLIN won't work, but zombified_piglin will.",
+                            "This is case-sensitive so ZOMBIFIED_PIGLIN won't work, but zombified_piglin will.",
                             "-1 will disable the ttl, but deleting the entry will do that too.",
                             "The settings in this section are not related to 'enable-custom-settings'"
                     )
@@ -920,15 +920,41 @@ public class PlutoConfig {
             ticksBetweenEntitiesSearchForHoppers = Math.max(1, getInt("entities.global.ticks-between-hopper-searches", ticksBetweenEntitiesSearchForHoppers));
         }
 
-        public boolean onlyTickImportantPlayerInventorySlots = false;
-        private void onlyTickImportantPlayerInventorySlots() {
-            setComments("entities.player.only-tick-important-inventory-slots",
+        public boolean playerInventoryOnlyTickImportantSlots = false;
+        public boolean playerInventoryOnlyTickHandSlots = false;
+        public boolean playerInventoryOnlyUpdateImportantSlots = false;
+        private void playerInventoryTicking() {
+            if (configVersion == 1) {
+                playerInventoryOnlyUpdateImportantSlots = this.config.getBoolean("entities.player.only-tick-important-inventory-slots", this.worldDefaults.getBoolean("entities.player.only-tick-important-inventory-slots"));
+                remove("entities.player.only-tick-important-inventory-slots");
+            }
+
+            setComments("entities.player.inventory-ticking.only-tick-important-slots",
                     List.of(
-                            "Only the players hands and armour will be ticked versus the whole inventory",
-                            "Can improve performance due to the ticked slots going from 41 to 6 slots."
+                            "Only the player's off hand & hot bar will be ticked versus the whole inventory",
+                            "Will improve performance due to the ticked slots going from 41 to 10 slots."
                     )
             );
-            onlyTickImportantPlayerInventorySlots = getBoolean("entities.player.only-tick-important-inventory-slots", onlyTickImportantPlayerInventorySlots);
+            playerInventoryOnlyTickImportantSlots = getBoolean("entities.player.inventory-ticking.only-tick-important-slots", playerInventoryOnlyTickImportantSlots);
+
+            setComments("entities.player.inventory-ticking.only-tick-hand-slots",
+                    List.of(
+                            "Only the player's hands will be ticked versus the whole inventory",
+                            "This will override ticking the hot bar from 'only-tick-important-slots'.",
+                            "Will improve performance more due to the ticked slots going from 41 to 2 slots.",
+                            "Requires 'only-tick-important-slots' to be set to true."
+                    )
+            );
+            playerInventoryOnlyTickHandSlots = getBoolean("entities.player.inventory-ticking.only-tick-hand-slots", playerInventoryOnlyTickHandSlots);
+
+            setComments("entities.player.inventory-ticking.only-update-important-slots",
+                    List.of(
+                            "Only the player's hands will be updated versus the whole inventory",
+                            "Will improve performance due to the updated slots going from 41 to 2 slots.",
+                            "Note: Currently this only targets hands due to it only expecting maps."
+                    )
+            );
+            playerInventoryOnlyUpdateImportantSlots = getBoolean("entities.player.inventory-ticking.only-update-important-slots", playerInventoryOnlyUpdateImportantSlots);
         }
     }
 }

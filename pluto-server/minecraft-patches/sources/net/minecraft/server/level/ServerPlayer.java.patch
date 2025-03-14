@@ -5,11 +5,11 @@
              }
  
 +            // Pluto start - Only tick inventory slots that are important
-+            // This drops the ticked inventory slots from 41 -> 6.
-+            if (this.level().plutoConfig().onlyTickImportantPlayerInventorySlots) {
-+                for (ItemStack item : this.getAllSlots()) { // TODO: Mojang may change this to include the main inventory.
++            // This drops the ticked inventory slots from 41 -> 2.
++            if (this.level().plutoConfig().playerInventoryOnlyUpdateImportantSlots) {
++                for (ItemStack item : this.getHandSlots()) {
 +                    if (item.isEmpty()) continue;
-+                    synchronizeSpecialItemUpdates(item);
++                    synchronizeSpecialItemUpdates(item); // FIXME: If mojang expects this to handle non-map items.
 +                }
 +            } else
 +            // Pluto end - Only tick inventory slots that are important
