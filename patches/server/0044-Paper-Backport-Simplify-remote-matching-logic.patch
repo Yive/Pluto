@@ -1,0 +1,125 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yive <6853318+Yive@users.noreply.github.com>
+Date: Sun, 23 Mar 2025 08:07:30 -0700
+Subject: [PATCH] Paper Backport: Simplify remote matching logic
+
+Pulled from https://github.com/PaperMC/Paper/commit/310f52293bd1877249bb3b1696cf8dbe1829db95
+
+diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
+index 17e23ca4dd2bbfba49ea00aa2b719a95feb931be..52165f2c90c626910d8d690f1b35155eafb3c106 100644
+--- a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
++++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
+@@ -176,6 +176,8 @@ public class GlobalConfiguration extends ConfigurationPart {
+         public boolean skipVanillaDamageTickWhenShieldBlocked = false;
+         @Comment("This setting controls what compression format is used for region files.")
+         public CompressionFormat compressionFormat = CompressionFormat.ZLIB;
++        @Comment("Only checks an item's amount and type instead of its full data during inventory desync checks.")
++        public boolean simplifyRemoteItemMatching = false;
+ 
+         public enum CompressionFormat {
+             GZIP,
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 5a8f396d47577f087abb415c972fd4f51e50faba..d1016e595b493bd1453062571e2a1f70734ac795 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -393,6 +393,13 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+             }
+             // Paper end - Sync offhand slot in menus
+ 
++            // Paper start - add flag to simplify remote matching logic
++            @Override
++            public ServerPlayer player() {
++                return ServerPlayer.this;
++            }
++            // Paper end - add flag to simplify remote matching logic
++
+             @Override
+             public void sendSlotChange(AbstractContainerMenu handler, int slot, ItemStack stack) {
+                 ServerPlayer.this.connection.send(new ClientboundContainerSetSlotPacket(handler.containerId, handler.incrementStateId(), slot, stack));
+diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+index 4680f77a275d8d2b226018db89a571ac25998dd8..315657dc663c4e95b70b6e76f6b7ae4ab995cddf 100644
+--- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -341,7 +341,7 @@ public abstract class AbstractContainerMenu {
+         if (!this.suppressRemoteUpdates) {
+             ItemStack itemstack1 = (ItemStack) this.remoteSlots.get(slot);
+ 
+-            if (!ItemStack.matches(itemstack1, stack)) {
++            if (!this.matchesRemote(itemstack1, stack)) { // Paper - add flag to simplify remote matching logic
+                 ItemStack itemstack2 = (ItemStack) copySupplier.get();
+ 
+                 this.remoteSlots.set(slot, itemstack2);
+@@ -369,7 +369,7 @@ public abstract class AbstractContainerMenu {
+ 
+     private void synchronizeCarriedToRemote() {
+         if (!this.suppressRemoteUpdates) {
+-            if (!ItemStack.matches(this.getCarried(), this.remoteCarried)) {
++            if (!this.matchesRemote(this.getCarried(), this.remoteCarried)) { // Paper - add flag to simplify remote matching logic
+                 this.remoteCarried = this.getCarried().copy();
+                 if (this.synchronizer != null) {
+                     this.synchronizer.sendCarriedChange(this, this.remoteCarried);
+@@ -379,6 +379,16 @@ public abstract class AbstractContainerMenu {
+         }
+     }
+ 
++    // Paper start - add flag to simplify remote matching logic
++    private boolean matchesRemote(final ItemStack stack, final ItemStack other) {
++        if (this.synchronizer != null && this.synchronizer.player() != null && this.synchronizer.player().getBukkitEntity().simplifyContainerDesyncCheck()) {
++            // Only check the item type and count
++            return stack == other || (stack.getCount() == other.getCount() && ItemStack.isSameItem(stack, other));
++        }
++        return ItemStack.matches(stack, other);
++    }
++    // Paper end - add flag to simplify remote matching logic
++
+     public void setRemoteSlot(int slot, ItemStack stack) {
+         this.remoteSlots.set(slot, stack.copy());
+     }
+diff --git a/src/main/java/net/minecraft/world/inventory/ContainerSynchronizer.java b/src/main/java/net/minecraft/world/inventory/ContainerSynchronizer.java
+index a45ef5fcffc05e4e30801b73e82d29c6dbf5b8fd..7e5f0ed2a507a94c8fd76cab577c76374e56d2f9 100644
+--- a/src/main/java/net/minecraft/world/inventory/ContainerSynchronizer.java
++++ b/src/main/java/net/minecraft/world/inventory/ContainerSynchronizer.java
+@@ -12,4 +12,10 @@ public interface ContainerSynchronizer {
+     void sendCarriedChange(AbstractContainerMenu handler, ItemStack stack);
+ 
+     void sendDataChange(AbstractContainerMenu handler, int property, int value);
++
++    // Paper start - add flag to simplify remote matching logic
++    default net.minecraft.server.level.@org.jetbrains.annotations.Nullable ServerPlayer player() {
++        return null;
++    }
++    // Paper end - add flag to simplify remote matching logic
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index d4e497961578bb693275cdf95915b60b2cc76eb7..5db99a5810e862327ac3ca7a3e3b5ab065d1f8f7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -217,6 +217,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public org.bukkit.event.player.PlayerResourcePackStatusEvent.Status resourcePackStatus; // Paper - more resource pack API
+     private static final boolean DISABLE_CHANNEL_LIMIT = System.getProperty("paper.disableChannelLimit") != null; // Paper - add a flag to disable the channel limit
+     private long lastSaveTime; // Paper - getLastPlayed replacement API
++    private boolean simplifyContainerDesyncCheck = io.papermc.paper.configuration.GlobalConfiguration.get().unsupportedSettings.simplifyRemoteItemMatching;
+ 
+     public CraftPlayer(CraftServer server, ServerPlayer entity) {
+         super(server, entity);
+@@ -3580,4 +3581,20 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundEntityEventPacket(((CraftEntity) target).getHandle(), effect.getData()));
+     }
+     // Paper end - entity effect API
++
++    /**
++     * Returns whether container desync checks should skip the full item comparison of remote carried and changed slots
++     * and should instead only check their type and amount.
++     * <p>
++     * This is useful if the client is not able to produce the same item stack (or as of 1.21.5, its data hashes) as the server.
++     *
++     * @return whether to simplify container desync checks
++     */
++    public boolean simplifyContainerDesyncCheck() {
++        return simplifyContainerDesyncCheck;
++    }
++
++    public void setSimplifyContainerDesyncCheck(final boolean simplifyContainerDesyncCheck) {
++        this.simplifyContainerDesyncCheck = simplifyContainerDesyncCheck;
++    }
+ }
