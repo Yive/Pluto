@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
-@@ -379,6 +_,7 @@
+@@ -382,6 +_,7 @@
      }
  
      protected boolean teleportSomewhere() {
@@ -8,7 +8,7 @@
          if (!this.isNoAi() && this.isAlive()) {
              BlockPos blockPos = this.blockPosition();
  
-@@ -460,6 +_,7 @@
+@@ -461,6 +_,7 @@
          Vec3 vec3 = this.position();
          AABB boundingBox = this.getBoundingBox();
          if (!this.isClosed() && this.teleportSomewhere()) {

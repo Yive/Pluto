@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/DropperBlock.java
 +++ b/net/minecraft/world/level/block/DropperBlock.java
-@@ -66,6 +_,19 @@
+@@ -65,6 +_,19 @@
                          if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(level, pos, item, randomSlot)) return; // Paper - Add BlockPreDispenseEvent
                          itemStack = DISPENSE_BEHAVIOUR.dispense(blockSource, item);
                      } else {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/AbstractBoat.java
 +++ b/net/minecraft/world/entity/vehicle/AbstractBoat.java
-@@ -361,7 +_,14 @@
+@@ -324,7 +_,14 @@
          if (!entities.isEmpty()) {
              boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
  

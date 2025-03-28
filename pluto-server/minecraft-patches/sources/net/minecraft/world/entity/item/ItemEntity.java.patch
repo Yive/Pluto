@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
-@@ -128,6 +_,7 @@
+@@ -135,6 +_,7 @@
      @Override
      public void inactiveTick() {
          super.inactiveTick();
@@ -8,7 +8,7 @@
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              this.pickupDelay--;
          }
-@@ -147,12 +_,19 @@
+@@ -154,12 +_,19 @@
      }
      // Paper end - EAR 2
  
@@ -28,7 +28,7 @@
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  this.pickupDelay--;
              }
-@@ -199,11 +_,11 @@
+@@ -206,11 +_,11 @@
                  }
              }
  

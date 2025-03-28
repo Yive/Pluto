@@ -1,22 +1,23 @@
 --- a/net/minecraft/world/level/Level.java
 +++ b/net/minecraft/world/level/Level.java
-@@ -168,6 +_,7 @@
-         return this.paperConfig;
+@@ -159,6 +_,8 @@
      }
      // Paper end - add paper world config
-+    private final dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig; public dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig() { return this.plutoConfig; } // Pluto - Config
  
-     public final io.papermc.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
-     public static BlockPos lastPhysicsProblem; // Spigot
-@@ -853,6 +_,7 @@
-         // Paper end - getblock optimisations - cache world height/sections
++    private final dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig; public dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig() { return this.plutoConfig; } // Pluto - Config
++
+     public static @Nullable BlockPos lastPhysicsProblem; // Spigot
+     private int tileTickPosition;
+     public final Map<ServerExplosion.CacheKey, Float> explosionDensityCache = new java.util.HashMap<>(); // Paper - Optimize explosions
+@@ -207,6 +_,7 @@
+     ) {
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 +        this.plutoConfig = new dev.yive.pluto.PlutoConfig.WorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Pluto - Config
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
-@@ -1869,8 +_,11 @@
+@@ -1160,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(BlockPos pos) {
@@ -30,7 +31,7 @@
          }
      }
  
-@@ -1986,8 +_,11 @@
+@@ -1276,8 +_,11 @@
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
          for (Direction direction : Direction.Plane.HORIZONTAL) {
              BlockPos blockPos = pos.relative(direction);
@@ -44,7 +45,7 @@
                  if (blockState.is(Blocks.COMPARATOR)) {
                      this.neighborChanged(blockState, blockPos, block, null, false);
                  } else if (blockState.isRedstoneConductor(this, blockPos)) {
-@@ -2005,9 +_,12 @@
+@@ -1295,9 +_,12 @@
      public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
          long l = 0L;
          float f = 0.0F;

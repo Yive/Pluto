@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BambooStalkBlock.java
 +++ b/net/minecraft/world/level/block/BambooStalkBlock.java
-@@ -92,11 +_,16 @@
+@@ -82,11 +_,16 @@
      @Nullable
      @Override
      public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -18,26 +18,26 @@
 +            BlockState blockState = chunk.getBlockState(context.getClickedPos().below()); // Pluto - Decrease chunk/block lookups
              if (blockState.is(BlockTags.BAMBOO_PLANTABLE_ON)) {
                  if (blockState.is(Blocks.BAMBOO_SAPLING)) {
-                     return this.defaultBlockState().setValue(AGE, Integer.valueOf(0));
-@@ -104,7 +_,7 @@
+                     return this.defaultBlockState().setValue(AGE, 0);
+@@ -94,7 +_,7 @@
                      int i = blockState.getValue(AGE) > 0 ? 1 : 0;
-                     return this.defaultBlockState().setValue(AGE, Integer.valueOf(i));
+                     return this.defaultBlockState().setValue(AGE, i);
                  } else {
 -                    BlockState blockState1 = context.getLevel().getBlockState(context.getClickedPos().above());
 +                    BlockState blockState1 = chunk.getBlockState(context.getClickedPos().above()); // Pluto - Decrease chunk/block lookups
                      return blockState1.is(Blocks.BAMBOO)
                          ? this.defaultBlockState().setValue(AGE, blockState1.getValue(AGE))
                          : Blocks.BAMBOO_SAPLING.defaultBlockState();
-@@ -130,7 +_,7 @@
+@@ -120,7 +_,7 @@
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
          if (state.getValue(STAGE) == 0) {
--            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0f * 3)) && level.isEmptyBlock(pos.above()) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
-+            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0f * 3)) && level.isEmptyBlock(pos.above()) && (level.plutoConfig().bambooStalkIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
+-            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
++            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && (level.plutoConfig().bambooStalkIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
                  int i = this.getHeightBelowUpToMax(level, pos) + 1;
                  if (i < level.paperConfig().maxGrowthHeight.bamboo.max) { // Paper - Configurable cactus/bamboo/reed growth height
                      this.growBamboo(state, level, pos, random, i);
-@@ -202,9 +_,14 @@
+@@ -187,9 +_,14 @@
      }
  
      protected void growBamboo(BlockState state, Level level, BlockPos pos, RandomSource random, int age) {

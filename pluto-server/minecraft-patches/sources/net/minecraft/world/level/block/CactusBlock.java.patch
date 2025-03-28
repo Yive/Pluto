@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CactusBlock.java
 +++ b/net/minecraft/world/level/block/CactusBlock.java
-@@ -49,10 +_,15 @@
+@@ -53,11 +_,15 @@
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
          BlockPos blockPos = pos.above();
@@ -9,45 +9,34 @@
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
 +        if (chunk == null) return;
 +
-+        if (chunk.getBlockState(blockPos).isAir()) {
-+            // Pluto end - Decrease chunk/block lookups
++        if (chunk.getBlockState(blockPos).isAir()) { // Pluto end - Decrease chunk/block lookups
              int i = 1;
+             int ageValue = state.getValue(AGE);
  
 -            while (level.getBlockState(pos.below(i)).is(this)) {
 +            while (chunk.getBlockState(pos.below(i)).is(this)) { // Pluto - Decrease chunk/block lookups
-                 i++;
-             }
- 
-@@ -61,11 +_,28 @@
- 
-                 int modifier = level.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
-                 if (ageValue >= 15 || (modifier != 100 && random.nextFloat() < (modifier / (100.0f * 16)))) { // Spigot - SPIGOT-7159: Better modifier
-+                    // Pluto start - Check if the cactus can even survive being placed
-+                    if (level.plutoConfig().cactusCheckSurvivalBeforeGrowth && !canSurvive(level, blockPos)) {
-+                        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(state));
-+                        // We're going to fake the block breaking to match vanilla standards.
-+                        for (net.minecraft.world.item.ItemStack drop : Block.getDrops(state, level, pos, null)) { // Use base cactus since we don't place a block
-+                            Block.popResource(level, blockPos, drop);
-+                        }
-+                        level.setBlock(pos, state.setValue(CactusBlock.AGE, 0), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-+                        return;
-+                    }
-+                    // Pluto end - Check if the cactus can even survive being placed
-                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, this.defaultBlockState()); // CraftBukkit
-                     BlockState blockState = state.setValue(AGE, Integer.valueOf(0));
-                     level.setBlock(pos, blockState, 4);
-                     level.neighborChanged(blockState, blockPos, this, null, false);
-                 } else if (modifier == 100 || random.nextFloat() < (modifier / (100.0f * 16))) { // Spigot - SPIGOT-7159: Better modifier resolution
-+                    // Pluto start - Check if the cactus can even survive being placed
-+                    if (level.plutoConfig().cactusCheckSurvivalBeforeGrowth) {
-+                        level.setBlock(pos, state.setValue(CactusBlock.AGE, ageValue + 1), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-+                        return;
-+                    }
-+                    // Pluto end - Check if the cactus can even survive being placed
-                     level.setBlock(pos, state.setValue(AGE, Integer.valueOf(ageValue + 1)), 4);
+                 if (++i == level.paperConfig().maxGrowthHeight.cactus && ageValue == 15) { // Paper - Configurable cactus/bamboo/reed growth height
+                     return;
                  }
-             }
-@@ -102,9 +_,15 @@
+@@ -69,6 +_,17 @@
+                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, Blocks.CACTUS_FLOWER.defaultBlockState(), 3);
+                 }
+             } else if (ageValue == 15 && i < level.paperConfig().maxGrowthHeight.cactus) { // Paper - Configurable cactus/bamboo/reed growth height
++                // Pluto start - Check if the cactus can even survive being placed
++                if (level.plutoConfig().cactusCheckSurvivalBeforeGrowth && !canSurvive(level, blockPos)) {
++                    level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(state));
++                    // We're going to fake the block breaking to match vanilla standards.
++                    for (net.minecraft.world.item.ItemStack drop : Block.getDrops(state, level, pos, null)) { // Use base cactus since we don't place a block
++                        Block.popResource(level, blockPos, drop);
++                    }
++                    level.setBlock(pos, state.setValue(CactusBlock.AGE, 0), Block.UPDATE_NONE);
++                    return;
++                }
++                // Pluto end - Check if the cactus can even survive being placed
+                 // Paper start
+                 if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, this.defaultBlockState(), 3)) {
+                     return;
+@@ -115,9 +_,15 @@
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {

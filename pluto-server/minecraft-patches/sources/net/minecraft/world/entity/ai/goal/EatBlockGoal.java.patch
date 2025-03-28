@@ -4,12 +4,12 @@
              return false;
          } else {
              BlockPos blockPos = this.mob.blockPosition();
--            return IS_TALL_GRASS.test(this.level.getBlockState(blockPos)) || this.level.getBlockState(blockPos.below()).is(Blocks.GRASS_BLOCK);
+-            return IS_EDIBLE.test(this.level.getBlockState(blockPos)) || this.level.getBlockState(blockPos.below()).is(Blocks.GRASS_BLOCK);
 +            // Pluto start - Decrease chunk/block lookups
 +            net.minecraft.world.level.chunk.LevelChunk chunk = this.level.getChunkIfLoaded(blockPos);
 +            if (chunk == null) return false;
 +
-+            return IS_TALL_GRASS.test(chunk.getBlockState(blockPos)) || chunk.getBlockState(blockPos.below()).is(Blocks.GRASS_BLOCK);
++            return IS_EDIBLE.test(chunk.getBlockState(blockPos)) || chunk.getBlockState(blockPos.below()).is(Blocks.GRASS_BLOCK);
 +            // Pluto end - Decrease chunk/block lookups
          }
      }

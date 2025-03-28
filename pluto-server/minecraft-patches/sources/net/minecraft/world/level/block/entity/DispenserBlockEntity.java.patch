@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
-@@ -62,6 +_,14 @@
+@@ -67,6 +_,14 @@
  
      public int getRandomSlot(RandomSource random) {
          this.unpackLootTable(null);

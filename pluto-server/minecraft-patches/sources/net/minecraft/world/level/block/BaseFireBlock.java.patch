@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/net/minecraft/world/level/block/BaseFireBlock.java
-@@ -161,7 +_,7 @@
+@@ -163,7 +_,7 @@
      @Override
-     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving, UseOnContext context) { // CraftBukkit - context
+     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
          if (!oldState.is(state.getBlock())) {
 -            if (inPortalDimension(level)) {
 +            if (!level.plutoConfig().disableNetherPortalGeneration && inPortalDimension(level)) { // Pluto - Toggle for nether portal generation

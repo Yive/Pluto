@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/StemBlock.java
 +++ b/net/minecraft/world/level/block/StemBlock.java
-@@ -78,8 +_,8 @@
+@@ -68,8 +_,8 @@
  
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -8,10 +8,10 @@
 -            float growthSpeed = CropBlock.getGrowthSpeed(this, level, pos);
 +        if (level.plutoConfig().stemIgnoreLightLevel || level.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
 +            float growthSpeed = level.plutoConfig().useStaticGrowthSpeedStems ? level.plutoConfig().staticGrowthSpeedStems : CropBlock.getGrowthSpeed(this, level, pos); // Pluto - Static growth speeds
-             if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? level.spigotConfig.pumpkinModifier : level.spigotConfig.melonModifier) / (100.0f * (Math.floor((25.0F / growthSpeed) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
+             if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? level.spigotConfig.pumpkinModifier : level.spigotConfig.melonModifier) / (100.0F * (Math.floor((25.0F / growthSpeed) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
                  int ageValue = state.getValue(AGE);
                  if (ageValue < 7) {
-@@ -88,8 +_,13 @@
+@@ -78,8 +_,13 @@
                  } else {
                      Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
                      BlockPos blockPos = pos.relative(randomDirection);

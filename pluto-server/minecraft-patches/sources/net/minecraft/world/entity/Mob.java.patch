@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -221,10 +_,10 @@
+@@ -209,10 +_,10 @@
      public void inactiveTick() {
          super.inactiveTick();
          boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
@@ -13,7 +13,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -863,20 +_,20 @@
+@@ -733,20 +_,20 @@
          int i = this.tickCount + this.getId();
          if (i % 2 != 0 && this.tickCount > 1) {
              profilerFiller.push("targetSelector");

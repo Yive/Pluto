@@ -1,10 +1,9 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1211,4 +_,16 @@
-         return this.getHandle().canUseSlot(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
+@@ -926,6 +_,18 @@
+         this.getHandle().getBrain().setMemory(CraftMemoryKey.bukkitToMinecraft(memoryKey), CraftMemoryMapper.toNms(t));
      }
-     // Paper end - Expose canUseSlot
-+
+ 
 +    // Pluto start - Expose some sound related functions
 +    @Override
 +    public float getSoundVolume() {
@@ -16,4 +15,7 @@
 +        return this.getHandle().plutoGetVoicePitch();
 +    }
 +    // Pluto end - Expose some sound related functions
- }
++
+     @Override
+     public Sound getHurtSound() {
+         SoundEvent sound = this.getHandle().getHurtSound(this.getHandle().damageSources().generic());

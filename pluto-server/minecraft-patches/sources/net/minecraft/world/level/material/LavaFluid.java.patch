@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/material/LavaFluid.java
 +++ b/net/minecraft/world/level/material/LavaFluid.java
-@@ -207,9 +_,8 @@
+@@ -219,9 +_,8 @@
      @Override
      protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
          if (direction == Direction.DOWN) {

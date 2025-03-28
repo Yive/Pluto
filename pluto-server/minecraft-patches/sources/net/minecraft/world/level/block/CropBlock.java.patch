@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CropBlock.java
 +++ b/net/minecraft/world/level/block/CropBlock.java
-@@ -84,10 +_,10 @@
+@@ -76,10 +_,10 @@
  
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -13,7 +13,7 @@
                  // Spigot start
                  int modifier = 100;
                  if (this == Blocks.BEETROOTS) {
-@@ -176,7 +_,7 @@
+@@ -163,7 +_,7 @@
      }
  
      protected static boolean hasSufficientLight(LevelReader level, BlockPos pos) {

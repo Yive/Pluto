@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -816,6 +_,14 @@
+@@ -696,6 +_,14 @@
              return;
          }
          // Paper end - entity despawn time limit
@@ -15,24 +15,24 @@
          this.baseTick();
      }
  
-@@ -842,7 +_,7 @@
+@@ -722,7 +_,7 @@
          }
  
-         if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - // Moved up to postTick
+         if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - Moved up to postTick
 -        if (this.canSpawnSprintParticle()) {
 +        if (!this.level.plutoConfig().disableSprintParticles && this.canSpawnSprintParticle()) { // Pluto - Option to disable sprint particles | More efficient to exit early to avoid canSpawnSprintParticle
              this.spawnSprintParticle();
          }
  
-@@ -1273,6 +_,7 @@
-             this.movementThisTick.add(new Entity.Movement(oldPosition, position));
-             List<Entity.Movement> list = List.copyOf(this.movementThisTick);
-             this.movementThisTick.clear();
+@@ -1179,6 +_,7 @@
+ 
+             boolean isOnFire = this.isOnFire();
+             boolean isFreezing = this.isFreezing();
 +            if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
-             this.checkInsideBlocks(list, this.blocksInside);
-             boolean flag = Iterables.any(this.blocksInside, state -> state.is(BlockTags.FIRE) || state.is(Blocks.LAVA));
-             this.blocksInside.clear();
-@@ -1340,7 +_,7 @@
+             this.checkInsideBlocks(movements, this.insideEffectCollector);
+             this.insideEffectCollector.applyAndClear(this);
+             if (this.isInRain()) {
+@@ -1255,7 +_,7 @@
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
              this.onFlap();
@@ -41,7 +41,7 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1851,10 +_,26 @@
+@@ -1709,10 +_,25 @@
          return this.wasTouchingWater;
      }
  
@@ -60,17 +60,16 @@
 +            this.lastRainCheckResult = false;
 +            return false;
 +        }
-+
          BlockPos blockPos = this.blockPosition();
 -        return this.level().isRainingAt(blockPos)
 -            || this.level().isRainingAt(BlockPos.containing(blockPos.getX(), this.getBoundingBox().maxY, blockPos.getZ()));
-+        this.lastRainCheckResult = this.level().isRainingAt(blockPos) || this.level().isRainingAt(BlockPos.containing((double) blockPos.getX(), this.getBoundingBox().maxY, (double) blockPos.getZ()));
++        this.lastRainCheckResult = this.level().isRainingAt(blockPos) || this.level().isRainingAt(BlockPos.containing(blockPos.getX(), this.getBoundingBox().maxY, blockPos.getZ()));
 +        return this.lastRainCheckResult;
 +        // Pluto end - Optimise rain check
      }
  
-     public boolean isInBubbleColumn() {
-@@ -1895,6 +_,13 @@
+     public boolean isInWaterOrRain() {
+@@ -1741,6 +_,13 @@
          this.fluidHeight.clear();
          this.updateInWaterStateAndDoWaterCurrentPushing();
          double d = this.level().dimensionType().ultraWarm() ? 0.007 : 0.0023333333333333335;
@@ -84,7 +83,7 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
-@@ -5071,6 +_,43 @@
+@@ -4777,6 +_,43 @@
              return this.save;
          }
      }

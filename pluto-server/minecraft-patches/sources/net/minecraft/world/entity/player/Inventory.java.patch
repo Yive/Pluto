@@ -1,31 +1,32 @@
 --- a/net/minecraft/world/entity/player/Inventory.java
 +++ b/net/minecraft/world/entity/player/Inventory.java
-@@ -281,6 +_,28 @@
+@@ -322,6 +_,29 @@
      }
  
      public void tick() {
 +        // Pluto start - Only tick inventory slots that are important
 +        if (this.player.level().plutoConfig().playerInventoryOnlyTickImportantSlots) {
++            ItemStack offHand = this.equipment.get(EquipmentSlot.OFFHAND);
++            if (!offHand.isEmpty())
++                offHand.inventoryTick(this.player.level(), this.player, null);
++
 +            if (this.player.level().plutoConfig().playerInventoryOnlyTickHandSlots) {
-+                this.getSelected().inventoryTick(this.player.level(), this.player, this.selected, true);
-+                this.offhand.getFirst().inventoryTick(this.player.level(), this.player, SLOT_OFFHAND, true); // TODO: Check if true is still safe in future versions
++                ItemStack mainHand = this.getSelectedItem();
++                if (!mainHand.isEmpty())
++                    mainHand.inventoryTick(this.player.level(), this.player, EquipmentSlot.MAINHAND);
 +                return;
 +            }
 +
 +            for (int slot = 0; slot < SELECTION_SIZE; slot++) {
-+                this.items.get(slot).inventoryTick(this.player.level(), this.player, slot, this.selected == slot);
++                ItemStack item = this.getItem(slot);
++                if (item.isEmpty()) continue;
++
++                item.inventoryTick(this.player.level(), this.player, slot == this.selected ? EquipmentSlot.MAINHAND : null);
 +            }
-+
-+            this.offhand.getFirst().inventoryTick(this.player.level(), this.player, SLOT_OFFHAND, false);
-+
-+            /* TODO: Uncomment if armour is expected to tick in future versions
-+            for (int slot = 0; slot < this.armor.size(); slot++) {
-+                this.armor.get(slot).inventoryTick(this.player.level(), this.player, slot + INVENTORY_SIZE, false);
-+            }*/
 +            return;
 +        }
 +        // Pluto end - Only tick inventory slots that are important
 +
-         for (NonNullList<ItemStack> list : this.compartments) {
-             for (int i = 0; i < list.size(); i++) {
-                 if (!list.get(i).isEmpty()) {
+         for (int i = 0; i < this.items.size(); i++) {
+             ItemStack item = this.getItem(i);
+             if (!item.isEmpty()) {

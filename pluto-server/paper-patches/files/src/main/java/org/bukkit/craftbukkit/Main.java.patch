@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
-@@ -183,6 +_,14 @@
+@@ -170,6 +_,14 @@
+                         .ofType(String.class)
                          .defaultsTo("Unknown Server")
                          .describedAs("Name");
-                 // Paper end
 +
 +                // Pluto start - Config
 +                acceptsAll(asList("pluto", "pluto-settings"), "File for pluto settings")

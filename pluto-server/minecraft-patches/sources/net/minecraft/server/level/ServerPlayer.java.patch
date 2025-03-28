@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -872,6 +_,15 @@
+@@ -781,6 +_,15 @@
                  super.tick();
              }
  

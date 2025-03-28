@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -423,6 +_,7 @@
+@@ -419,6 +_,7 @@
      @Override
      public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> listenerConsumer) {
          if (this.level() instanceof ServerLevel serverLevel) {
@@ -8,7 +8,7 @@
              listenerConsumer.accept(this.dynamicVibrationListener, serverLevel);
              listenerConsumer.accept(this.dynamicJukeboxListener, serverLevel);
          }
-@@ -542,7 +_,7 @@
+@@ -527,7 +_,7 @@
      }
  
      public boolean canDuplicate() {

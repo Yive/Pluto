@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1071,6 +_,7 @@
+@@ -1083,6 +_,7 @@
      private final float spawnDimensionsScale;
      private final FeatureFlagSet requiredFeatures;
      public boolean dabEnabled = false; // Pufferfish
