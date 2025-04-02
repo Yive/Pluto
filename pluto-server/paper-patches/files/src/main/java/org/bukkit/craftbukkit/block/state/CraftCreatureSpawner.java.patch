@@ -1,5 +1,5 @@
---- a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
-+++ b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
+--- a/src/main/java/org/bukkit/craftbukkit/block/state/CraftCreatureSpawner.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/state/CraftCreatureSpawner.java
 @@ -61,6 +_,7 @@
  
          RandomSource rand = (this.isPlaced()) ? this.getWorldHandle().getRandom() : RandomSource.create();

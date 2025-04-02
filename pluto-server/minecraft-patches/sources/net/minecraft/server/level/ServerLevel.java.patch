@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -511,14 +_,17 @@
+@@ -750,14 +_,17 @@
          if (!this.isDebug() && runsNormally) {
              long l = this.getGameTime();
              profilerFiller.push("blockTicks");
@@ -18,7 +18,7 @@
              this.raids.tick(this);
          }
  
-@@ -526,6 +_,7 @@
+@@ -765,6 +_,7 @@
          this.getChunkSource().tick(hasTimeLeft, true);
          profilerFiller.popPush("blockEvents");
          if (runsNormally) {
@@ -26,7 +26,7 @@
              this.runBlockEvents();
          }
  
-@@ -544,6 +_,7 @@
+@@ -783,6 +_,7 @@
                  profilerFiller.pop();
              }
  
@@ -34,11 +34,11 @@
              io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
              this.entityTickList
                  .forEach(
-@@ -552,6 +_,7 @@
+@@ -791,6 +_,7 @@
                          if (!entity.isRemoved()) {
                              if (!tickRateManager.isEntityFrozen(entity)) {
                                  profilerFiller.push("checkDespawn");
 +                                if (plutoConfig().entityDespawnCheckModulo > 0 && (plutoConfig().entityDespawnCheckModulo == 1 || MinecraftServer.currentTick % plutoConfig().entityDespawnCheckModulo == 0)) // Pluto - Configuration for entity despawn check
                                  entity.checkDespawn();
                                  profilerFiller.pop();
-                                 if (entity instanceof ServerPlayer
+                                 if (true) { // Paper - rewrite chunk system
