@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -650,6 +_,13 @@
+@@ -652,6 +_,13 @@
          return compound;
      }
  
