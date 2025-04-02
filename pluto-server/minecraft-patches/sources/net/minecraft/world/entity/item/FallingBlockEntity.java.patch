@@ -9,7 +9,7 @@
 +                                if (this.level().plutoConfig().preventInsideBlockXrayExploit) {
 +                                    org.bukkit.Material material = this.level().getBlockState(blockPos.below()).getBukkitMaterial();
 +                                    if (material == org.bukkit.Material.COMPOSTER || material.toString().contains("CAULDRON")) { // Yes I know this is terrible
-+                                        this.discard(EntityRemoveEvent.Cause.DESPAWN);
++                                        this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN);
 +                                        if (this.dropItem && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 +                                            this.callOnBrokenAfterFall(block, blockPos);
 +                                            this.spawnAtLocation(serverLevel, block);
