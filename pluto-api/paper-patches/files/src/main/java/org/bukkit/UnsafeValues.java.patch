@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -270,6 +_,13 @@
+@@ -271,6 +_,13 @@
       */
      @NotNull Entity deserializeEntity(byte @NotNull [] data, @NotNull World world, boolean preserveUUID, boolean preservePassengers);
  

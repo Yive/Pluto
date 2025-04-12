@@ -1,8 +1,8 @@
 --- a/pufferfish-api/build.gradle.kts
 +++ b/pufferfish-api/build.gradle.kts
-@@ -105,17 +_,21 @@
-         java {
+@@ -110,17 +_,21 @@
              srcDir(generatedDir)
+             // Pufferfish start
              srcDir(file("../paper-api/src/main/java"))
 +            srcDir(file("../pufferfish-api/src/main/java")) // Pluto - Branding
          }
@@ -19,6 +19,6 @@
          resources {
              srcDir(file("../paper-api/src/test/resources"))
 +            srcDir(file("../pufferfish-api/src/test/resources")) // Pluto - Branding
+             // Pufferfish end
          }
      }
- }
