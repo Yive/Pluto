@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Inventory.java
 +++ b/net/minecraft/world/entity/player/Inventory.java
-@@ -322,6 +_,29 @@
+@@ -326,6 +_,29 @@
      }
  
      public void tick() {
