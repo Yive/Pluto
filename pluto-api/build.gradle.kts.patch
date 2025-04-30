@@ -1,6 +1,6 @@
 --- a/pufferfish-api/build.gradle.kts
 +++ b/pufferfish-api/build.gradle.kts
-@@ -106,17 +_,21 @@
+@@ -103,17 +_,21 @@
              srcDir(generatedDir)
              // Pufferfish start
              srcDir(file("../paper-api/src/main/java"))
