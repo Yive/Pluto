@@ -83,7 +83,7 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
-@@ -5090,6 +_,43 @@
+@@ -5091,6 +_,43 @@
              return this.save;
          }
      }
