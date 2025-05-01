@@ -18,7 +18,7 @@
 -                    BlockState blockState = level.getBlockState(blockPos.below());
 -                    if (level.getBlockState(blockPos).isAir() && (blockState.is(Blocks.FARMLAND) || blockState.is(BlockTags.DIRT))) {
 +                    // Pluto start - Decrease chunk/block lookups
-+                    net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
++                    net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
 +                    if (chunk == null) return;
 +
 +                    BlockState blockState;
