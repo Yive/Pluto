@@ -28,21 +28,30 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4217,12 +_,15 @@
+@@ -4215,19 +_,21 @@
+         double z1 = this.getZ();
+         double d = y;
          boolean flag = false;
-         BlockPos blockPos = BlockPos.containing(x, y, z);
+-        BlockPos blockPos = BlockPos.containing(x, y, z);
          Level level = this.level();
 -        if (level.hasChunkAt(blockPos)) {
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(Mth.floor(x) >> 4, Mth.floor(z) >> 4);
 +        if (chunk != null) {
++            BlockPos blockPos = BlockPos.containing(x, y, z);
 +            // Pluto end - Decrease chunk/block lookups
              boolean flag1 = false;
  
              while (!flag1 && blockPos.getY() > level.getMinY()) {
-                 BlockPos blockPos1 = blockPos.below();
+-                BlockPos blockPos1 = blockPos.below();
 -                BlockState blockState = level.getBlockState(blockPos1);
-+                BlockState blockState = chunk.getBlockState(blockPos1); // Pluto - Decrease chunk/block lookups
++                BlockState blockState = chunk.getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Decrease chunk/block lookups
                  if (blockState.blocksMotion()) {
                      flag1 = true;
                  } else {
+                     d--;
+-                    blockPos = blockPos1;
++                    blockPos = blockPos.below(); // Pluto - Decrease chunk/block lookups
+                 }
+             }
+ 

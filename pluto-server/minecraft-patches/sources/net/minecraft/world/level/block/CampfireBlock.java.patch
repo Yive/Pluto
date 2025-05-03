@@ -1,18 +1,22 @@
 --- a/net/minecraft/world/level/block/CampfireBlock.java
 +++ b/net/minecraft/world/level/block/CampfireBlock.java
-@@ -257,16 +_,21 @@
+@@ -257,16 +_,24 @@
      }
  
      public static boolean isSmokeyPos(Level level, BlockPos pos) {
 +        // Pluto start - Decrease chunk/block lookups
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
 +        if (chunk == null) return false;
++
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
 +        // Pluto end - Decrease chunk/block lookups
 +
          for (int i = 1; i <= 5; i++) {
-             BlockPos blockPos = pos.below(i);
+-            BlockPos blockPos = pos.below(i);
 -            BlockState blockState = level.getBlockState(blockPos);
-+            BlockState blockState = chunk.getBlockState(blockPos); // Pluto - Decrease chunk/block lookups
++            BlockState blockState = chunk.getBlockState(x, y - i, z); // Pluto - Decrease chunk/block lookups
              if (isLitCampfire(blockState)) {
                  return true;
              }
@@ -20,7 +24,7 @@
              boolean flag = Shapes.joinIsNotEmpty(SHAPE_VIRTUAL_POST, blockState.getCollisionShape(level, pos, CollisionContext.empty()), BooleanOp.AND);
              if (flag) {
 -                BlockState blockState1 = level.getBlockState(blockPos.below());
-+                BlockState blockState1 = chunk.getBlockState(blockPos.below()); // Pluto - Decrease chunk/block lookups
++                BlockState blockState1 = chunk.getBlockState(x, y - (i + 1), z); // Pluto - Decrease chunk/block lookups
                  return isLitCampfire(blockState1);
              }
          }

@@ -13,7 +13,7 @@
          Block block = blockState.getBlock();
 -        Block block1 = serverLevel.getBlockState(pos.below()).getBlock();
 -        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && block1 instanceof FarmBlock;
-+        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && chunk.getBlockState(pos.below()).getBlock() instanceof FarmBlock;
++        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && chunk.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).getBlock() instanceof FarmBlock;
 +        // Pluto end - Decrease chunk/block lookups
      }
  
@@ -38,7 +38,7 @@
                  }
  
 -                if (blockState.isAir() && block1 instanceof FarmBlock && owner.hasFarmSeeds()) {
-+                if (blockState.isAir() && chunk.getBlockState(this.aboveFarmlandPos.below()).getBlock() instanceof FarmBlock && owner.hasFarmSeeds()) { // Pluto - Decrease chunk/block lookups
++                if (blockState.isAir() && chunk.getBlockState(this.aboveFarmlandPos.getX(), this.aboveFarmlandPos.getY() - 1, this.aboveFarmlandPos.getZ()).getBlock() instanceof FarmBlock && owner.hasFarmSeeds()) { // Pluto - Decrease chunk/block lookups
                      SimpleContainer inventory = owner.getInventory();
  
                      for (int i = 0; i < inventory.getContainerSize(); i++) {

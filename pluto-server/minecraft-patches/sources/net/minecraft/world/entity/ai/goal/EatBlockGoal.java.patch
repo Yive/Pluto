@@ -9,7 +9,7 @@
 +            net.minecraft.world.level.chunk.LevelChunk chunk = this.level.getChunkIfLoaded(blockPos);
 +            if (chunk == null) return false;
 +
-+            return IS_EDIBLE.test(chunk.getBlockState(blockPos)) || chunk.getBlockState(blockPos.below()).is(Blocks.GRASS_BLOCK);
++            return IS_EDIBLE.test(chunk.getBlockState(blockPos)) || chunk.getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()).is(Blocks.GRASS_BLOCK);
 +            // Pluto end - Decrease chunk/block lookups
          }
      }

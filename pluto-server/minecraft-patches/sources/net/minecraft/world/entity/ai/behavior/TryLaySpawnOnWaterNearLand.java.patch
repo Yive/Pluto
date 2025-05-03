@@ -1,23 +1,29 @@
 --- a/net/minecraft/world/entity/ai/behavior/TryLaySpawnOnWaterNearLand.java
 +++ b/net/minecraft/world/entity/ai/behavior/TryLaySpawnOnWaterNearLand.java
-@@ -28,10 +_,17 @@
+@@ -27,13 +_,22 @@
+                             BlockPos blockPos = entity.blockPosition().below();
  
                              for (Direction direction : Direction.Plane.HORIZONTAL) {
++                                // Pluto start - Decrease chunk/block lookups
++                                final int x = blockPos.getX() + direction.getStepX();
++                                final int z = blockPos.getZ() + direction.getStepZ();
++                                net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(x >> 4, z >> 4);
++                                if (chunk == null) continue;
++
                                  BlockPos blockPos1 = blockPos.relative(direction);
 -                                if (level.getBlockState(blockPos1).getCollisionShape(level, blockPos1).getFaceShape(Direction.UP).isEmpty()
 -                                    && level.getFluidState(blockPos1).is(Fluids.WATER)) {
-+                                // Pluto start - Decrease chunk/block lookups
-+                                net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos1);
-+                                if (chunk == null) continue;
-+
+-                                    BlockPos blockPos2 = blockPos1.above();
+-                                    if (level.getBlockState(blockPos2).isAir()) {
 +                                BlockState state = chunk.getBlockState(blockPos1);
 +
 +                                if (state.getCollisionShape(level, blockPos1).getFaceShape(Direction.UP).isEmpty()
 +                                    && state.getFluidState().is(Fluids.WATER)) {
 +                                    // Pluto end - Decrease chunk/block lookups
-                                     BlockPos blockPos2 = blockPos1.above();
--                                    if (level.getBlockState(blockPos2).isAir()) {
-+                                    if (chunk.getBlockState(blockPos2).isAir()) { // Pluto - Decrease chunk/block lookups
++                                    if (chunk.getBlockState(blockPos1.getX(), blockPos1.getY() + 1, blockPos1.getZ()).isAir()) { // Pluto - Decrease chunk/block lookups
                                          BlockState blockState = spawnBlock.defaultBlockState();
                                          // CraftBukkit start
++                                        BlockPos blockPos2 = blockPos1.above(); // Pluto - Decrease chunk/block lookups
                                          if (!org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(entity, blockPos2, blockState)) {
+                                             isPregnant.erase();
+                                             return true;

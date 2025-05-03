@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/net/minecraft/world/level/block/SugarCaneBlock.java
-@@ -48,10 +_,15 @@
+@@ -48,10 +_,18 @@
  
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -9,12 +9,15 @@
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
 +        if (chunk == null) return;
 +
-+        if (chunk.getBlockState(pos.above()).isAir()) {
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        if (chunk.getBlockState(x, y + 1, z).isAir()) {
 +            // Pluto end - Decrease chunk/block lookups
              int i = 1;
  
 -            while (level.getBlockState(pos.below(i)).is(this)) {
-+            while (chunk.getBlockState(pos.below(i)).is(this)) { // Pluto - Decrease chunk/block lookups
++            while (chunk.getBlockState(x, y - i, z).is(this)) { // Pluto - Decrease chunk/block lookups
                  i++;
              }
  

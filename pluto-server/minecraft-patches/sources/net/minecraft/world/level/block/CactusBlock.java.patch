@@ -1,20 +1,24 @@
 --- a/net/minecraft/world/level/block/CactusBlock.java
 +++ b/net/minecraft/world/level/block/CactusBlock.java
-@@ -53,11 +_,15 @@
+@@ -53,11 +_,19 @@
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
          BlockPos blockPos = pos.above();
 -        if (level.isEmptyBlock(blockPos)) {
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(blockPos);
++        final int x = pos.getX();
++        final int z = pos.getZ();
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(x >> 4, z >> 4);
 +        if (chunk == null) return;
 +
-+        if (chunk.getBlockState(blockPos).isAir()) { // Pluto end - Decrease chunk/block lookups
++        final int y = pos.getY();
++        if (chunk.getBlockState(x, y + 1, z).isAir()) {
++            // Pluto end - Decrease chunk/block lookups
              int i = 1;
              int ageValue = state.getValue(AGE);
  
 -            while (level.getBlockState(pos.below(i)).is(this)) {
-+            while (chunk.getBlockState(pos.below(i)).is(this)) { // Pluto - Decrease chunk/block lookups
++            while (chunk.getBlockState(x, y - i, z).is(this)) { // Pluto - Decrease chunk/block lookups
                  if (++i == level.paperConfig().maxGrowthHeight.cactus && ageValue == 15) { // Paper - Configurable cactus/bamboo/reed growth height
                      return;
                  }

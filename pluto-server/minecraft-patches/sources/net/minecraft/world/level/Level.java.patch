@@ -31,20 +31,27 @@
          }
      }
  
-@@ -1979,8 +_,11 @@
+@@ -1978,12 +_,17 @@
+ 
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
          for (Direction direction : Direction.Plane.HORIZONTAL) {
++            // Pluto start - Decrease chunk/block lookups
++            final int x = pos.getX() + direction.getStepX();
++            final int z = pos.getZ() + direction.getStepZ();
              BlockPos blockPos = pos.relative(direction);
 -            if (this.hasChunkAt(blockPos)) {
 -                BlockState blockState = this.getBlockState(blockPos);
-+            // Pluto start - Decrease chunk/block lookups
-+            LevelChunk chunk = this.getChunkIfLoaded(blockPos);
++            LevelChunk chunk = this.getChunkIfLoaded(x >> 4, z >> 4);
 +            if (chunk != null) {
-+                BlockState blockState = chunk.getBlockState(blockPos);
-+                // Pluto end - Decrease chunk/block lookups
++                BlockState blockState = chunk.getBlockState(x, pos.getY() + direction.getStepY(), z);
                  if (blockState.is(Blocks.COMPARATOR)) {
                      this.neighborChanged(blockState, blockPos, block, null, false);
-                 } else if (blockState.isRedstoneConductor(this, blockPos)) {
+-                } else if (blockState.isRedstoneConductor(this, blockPos)) {
++                } else if (blockState.isRedstoneConductor(this, blockPos = pos.relative(direction))) {
++                    // Pluto end - Decrease chunk/block lookups
+                     blockPos = blockPos.relative(direction);
+                     blockState = this.getBlockState(blockPos);
+                     if (blockState.is(Blocks.COMPARATOR)) {
 @@ -1998,9 +_,12 @@
      public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
          long l = 0L;

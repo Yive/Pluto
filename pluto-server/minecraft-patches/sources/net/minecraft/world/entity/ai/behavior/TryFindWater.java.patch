@@ -14,7 +14,7 @@
 +                                // Pluto end - Decrease chunk/block lookups
                                  if (blockState1.is(Blocks.WATER)) {
 -                                    if (blockState.isAir()) {
-+                                    if (chunk.getBlockState(blockPos3.above()).isAir()) { // Pluto - Decrease chunk/block lookups
++                                    if (chunk.getBlockState(blockPos3.getX(), blockPos3.getY() + 1, blockPos3.getZ()).isAir()) { // Pluto - Decrease chunk/block lookups
                                          blockPos = blockPos3.immutable();
                                          break;
                                      }
