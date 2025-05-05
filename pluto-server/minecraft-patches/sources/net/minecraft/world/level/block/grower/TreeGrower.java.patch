@@ -1,0 +1,47 @@
+--- a/net/minecraft/world/level/block/grower/TreeGrower.java
++++ b/net/minecraft/world/level/block/grower/TreeGrower.java
+@@ -185,14 +_,39 @@
+ 
+     private static boolean isTwoByTwoSapling(BlockState state, BlockGetter level, BlockPos pos, int xOffset, int yOffset) {
+         Block block = state.getBlock();
+-        return level.getBlockState(pos.offset(xOffset, 0, yOffset)).is(block)
+-            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset)).is(block)
+-            && level.getBlockState(pos.offset(xOffset, 0, yOffset + 1)).is(block)
+-            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset + 1)).is(block);
++        // Pluto start - Memory efficient block lookups | I feel like mojang made a typo with yOffset.
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        return level.pluto$getBlockState(x + xOffset, y, z + yOffset).is(block)
++            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset).is(block)
++            && level.pluto$getBlockState(x + xOffset, y, z + yOffset + 1).is(block)
++            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset + 1).is(block);
++        // Pluto end - Memory efficient block lookups
+     }
+ 
+     private boolean hasFlowers(LevelAccessor level, BlockPos pos) {
+-        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(pos.below().north(2).west(2), pos.above().south(2).east(2))) {
++        // Pluto start - Memory efficient block lookups | 6 allocations -> 2 allocations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++
++        final int x1 = x - 2;
++        final int x2 = x + 2;
++        final int y1 = y - 1;
++        final int y2 = y + 1;
++        final int z1 = z - 2;
++        final int z2 = z + 2;
++
++        final int minX = Math.min(x1, x2);
++        final int minY = Math.min(y1, y2);
++        final int minZ = Math.min(z1, z2);
++        final int maxX = Math.max(x1, x2);
++        final int maxY = Math.max(y1, y2);
++        final int maxZ = Math.max(z1, z2);
++
++        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
++            // Pluto end - Memory efficient block lookups
+             if (level.getBlockState(blockPos).is(BlockTags.FLOWERS)) {
+                 return true;
+             }

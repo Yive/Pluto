@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/level/block/CocoaBlock.java
++++ b/net/minecraft/world/level/block/CocoaBlock.java
+@@ -60,7 +_,10 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.relative(state.getValue(FACING)));
++        // Pluto start - Memory efficient block lookups
++        Direction direction = state.getValue(FACING);
++        BlockState blockState = level.pluto$getBlockState(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(), pos.getZ() + direction.getStepZ());
++        // Pluto end - Memory efficient block lookups
+         return blockState.is(BlockTags.JUNGLE_LOGS);
+     }
+ 

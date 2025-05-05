@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/level/block/BigDripleafBlock.java
++++ b/net/minecraft/world/level/block/BigDripleafBlock.java
+@@ -139,8 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockPos blockPos = pos.below();
+-        BlockState blockState = level.getBlockState(blockPos);
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return blockState.is(this) || blockState.is(Blocks.BIG_DRIPLEAF_STEM) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE);
+     }
+ 
+@@ -170,7 +_,7 @@
+ 
+     @Override
+     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+-        BlockState blockState = level.getBlockState(pos.above());
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return canReplace(blockState);
+     }
+ 
+@@ -295,7 +_,7 @@
+ 
+     @Override
+     public BlockState getStateForPlacement(BlockPlaceContext context) {
+-        BlockState blockState = context.getLevel().getBlockState(context.getClickedPos().below());
++        BlockState blockState = context.getLevel().pluto$getBlockState(context.getClickedPos().getX(), context.getClickedPos().getY() - 1, context.getClickedPos().getZ()); // Pluto - Memory efficient block lookups
+         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+         boolean flag = blockState.is(Blocks.BIG_DRIPLEAF) || blockState.is(Blocks.BIG_DRIPLEAF_STEM);
+         return this.defaultBlockState()

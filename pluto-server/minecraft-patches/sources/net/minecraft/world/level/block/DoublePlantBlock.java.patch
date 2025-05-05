@@ -1,0 +1,33 @@
+--- a/net/minecraft/world/level/block/DoublePlantBlock.java
++++ b/net/minecraft/world/level/block/DoublePlantBlock.java
+@@ -65,7 +_,7 @@
+     public BlockState getStateForPlacement(BlockPlaceContext context) {
+         BlockPos clickedPos = context.getClickedPos();
+         Level level = context.getLevel();
+-        return clickedPos.getY() < level.getMaxY() && level.getBlockState(clickedPos.above()).canBeReplaced(context)
++        return clickedPos.getY() < level.getMaxY() && level.pluto$getBlockState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ()).canBeReplaced(context) // Pluto - Memory efficient block lookups
+             ? super.getStateForPlacement(context)
+             : null;
+     }
+@@ -81,7 +_,7 @@
+         if (state.getValue(HALF) != DoubleBlockHalf.UPPER) {
+             return super.canSurvive(state, level, pos);
+         } else {
+-            BlockState blockState = level.getBlockState(pos.below());
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+             return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
+         }
+     }
+@@ -122,10 +_,10 @@
+         // CraftBukkit end
+         DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
+         if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+-            BlockPos blockPos = pos.below();
+-            BlockState blockState = level.getBlockState(blockPos);
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+             if (blockState.is(state.getBlock()) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                 BlockState blockState1 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
++                BlockPos blockPos = pos.below(); // Pluto - Memory efficient block lookups
+                 level.setBlock(blockPos, blockState1, 35);
+                 level.levelEvent(player, 2001, blockPos, Block.getId(blockState));
+             }

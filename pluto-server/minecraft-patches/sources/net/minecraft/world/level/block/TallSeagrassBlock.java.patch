@@ -1,0 +1,23 @@
+--- a/net/minecraft/world/level/block/TallSeagrassBlock.java
++++ b/net/minecraft/world/level/block/TallSeagrassBlock.java
+@@ -55,7 +_,10 @@
+     public BlockState getStateForPlacement(BlockPlaceContext context) {
+         BlockState blockState = super.getStateForPlacement(context);
+         if (blockState != null) {
+-            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos().above());
++            // Pluto start - Memory efficient block lookups
++            final BlockPos clickedPos = context.getClickedPos();
++            FluidState fluidState = context.getLevel().pluto$getFluidState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ());
++            // Pluto end - Memory efficient block lookups
+             if (fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8) {
+                 return blockState;
+             }
+@@ -67,7 +_,7 @@
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+-            BlockState blockState = level.getBlockState(pos.below());
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+             return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
+         } else {
+             FluidState fluidState = level.getFluidState(pos);

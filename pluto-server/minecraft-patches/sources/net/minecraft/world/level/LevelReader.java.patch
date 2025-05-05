@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/LevelReader.java
++++ b/net/minecraft/world/level/LevelReader.java
+@@ -100,6 +_,15 @@
+         return new BlockPos(pos.getX(), this.getHeight(heightmapType, pos.getX(), pos.getZ()), pos.getZ());
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    default boolean pluto$isEmptyBlock(int x, int y, int z) {
++        return this.pluto$getBlockState(x, y, z).isAir();
++    }
++    default boolean pluto$isEmptyBlock(long packedPos) {
++        return this.pluto$getBlockState(packedPos).isAir();
++    }
++    // Pluto end - Memory efficient block lookups
++
+     default boolean isEmptyBlock(BlockPos pos) {
+         return this.getBlockState(pos).isAir();
+     }

@@ -1,0 +1,17 @@
+--- a/net/minecraft/world/level/block/CoralBlock.java
++++ b/net/minecraft/world/level/block/CoralBlock.java
+@@ -65,8 +_,13 @@
+     }
+ 
+     protected boolean scanForWater(BlockGetter level, BlockPos pos) {
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        // Pluto end - Memory efficient block lookups
+         for (Direction direction : Direction.values()) {
+-            FluidState fluidState = level.getFluidState(pos.relative(direction));
++            FluidState fluidState = level.pluto$getFluidState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
+             if (fluidState.is(FluidTags.WATER)) {
+                 return true;
+             }

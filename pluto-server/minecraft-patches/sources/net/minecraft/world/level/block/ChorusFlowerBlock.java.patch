@@ -1,0 +1,147 @@
+--- a/net/minecraft/world/level/block/ChorusFlowerBlock.java
++++ b/net/minecraft/world/level/block/ChorusFlowerBlock.java
+@@ -64,20 +_,25 @@
+ 
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+-        BlockPos blockPos = pos.above();
+-        if (level.isEmptyBlock(blockPos) && blockPos.getY() <= level.getMaxY()) {
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        BlockPos blockPos;
++        if (level.pluto$isEmptyBlock(x, y + 1, z) && (y + 1) <= level.getMaxY()) {
++            // Pluto end - Memory efficient block lookups
+             int ageValue = state.getValue(AGE);
+             if (ageValue < 5) {
+                 boolean flag = false;
+                 boolean flag1 = false;
+-                BlockState blockState = level.getBlockState(pos.below());
++                BlockState blockState = level.pluto$getBlockState(x, y - 1, z); // Pluto - Memory efficient block lookups
+                 if (blockState.is(Blocks.END_STONE)) {
+                     flag = true;
+                 } else if (blockState.is(this.plant)) {
+                     int i = 1;
+ 
+                     for (int i1 = 0; i1 < 4; i1++) {
+-                        BlockState blockState1 = level.getBlockState(pos.below(i + 1));
++                        BlockState blockState1 = level.pluto$getBlockState(x, y - (i + 1), z); // Pluto - Memory efficient block lookups
+                         if (!blockState1.is(this.plant)) {
+                             if (blockState1.is(Blocks.END_STONE)) {
+                                 flag1 = true;
+@@ -95,8 +_,8 @@
+                     flag = true;
+                 }
+ 
+-                if (flag && allNeighborsEmpty(level, blockPos, null) && level.isEmptyBlock(pos.above(2))) {
+-                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
++                if (flag && allNeighborsEmpty(level, x, y + 1, z, null) && level.pluto$isEmptyBlock(x, y + 2, z)) {
++                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos = pos.above(), this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
+                     level.setBlock(pos, ChorusPlantBlock.getStateWithConnections(level, pos, this.plant.defaultBlockState()), 2);
+                     this.placeGrownFlower(level, blockPos, ageValue);
+                     } // CraftBukkit
+@@ -110,11 +_,16 @@
+ 
+                     for (int i2 = 0; i2 < i; i2++) {
+                         Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+-                        BlockPos blockPos1 = pos.relative(randomDirection);
+-                        if (level.isEmptyBlock(blockPos1)
+-                            && level.isEmptyBlock(blockPos1.below())
+-                            && allNeighborsEmpty(level, blockPos1, randomDirection.getOpposite())) {
+-                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1, this.defaultBlockState().setValue(AGE, ageValue + 1), 2)) { // CraftBukkit - add event
++                        // Pluto start - Memory efficient block lookups
++                        final int x1 = x + randomDirection.getStepX();
++                        final int y1 = y + randomDirection.getStepY();
++                        final int z1 = z + randomDirection.getStepZ();
++                        BlockPos blockPos1;
++                        if (level.pluto$isEmptyBlock(x1, y1, z1)
++                            && level.pluto$isEmptyBlock(x1, y1 - 1, z1)
++                            && allNeighborsEmpty(level, x1, y1, z1, randomDirection.getOpposite())) {
++                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1 = pos.relative(randomDirection), this.defaultBlockState().setValue(AGE, ageValue + 1), 2)) { // CraftBukkit - add event
++                            // Pluto end - Memory efficient block lookups
+                             this.placeGrownFlower(level, blockPos1, ageValue + 1);
+                             flag2 = true;
+                             } // CraftBukkit
+@@ -151,9 +_,11 @@
+         level.levelEvent(1034, pos, 0);
+     }
+ 
+-    private static boolean allNeighborsEmpty(LevelReader level, BlockPos pos, @Nullable Direction excludingSide) {
++    // Pluto start - Memory efficient block lookups
++    private static boolean allNeighborsEmpty(LevelReader level, int x, int y, int z, @Nullable Direction excludingSide) {
+         for (Direction direction : Direction.Plane.HORIZONTAL) {
+-            if (direction != excludingSide && !level.isEmptyBlock(pos.relative(direction))) {
++            if (direction != excludingSide && !level.pluto$isEmptyBlock(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) {
++                // Pluto end - Memory efficient block lookups
+                 return false;
+             }
+         }
+@@ -181,7 +_,12 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.below());
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
++        // Pluto end - Memory efficient block lookups
+         if (!blockState.is(this.plant) && !blockState.is(Blocks.END_STONE)) {
+             if (!blockState.isAir()) {
+                 return false;
+@@ -189,7 +_,7 @@
+                 boolean flag = false;
+ 
+                 for (Direction direction : Direction.Plane.HORIZONTAL) {
+-                    BlockState blockState1 = level.getBlockState(pos.relative(direction));
++                    BlockState blockState1 = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
+                     if (blockState1.is(this.plant)) {
+                         if (flag) {
+                             return false;
+@@ -227,12 +_,17 @@
+             i++;
+         }
+ 
++        // Pluto start - Memory efficient block lookups
++        final int x = branchPos.getX();
++        final int y = branchPos.getY();
++        final int z = branchPos.getZ();
++        // Pluto end - Memory efficient block lookups
+         for (int i1 = 0; i1 < i; i1++) {
+-            BlockPos blockPos = branchPos.above(i1 + 1);
+-            if (!allNeighborsEmpty(level, blockPos, null)) {
++            if (!allNeighborsEmpty(level, x, y + (i1 + 1), z, null)) { // Pluto - Memory efficient block lookups
+                 return;
+             }
+ 
++            BlockPos blockPos = branchPos.above(i1 + 1); // Pluto - Memory efficient block lookups | Moved down
+             level.setBlock(blockPos, ChorusPlantBlock.getStateWithConnections(level, blockPos, block.defaultBlockState()), 2);
+             level.setBlock(blockPos.below(), ChorusPlantBlock.getStateWithConnections(level, blockPos.below(), block.defaultBlockState()), 2);
+         }
+@@ -246,13 +_,18 @@
+ 
+             for (int i2 = 0; i2 < randomInt; i2++) {
+                 Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+-                BlockPos blockPos1 = branchPos.above(i).relative(randomDirection);
+-                if (Math.abs(blockPos1.getX() - originalBranchPos.getX()) < maxHorizontalDistance
+-                    && Math.abs(blockPos1.getZ() - originalBranchPos.getZ()) < maxHorizontalDistance
+-                    && level.isEmptyBlock(blockPos1)
+-                    && level.isEmptyBlock(blockPos1.below())
+-                    && allNeighborsEmpty(level, blockPos1, randomDirection.getOpposite())) {
++                // Pluto start - Memory efficient block lookups
++                final int x1 = x + randomDirection.getStepX();
++                final int y1 = (y + i) + randomDirection.getStepY();
++                final int z1 = z + randomDirection.getStepZ();
++                if (Math.abs(x1 - originalBranchPos.getX()) < maxHorizontalDistance
++                    && Math.abs(z1 - originalBranchPos.getZ()) < maxHorizontalDistance
++                    && level.pluto$isEmptyBlock(x1, y1, z1)
++                    && level.pluto$isEmptyBlock(x1, y1 - 1, z1)
++                    && allNeighborsEmpty(level, x1, y1, z1, randomDirection.getOpposite())) {
++                    // Pluto end - Memory efficient block lookups
+                     flag = true;
++                    BlockPos blockPos1 = new BlockPos(x1, y1, z1); // Pluto - Memory efficient block lookups | Moved down
+                     level.setBlock(blockPos1, ChorusPlantBlock.getStateWithConnections(level, blockPos1, block.defaultBlockState()), 2);
+                     level.setBlock(
+                         blockPos1.relative(randomDirection.getOpposite()),

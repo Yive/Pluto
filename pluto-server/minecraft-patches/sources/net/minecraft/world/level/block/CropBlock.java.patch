@@ -13,6 +13,60 @@
                  // Spigot start
                  int modifier = 100;
                  if (this == Blocks.BEETROOTS) {
+@@ -115,12 +_,17 @@
+ 
+     protected static float getGrowthSpeed(Block block, BlockGetter level, BlockPos pos) {
+         float f = 1.0F;
+-        BlockPos blockPos = pos.below();
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int yBelow = y - 1;
++        final int z = pos.getZ();
++        // Pluto end - Memory efficient block lookups
+ 
+         for (int i = -1; i <= 1; i++) {
+             for (int i1 = -1; i1 <= 1; i1++) {
+                 float f1 = 0.0F;
+-                BlockState blockState = level.getBlockState(blockPos.offset(i, 0, i1));
++                BlockState blockState = level.pluto$getBlockState(x + i, yBelow, z + i1); // Pluto - Memory efficient block lookups
+                 if (blockState.is(Blocks.FARMLAND)) {
+                     f1 = 1.0F;
+                     if (blockState.getValue(FarmBlock.MOISTURE) > 0) {
+@@ -136,19 +_,23 @@
+             }
+         }
+ 
+-        BlockPos blockPos1 = pos.north();
+-        BlockPos blockPos2 = pos.south();
+-        BlockPos blockPos3 = pos.west();
+-        BlockPos blockPos4 = pos.east();
+-        boolean flag = level.getBlockState(blockPos3).is(block) || level.getBlockState(blockPos4).is(block);
+-        boolean flag1 = level.getBlockState(blockPos1).is(block) || level.getBlockState(blockPos2).is(block);
++        // Pluto start - Memory efficient block lookups
++        final int zNorth = z - 1;
++        final int zSouth = z + 1;
++        final int xWest = x - 1;
++        final int xEast = x + 1;
++        boolean flag = level.pluto$getBlockState(xWest, y, z).is(block) || level.pluto$getBlockState(xEast, y, z).is(block);
++        boolean flag1 = level.pluto$getBlockState(x, y, zNorth).is(block) || level.pluto$getBlockState(x, y, zSouth).is(block);
++        // Pluto end - Memory efficient block lookups
+         if (flag && flag1) {
+             f /= 2.0F;
+         } else {
+-            boolean flag2 = level.getBlockState(blockPos3.north()).is(block)
+-                || level.getBlockState(blockPos4.north()).is(block)
+-                || level.getBlockState(blockPos4.south()).is(block)
+-                || level.getBlockState(blockPos3.south()).is(block);
++            // Pluto start - Memory efficient block lookups
++            boolean flag2 = level.pluto$getBlockState(xWest, y, z - 1).is(block)
++                || level.pluto$getBlockState(xEast, y, z - 1).is(block)
++                || level.pluto$getBlockState(xEast, y, z + 1).is(block)
++                || level.pluto$getBlockState(xWest, y, z + 1).is(block);
++            // Pluto end - Memory efficient block lookups
+             if (flag2) {
+                 f /= 2.0F;
+             }
 @@ -163,7 +_,7 @@
      }
  

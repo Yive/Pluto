@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/level/block/FarmBlock.java
 +++ b/net/minecraft/world/level/block/FarmBlock.java
+@@ -64,7 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.above());
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return !blockState.isSolid() || blockState.getBlock() instanceof FenceGateBlock || blockState.getBlock() instanceof MovingPistonBlock;
+     }
+ 
 @@ -97,7 +_,7 @@
          int moistureValue = state.getValue(MOISTURE);
          if (moistureValue > 0 && level.paperConfig().tickRates.wetFarmland != 1 && (level.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % level.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
@@ -9,3 +18,12 @@
              if (moistureValue > 0) {
                  org.bukkit.craftbukkit.event.CraftEventFactory.handleMoistureChangeEvent(level, pos, state.setValue(MOISTURE, moistureValue - 1), 2); // CraftBukkit
              } else if (!shouldMaintainFarmland(level, pos)) {
+@@ -154,7 +_,7 @@
+     }
+ 
+     private static boolean shouldMaintainFarmland(BlockGetter level, BlockPos pos) {
+-        return level.getBlockState(pos.above()).is(BlockTags.MAINTAINS_FARMLAND);
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(BlockTags.MAINTAINS_FARMLAND); // Pluto - Memory efficient block lookups
+     }
+ 
+     private static boolean isNearWater(LevelReader level, BlockPos pos) {

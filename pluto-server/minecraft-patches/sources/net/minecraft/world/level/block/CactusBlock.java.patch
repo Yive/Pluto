@@ -1,9 +1,10 @@
 --- a/net/minecraft/world/level/block/CactusBlock.java
 +++ b/net/minecraft/world/level/block/CactusBlock.java
-@@ -53,11 +_,19 @@
+@@ -52,25 +_,46 @@
+ 
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-         BlockPos blockPos = pos.above();
+-        BlockPos blockPos = pos.above();
 -        if (level.isEmptyBlock(blockPos)) {
 +        // Pluto start - Decrease chunk/block lookups
 +        final int x = pos.getX();
@@ -22,12 +23,20 @@
                  if (++i == level.paperConfig().maxGrowthHeight.cactus && ageValue == 15) { // Paper - Configurable cactus/bamboo/reed growth height
                      return;
                  }
-@@ -69,6 +_,17 @@
+             }
+ 
+-            if (ageValue == 8 && this.canSurvive(this.defaultBlockState(), level, pos.above())) {
++            // Pluto start - Decrease chunk/block lookups
++            BlockPos blockPos;
++            if (ageValue == 8 && this.canSurvive(this.defaultBlockState(), level, blockPos = pos.above())) {
++            // Pluto end - Decrease chunk/block lookups
+                 double d = i >= level.paperConfig().maxGrowthHeight.cactus ? 0.25 : 0.1; // Paper - Configurable cactus/bamboo/reed growth height
+                 if (random.nextDouble() <= d) {
                      org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, Blocks.CACTUS_FLOWER.defaultBlockState(), 3);
                  }
              } else if (ageValue == 15 && i < level.paperConfig().maxGrowthHeight.cactus) { // Paper - Configurable cactus/bamboo/reed growth height
 +                // Pluto start - Check if the cactus can even survive being placed
-+                if (level.plutoConfig().cactusCheckSurvivalBeforeGrowth && !canSurvive(level, blockPos)) {
++                if (level.plutoConfig().cactusCheckSurvivalBeforeGrowth && !canSurvive(level, blockPos = pos.above())) { // Pluto - Decrease chunk/block lookups
 +                    level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(state));
 +                    // We're going to fake the block breaking to match vanilla standards.
 +                    for (net.minecraft.world.item.ItemStack drop : Block.getDrops(state, level, pos, null)) { // Use base cactus since we don't place a block
@@ -38,9 +47,12 @@
 +                }
 +                // Pluto end - Check if the cactus can even survive being placed
                  // Paper start
-                 if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, this.defaultBlockState(), 3)) {
+-                if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, this.defaultBlockState(), 3)) {
++                if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos = pos.above(), this.defaultBlockState(), 3)) { // Pluto - Decrease chunk/block lookups
                      return;
-@@ -115,9 +_,15 @@
+                 }
+                 // Paper end
+@@ -115,15 +_,28 @@
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
@@ -50,10 +62,26 @@
 +
 +    protected boolean canSurvive(LevelReader level, BlockPos pos) {
 +        // Pluto end - Check if the cactus can even survive being placed
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        // Pluto end - Memory efficient block lookups
          for (Direction direction : Direction.Plane.HORIZONTAL) {
-             BlockState blockState = level.getBlockState(pos.relative(direction));
+-            BlockState blockState = level.getBlockState(pos.relative(direction));
 -            if (blockState.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA)) {
++            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
 +            if (blockState.isSolid() || blockState.getFluidState().is(FluidTags.LAVA)) { // Pluto - Decrease chunk/block lookups
                  return false;
              }
          }
+ 
+-        BlockState blockState1 = level.getBlockState(pos.below());
+-        return (blockState1.is(Blocks.CACTUS) || blockState1.is(BlockTags.SAND)) && !level.getBlockState(pos.above()).liquid();
++        // Pluto start - Memory efficient block lookups
++        BlockState blockState1 = level.pluto$getBlockState(x, y - 1, z);
++        return (blockState1.is(Blocks.CACTUS) || blockState1.is(BlockTags.SAND)) && !level.pluto$getBlockState(x, y + 1, z).liquid();
++        // Pluto end - Memory efficient block lookups
+     }
+ 
+     @Override

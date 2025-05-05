@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/AzaleaBlock.java
++++ b/net/minecraft/world/level/block/AzaleaBlock.java
+@@ -40,7 +_,7 @@
+ 
+     @Override
+     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+-        return level.getFluidState(pos.above()).isEmpty();
++        return level.pluto$getFluidState(pos.getX(), pos. getY() + 1, pos.getZ()).isEmpty(); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override

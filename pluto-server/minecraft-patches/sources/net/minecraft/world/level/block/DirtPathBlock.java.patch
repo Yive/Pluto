@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/DirtPathBlock.java
++++ b/net/minecraft/world/level/block/DirtPathBlock.java
+@@ -70,7 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.above());
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return !blockState.isSolid() || blockState.getBlock() instanceof FenceGateBlock;
+     }
+ 

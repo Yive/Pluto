@@ -21,16 +21,28 @@
                  i++;
              }
  
-@@ -93,11 +_,12 @@
+@@ -88,16 +_,21 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.below());
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
++        // Pluto end - Memory efficient block lookups
+         if (blockState.is(this)) {
              return true;
          } else {
              if (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.SAND)) {
+-                BlockPos blockPos = pos.below();
 +                if (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
-                 BlockPos blockPos = pos.below();
  
                  for (Direction direction : Direction.Plane.HORIZONTAL) {
-                     BlockState blockState1 = level.getBlockState(blockPos.relative(direction));
+-                    BlockState blockState1 = level.getBlockState(blockPos.relative(direction));
 -                    FluidState fluidState = level.getFluidState(blockPos.relative(direction));
++                    BlockState blockState1 = level.pluto$getBlockState(x + direction.getStepX(), (y - 1) + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
 +                    FluidState fluidState = blockState1.getFluidState(); // Pluto - Decrease chunk/block lookups
                      if (fluidState.is(FluidTags.WATER) || blockState1.is(Blocks.FROSTED_ICE)) {
                          return true;

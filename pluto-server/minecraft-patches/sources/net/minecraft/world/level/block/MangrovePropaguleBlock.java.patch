@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/MangrovePropaguleBlock.java
++++ b/net/minecraft/world/level/block/MangrovePropaguleBlock.java
+@@ -72,7 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        return isHanging(state) ? level.getBlockState(pos.above()).is(Blocks.MANGROVE_LEAVES) : super.canSurvive(state, level, pos);
++        return isHanging(state) ? level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.MANGROVE_LEAVES) : super.canSurvive(state, level, pos); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override

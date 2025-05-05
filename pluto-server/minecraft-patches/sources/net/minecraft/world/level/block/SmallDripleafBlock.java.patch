@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/SmallDripleafBlock.java
++++ b/net/minecraft/world/level/block/SmallDripleafBlock.java
+@@ -52,7 +_,7 @@
+     @Override
+     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+         return state.is(BlockTags.SMALL_DRIPLEAF_PLACEABLE)
+-            || level.getFluidState(pos.above()).isSourceOfType(Fluids.WATER) && super.mayPlaceOn(state, level, pos);
++            || level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).isSourceOfType(Fluids.WATER) && super.mayPlaceOn(state, level, pos); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Nullable

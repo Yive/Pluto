@@ -1,0 +1,59 @@
+--- a/net/minecraft/world/level/block/ChorusPlantBlock.java
++++ b/net/minecraft/world/level/block/ChorusPlantBlock.java
+@@ -43,12 +_,17 @@
+     }
+ 
+     public static BlockState getStateWithConnections(BlockGetter level, BlockPos pos, BlockState state) {
+-        BlockState blockState = level.getBlockState(pos.below());
+-        BlockState blockState1 = level.getBlockState(pos.above());
+-        BlockState blockState2 = level.getBlockState(pos.north());
+-        BlockState blockState3 = level.getBlockState(pos.east());
+-        BlockState blockState4 = level.getBlockState(pos.south());
+-        BlockState blockState5 = level.getBlockState(pos.west());
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
++        BlockState blockState1 = level.pluto$getBlockState(x, y + 1, z);
++        BlockState blockState2 = level.pluto$getBlockState(x, y, z - 1);
++        BlockState blockState3 = level.pluto$getBlockState(x + 1, y, z);
++        BlockState blockState4 = level.pluto$getBlockState(x, y, z + 1);
++        BlockState blockState5 = level.pluto$getBlockState(x - 1, y, z);
++        // Pluto end - Memory efficient block lookups
+         Block block = state.getBlock();
+         return state.trySetValue(DOWN, blockState.is(block) || blockState.is(Blocks.CHORUS_FLOWER) || blockState.is(Blocks.END_STONE))
+             .trySetValue(UP, blockState1.is(block) || blockState1.is(Blocks.CHORUS_FLOWER))
+@@ -92,18 +_,28 @@
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+         if (io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableChorusPlantUpdates) return true; // Paper - add option to disable block updates
+-        BlockState blockState = level.getBlockState(pos.below());
+-        boolean flag = !level.getBlockState(pos.above()).isAir() && !blockState.isAir();
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
++        boolean flag = !level.pluto$getBlockState(x, y + 1, z).isAir() && !blockState.isAir();
++        // Pluto end - Memory efficient block lookups
+ 
+         for (Direction direction : Direction.Plane.HORIZONTAL) {
++            // Pluto start - Memory efficient block lookups
++            final int x1 = x + direction.getStepX();
++            final int y1 = y + direction.getStepY();
++            final int z1 = z + direction.getStepZ();
++            // Pluto end - Memory efficient block lookups
+             BlockPos blockPos = pos.relative(direction);
+-            BlockState blockState1 = level.getBlockState(blockPos);
++            BlockState blockState1 = level.pluto$getBlockState(x1, y1, z1); // Pluto - Memory efficient block lookups
+             if (blockState1.is(this)) {
+                 if (flag) {
+                     return false;
+                 }
+ 
+-                BlockState blockState2 = level.getBlockState(blockPos.below());
++                BlockState blockState2 = level.pluto$getBlockState(x1, y1 - 1, z1); // Pluto - Memory efficient block lookups
+                 if (blockState2.is(this) || blockState2.is(Blocks.END_STONE)) {
+                     return true;
+                 }
