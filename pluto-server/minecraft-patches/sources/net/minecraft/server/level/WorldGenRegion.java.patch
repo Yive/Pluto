@@ -1,0 +1,53 @@
+--- a/net/minecraft/server/level/WorldGenRegion.java
++++ b/net/minecraft/server/level/WorldGenRegion.java
+@@ -203,6 +_,50 @@
+     }
+     // Paper end
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    public BlockState pluto$getBlockState(int x, int y, int z) {
++        return this.getChunk(x >> 4, z >> 4).getBlockState(x, y, z);
++    }
++
++    @Override
++    public BlockState pluto$getBlockState(long packedPos) {
++        return pluto$getBlockState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public @Nullable BlockState pluto$getBlockStateIfLoaded(int x, int y, int z) {
++        ChunkAccess chunk = this.getChunkIfLoadedImmediately(x >> 4, z >> 4);
++        return chunk == null ? null : chunk.getBlockState(x, y, z);
++    }
++
++    @Override
++    public @Nullable BlockState pluto$getBlockStateIfLoaded(long packedPos) {
++        return pluto$getBlockStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(int x, int y, int z) {
++        return this.getChunk(x >> 4, z >> 4).pluto$getFluidState(x, y, z);
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(long packedPos) {
++        return pluto$getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public @Nullable FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
++        ChunkAccess chunk = this.getChunkIfLoadedImmediately(x >> 4, z >> 4);
++        return chunk == null ? null : chunk.pluto$getFluidState(x, y, z);
++    }
++
++    @Override
++    public @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos) {
++        return pluto$getFluidStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     public BlockState getBlockState(BlockPos pos) {
+         return this.getChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ())).getBlockState(pos);

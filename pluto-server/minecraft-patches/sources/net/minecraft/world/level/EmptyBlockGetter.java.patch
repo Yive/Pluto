@@ -1,0 +1,51 @@
+--- a/net/minecraft/world/level/EmptyBlockGetter.java
++++ b/net/minecraft/world/level/EmptyBlockGetter.java
+@@ -17,6 +_,48 @@
+         return null;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    public BlockState pluto$getBlockState(int x, int y, int z) {
++        return Blocks.AIR.defaultBlockState();
++    }
++
++    @Override
++    public BlockState pluto$getBlockState(long packedPos) {
++        return Blocks.AIR.defaultBlockState();
++    }
++
++    @Override
++    public BlockState pluto$getBlockStateIfLoaded(int x, int y, int z) {
++        return Blocks.AIR.defaultBlockState();
++    }
++
++    @Override
++    public BlockState pluto$getBlockStateIfLoaded(long packedPos) {
++        return Blocks.AIR.defaultBlockState();
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(int x, int y, int z) {
++        return Fluids.EMPTY.defaultFluidState();
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(long packedPos) {
++        return Fluids.EMPTY.defaultFluidState();
++    }
++
++    @Override
++    public FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
++        return Fluids.EMPTY.defaultFluidState();
++    }
++
++    @Override
++    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
++        return Fluids.EMPTY.defaultFluidState();
++    }
++    // Pluto end - Memory efficient block lookups
++
+     // Paper start - If loaded util
+     @Override
+     public final FluidState getFluidIfLoaded(BlockPos pos) {

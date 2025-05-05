@@ -1,0 +1,59 @@
+--- a/net/minecraft/world/level/PathNavigationRegion.java
++++ b/net/minecraft/world/level/PathNavigationRegion.java
+@@ -124,6 +_,56 @@
+         return chunk.getBlockEntity(pos);
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    public BlockState pluto$getBlockState(int x, int y, int z) {
++        if (this.isOutsideBuildHeight(y))
++            return Blocks.AIR.defaultBlockState();
++
++        return this.getChunk(x >> 4, z >> 4).getBlockState(x, y, z);
++    }
++
++    @Override
++    public BlockState pluto$getBlockState(long packedPos) {
++        return pluto$getBlockState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public @Nullable BlockState pluto$getBlockStateIfLoaded(int x, int y, int z) {
++        ChunkAccess chunk = getChunkIfLoaded(x >> 4, z >> 4);
++        return chunk == null ? null : chunk.getBlockState(x, y, z);
++    }
++
++    @Override
++    public @Nullable BlockState pluto$getBlockStateIfLoaded(long packedPos) {
++        return pluto$getBlockStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(int x, int y, int z) {
++        if (this.isOutsideBuildHeight(y))
++            return Fluids.EMPTY.defaultFluidState();
++
++        return this.getChunk(x >> 4, z >> 4).pluto$getFluidState(x, y, z);
++    }
++
++    @Override
++    public FluidState pluto$getFluidState(long packedPos) {
++        return pluto$getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++
++    @Override
++    public @Nullable FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
++        ChunkAccess chunk = getChunkIfLoaded(x >> 4, z >> 4);
++        return chunk == null ? null : chunk.pluto$getFluidState(x, y, z);
++    }
++
++    @Override
++    public @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos) {
++        return pluto$getFluidStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     public BlockState getBlockState(BlockPos pos) {
+         if (this.isOutsideBuildHeight(pos)) {
