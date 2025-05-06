@@ -1,0 +1,26 @@
+--- a/net/minecraft/world/level/block/RailState.java
++++ b/net/minecraft/world/level/block/RailState.java
+@@ -103,14 +_,17 @@
+         if (BaseRailBlock.isRail(blockState)) {
+             return new RailState(this.level, pos, blockState);
+         } else {
+-            BlockPos blockPos = pos.above();
+-            blockState = this.level.getBlockState(blockPos);
++            // Pluto start - Memory efficient block lookups
++            final int x = pos.getX();
++            final int y = pos.getY();
++            final int z = pos.getZ();
++            blockState = this.level.pluto$getBlockState(x, y + 1, z);
+             if (BaseRailBlock.isRail(blockState)) {
+-                return new RailState(this.level, blockPos, blockState);
++                return new RailState(this.level, pos.above(), blockState);
+             } else {
+-                blockPos = pos.below();
+-                blockState = this.level.getBlockState(blockPos);
+-                return BaseRailBlock.isRail(blockState) ? new RailState(this.level, blockPos, blockState) : null;
++                blockState = this.level.pluto$getBlockState(x, y - 1, z);
++                return BaseRailBlock.isRail(blockState) ? new RailState(this.level, pos.below(), blockState) : null;
++                // Pluto end - Memory efficient block lookups
+             }
+         }
+     }

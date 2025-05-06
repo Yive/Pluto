@@ -18,31 +18,39 @@
                      flag |= validator.getAsBoolean(); // Paper - note: this is not a validator, it's what adds/sucks in items
                  }
  
-@@ -528,9 +_,15 @@
+@@ -528,9 +_,19 @@
      }
  
      public static boolean suckInItems(Level level, Hopper hopper) {
+-        BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
+-        BlockState blockState = level.getBlockState(blockPos);
+-        Container sourceContainer = getSourceContainer(level, hopper, blockPos, blockState);
 +        // Pluto start - Entities search for hoppers
 +        return suckInItems(level, hopper, null);
 +    }
 +
 +    public static boolean suckInItems(Level level, Hopper hopper, @Nullable Container sourceContainer) {
 +        // Pluto end - Entities search for hoppers
-         BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
-         BlockState blockState = level.getBlockState(blockPos);
--        Container sourceContainer = getSourceContainer(level, hopper, blockPos, blockState);
-+        if (sourceContainer == null) sourceContainer = getSourceContainer(level, hopper, blockPos, blockState); // Pluto - Entities search for hoppers
++        // Pluto start - Memory efficient block lookups
++        final int x = net.minecraft.util.Mth.floor(hopper.getLevelX());
++        final int y = net.minecraft.util.Mth.floor(hopper.getLevelY() + 1.0D);
++        final int z = net.minecraft.util.Mth.floor(hopper.getLevelZ());
++        BlockState blockState = level.pluto$getBlockState(x, y, z);
++        if (sourceContainer == null) sourceContainer = getSourceContainer(level, hopper, new BlockPos(x, y, z), blockState); // Pluto - Entities search for hoppers
++        // Pluto end - Memory efficient block lookups
          if (sourceContainer != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
-@@ -543,6 +_,7 @@
+@@ -543,7 +_,8 @@
  
              return false;
          } else {
+-            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
 +            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
-             boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
++            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory efficient block lookups
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
+                     if (addItem(hopper, itemEntity)) {
 @@ -736,6 +_,7 @@
          // CraftBukkit start
          BlockPos searchPosition = pos.relative(blockEntity.facing);

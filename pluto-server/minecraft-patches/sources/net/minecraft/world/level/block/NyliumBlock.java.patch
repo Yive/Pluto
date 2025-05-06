@@ -1,0 +1,12 @@
+--- a/net/minecraft/world/level/block/NyliumBlock.java
++++ b/net/minecraft/world/level/block/NyliumBlock.java
+@@ -30,8 +_,7 @@
+     }
+ 
+     private static boolean canBeNylium(BlockState state, LevelReader reader, BlockPos pos) {
+-        BlockPos blockPos = pos.above();
+-        BlockState blockState = reader.getBlockState(blockPos);
++        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         int lightBlockInto = LightEngine.getLightBlockInto(state, blockState, Direction.UP, blockState.getLightBlock());
+         return lightBlockInto < 15;
+     }

@@ -1,0 +1,29 @@
+--- a/net/minecraft/world/level/block/BubbleColumnBlock.java
++++ b/net/minecraft/world/level/block/BubbleColumnBlock.java
+@@ -50,7 +_,7 @@
+     @Override
+     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
+         if (!new io.papermc.paper.event.entity.EntityInsideBlockEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(level, pos)).callEvent()) { return; } // Paper - Add EntityInsideBlockEvent
+-        BlockState blockState = level.getBlockState(pos.above());
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         boolean flag = blockState.getCollisionShape(level, pos).isEmpty() && blockState.getFluidState().isEmpty();
+         if (flag) {
+             entity.onAboveBubbleColumn(state.getValue(DRAG_DOWN), pos);
+@@ -61,7 +_,7 @@
+ 
+     @Override
+     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+-        updateColumn(level, pos, state, level.getBlockState(pos.below()));
++        updateColumn(level, pos, state, level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override
+@@ -166,7 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        BlockState blockState = level.getBlockState(pos.below());
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return blockState.is(Blocks.BUBBLE_COLUMN) || blockState.is(Blocks.MAGMA_BLOCK) || blockState.is(Blocks.SOUL_SAND);
+     }
+ 

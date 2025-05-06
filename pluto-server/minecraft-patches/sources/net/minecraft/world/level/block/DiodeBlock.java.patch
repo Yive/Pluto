@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/DiodeBlock.java
++++ b/net/minecraft/world/level/block/DiodeBlock.java
+@@ -204,7 +_,7 @@
+ 
+     public boolean shouldPrioritize(BlockGetter level, BlockPos pos, BlockState state) {
+         Direction opposite = state.getValue(FACING).getOpposite();
+-        BlockState blockState = level.getBlockState(pos.relative(opposite));
++        BlockState blockState = level.pluto$getBlockState(pos.getX() + opposite.getStepX(), pos.getY() + opposite.getStepY(), pos.getZ() + opposite.getStepZ()); // Pluto - Memory efficient block lookups
+         return isDiode(blockState) && blockState.getValue(FACING) != opposite;
+     }
+ 

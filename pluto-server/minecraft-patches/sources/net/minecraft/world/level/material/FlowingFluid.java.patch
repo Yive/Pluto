@@ -1,5 +1,15 @@
 --- a/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/net/minecraft/world/level/material/FlowingFluid.java
+@@ -106,8 +_,7 @@
+                 float f = 0.0F;
+                 if (ownHeight == 0.0F) {
+                     if (!blockReader.getBlockState(mutableBlockPos).blocksMotion()) {
+-                        BlockPos blockPos = mutableBlockPos.below();
+-                        FluidState fluidState2 = blockReader.getFluidState(blockPos);
++                        FluidState fluidState2 = blockReader.pluto$getFluidState(mutableBlockPos.asLong()); // Pluto - Memory efficient block lookups
+                         if (this.affectsFlow(fluidState2)) {
+                             ownHeight = fluidState2.getOwnHeight();
+                             if (ownHeight > 0.0F) {
 @@ -146,7 +_,7 @@
  
      protected boolean isSolidFace(BlockGetter level, BlockPos neighborPos, Direction side) {

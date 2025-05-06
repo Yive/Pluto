@@ -1,0 +1,22 @@
+--- a/net/minecraft/world/level/block/BonemealableBlock.java
++++ b/net/minecraft/world/level/block/BonemealableBlock.java
+@@ -26,9 +_,17 @@
+     }
+ 
+     private static Optional<BlockPos> getSpreadableNeighbourPos(List<Direction> directions, LevelReader level, BlockPos pos, BlockState state) {
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
+         for (Direction direction : directions) {
+-            BlockPos blockPos = pos.relative(direction);
+-            if (level.isEmptyBlock(blockPos) && state.canSurvive(level, blockPos)) {
++            final int x1 = x + direction.getStepX();
++            final int y1 = y + direction.getStepY();
++            final int z1 = z + direction.getStepZ();
++            BlockPos blockPos;
++            if (level.pluto$isEmptyBlock(x1, y1, z1) && state.canSurvive(level, blockPos = new BlockPos(x1, y1, z1))) {
++                // Pluto end - Memory efficient block lookups
+                 return Optional.of(blockPos);
+             }
+         }

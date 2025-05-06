@@ -1,11 +1,28 @@
 --- a/net/minecraft/world/level/block/BambooSaplingBlock.java
 +++ b/net/minecraft/world/level/block/BambooSaplingBlock.java
-@@ -38,7 +_,7 @@
+@@ -38,14 +_,14 @@
  
      @Override
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 -        if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
-+        if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && (level.plutoConfig().bambooSaplingIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
++        if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && (level.plutoConfig().bambooSaplingIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora // Pluto - Memory efficient block lookups
              this.growBamboo(level, pos);
          }
      }
+ 
+     @Override
+     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        return level.getBlockState(pos.below()).is(BlockTags.BAMBOO_PLANTABLE_ON);
++        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.BAMBOO_PLANTABLE_ON); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override
+@@ -75,7 +_,7 @@
+ 
+     @Override
+     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+-        return level.getBlockState(pos.above()).isAir();
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir(); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override

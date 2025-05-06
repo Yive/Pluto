@@ -1,0 +1,33 @@
+--- a/net/minecraft/world/level/block/CreakingHeartBlock.java
++++ b/net/minecraft/world/level/block/CreakingHeartBlock.java
+@@ -114,8 +_,13 @@
+     public static boolean hasRequiredLogs(BlockState state, LevelReader level, BlockPos pos) {
+         Direction.Axis axis = state.getValue(AXIS);
+ 
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
+         for (Direction direction : axis.getDirections()) {
+-            BlockState blockState = level.getBlockState(pos.relative(direction));
++            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
++            // Pluto end - Memory efficient block lookups
+             if (!blockState.is(BlockTags.PALE_OAK_LOGS) || blockState.getValue(AXIS) != axis) {
+                 return false;
+             }
+@@ -125,9 +_,13 @@
+     }
+ 
+     private static boolean isSurroundedByLogs(LevelAccessor level, BlockPos pos) {
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
+         for (Direction direction : Direction.values()) {
+-            BlockPos blockPos = pos.relative(direction);
+-            BlockState blockState = level.getBlockState(blockPos);
++            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
++            // Pluto end - Memory efficient block lookups
+             if (!blockState.is(BlockTags.PALE_OAK_LOGS)) {
+                 return false;
+             }

@@ -1,5 +1,15 @@
 --- a/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/net/minecraft/world/level/block/BaseFireBlock.java
+@@ -43,8 +_,7 @@
+     }
+ 
+     public static BlockState getState(BlockGetter reader, BlockPos pos) {
+-        BlockPos blockPos = pos.below();
+-        BlockState blockState = reader.getBlockState(blockPos);
++        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return SoulFireBlock.canSurviveOnBlock(blockState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(reader, pos);
+     }
+ 
 @@ -163,7 +_,7 @@
      @Override
      protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
@@ -9,3 +19,21 @@
                  Optional<PortalShape> optional = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
                  if (optional.isPresent()) {
                      optional.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
+@@ -203,11 +_,15 @@
+         if (!inPortalDimension(level)) {
+             return false;
+         } else {
+-            BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
++            // Pluto start - Memory efficient block lookups
++            final int x = pos.getX();
++            final int y = pos.getY();
++            final int z = pos.getZ();
++            // Pluto end - Memory efficient block lookups
+             boolean flag = false;
+ 
+             for (Direction direction1 : Direction.values()) {
+-                if (level.getBlockState(mutableBlockPos.set(pos).move(direction1)).is(Blocks.OBSIDIAN)) {
++                if (level.pluto$getBlockState(x + direction1.getStepX(), y + direction1.getStepY(), z + direction1.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory efficient block lookups
+                     flag = true;
+                     break;
+                 }

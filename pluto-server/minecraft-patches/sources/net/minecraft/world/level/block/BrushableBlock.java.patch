@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/BrushableBlock.java
++++ b/net/minecraft/world/level/block/BrushableBlock.java
+@@ -85,7 +_,7 @@
+             brushableBlockEntity.checkReset(level);
+         }
+ 
+-        if (FallingBlock.isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinY()) {
++        if (FallingBlock.isFree(level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())) && pos.getY() >= level.getMinY()) { // Pluto - Memory efficient block lookups
+             FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(level, pos, state);
+             fallingBlockEntity.disableDrop();
+         }
