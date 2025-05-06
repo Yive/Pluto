@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
++++ b/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
+@@ -153,7 +_,7 @@
+         Vec3 pos = DefaultRandomPos.getPos(pathfinder, radius, verticalDistance);
+         int i = 0;
+ 
+-        while (pos != null && !pathfinder.level().getBlockState(BlockPos.containing(pos)).isPathfindable(PathComputationType.WATER) && i++ < 10) {
++        while (pos != null && !pathfinder.level().pluto$getBlockState(pos.asBlockPosLong()).isPathfindable(PathComputationType.WATER) && i++ < 10) { // Pluto - Memory efficient block lookups
+             pos = DefaultRandomPos.getPos(pathfinder, radius, verticalDistance);
+         }
+ 

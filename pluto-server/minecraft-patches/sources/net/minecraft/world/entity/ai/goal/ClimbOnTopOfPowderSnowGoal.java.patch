@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/entity/ai/goal/ClimbOnTopOfPowderSnowGoal.java
++++ b/net/minecraft/world/entity/ai/goal/ClimbOnTopOfPowderSnowGoal.java
+@@ -23,9 +_,10 @@
+     public boolean canUse() {
+         boolean flag = this.mob.wasInPowderSnow || this.mob.isInPowderSnow;
+         if (flag && this.mob.getType().is(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS)) {
+-            BlockPos blockPos = this.mob.blockPosition().above();
+-            BlockState blockState = this.level.getBlockState(blockPos);
+-            return blockState.is(Blocks.POWDER_SNOW) || blockState.getCollisionShape(this.level, blockPos) == Shapes.empty();
++            // Pluto start - Memory efficient block lookups
++            BlockState blockState = this.level.pluto$getBlockState(this.mob.blockPosition().getX(), this.mob.blockPosition().getY() + 1, this.mob.blockPosition().getZ());
++            return blockState.is(Blocks.POWDER_SNOW) || blockState.getCollisionShape(this.level, this.mob.blockPosition().above()) == Shapes.empty();
++            // Pluto end - Memory efficient block lookups
+         } else {
+             return false;
+         }

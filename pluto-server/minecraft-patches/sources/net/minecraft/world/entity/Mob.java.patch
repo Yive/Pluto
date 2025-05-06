@@ -38,3 +38,17 @@
              this.goalSelector.tick();
              profilerFiller.pop();
          }
+@@ -1514,12 +_,11 @@
+     public boolean isSunBurnTick() {
+         if (this.level().isBrightOutside() && !this.level().isClientSide) {
+             float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();
+-            BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
+             boolean flag = this.isInWaterOrRain() || this.isInPowderSnow || this.wasInPowderSnow;
+             if (lightLevelDependentMagicValue > 0.5F
+                 && this.random.nextFloat() * 30.0F < (lightLevelDependentMagicValue - 0.4F) * 2.0F
+                 && !flag
+-                && this.level().canSeeSky(blockPos)) {
++                && this.level().canSeeSky(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()))) { // Pluto - Memory efficient block lookups
+                 return true;
+             }
+         }

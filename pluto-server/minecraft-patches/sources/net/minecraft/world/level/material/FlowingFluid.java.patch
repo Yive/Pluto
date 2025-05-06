@@ -19,3 +19,12 @@
          return !fluidState.getType().isSame(this)
              && (side == Direction.UP || !(blockState.getBlock() instanceof IceBlock) && blockState.isFaceSturdy(level, neighborPos, side));
      }
+@@ -513,7 +_,7 @@
+     }
+ 
+     private static boolean hasSameAbove(FluidState fluidState, BlockGetter level, BlockPos pos) {
+-        return fluidState.getType().isSame(level.getFluidState(pos.above()).getType());
++        return fluidState.getType().isSame(level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).getType()); // Pluto - Memory efficient block lookups
+     }
+ 
+     @Override

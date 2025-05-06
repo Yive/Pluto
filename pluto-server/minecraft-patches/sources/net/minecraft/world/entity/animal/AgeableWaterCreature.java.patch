@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/entity/animal/AgeableWaterCreature.java
++++ b/net/minecraft/world/entity/animal/AgeableWaterCreature.java
+@@ -74,7 +_,9 @@
+         // Paper end - Make water animal spawn height configurable
+         return pos.getY() >= i
+             && pos.getY() <= seaLevel
+-            && level.getFluidState(pos.below()).is(FluidTags.WATER)
+-            && level.getBlockState(pos.above()).is(Blocks.WATER);
++            // Pluto start - Memory efficient block lookups
++            && level.pluto$getFluidState(pos.getX(), pos.getY() - 1, pos.getZ()).is(FluidTags.WATER)
++            && level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER);
++            // Pluto end - Memory efficient block lookups
+     }
+ }

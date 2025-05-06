@@ -41,6 +41,20 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
+@@ -1705,9 +_,10 @@
+     }
+ 
+     protected BlockPos getPrimaryStepSoundBlockPos(BlockPos pos) {
+-        BlockPos blockPos = pos.above();
+-        BlockState blockState = this.level().getBlockState(blockPos);
+-        return !blockState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !blockState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? pos : blockPos;
++        // Pluto start - Memory efficient block lookups
++        BlockState blockState = this.level().pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ());
++        return !blockState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !blockState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? pos : pos.above();
++        // Pluto end - Memory efficient block lookups
+     }
+ 
+     protected void playCombinationStepSounds(BlockState primaryState, BlockState secondaryState) {
 @@ -1857,10 +_,25 @@
          return this.wasTouchingWater;
      }

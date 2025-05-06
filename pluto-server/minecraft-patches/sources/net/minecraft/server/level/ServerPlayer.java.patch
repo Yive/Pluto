@@ -17,3 +17,12 @@
              for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
                  ItemStack item = this.getInventory().getItem(i);
                  if (!item.isEmpty()) {
+@@ -1285,7 +_,7 @@
+             return Optional.empty();
+         } else {
+             boolean isPossibleToRespawnInThis = block.isPossibleToRespawnInThis(blockState);
+-            BlockState blockState1 = level.getBlockState(blockPos.above());
++            BlockState blockState1 = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()); // Pluto - Memory efficient block lookups
+             boolean isPossibleToRespawnInThis1 = blockState1.getBlock().isPossibleToRespawnInThis(blockState1);
+             return isPossibleToRespawnInThis && isPossibleToRespawnInThis1
+                 ? Optional.of(new ServerPlayer.RespawnPosAngle(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.1, blockPos.getZ() + 0.5), f, false, false)) // CraftBukkit

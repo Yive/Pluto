@@ -1,0 +1,24 @@
+--- a/net/minecraft/world/entity/animal/frog/FrogAi.java
++++ b/net/minecraft/world/entity/animal/frog/FrogAi.java
+@@ -213,14 +_,16 @@
+ 
+     private static <E extends Mob> boolean isAcceptableLandingSpot(E mob, BlockPos pos) {
+         Level level = mob.level();
+-        BlockPos blockPos = pos.below();
+-        if (level.getFluidState(pos).isEmpty() && level.getFluidState(blockPos).isEmpty() && level.getFluidState(pos.above()).isEmpty()) {
+-            BlockState blockState = level.getBlockState(pos);
+-            BlockState blockState1 = level.getBlockState(blockPos);
++        // Pluto start - Decrease chunk/block lookups
++        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);
++        BlockState blockState = chunk.getBlockState(pos); // Moved up
++        BlockState blockState1; // Moved up
++        if (blockState.getFluidState().isEmpty() && (blockState1 = chunk.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())).getFluidState().isEmpty() && chunk.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).isEmpty()) { // Pluto - Memory efficient block lookups
++            // Pluto end - Decrease chunk/block lookups
+             if (!blockState.is(BlockTags.FROG_PREFER_JUMP_TO) && !blockState1.is(BlockTags.FROG_PREFER_JUMP_TO)) {
+                 PathfindingContext pathfindingContext = new PathfindingContext(mob.level(), mob);
+                 PathType pathTypeStatic = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, pos.mutable());
+-                PathType pathTypeStatic1 = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, blockPos.mutable());
++                PathType pathTypeStatic1 = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, pos.below().mutable()); // Pluto - Memory efficient block lookups
+                 return pathTypeStatic == PathType.TRAPDOOR
+                     || blockState.isAir() && pathTypeStatic1 == PathType.TRAPDOOR
+                     || LongJumpToRandomPos.defaultAcceptableLandingSpot(mob, pos);

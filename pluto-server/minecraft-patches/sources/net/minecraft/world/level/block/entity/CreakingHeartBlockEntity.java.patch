@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
+@@ -88,9 +_,11 @@
+                     Vec3 vec3 = Vec3.atCenterOf(pos);
+                     float f = 0.2F + 0.8F * (100 - creakingHeart.emitter) / 100.0F;
+                     Vec3 vec31 = vec3.subtract(creakingHeart.emitterTarget).scale(f).add(creakingHeart.emitterTarget);
+-                    BlockPos blockPos = BlockPos.containing(vec31);
++                    // Pluto start - Memory efficient block lookups
++                    long blockPos = vec31.asBlockPosLong();
+                     float f1 = creakingHeart.emitter / 2.0F / 100.0F + 0.5F;
+-                    serverLevel.playSound(null, blockPos, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, f1, 1.0F);
++                    serverLevel.playSound(null, BlockPos.getX(blockPos) + 0.5, BlockPos.getY(blockPos) + 0.5, BlockPos.getZ(blockPos) + 0.5, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, f1, 1.0F);
++                    // Pluto end - Memory efficient block lookups
+                 }
+ 
+                 creakingHeart.emitter--;

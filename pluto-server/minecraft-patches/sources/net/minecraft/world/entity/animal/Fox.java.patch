@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/animal/Fox.java
++++ b/net/minecraft/world/entity/animal/Fox.java
+@@ -739,7 +_,7 @@
+             double d4 = d2 == 0.0 ? d1 * (i1 / 6.0F) : d3 / d2;
+ 
+             for (int i2 = 1; i2 < 4; i2++) {
+-                if (!fox.level().getBlockState(BlockPos.containing(fox.getX() + d4, fox.getY() + i2, fox.getZ() + d3)).canBeReplaced()) {
++                if (!fox.level().pluto$getBlockState(Mth.floor(fox.getX() + d4), Mth.floor(fox.getY() + i2), Mth.floor(fox.getZ() + d3)).canBeReplaced()) { // Pluto - Memory efficient block lookups
+                     return false;
+                 }
+             }

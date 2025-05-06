@@ -1,0 +1,11 @@
+--- a/net/minecraft/core/cauldron/CauldronInteraction.java
++++ b/net/minecraft/core/cauldron/CauldronInteraction.java
+@@ -388,7 +_,7 @@
+     }
+ 
+     private static boolean isUnderWater(Level level, BlockPos pos) {
+-        FluidState fluidState = level.getFluidState(pos.above());
++        FluidState fluidState = level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+         return fluidState.is(FluidTags.WATER);
+     }
+ 

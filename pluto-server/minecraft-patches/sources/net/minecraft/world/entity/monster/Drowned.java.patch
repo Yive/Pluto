@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/monster/Drowned.java
++++ b/net/minecraft/world/entity/monster/Drowned.java
+@@ -321,8 +_,10 @@
+ 
+         @Override
+         protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+-            BlockPos blockPos = pos.above();
+-            return level.isEmptyBlock(blockPos) && level.isEmptyBlock(blockPos.above()) && level.getBlockState(pos).entityCanStandOn(level, pos, this.drowned);
++            // Pluto start - Decrease chunk/block lookups
++            net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);
++            return chunk.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir() && chunk.getBlockState(pos.getX(), pos.getY() + 2, pos.getZ()).isAir() && chunk.getBlockState(pos).entityCanStandOn(level, pos, this.drowned); // Pluto - Memory efficient block lookups
++            // Pluto end - Decrease chunk/block lookups
+         }
+ 
+         @Override

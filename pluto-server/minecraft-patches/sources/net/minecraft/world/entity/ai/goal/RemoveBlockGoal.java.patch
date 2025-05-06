@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/entity/ai/goal/RemoveBlockGoal.java
++++ b/net/minecraft/world/entity/ai/goal/RemoveBlockGoal.java
+@@ -152,7 +_,9 @@
+         ChunkAccess chunk = level.getChunkIfLoadedImmediately(pos.getX() >> 4, pos.getZ() >> 4); // Paper - Prevent AI rules from loading chunks
+         return chunk != null
+             && chunk.getBlockState(pos).is(this.blockToRemove)
+-            && chunk.getBlockState(pos.above()).isAir()
+-            && chunk.getBlockState(pos.above(2)).isAir();
++            // Pluto start - Memory efficient block lookups
++            && chunk.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir()
++            && chunk.getBlockState(pos.getX(), pos.getY() + 2, pos.getZ()).isAir();
++            // Pluto end - Memory efficient block lookups
+     }
+ }

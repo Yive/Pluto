@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/ai/goal/CatSitOnBlockGoal.java
++++ b/net/minecraft/world/entity/ai/goal/CatSitOnBlockGoal.java
+@@ -44,7 +_,7 @@
+ 
+     @Override
+     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+-        if (!level.isEmptyBlock(pos.above())) {
++        if (!level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ())) { // Pluto - Memory efficient block lookups
+             return false;
+         } else {
+             BlockState blockState = level.getBlockState(pos);

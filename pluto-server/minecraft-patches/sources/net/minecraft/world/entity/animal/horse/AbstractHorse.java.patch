@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/animal/horse/AbstractHorse.java
++++ b/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+@@ -347,7 +_,7 @@
+     @Override
+     protected void playStepSound(BlockPos pos, BlockState block) {
+         if (!block.liquid()) {
+-            BlockState blockState = this.level().getBlockState(pos.above());
++            BlockState blockState = this.level().pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
+             SoundType soundType = block.getSoundType();
+             if (blockState.is(Blocks.SNOW)) {
+                 soundType = blockState.getSoundType();

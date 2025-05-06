@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -436,7 +_,7 @@
+             }
+ 
+             if (this.isEyeInFluid(FluidTags.WATER)
+-                && !serverLevel1.getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
++                && !serverLevel1.pluto$getBlockState(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ())).is(Blocks.BUBBLE_COLUMN)) { // Pluto - Memory efficient block lookups
+                 boolean flag1 = !this.canBreatheUnderwater()
+                     && !MobEffectUtil.hasWaterBreathing(this)
+                     && (!flag || !((Player)this).getAbilities().invulnerable);
 @@ -2809,6 +_,11 @@
          }
      }
@@ -28,7 +37,7 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4215,19 +_,21 @@
+@@ -4215,19 +_,27 @@
          double z1 = this.getZ();
          double d = y;
          boolean flag = false;
@@ -38,20 +47,37 @@
 +        // Pluto start - Decrease chunk/block lookups
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(Mth.floor(x) >> 4, Mth.floor(z) >> 4);
 +        if (chunk != null) {
-+            BlockPos blockPos = BlockPos.containing(x, y, z);
++            // Pluto start - Memory efficient block lookups
++            final int x2 = Mth.floor(x);
++            int y2 = Mth.floor(y);
++            final int z2 = Mth.floor(z);
++            // Pluto end - Memory efficient block lookups
 +            // Pluto end - Decrease chunk/block lookups
              boolean flag1 = false;
  
-             while (!flag1 && blockPos.getY() > level.getMinY()) {
+-            while (!flag1 && blockPos.getY() > level.getMinY()) {
 -                BlockPos blockPos1 = blockPos.below();
 -                BlockState blockState = level.getBlockState(blockPos1);
-+                BlockState blockState = chunk.getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Decrease chunk/block lookups
++            // Pluto start - Memory efficient block lookups
++            while (!flag1 && y2 > level.getMinY()) {
++                BlockState blockState = chunk.getBlockState(x2, y2 - 1, z2); // Pluto - Decrease chunk/block lookups
++                // Pluto end - Memory efficient block lookups
                  if (blockState.blocksMotion()) {
                      flag1 = true;
                  } else {
                      d--;
 -                    blockPos = blockPos1;
-+                    blockPos = blockPos.below(); // Pluto - Decrease chunk/block lookups
++                    y2--; // Pluto - Memory efficient block lookups
                  }
              }
  
+@@ -4369,8 +_,7 @@
+                 Direction direction = blockState.getValue(BedBlock.FACING);
+                 this.level().setBlock(blockPos, blockState.setValue(BedBlock.OCCUPIED, false), 3);
+                 Vec3 vec31 = BedBlock.findStandUpPosition(this.getType(), this.level(), blockPos, direction, this.getYRot()).orElseGet(() -> {
+-                    BlockPos blockPos1 = blockPos.above();
+-                    return new Vec3(blockPos1.getX() + 0.5, blockPos1.getY() + 0.1, blockPos1.getZ() + 0.5);
++                    return new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 1.1, blockPos.getZ() + 0.5); // Pluto - Memory efficient block lookups
+                 });
+                 Vec3 vec32 = Vec3.atBottomCenterOf(blockPos).subtract(vec31).normalize();
+                 float f = (float)Mth.wrapDegrees(Mth.atan2(vec32.z, vec32.x) * 180.0F / (float)Math.PI - 90.0);

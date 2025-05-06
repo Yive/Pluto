@@ -1,0 +1,29 @@
+--- a/net/minecraft/world/entity/SpawnPlacementTypes.java
++++ b/net/minecraft/world/entity/SpawnPlacementTypes.java
+@@ -12,8 +_,10 @@
+     SpawnPlacementType NO_RESTRICTIONS = (level, pos, entityType) -> true;
+     SpawnPlacementType IN_WATER = (level, pos, entityType) -> {
+         if (entityType != null && level.getWorldBorder().isWithinBounds(pos)) {
+-            BlockPos blockPos = pos.above();
+-            return level.getFluidState(pos).is(FluidTags.WATER) && !level.getBlockState(blockPos).isRedstoneConductor(level, blockPos);
++            // Pluto start - Memory efficient block lookups
++            BlockPos blockPos;
++            return level.getFluidState(pos).is(FluidTags.WATER) && !level.getBlockState(blockPos = pos.above()).isRedstoneConductor(level, blockPos);
++            // Pluto end - Memory efficient block lookups
+         } else {
+             return false;
+         }
+@@ -25,12 +_,11 @@
+         @Override
+         public boolean isSpawnPositionOk(LevelReader level, BlockPos pos, @Nullable EntityType<?> entityType) {
+             if (entityType != null && level.getWorldBorder().isWithinBounds(pos)) {
+-                BlockPos blockPos = pos.above();
+                 BlockPos blockPos1 = pos.below();
+                 BlockState blockState = level.getBlockState(blockPos1);
+                 return blockState.isValidSpawn(level, blockPos1, entityType)
+                     && this.isValidEmptySpawnBlock(level, pos, entityType)
+-                    && this.isValidEmptySpawnBlock(level, blockPos, entityType);
++                    && this.isValidEmptySpawnBlock(level, pos.above(), entityType); // Pluto - Memory efficient block lookups
+             } else {
+                 return false;
+             }

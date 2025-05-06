@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/animal/Dolphin.java
++++ b/net/minecraft/world/entity/animal/Dolphin.java
+@@ -449,8 +_,10 @@
+                     }
+ 
+                     if (posTowards != null) {
+-                        BlockPos blockPos = BlockPos.containing(posTowards);
+-                        if (!level.getFluidState(blockPos).is(FluidTags.WATER) || !level.getBlockState(blockPos).isPathfindable(PathComputationType.WATER)) {
++                        // Pluto start - Decrease chunk/block lookups
++                        net.minecraft.world.level.block.state.BlockState state = level.pluto$getBlockState(posTowards.asBlockPosLong()); // Pluto - Memory efficient block lookups
++                        if (!state.getFluidState().is(FluidTags.WATER) || !state.isPathfindable(PathComputationType.WATER)) {
++                            // Pluto end - Decrease chunk/block lookups
+                             posTowards = DefaultRandomPos.getPosTowards(this.dolphin, 8, 5, vec3, (float) (Math.PI / 2));
+                         }
+                     }
