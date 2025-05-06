@@ -28,6 +28,15 @@
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  this.pickupDelay--;
              }
+@@ -194,7 +_,7 @@
+                     f = 1F;
+                 } else if (this.onGround()) {
+                     // Paper end - Friction API
+-                    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F;
++                    f = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F; // Pluto - Memory efficient block lookups
+                 }
+ 
+                 this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98, f));
 @@ -206,11 +_,11 @@
                  }
              }
@@ -45,3 +54,21 @@
                  this.mergeWithNeighbours();
              }
  
+@@ -240,8 +_,15 @@
+ 
+     @Override
+     public BlockPos getBlockPosBelowThatAffectsMyMovement() {
+-        return this.getOnPos(0.999999F);
+-    }
++        return this.getOnPos(0.999999F); // Pluto - Memory efficient block lookups | Diff on change
++    }
++
++    // Pluto start - Memory efficient block lookups
++    @Override
++    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
++        return this.pluto$getOnPos(0.999999F);
++    }
++    // Pluto end - Memory efficient block lookups
+ 
+     private void setUnderwaterMovement() {
+         this.setFluidMovement(0.99F);

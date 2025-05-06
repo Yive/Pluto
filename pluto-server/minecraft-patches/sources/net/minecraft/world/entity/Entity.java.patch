@@ -24,6 +24,51 @@
              this.spawnSprintParticle();
          }
  
+@@ -1156,10 +_,13 @@
+                 this.minorHorizontalCollision = false;
+             }
+ 
+-            BlockPos onPosLegacy = this.getOnPosLegacy();
+-            BlockState blockState = this.level().getBlockState(onPosLegacy);
++            // Pluto start - Memory efficient block lookups
++            long onPosLegacyLong = this.pluto$getOnPosLegacy();
++            BlockPos onPosLegacy = null;
++            BlockState blockState = this.level().pluto$getBlockState(onPosLegacyLong);
+             if (this.isLocalInstanceAuthoritative()) {
+-                this.checkFallDamage(vec3.y, this.onGround(), blockState, onPosLegacy);
++                this.checkFallDamage(vec3.y, this.onGround(), blockState, onPosLegacy = BlockPos.of(onPosLegacyLong));
++                // Pluto end - Memory efficient block lookups
+             }
+ 
+             if (this.isRemoved()) {
+@@ -1201,7 +_,7 @@
+                 if (!this.level().isClientSide() || this.isLocalInstanceAuthoritative()) {
+                     Entity.MovementEmission movementEmission = this.getMovementEmission();
+                     if (movementEmission.emitsAnything() && !this.isPassenger()) {
+-                        this.applyMovementEmissionAndPlaySound(movementEmission, vec3, onPosLegacy, blockState);
++                        this.applyMovementEmissionAndPlaySound(movementEmission, vec3, onPosLegacy == null ? BlockPos.of(onPosLegacyLong) : onPosLegacy, blockState); // Pluto - Memory efficient block lookups
+                     }
+                 }
+ 
+@@ -1223,12 +_,16 @@
+         float f = 0.6F;
+         float f1 = (float)(movement.length() * 0.6F);
+         float f2 = (float)(movement.horizontalDistance() * 0.6F);
+-        BlockPos onPos = this.getOnPos();
+-        BlockState blockState = this.level().getBlockState(onPos);
++        // Pluto start - Memory efficient block lookups
++        long onPosLong = this.pluto$getOnPos();
++        BlockPos onPos;
++        BlockState blockState = this.level().pluto$getBlockState(onPosLong);
++        // Pluto end - Memory efficient block lookups
+         boolean isStateClimbable = this.isStateClimbable(blockState);
+         this.moveDist += isStateClimbable ? f1 : f2;
+         this.flyDist += f1;
+         if (this.moveDist > this.nextStep && !blockState.isAir()) {
++            onPos = BlockPos.of(onPosLong); // Pluto - Memory efficient block lookups | Moved down
+             boolean flag = onPos.equals(pos);
+             boolean flag1 = this.vibrationAndSoundEffectsFromBlock(pos, state, movementEmission.emitsSounds(), flag, movement);
+             if (!flag) {
 @@ -1285,6 +_,7 @@
  
              boolean isOnFire = this.isOnFire();
@@ -40,6 +85,81 @@
 +            if (!this.level().plutoConfig().disableFlapEvents && this.getMovementEmission().emitsEvents()) { // Pluto - Option to disable flapping movement game event
                  this.gameEvent(GameEvent.FLAP);
              }
+         }
+@@ -1369,15 +_,15 @@
+ 
+     @Deprecated
+     public BlockPos getOnPosLegacy() {
+-        return this.getOnPos(0.2F);
++        return this.getOnPos(0.2F); // Pluto - Memory efficient block lookups | Diff on change
+     }
+ 
+     public BlockPos getBlockPosBelowThatAffectsMyMovement() {
+-        return this.getOnPos(0.500001F);
++        return this.getOnPos(0.500001F); // Pluto - Memory efficient block lookups | Diff on change
+     }
+ 
+     public BlockPos getOnPos() {
+-        return this.getOnPos(1.0E-5F);
++        return this.getOnPos(1.0E-5F); // Pluto - Memory efficient block lookups | Diff on change
+     }
+ 
+     protected BlockPos getOnPos(float yOffset) {
+@@ -1401,9 +_,45 @@
+         }
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Deprecated
++    public long pluto$getOnPosLegacy() {
++        return this.pluto$getOnPos(0.2F);
++    }
++
++    public long pluto$getOnPos() {
++        return this.pluto$getOnPos(1.0E-5F);
++    }
++
++    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
++        return this.pluto$getOnPos(0.500001F);
++    }
++
++    protected long pluto$getOnPos(float yOffset) {
++        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) != null) { // Paper - ensure no loads
++            BlockPos blockPos = this.mainSupportingBlockPos.get();
++            if (!(yOffset > 1.0E-5F)) {
++                return blockPos.asLong();
++            } else {
++                BlockState blockState = this.level().getBlockState(blockPos);
++                return (!(yOffset <= 0.5) || !blockState.is(BlockTags.FENCES))
++                        && !blockState.is(BlockTags.WALLS)
++                        && !(blockState.getBlock() instanceof FenceGateBlock)
++                        ? BlockPos.asLong(blockPos.getX(), Mth.floor(this.position.y - yOffset), blockPos.getZ())
++                        : blockPos.asLong();
++            }
++        } else {
++            int floor = Mth.floor(this.position.x);
++            int floor1 = Mth.floor(this.position.y - yOffset);
++            int floor2 = Mth.floor(this.position.z);
++            return BlockPos.asLong(floor, floor1, floor2);
++        }
++    }
++    // Pluto end - Memory efficient block lookups
++
+     protected float getBlockJumpFactor() {
+         float jumpFactor = this.level().getBlockState(this.blockPosition()).getBlock().getJumpFactor();
+-        float jumpFactor1 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor();
++        float jumpFactor1 = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor(); // Pluto - Memory efficient block lookups
+         return jumpFactor == 1.0 ? jumpFactor1 : jumpFactor;
+     }
+ 
+@@ -1411,7 +_,7 @@
+         BlockState blockState = this.level().getBlockState(this.blockPosition());
+         float speedFactor = blockState.getBlock().getSpeedFactor();
+         if (!blockState.is(Blocks.WATER) && !blockState.is(Blocks.BUBBLE_COLUMN)) {
+-            return speedFactor == 1.0 ? this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor() : speedFactor;
++            return speedFactor == 1.0 ? this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor() : speedFactor; // Pluto - Memory efficient block lookups
+         } else {
+             return speedFactor;
          }
 @@ -1705,9 +_,10 @@
      }
@@ -97,6 +217,52 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
+@@ -1968,11 +_,11 @@
+ 
+     @Deprecated
+     protected BlockState getBlockStateOnLegacy() {
+-        return this.level().getBlockState(this.getOnPosLegacy());
++        return this.level().pluto$getBlockState(this.pluto$getOnPosLegacy()); // Pluto - Memory efficient block lookups
+     }
+ 
+     public BlockState getBlockStateOn() {
+-        return this.level().getBlockState(this.getOnPos());
++        return this.level().pluto$getBlockState(this.pluto$getOnPos()); // Pluto - Memory efficient block lookups
+     }
+ 
+     public boolean canSpawnSprintParticle() {
+@@ -1980,19 +_,25 @@
+     }
+ 
+     protected void spawnSprintParticle() {
+-        BlockPos onPosLegacy = this.getOnPosLegacy();
+-        BlockState blockState = this.level().getBlockState(onPosLegacy);
++        // Pluto start - Memory efficient block lookups
++        long onPosLegacy = this.pluto$getOnPosLegacy();
++        BlockState blockState = this.level().pluto$getBlockState(onPosLegacy);
++        // Pluto end - Memory efficient block lookups
+         if (blockState.getRenderShape() != RenderShape.INVISIBLE) {
+             Vec3 deltaMovement = this.getDeltaMovement();
+             BlockPos blockPos = this.blockPosition();
+             double d = this.getX() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
+             double d1 = this.getZ() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
+-            if (blockPos.getX() != onPosLegacy.getX()) {
+-                d = Mth.clamp(d, (double)onPosLegacy.getX(), onPosLegacy.getX() + 1.0);
++            // Pluto start - Memory efficient block lookups
++            final int x = BlockPos.getX(onPosLegacy);
++            if (blockPos.getX() != x) {
++                d = Mth.clamp(d, (double)x, x + 1.0);
+             }
+ 
+-            if (blockPos.getZ() != onPosLegacy.getZ()) {
+-                d1 = Mth.clamp(d1, (double)onPosLegacy.getZ(), onPosLegacy.getZ() + 1.0);
++            final int z = BlockPos.getZ(onPosLegacy);
++            if (blockPos.getZ() != z) {
++                d1 = Mth.clamp(d1, (double)z, z + 1.0);
++                // Pluto end - Memory efficient block lookups
+             }
+ 
+             this.level()
 @@ -5091,6 +_,43 @@
              return this.save;
          }
