@@ -1,0 +1,25 @@
+--- a/net/minecraft/world/level/block/TripWireHookBlock.java
++++ b/net/minecraft/world/level/block/TripWireHookBlock.java
+@@ -267,6 +_,22 @@
+         }
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return blockState.getValue(POWERED) ? 15 : 0;
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        if (!blockState.getValue(POWERED)) {
++            return 0;
++        } else {
++            return blockState.getValue(FACING) == side ? 15 : 0;
++        }
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected boolean isSignalSource(BlockState state) {
+         return true;

@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/TargetBlock.java
++++ b/net/minecraft/world/level/block/TargetBlock.java
+@@ -117,6 +_,13 @@
+         return blockState.getValue(OUTPUT_POWER);
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return blockState.getValue(OUTPUT_POWER);
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected boolean isSignalSource(BlockState state) {
+         return true;

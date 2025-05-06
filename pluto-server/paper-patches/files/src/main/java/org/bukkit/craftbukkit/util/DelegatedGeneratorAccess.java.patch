@@ -1,10 +1,20 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
-@@ -787,6 +_,58 @@
+@@ -787,6 +_,68 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  
 +    // Pluto start - Memory efficient block lookups
++    @Override
++    public int pluto$getDirectSignal(int x, int y, int z, Direction direction) {
++        return this.delegate.pluto$getDirectSignal(x, y, z, direction);
++    }
++
++    @Override
++    public int pluto$getControlInputSignal(int x, int y, int z, Direction direction, boolean diodesOnly) {
++        return this.delegate.pluto$getControlInputSignal(x, y, z, direction, diodesOnly);
++    }
++
 +    @Override
 +    public boolean pluto$isEmptyBlock(long packedPos) {
 +        return this.delegate.pluto$isEmptyBlock(packedPos);

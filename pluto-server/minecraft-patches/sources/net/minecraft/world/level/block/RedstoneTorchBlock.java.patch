@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/RedstoneTorchBlock.java
++++ b/net/minecraft/world/level/block/RedstoneTorchBlock.java
+@@ -132,6 +_,18 @@
+         return side == Direction.DOWN ? blockState.getSignal(blockAccess, pos, side) : 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
++        return blockState.getValue(LIT) && Direction.UP != side ? 15 : 0;
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return side == Direction.DOWN ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected boolean isSignalSource(BlockState state) {
+         return true;

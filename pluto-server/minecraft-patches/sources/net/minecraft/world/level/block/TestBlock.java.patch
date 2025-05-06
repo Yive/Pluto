@@ -1,0 +1,22 @@
+--- a/net/minecraft/world/level/block/TestBlock.java
++++ b/net/minecraft/world/level/block/TestBlock.java
+@@ -117,6 +_,19 @@
+         }
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++        if (state.getValue(MODE) != TestBlockMode.START) {
++            return 0;
++        } else if (level.getBlockEntity(new BlockPos(x, y, z)) instanceof TestBlockEntity testBlockEntity) {
++            return testBlockEntity.isPowered() ? 15 : 0;
++        } else {
++            return 0;
++        }
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+         ItemStack itemStack = super.getCloneItemStack(level, pos, state, includeData);

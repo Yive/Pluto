@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/CalibratedSculkSensorBlock.java
++++ b/net/minecraft/world/level/block/CalibratedSculkSensorBlock.java
+@@ -61,6 +_,13 @@
+         return direction != state.getValue(FACING) ? super.getSignal(state, level, pos, direction) : 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++        return direction != state.getValue(FACING) ? super.pluto$getSignal(state, level, x, y, z, direction) : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+         super.createBlockStateDefinition(builder);

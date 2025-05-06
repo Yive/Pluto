@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/RedstoneWallTorchBlock.java
++++ b/net/minecraft/world/level/block/RedstoneWallTorchBlock.java
+@@ -90,6 +_,13 @@
+         return blockState.getValue(LIT) && blockState.getValue(FACING) != side ? 15 : 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
++        return blockState.getValue(LIT) && blockState.getValue(FACING) != side ? 15 : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected BlockState rotate(BlockState state, Rotation rotation) {
+         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));

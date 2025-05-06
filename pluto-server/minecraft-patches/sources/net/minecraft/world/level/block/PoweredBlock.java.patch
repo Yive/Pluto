@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/level/block/PoweredBlock.java
++++ b/net/minecraft/world/level/block/PoweredBlock.java
+@@ -28,4 +_,11 @@
+     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+         return 15;
+     }
++
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++        return 15;
++    }
++    // Pluto end - Memory efficient block lookups
+ }

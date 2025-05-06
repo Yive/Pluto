@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/BasePressurePlateBlock.java
++++ b/net/minecraft/world/level/block/BasePressurePlateBlock.java
+@@ -147,6 +_,18 @@
+         return side == Direction.UP ? this.getSignalForState(blockState) : 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return this.getSignalForState(blockState);
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
++        return side == Direction.UP ? this.getSignalForState(blockState) : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected boolean isSignalSource(BlockState state) {
+         return true;

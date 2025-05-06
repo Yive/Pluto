@@ -1,0 +1,54 @@
+--- a/net/minecraft/world/level/block/state/BlockBehaviour.java
++++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
+@@ -367,6 +_,12 @@
+         return 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++        return 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
+     }
+ 
+@@ -374,6 +_,12 @@
+         return 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++        return 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     public final Optional<ResourceKey<LootTable>> getLootTable() {
+         return this.drops;
+     }
+@@ -742,6 +_,12 @@
+             return this.getBlock().getSignal(this.asState(), level, pos, direction);
+         }
+ 
++        // Pluto start - Memory efficient block lookups
++        public int pluto$getSignal(BlockGetter level, int x, int y, int z, Direction direction) {
++            return this.getBlock().pluto$getSignal(this.asState(), level, x, y, z, direction);
++        }
++        // Pluto end - Memory efficient block lookups
++
+         public boolean hasAnalogOutputSignal() {
+             return this.getBlock().hasAnalogOutputSignal(this.asState());
+         }
+@@ -761,6 +_,12 @@
+         public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
+             return this.getBlock().getDirectSignal(this.asState(), level, pos, direction);
+         }
++
++        // Pluto start - Memory efficient block lookups
++        public int pluto$getDirectSignal(BlockGetter level, int x, int y, int z, Direction direction) {
++            return this.getBlock().pluto$getDirectSignal(this.asState(), level, x, y, z, direction);
++        }
++        // Pluto end - Memory efficient block lookups
+ 
+         public PushReaction getPistonPushReaction() {
+             return !this.isDestroyable() ? PushReaction.BLOCK : this.pushReaction; // Paper - Protect Bedrock and End Portal/Frames from being destroyed

@@ -1,0 +1,25 @@
+--- a/net/minecraft/world/level/block/DetectorRailBlock.java
++++ b/net/minecraft/world/level/block/DetectorRailBlock.java
+@@ -78,6 +_,22 @@
+         }
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return blockState.getValue(POWERED) ? 15 : 0;
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
++        if (!blockState.getValue(POWERED)) {
++            return 0;
++        } else {
++            return side == Direction.UP ? 15 : 0;
++        }
++    }
++    // Pluto end - Memory efficient block lookups
++
+     private void checkPressed(Level level, BlockPos pos, BlockState state) {
+         if (this.canSurvive(state, level, pos)) {
+             if (!state.is(this)) { return; } // Paper - Fix some rails connecting improperly

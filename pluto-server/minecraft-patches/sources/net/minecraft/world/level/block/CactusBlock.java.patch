@@ -27,7 +27,7 @@
  
 -            if (ageValue == 8 && this.canSurvive(this.defaultBlockState(), level, pos.above())) {
 +            // Pluto start - Decrease chunk/block lookups
-+            BlockPos blockPos;
++            BlockPos blockPos = null;
 +            if (ageValue == 8 && this.canSurvive(this.defaultBlockState(), level, blockPos = pos.above())) {
 +            // Pluto end - Decrease chunk/block lookups
                  double d = i >= level.paperConfig().maxGrowthHeight.cactus ? 0.25 : 0.1; // Paper - Configurable cactus/bamboo/reed growth height
@@ -48,7 +48,7 @@
 +                // Pluto end - Check if the cactus can even survive being placed
                  // Paper start
 -                if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, this.defaultBlockState(), 3)) {
-+                if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos = pos.above(), this.defaultBlockState(), 3)) { // Pluto - Decrease chunk/block lookups
++                if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos == null ? blockPos = pos.above() : blockPos, this.defaultBlockState(), 3)) { // Pluto - Decrease chunk/block lookups
                      return;
                  }
                  // Paper end

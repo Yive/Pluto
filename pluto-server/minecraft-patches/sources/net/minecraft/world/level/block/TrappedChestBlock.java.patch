@@ -1,0 +1,19 @@
+--- a/net/minecraft/world/level/block/TrappedChestBlock.java
++++ b/net/minecraft/world/level/block/TrappedChestBlock.java
+@@ -51,4 +_,16 @@
+     protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+         return side == Direction.UP ? blockState.getSignal(blockAccess, pos, side) : 0;
+     }
++
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState state, BlockGetter blockAccess, int x, int y, int z, Direction direction) {
++        return Mth.clamp(ChestBlockEntity.getOpenCount(blockAccess, pos), 0, 15);
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return side == Direction.UP ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
++    }
++    // Pluto end - Memory efficient block lookups
+ }

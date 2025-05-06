@@ -1,0 +1,111 @@
+--- a/net/minecraft/world/level/block/RedStoneWireBlock.java
++++ b/net/minecraft/world/level/block/RedStoneWireBlock.java
+@@ -235,12 +_,17 @@
+     }
+ 
+     private RedstoneSide getConnectingSide(BlockGetter level, BlockPos pos, Direction direction, boolean nonNormalCubeAbove) {
+-        BlockPos blockPos = pos.relative(direction);
+-        BlockState blockState = level.getBlockState(blockPos);
++        // Pluto start - Memory efficient block lookups
++        final int x = pos.getX() + direction.getStepX();
++        final int y = pos.getY() + direction.getStepY();
++        final int z = pos.getZ() + direction.getStepZ();
++        BlockPos blockPos = null;
++        BlockState blockState = level.pluto$getBlockState(x, y, z);
+         if (nonNormalCubeAbove) {
+-            boolean flag = blockState.getBlock() instanceof TrapDoorBlock || this.canSurviveOn(level, blockPos, blockState);
+-            if (flag && shouldConnectTo(level.getBlockState(blockPos.above()))) {
+-                if (blockState.isFaceSturdy(level, blockPos, direction.getOpposite())) {
++            boolean flag = blockState.getBlock() instanceof TrapDoorBlock || this.canSurviveOn(level, blockPos = new BlockPos(x, y, z), blockState);
++            if (flag && shouldConnectTo(level.pluto$getBlockState(x, y + 1, z))) {// Pluto end - Memory efficient block lookups
++                if (blockState.isFaceSturdy(level, blockPos == null ? new BlockPos(x, y, z) : blockPos, direction.getOpposite())) {
++                    // Pluto end - Memory efficient block lookups
+                     return RedstoneSide.UP;
+                 }
+ 
+@@ -249,7 +_,7 @@
+         }
+ 
+         return !shouldConnectTo(blockState, direction)
+-                && (blockState.isRedstoneConductor(level, blockPos) || !shouldConnectTo(level.getBlockState(blockPos.below())))
++                && (blockState.isRedstoneConductor(level, blockPos == null ? new BlockPos(x, y, z) : blockPos) || !shouldConnectTo(level.pluto$getBlockState(x, y - 1, z))) // Pluto - Memory efficient block lookups
+             ? RedstoneSide.NONE
+             : RedstoneSide.SIDE;
+     }
+@@ -424,6 +_,76 @@
+     protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+         return !this.shouldSignal ? 0 : blockState.getSignal(blockAccess, pos, side);
+     }
++
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return !this.shouldSignal ? 0 : blockState.pluto$getSignal(blockAccess, x, y, z, side);
++    }
++
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        if (this.shouldSignal && side != Direction.DOWN) {
++            int powerValue = blockState.getValue(POWER);
++            if (powerValue == 0) {
++                return 0;
++            } else {
++                return side != Direction.UP
++                        && !this.pluto$getConnectionState(blockAccess, blockState, x, y, z).getValue(PROPERTY_BY_DIRECTION.get(side.getOpposite())).isConnected()
++                        ? 0
++                        : powerValue;
++            }
++        } else {
++            return 0;
++        }
++    }
++
++    private BlockState pluto$getConnectionState(BlockGetter level, BlockState state, int x, int y, int z) {
++        boolean isDot = isDot(state);
++        state = this.pluto$getMissingConnections(level, this.defaultBlockState().setValue(POWER, state.getValue(POWER)), x, y, z);
++        if (isDot && isDot(state)) {
++            return state;
++        } else {
++            boolean isConnected = state.getValue(NORTH).isConnected();
++            boolean isConnected1 = state.getValue(SOUTH).isConnected();
++            boolean isConnected2 = state.getValue(EAST).isConnected();
++            boolean isConnected3 = state.getValue(WEST).isConnected();
++            boolean flag = !isConnected && !isConnected1;
++            boolean flag1 = !isConnected2 && !isConnected3;
++            if (!isConnected3 && flag) {
++                state = state.setValue(WEST, RedstoneSide.SIDE);
++            }
++
++            if (!isConnected2 && flag) {
++                state = state.setValue(EAST, RedstoneSide.SIDE);
++            }
++
++            if (!isConnected && flag1) {
++                state = state.setValue(NORTH, RedstoneSide.SIDE);
++            }
++
++            if (!isConnected1 && flag1) {
++                state = state.setValue(SOUTH, RedstoneSide.SIDE);
++            }
++
++            return state;
++        }
++    }
++
++    private BlockState pluto$getMissingConnections(BlockGetter level, BlockState state, int x, int y, int z) {
++        BlockPos pos = new BlockPos(x, y, z); // TODO: Look into replacing this by using integers.
++        boolean flag = !level.pluto$getBlockState(x, y + 1, z).isRedstoneConductor(level, pos);
++
++        for (Direction direction : Direction.Plane.HORIZONTAL) {
++            if (!state.getValue(PROPERTY_BY_DIRECTION.get(direction)).isConnected()) {
++                RedstoneSide connectingSide = this.getConnectingSide(level, pos, direction, flag);
++                state = state.setValue(PROPERTY_BY_DIRECTION.get(direction), connectingSide);
++            }
++        }
++
++        return state;
++    }
++    // Pluto end - Memory efficient block lookups
+ 
+     @Override
+     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {

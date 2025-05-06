@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/ObserverBlock.java
++++ b/net/minecraft/world/level/block/ObserverBlock.java
+@@ -111,6 +_,18 @@
+         return blockState.getSignal(blockAccess, pos, side);
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return blockState.pluto$getSignal(blockAccess, x, y, z, side);
++    }
++
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
++        return blockState.getValue(POWERED) && blockState.getValue(FACING) == side ? 15 : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+         return blockState.getValue(POWERED) && blockState.getValue(FACING) == side ? 15 : 0;

@@ -1,5 +1,45 @@
 --- a/net/minecraft/world/level/block/DiodeBlock.java
 +++ b/net/minecraft/world/level/block/DiodeBlock.java
+@@ -81,6 +_,26 @@
+         return blockState.getSignal(blockAccess, pos, side);
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return blockState.pluto$getSignal(blockAccess, x, y, z, side);
++    }
++
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        if (!blockState.getValue(POWERED)) {
++            return 0;
++        } else {
++            return blockState.getValue(FACING) == side ? this.pluto$getOutputSignal(blockAccess, x, y, z, blockState) : 0;
++        }
++    }
++
++    protected int pluto$getOutputSignal(BlockGetter level, int x, int y, int z, BlockState state) {
++        return 15;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+         if (!blockState.getValue(POWERED)) {
+@@ -148,8 +_,10 @@
+         Direction counterClockWise = direction.getCounterClockWise();
+         boolean flag = this.sideInputDiodesOnly();
+         return Math.max(
+-            level.getControlInputSignal(pos.relative(clockWise), clockWise, flag),
+-            level.getControlInputSignal(pos.relative(counterClockWise), counterClockWise, flag)
++            // Pluto start - Memory efficient block lookups
++            level.pluto$getControlInputSignal(pos.getX() + clockWise.getStepX(), pos.getY() + clockWise.getStepY(), pos.getZ() + clockWise.getStepZ(), clockWise, flag),
++            level.pluto$getControlInputSignal(pos.getX() + counterClockWise.getStepX(), pos.getY() + counterClockWise.getStepY(), pos.getZ() + counterClockWise.getStepZ(), counterClockWise, flag)
++            // Pluto end - Memory efficient block lookups
+         );
+     }
+ 
 @@ -204,7 +_,7 @@
  
      public boolean shouldPrioritize(BlockGetter level, BlockPos pos, BlockState state) {

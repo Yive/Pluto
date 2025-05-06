@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/DaylightDetectorBlock.java
++++ b/net/minecraft/world/level/block/DaylightDetectorBlock.java
+@@ -56,6 +_,13 @@
+         return blockState.getValue(POWER);
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return blockState.getValue(POWER);
++    }
++    // Pluto end - Memory efficient block lookups
++
+     private static void updateSignalStrength(BlockState state, Level level, BlockPos pos) {
+         int i = level.getBrightness(LightLayer.SKY, pos) - level.getSkyDarken();
+         float sunAngle = level.getSunAngle(1.0F);

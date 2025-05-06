@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/LecternBlock.java
++++ b/net/minecraft/world/level/block/LecternBlock.java
+@@ -219,6 +_,18 @@
+         return side == Direction.UP && blockState.getValue(POWERED) ? 15 : 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    @Override
++    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
++        return blockState.getValue(POWERED) ? 15 : 0;
++    }
++
++    @Override
++    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
++        return side == Direction.UP && blockState.getValue(POWERED) ? 15 : 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     @Override
+     protected boolean hasAnalogOutputSignal(BlockState state) {
+         return true;

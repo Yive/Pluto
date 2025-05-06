@@ -1,0 +1,23 @@
+--- a/net/minecraft/world/level/block/entity/ChestBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/ChestBlockEntity.java
+@@ -196,6 +_,20 @@
+         return 0;
+     }
+ 
++    // Pluto start - Memory efficient block lookups
++    public static int pluto$getOpenCount(BlockGetter level, int x, int y, int z) {
++        BlockState blockState = level.pluto$getBlockState(x, y, z);
++        if (blockState.hasBlockEntity()) {
++            BlockEntity blockEntity = level.getBlockEntity(new BlockPos(x, y, z));
++            if (blockEntity instanceof ChestBlockEntity) {
++                return ((ChestBlockEntity)blockEntity).openersCounter.getOpenerCount();
++            }
++        }
++
++        return 0;
++    }
++    // Pluto end - Memory efficient block lookups
++
+     public static void swapContents(ChestBlockEntity chest, ChestBlockEntity otherChest) {
+         NonNullList<ItemStack> items = chest.getItems();
+         chest.setItems(otherChest.getItems());
