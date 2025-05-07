@@ -6,7 +6,7 @@
      private RedstoneSide getConnectingSide(BlockGetter level, BlockPos pos, Direction direction, boolean nonNormalCubeAbove) {
 -        BlockPos blockPos = pos.relative(direction);
 -        BlockState blockState = level.getBlockState(blockPos);
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX() + direction.getStepX();
 +        final int y = pos.getY() + direction.getStepY();
 +        final int z = pos.getZ() + direction.getStepZ();
@@ -17,9 +17,9 @@
 -            if (flag && shouldConnectTo(level.getBlockState(blockPos.above()))) {
 -                if (blockState.isFaceSturdy(level, blockPos, direction.getOpposite())) {
 +            boolean flag = blockState.getBlock() instanceof TrapDoorBlock || this.canSurviveOn(level, blockPos = new BlockPos(x, y, z), blockState);
-+            if (flag && shouldConnectTo(level.pluto$getBlockState(x, y + 1, z))) {// Pluto end - Memory efficient block lookups
++            if (flag && shouldConnectTo(level.pluto$getBlockState(x, y + 1, z))) {// Pluto end - Memory allocation optimisations
 +                if (blockState.isFaceSturdy(level, blockPos == null ? new BlockPos(x, y, z) : blockPos, direction.getOpposite())) {
-+                    // Pluto end - Memory efficient block lookups
++                    // Pluto end - Memory allocation optimisations
                      return RedstoneSide.UP;
                  }
  
@@ -28,7 +28,7 @@
  
          return !shouldConnectTo(blockState, direction)
 -                && (blockState.isRedstoneConductor(level, blockPos) || !shouldConnectTo(level.getBlockState(blockPos.below())))
-+                && (blockState.isRedstoneConductor(level, blockPos == null ? new BlockPos(x, y, z) : blockPos) || !shouldConnectTo(level.pluto$getBlockState(x, y - 1, z))) // Pluto - Memory efficient block lookups
++                && (blockState.isRedstoneConductor(level, blockPos == null ? new BlockPos(x, y, z) : blockPos) || !shouldConnectTo(level.pluto$getBlockState(x, y - 1, z))) // Pluto - Memory allocation optimisations
              ? RedstoneSide.NONE
              : RedstoneSide.SIDE;
      }
@@ -37,7 +37,7 @@
          return !this.shouldSignal ? 0 : blockState.getSignal(blockAccess, pos, side);
      }
 +
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
 +        return !this.shouldSignal ? 0 : blockState.pluto$getSignal(blockAccess, x, y, z, side);
@@ -105,7 +105,7 @@
 +
 +        return state;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
  
      @Override
      protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {

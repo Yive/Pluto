@@ -6,7 +6,7 @@
      private static boolean canBeNylium(BlockState state, LevelReader reader, BlockPos pos) {
 -        BlockPos blockPos = pos.above();
 -        BlockState blockState = reader.getBlockState(blockPos);
-+        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
++        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
          int lightBlockInto = LightEngine.getLightBlockInto(state, blockState, Direction.UP, blockState.getLightBlock());
          return lightBlockInto < 15;
      }

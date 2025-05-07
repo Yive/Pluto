@@ -5,7 +5,7 @@
  
              if (this.isEyeInFluid(FluidTags.WATER)
 -                && !serverLevel1.getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
-+                && !serverLevel1.pluto$getBlockState(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ())).is(Blocks.BUBBLE_COLUMN)) { // Pluto - Memory efficient block lookups
++                && !serverLevel1.pluto$getBlockState(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ())).is(Blocks.BUBBLE_COLUMN)) { // Pluto - Memory allocation optimisations
                  boolean flag1 = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
                      && (!flag || !((Player)this).getAbilities().invulnerable);
@@ -27,10 +27,10 @@
      private void travelInAir(Vec3 travelVector) {
 -        BlockPos blockPosBelowThatAffectsMyMovement = this.getBlockPosBelowThatAffectsMyMovement();
 -        float f = this.onGround() ? this.level().getBlockState(blockPosBelowThatAffectsMyMovement).getBlock().getFriction() : 1.0F;
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        long blockPosBelowThatAffectsMyMovement = this.pluto$getBlockPosBelowThatAffectsMyMovement();
 +        float f = this.onGround() ? this.level().pluto$getBlockState(blockPosBelowThatAffectsMyMovement).getBlock().getFriction() : 1.0F;
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
          float f1 = f * 0.91F;
          Vec3 vec3 = this.handleRelativeFrictionAndCalculateMovement(travelVector, f);
          double d = vec3.y;
@@ -38,7 +38,7 @@
          if (effect != null) {
              d += (0.05 * (effect.getAmplifier() + 1) - vec3.y) * 0.2;
 -        } else if (!this.level().isClientSide || this.level().hasChunkAt(blockPosBelowThatAffectsMyMovement)) {
-+        } else if (!this.level().isClientSide || this.level().hasChunkAt(BlockPos.getX(blockPosBelowThatAffectsMyMovement) >> 4, BlockPos.getZ(blockPosBelowThatAffectsMyMovement) >> 4)) { // Pluto - Memory efficient block lookups
++        } else if (!this.level().isClientSide || this.level().hasChunkAt(BlockPos.getX(blockPosBelowThatAffectsMyMovement) >> 4, BlockPos.getZ(blockPosBelowThatAffectsMyMovement) >> 4)) { // Pluto - Memory allocation optimisations
              d -= this.getEffectiveGravity();
          } else if (this.getY() > this.level().getMinY()) {
              d = -0.1;
@@ -68,27 +68,27 @@
 +        // Pluto start - Decrease chunk/block lookups
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(Mth.floor(x) >> 4, Mth.floor(z) >> 4);
 +        if (chunk != null) {
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            final int x2 = Mth.floor(x);
 +            int y2 = Mth.floor(y);
 +            final int z2 = Mth.floor(z);
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
 +            // Pluto end - Decrease chunk/block lookups
              boolean flag1 = false;
  
 -            while (!flag1 && blockPos.getY() > level.getMinY()) {
 -                BlockPos blockPos1 = blockPos.below();
 -                BlockState blockState = level.getBlockState(blockPos1);
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            while (!flag1 && y2 > level.getMinY()) {
 +                BlockState blockState = chunk.getBlockState(x2, y2 - 1, z2); // Pluto - Decrease chunk/block lookups
-+                // Pluto end - Memory efficient block lookups
++                // Pluto end - Memory allocation optimisations
                  if (blockState.blocksMotion()) {
                      flag1 = true;
                  } else {
                      d--;
 -                    blockPos = blockPos1;
-+                    y2--; // Pluto - Memory efficient block lookups
++                    y2--; // Pluto - Memory allocation optimisations
                  }
              }
  
@@ -98,7 +98,7 @@
                  Vec3 vec31 = BedBlock.findStandUpPosition(this.getType(), this.level(), blockPos, direction, this.getYRot()).orElseGet(() -> {
 -                    BlockPos blockPos1 = blockPos.above();
 -                    return new Vec3(blockPos1.getX() + 0.5, blockPos1.getY() + 0.1, blockPos1.getZ() + 0.5);
-+                    return new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 1.1, blockPos.getZ() + 0.5); // Pluto - Memory efficient block lookups
++                    return new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 1.1, blockPos.getZ() + 0.5); // Pluto - Memory allocation optimisations
                  });
                  Vec3 vec32 = Vec3.atBottomCenterOf(blockPos).subtract(vec31).normalize();
                  float f = (float)Mth.wrapDegrees(Mth.atan2(vec32.z, vec32.x) * 180.0F / (float)Math.PI - 90.0);

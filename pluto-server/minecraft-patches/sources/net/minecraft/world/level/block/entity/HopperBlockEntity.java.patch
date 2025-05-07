@@ -31,13 +31,13 @@
 +
 +    public static boolean suckInItems(Level level, Hopper hopper, @Nullable Container sourceContainer) {
 +        // Pluto end - Entities search for hoppers
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = net.minecraft.util.Mth.floor(hopper.getLevelX());
 +        final int y = net.minecraft.util.Mth.floor(hopper.getLevelY() + 1.0D);
 +        final int z = net.minecraft.util.Mth.floor(hopper.getLevelZ());
 +        BlockState blockState = level.pluto$getBlockState(x, y, z);
 +        if (sourceContainer == null) sourceContainer = getSourceContainer(level, hopper, new BlockPos(x, y, z), blockState); // Pluto - Entities search for hoppers
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
          if (sourceContainer != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
@@ -47,7 +47,7 @@
          } else {
 -            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
 +            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
-+            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory efficient block lookups
++            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory allocation optimisations
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
                      if (addItem(hopper, itemEntity)) {

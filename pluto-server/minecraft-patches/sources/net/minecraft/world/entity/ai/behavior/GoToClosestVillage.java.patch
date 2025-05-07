@@ -5,7 +5,7 @@
                          Vec3 pos = LandRandomPos.getPos(villager, 15, 7, pos1 -> -poiManager.sectionsToVillage(SectionPos.of(pos1)));
                          if (pos != null) {
 -                            int i2 = poiManager.sectionsToVillage(SectionPos.of(BlockPos.containing(pos)));
-+                            int i2 = poiManager.sectionsToVillage(SectionPos.of(net.minecraft.util.Mth.floor(pos.x) >> 4, net.minecraft.util.Mth.floor(pos.y) >> 4, net.minecraft.util.Mth.floor(pos.z) >> 4)); // Pluto - Memory efficient block lookups
++                            int i2 = poiManager.sectionsToVillage(SectionPos.of(net.minecraft.util.Mth.floor(pos.x) >> 4, net.minecraft.util.Mth.floor(pos.y) >> 4, net.minecraft.util.Mth.floor(pos.z) >> 4)); // Pluto - Memory allocation optimisations
                              if (i2 < i) {
                                  vec3 = pos;
                                  break;

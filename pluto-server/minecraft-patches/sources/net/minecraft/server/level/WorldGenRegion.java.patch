@@ -4,7 +4,7 @@
      }
      // Paper end
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
 +        return this.getChunk(x >> 4, z >> 4).getBlockState(x, y, z);
@@ -46,7 +46,7 @@
 +    public @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos) {
 +        return pluto$getFluidStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      public BlockState getBlockState(BlockPos pos) {

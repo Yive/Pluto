@@ -4,7 +4,7 @@
          return null;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
 +        return Blocks.AIR.defaultBlockState();
@@ -44,7 +44,7 @@
 +    public @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos) {
 +        return null;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      public BlockState getBlockState(BlockPos pos) {

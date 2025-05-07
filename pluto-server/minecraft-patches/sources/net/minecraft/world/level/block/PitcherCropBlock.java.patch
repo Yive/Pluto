@@ -25,10 +25,10 @@
 -            BlockPos blockPos = pos.below();
 -            BlockState blockState = level.getBlockState(blockPos);
 -            return isLower(blockState) ? new PitcherCropBlock.PosAndState(blockPos, blockState) : null;
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ());
 +            return isLower(blockState) ? new PitcherCropBlock.PosAndState(pos.below(), blockState) : null;
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          }
      }
  

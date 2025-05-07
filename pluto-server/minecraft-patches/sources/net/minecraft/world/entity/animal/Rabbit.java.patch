@@ -5,7 +5,7 @@
              BlockState blockState = level.getBlockState(pos);
              if (blockState.is(Blocks.FARMLAND) && this.wantsToRaid && !this.canRaid) {
 -                blockState = level.getBlockState(pos.above());
-+                blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
++                blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
                  if (blockState.getBlock() instanceof CarrotBlock && ((CarrotBlock)blockState.getBlock()).isMaxAge(blockState)) {
                      this.canRaid = true;
                      return true;

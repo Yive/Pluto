@@ -4,7 +4,7 @@
      }
  
      private static Optional<BlockPos> getSpreadableNeighbourPos(List<Direction> directions, LevelReader level, BlockPos pos, BlockState state) {
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -16,7 +16,7 @@
 +            final int z1 = z + direction.getStepZ();
 +            BlockPos blockPos;
 +            if (level.pluto$isEmptyBlock(x1, y1, z1) && state.canSurvive(level, blockPos = new BlockPos(x1, y1, z1))) {
-+                // Pluto end - Memory efficient block lookups
++                // Pluto end - Memory allocation optimisations
                  return Optional.of(blockPos);
              }
          }

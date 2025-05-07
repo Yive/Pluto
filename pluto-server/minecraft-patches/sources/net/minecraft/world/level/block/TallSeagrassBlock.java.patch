@@ -5,10 +5,10 @@
          BlockState blockState = super.getStateForPlacement(context);
          if (blockState != null) {
 -            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos().above());
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            final BlockPos clickedPos = context.getClickedPos();
 +            FluidState fluidState = context.getLevel().pluto$getFluidState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ());
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              if (fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8) {
                  return blockState;
              }
@@ -17,7 +17,7 @@
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
          if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
 -            BlockState blockState = level.getBlockState(pos.below());
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
              return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
          } else {
              FluidState fluidState = level.getFluidState(pos);

@@ -65,13 +65,13 @@
 +
 +    protected boolean canSurvive(LevelReader level, BlockPos pos) {
 +        // Pluto end - Check if the cactus can even survive being placed
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-+            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
 +            if (blockState.isSolid() || blockState.getFluidState().is(FluidTags.LAVA)) { // Pluto - Decrease chunk/block lookups
                  return false;
              }
@@ -79,10 +79,10 @@
  
 -        BlockState blockState1 = level.getBlockState(pos.below());
 -        return (blockState1.is(Blocks.CACTUS) || blockState1.is(BlockTags.SAND)) && !level.getBlockState(pos.above()).liquid();
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        BlockState blockState1 = level.pluto$getBlockState(x, y - 1, z);
 +        return (blockState1.is(Blocks.CACTUS) || blockState1.is(BlockTags.SAND)) && !level.pluto$getBlockState(x, y + 1, z).liquid();
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
      }
  
      @Override

@@ -5,7 +5,7 @@
                  double d1 = Mth.floor(this.getY()) + 1.0F;
                  double d2 = this.getZ() + cos * this.timeUntilHooked * 0.1F;
 -                BlockState blockState = serverLevel.getBlockState(BlockPos.containing(d, d1 - 1.0, d2));
-+                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory efficient block lookups
++                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory allocation optimisations
                  if (blockState.is(Blocks.WATER)) {
                      if (this.random.nextFloat() < 0.15F) {
                          serverLevel.sendParticles(ParticleTypes.BUBBLE, d, d1 - 0.1F, d2, 1, sin, 0.1, cos, 0.0);
@@ -14,7 +14,7 @@
                  double d1 = Mth.floor(this.getY()) + 1.0F;
                  double d2 = this.getZ() + Mth.cos(sin) * cos * 0.1;
 -                BlockState blockState = serverLevel.getBlockState(BlockPos.containing(d, d1 - 1.0, d2));
-+                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory efficient block lookups
++                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory allocation optimisations
                  if (blockState.is(Blocks.WATER)) {
                      serverLevel.sendParticles(ParticleTypes.SPLASH, d, d1, d2, 2 + this.random.nextInt(2), 0.1F, 0.0, 0.1F, 0.0);
                  }

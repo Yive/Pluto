@@ -5,7 +5,7 @@
      public boolean captureBlockStates = false;
      public boolean captureTreeGeneration = false;
 -    public Map<BlockPos, org.bukkit.craftbukkit.block.CraftBlockState> capturedBlockStates = new java.util.LinkedHashMap<>(); // Paper
-+    public Map<Long, org.bukkit.craftbukkit.block.CraftBlockState> capturedBlockStates = new it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<>(); // Paper // Pluto - Memory efficient block lookups
++    public Map<Long, org.bukkit.craftbukkit.block.CraftBlockState> capturedBlockStates = new it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<>(); // Paper // Pluto - Memory allocation optimisations
      public Map<BlockPos, BlockEntity> capturedTileEntities = new java.util.LinkedHashMap<>(); // Paper - Retain block place order when capturing blockstates
      @Nullable
      public List<net.minecraft.world.entity.item.ItemEntity> captureDrops;
@@ -18,6 +18,77 @@
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
      private int tileTickPosition;
      public final Map<ServerExplosion.CacheKey, Float> explosionDensityCache = new java.util.HashMap<>(); // Paper - Optimize explosions
+@@ -601,7 +_,7 @@
+ 
+         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+         final ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.LazyEntityCollisionContext collisionShape = new ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.LazyEntityCollisionContext(entity);
+-        BlockPos selected = null;
++        Long selected = null; // Pluto - Memory allocation optimisations
+         double selectedDistance = Double.MAX_VALUE;
+         final Vec3 entityPos = entity.position();
+ 
+@@ -675,7 +_,7 @@
+                                 }
+ 
+                                 final double distance = mutablePos.distToCenterSqr(entityPos);
+-                                if (distance > selectedDistance || (distance == selectedDistance && selected.compareTo(mutablePos) >= 0)) {
++                                if (distance > selectedDistance || (distance == selectedDistance && selected.compareTo(mutablePos.asLong()) >= 0)) { // Pluto - Memory allocation optimisations
+                                     continue;
+                                 }
+ 
+@@ -697,24 +_,38 @@
+                                     }
+ 
+                                     // avoid VoxelShape#move by shifting the entity collision shape instead
+-                                    final AABB shiftedAABB = aabb.move(-(double)blockX, -(double)blockY, -(double)blockZ);
++                                    // Pluto start - Memory allocation optimisations
++                                    final double x1 = aabb.minX + (-(double)blockX);
++                                    final double x2 = aabb.maxX + (-(double)blockX);
++                                    final double y1 = aabb.minY + (-(double)blockY);
++                                    final double y2 = aabb.maxY + (-(double)blockY);
++                                    final double z1 = aabb.minZ + (-(double)blockZ);
++                                    final double z2 = aabb.maxZ + (-(double)blockZ);
++
++                                    final double minX = Math.min(x1, x2);
++                                    final double minY = Math.min(y1, y2);
++                                    final double minZ = Math.min(z1, z2);
++                                    final double maxX = Math.max(x1, x2);
++                                    final double maxY = Math.max(y1, y2);
++                                    final double maxZ = Math.max(z1, z2);
++                                    // Pluto end - Memory allocation optimisations
+ 
+                                     final AABB singleAABB = ((ca.spottedleaf.moonrise.patches.collisions.shape.CollisionVoxelShape)blockCollision).moonrise$getSingleAABBRepresentation();
+                                     if (singleAABB != null) {
+-                                        if (!ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.voxelShapeIntersect(singleAABB, shiftedAABB)) {
++                                        if (!ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.voxelShapeIntersect(singleAABB, minX, minY, minZ, maxX, maxY, maxZ)) { // Pluto - Memory allocation optimisations
+                                             continue;
+                                         }
+ 
+-                                        selected = mutablePos.immutable();
++                                        selected = mutablePos.asLong(); // Pluto - Memory allocation optimisations
+                                         selectedDistance = distance;
+                                         continue;
+                                     }
+ 
+-                                    if (!ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.voxelShapeIntersectNoEmpty(blockCollision, shiftedAABB)) {
++                                    if (!ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.pluto$voxelShapeIntersectNoEmpty(blockCollision, minX, minY, minZ, maxX, maxY, maxZ)) { // Pluto - Memory allocation optimisations
+                                         continue;
+                                     }
+ 
+-                                    selected = mutablePos.immutable();
++                                    selected = mutablePos.asLong(); // Pluto - Memory allocation optimisations
+                                     selectedDistance = distance;
+                                     continue;
+                                 }
+@@ -725,7 +_,7 @@
+             }
+         }
+ 
+-        return java.util.Optional.ofNullable(selected);
++        return java.util.Optional.ofNullable(selected == null ? null : BlockPos.of(selected)); // Pluto - Memory allocation optimisations
+     }
+     // Paper end - optimise collisions
+     // Paper start - getblock optimisations - cache world height/sections
 @@ -840,6 +_,7 @@
          // Paper end - getblock optimisations - cache world height/sections
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
@@ -31,7 +102,7 @@
          // CraftBukkit start - tree generation
          if (this.captureTreeGeneration) {
 -            CraftBlockState previous = this.capturedBlockStates.get(pos);
-+            CraftBlockState previous = this.capturedBlockStates.get(pos.asLong()); // Pluto - Memory efficient block lookups
++            CraftBlockState previous = this.capturedBlockStates.get(pos.asLong()); // Pluto - Memory allocation optimisations
              if (previous != null) {
                  return previous.getHandle();
              }
@@ -39,18 +110,18 @@
      @Override
      public boolean setBlock(BlockPos pos, BlockState state, int flags, int recursionLeft) {
          // CraftBukkit start - tree generation
-+        long posLong = pos.asLong(); // Pluto - Memory efficient block lookups
++        long posLong = pos.asLong(); // Pluto - Memory allocation optimisations
          if (this.captureTreeGeneration) {
              // Paper start - Protect Bedrock and End Portal/Frames from being destroyed
              BlockState type = getBlockState(pos);
              if (!type.isDestroyable()) return false;
              // Paper end - Protect Bedrock and End Portal/Frames from being destroyed
 -            CraftBlockState blockstate = this.capturedBlockStates.get(pos);
-+            CraftBlockState blockstate = this.capturedBlockStates.get(posLong); // Pluto - Memory efficient block lookups
++            CraftBlockState blockstate = this.capturedBlockStates.get(posLong); // Pluto - Memory allocation optimisations
              if (blockstate == null) {
                  blockstate = org.bukkit.craftbukkit.block.CapturedBlockState.getTreeBlockState(this, pos, flags);
 -                this.capturedBlockStates.put(pos.immutable(), blockstate);
-+                this.capturedBlockStates.put(posLong, blockstate); // Pluto - Memory efficient block lookups
++                this.capturedBlockStates.put(posLong, blockstate); // Pluto - Memory allocation optimisations
              }
              blockstate.setData(state);
              blockstate.setFlags(flags);
@@ -59,14 +130,14 @@
              if (this.captureBlockStates) {
                  final CraftBlockState snapshot;
 -                if (!this.capturedBlockStates.containsKey(pos)) {
-+                if (!this.capturedBlockStates.containsKey(posLong)) { // Pluto - Memory efficient block lookups
++                if (!this.capturedBlockStates.containsKey(posLong)) { // Pluto - Memory allocation optimisations
                      snapshot = (CraftBlockState) org.bukkit.craftbukkit.block.CraftBlock.at(this, pos).getState(); // Paper - use CB getState to get a suitable snapshot
 -                    this.capturedBlockStates.put(pos.immutable(), snapshot);
-+                    this.capturedBlockStates.put(posLong, snapshot); // Pluto - Memory efficient block lookups
++                    this.capturedBlockStates.put(posLong, snapshot); // Pluto - Memory allocation optimisations
                      captured = true;
                  } else {
 -                    snapshot = this.capturedBlockStates.get(pos);
-+                    snapshot = this.capturedBlockStates.get(posLong); // Pluto - Memory efficient block lookups
++                    snapshot = this.capturedBlockStates.get(posLong); // Pluto - Memory allocation optimisations
                  }
                  snapshot.setFlags(flags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
              }
@@ -75,7 +146,7 @@
                  // CraftBukkit start - remove blockstate if failed (or the same)
                  if (this.captureBlockStates && captured) {
 -                    this.capturedBlockStates.remove(pos);
-+                    this.capturedBlockStates.remove(posLong); // Pluto - Memory efficient block lookups
++                    this.capturedBlockStates.remove(posLong); // Pluto - Memory allocation optimisations
                  }
                  // CraftBukkit end
                  return false;
@@ -83,7 +154,7 @@
          return this.getChunkSource().getLightEngine();
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
 +        if (this.captureTreeGeneration) {
@@ -151,14 +222,14 @@
 +    public @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos) {
 +        return pluto$getFluidStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      public BlockState getBlockState(BlockPos pos) {
          // CraftBukkit start - tree generation
          if (this.captureTreeGeneration) {
 -            CraftBlockState previous = this.capturedBlockStates.get(pos); // Paper
-+            CraftBlockState previous = this.capturedBlockStates.get(pos.asLong()); // Paper // Pluto - Memory efficient block lookups
++            CraftBlockState previous = this.capturedBlockStates.get(pos.asLong()); // Paper // Pluto - Memory allocation optimisations
              if (previous != null) {
                  return previous.getHandle();
              }
@@ -198,10 +269,10 @@
 -                    blockPos = blockPos.relative(direction);
 -                    blockState = this.getBlockState(blockPos);
 +                    // Pluto end - Decrease chunk/block lookups
-+                    blockState = this.pluto$getBlockState(blockPos.getX() + direction.getStepX(), blockPos.getY() + direction.getStepY(), blockPos.getZ() + direction.getStepZ()); // Pluto - Memory efficient block lookups
++                    blockState = this.pluto$getBlockState(blockPos.getX() + direction.getStepX(), blockPos.getY() + direction.getStepY(), blockPos.getZ() + direction.getStepZ()); // Pluto - Memory allocation optimisations
                      if (blockState.is(Blocks.COMPARATOR)) {
 -                        this.neighborChanged(blockState, blockPos, block, null, false);
-+                        this.neighborChanged(blockState, blockPos.relative(direction), block, null, false); // Pluto - Memory efficient block lookups
++                        this.neighborChanged(blockState, blockPos.relative(direction), block, null, false); // Pluto - Memory allocation optimisations
                      }
                  }
              }

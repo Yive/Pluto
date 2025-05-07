@@ -6,9 +6,9 @@
              && chunk.getBlockState(pos).is(this.blockToRemove)
 -            && chunk.getBlockState(pos.above()).isAir()
 -            && chunk.getBlockState(pos.above(2)).isAir();
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            && chunk.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir()
 +            && chunk.getBlockState(pos.getX(), pos.getY() + 2, pos.getZ()).isAir();
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
      }
  }

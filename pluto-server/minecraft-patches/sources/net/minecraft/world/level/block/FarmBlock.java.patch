@@ -5,7 +5,7 @@
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 -        BlockState blockState = level.getBlockState(pos.above());
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
          return !blockState.isSolid() || blockState.getBlock() instanceof FenceGateBlock || blockState.getBlock() instanceof MovingPistonBlock;
      }
  
@@ -23,7 +23,7 @@
  
      private static boolean shouldMaintainFarmland(BlockGetter level, BlockPos pos) {
 -        return level.getBlockState(pos.above()).is(BlockTags.MAINTAINS_FARMLAND);
-+        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(BlockTags.MAINTAINS_FARMLAND); // Pluto - Memory efficient block lookups
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(BlockTags.MAINTAINS_FARMLAND); // Pluto - Memory allocation optimisations
      }
  
      private static boolean isNearWater(LevelReader level, BlockPos pos) {

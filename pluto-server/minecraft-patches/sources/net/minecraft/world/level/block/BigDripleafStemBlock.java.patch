@@ -8,7 +8,7 @@
 -        BlockState blockState = level.getBlockState(blockPos);
 -        BlockState blockState1 = level.getBlockState(pos.above());
 -        return (blockState.is(this) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && (blockState1.is(this) || blockState1.is(Blocks.BIG_DRIPLEAF));
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -16,7 +16,7 @@
 +        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
 +        BlockState blockState1;
 +        return (blockState.is(this) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && ((blockState1 = level.pluto$getBlockState(x, y + 1, z)).is(this) || blockState1.is(Blocks.BIG_DRIPLEAF));
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
      }
  
      protected static boolean place(LevelAccessor level, BlockPos pos, FluidState fluidState, Direction direction) {

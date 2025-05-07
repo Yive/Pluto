@@ -4,12 +4,12 @@
          return blockState.getValue(LIT) && blockState.getValue(FACING) != side ? 15 : 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
 +        return blockState.getValue(LIT) && blockState.getValue(FACING) != side ? 15 : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected BlockState rotate(BlockState state, Rotation rotation) {

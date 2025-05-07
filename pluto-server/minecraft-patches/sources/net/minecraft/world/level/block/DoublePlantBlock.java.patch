@@ -5,7 +5,7 @@
          BlockPos clickedPos = context.getClickedPos();
          Level level = context.getLevel();
 -        return clickedPos.getY() < level.getMaxY() && level.getBlockState(clickedPos.above()).canBeReplaced(context)
-+        return clickedPos.getY() < level.getMaxY() && level.pluto$getBlockState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ()).canBeReplaced(context) // Pluto - Memory efficient block lookups
++        return clickedPos.getY() < level.getMaxY() && level.pluto$getBlockState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ()).canBeReplaced(context) // Pluto - Memory allocation optimisations
              ? super.getStateForPlacement(context)
              : null;
      }
@@ -14,7 +14,7 @@
              return super.canSurvive(state, level, pos);
          } else {
 -            BlockState blockState = level.getBlockState(pos.below());
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
              return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
          }
      }
@@ -24,10 +24,10 @@
          if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
 -            BlockPos blockPos = pos.below();
 -            BlockState blockState = level.getBlockState(blockPos);
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
              if (blockState.is(state.getBlock()) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
                  BlockState blockState1 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
-+                BlockPos blockPos = pos.below(); // Pluto - Memory efficient block lookups
++                BlockPos blockPos = pos.below(); // Pluto - Memory allocation optimisations
                  level.setBlock(blockPos, blockState1, 35);
                  level.levelEvent(player, 2001, blockPos, Block.getId(blockState));
              }

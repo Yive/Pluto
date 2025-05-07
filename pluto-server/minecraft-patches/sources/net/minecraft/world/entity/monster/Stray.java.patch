@@ -5,7 +5,7 @@
          EntityType<Stray> entityType, ServerLevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
      ) {
 -        BlockPos blockPos = pos;
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        int y = pos.getY();
 +        final int z = pos.getZ();
@@ -20,7 +20,7 @@
          return checkMonsterSpawnRules(entityType, level, spawnReason, pos, random)
 -            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(blockPos.below()));
 +            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(new BlockPos(x, y - 1, z)));
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
      }
  
      @Override

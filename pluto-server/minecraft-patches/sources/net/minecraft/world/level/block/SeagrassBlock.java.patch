@@ -5,7 +5,7 @@
      @Override
      public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
 -        return level.getBlockState(pos.above()).is(Blocks.WATER);
-+        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER); // Pluto - Memory efficient block lookups
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER); // Pluto - Memory allocation optimisations
      }
  
      @Override

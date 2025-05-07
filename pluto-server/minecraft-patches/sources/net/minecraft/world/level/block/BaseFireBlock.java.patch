@@ -6,7 +6,7 @@
      public static BlockState getState(BlockGetter reader, BlockPos pos) {
 -        BlockPos blockPos = pos.below();
 -        BlockState blockState = reader.getBlockState(blockPos);
-+        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory efficient block lookups
++        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
          return SoulFireBlock.canSurviveOnBlock(blockState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(reader, pos);
      }
  
@@ -24,16 +24,16 @@
              return false;
          } else {
 -            BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            final int x = pos.getX();
 +            final int y = pos.getY();
 +            final int z = pos.getZ();
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              boolean flag = false;
  
              for (Direction direction1 : Direction.values()) {
 -                if (level.getBlockState(mutableBlockPos.set(pos).move(direction1)).is(Blocks.OBSIDIAN)) {
-+                if (level.pluto$getBlockState(x + direction1.getStepX(), y + direction1.getStepY(), z + direction1.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory efficient block lookups
++                if (level.pluto$getBlockState(x + direction1.getStepX(), y + direction1.getStepY(), z + direction1.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
                      flag = true;
                      break;
                  }

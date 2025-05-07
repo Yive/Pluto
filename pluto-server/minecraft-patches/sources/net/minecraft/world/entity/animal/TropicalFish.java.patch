@@ -6,10 +6,10 @@
      ) {
 -        return level.getFluidState(pos.below()).is(FluidTags.WATER)
 -            && level.getBlockState(pos.above()).is(Blocks.WATER)
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        return level.pluto$getFluidState(pos.getX(), pos.getY() - 1, pos.getZ()).is(FluidTags.WATER)
 +            && level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER)
-+                // Pluto end - Memory efficient block lookups
++                // Pluto end - Memory allocation optimisations
              && (
                  level.getBiome(pos).is(BiomeTags.ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT)
                      || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, level, spawnReason, pos, random)

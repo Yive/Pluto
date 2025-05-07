@@ -5,7 +5,7 @@
              CollisionContext collisionContext = CollisionContext.of(this);
              if (collisionContext.isAbove(LiquidBlock.SHAPE_STABLE, this.blockPosition(), true)
 -                && !this.level().getFluidState(this.blockPosition().above()).is(FluidTags.LAVA)) {
-+                && !this.level().pluto$getFluidState(this.blockPosition().getX(), this.blockPosition().getY() + 1, this.blockPosition().getZ()).is(FluidTags.LAVA)) { // Pluto - Memory efficient block lookups
++                && !this.level().pluto$getFluidState(this.blockPosition().getX(), this.blockPosition().getY() + 1, this.blockPosition().getZ()).is(FluidTags.LAVA)) { // Pluto - Memory allocation optimisations
                  this.setOnGround(true);
              } else {
                  this.setDeltaMovement(this.getDeltaMovement().scale(0.5).add(0.0, 0.05, 0.0));

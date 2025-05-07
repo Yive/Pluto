@@ -6,10 +6,10 @@
          if (entityType != null && level.getWorldBorder().isWithinBounds(pos)) {
 -            BlockPos blockPos = pos.above();
 -            return level.getFluidState(pos).is(FluidTags.WATER) && !level.getBlockState(blockPos).isRedstoneConductor(level, blockPos);
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            BlockPos blockPos;
 +            return level.getFluidState(pos).is(FluidTags.WATER) && !level.getBlockState(blockPos = pos.above()).isRedstoneConductor(level, blockPos);
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          } else {
              return false;
          }
@@ -23,7 +23,7 @@
                  return blockState.isValidSpawn(level, blockPos1, entityType)
                      && this.isValidEmptySpawnBlock(level, pos, entityType)
 -                    && this.isValidEmptySpawnBlock(level, blockPos, entityType);
-+                    && this.isValidEmptySpawnBlock(level, pos.above(), entityType); // Pluto - Memory efficient block lookups
++                    && this.isValidEmptySpawnBlock(level, pos.above(), entityType); // Pluto - Memory allocation optimisations
              } else {
                  return false;
              }

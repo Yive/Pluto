@@ -4,7 +4,7 @@
  public interface SignalGetter extends BlockGetter {
      Direction[] DIRECTIONS = Direction.values();
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    default int pluto$getDirectSignal(int x, int y, int z, Direction direction) {
 +        return this.pluto$getBlockState(x, y, z).pluto$getDirectSignal(this, x, y, z, direction);
 +    }
@@ -21,46 +21,46 @@
 +            return blockState.isSignalSource() ? this.pluto$getDirectSignal(x, y, z, direction) : 0;
 +        }
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      default int getDirectSignal(BlockPos pos, Direction direction) {
          return this.getBlockState(pos).getDirectSignal(this, pos, direction);
      }
  
      default int getDirectSignalTo(BlockPos pos) {
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
          int i = 0;
 -        i = Math.max(i, this.getDirectSignal(pos.below(), Direction.DOWN));
-+        i = Math.max(i, this.pluto$getDirectSignal(x, y - 1, z, Direction.DOWN)); // Pluto - Memory efficient block lookups
++        i = Math.max(i, this.pluto$getDirectSignal(x, y - 1, z, Direction.DOWN)); // Pluto - Memory allocation optimisations
          if (i >= 15) {
              return i;
          } else {
 -            i = Math.max(i, this.getDirectSignal(pos.above(), Direction.UP));
-+            i = Math.max(i, this.pluto$getDirectSignal(x, y + 1, z, Direction.UP)); // Pluto - Memory efficient block lookups
++            i = Math.max(i, this.pluto$getDirectSignal(x, y + 1, z, Direction.UP)); // Pluto - Memory allocation optimisations
              if (i >= 15) {
                  return i;
              } else {
 -                i = Math.max(i, this.getDirectSignal(pos.north(), Direction.NORTH));
-+                i = Math.max(i, this.pluto$getDirectSignal(x, y, z - 1, Direction.NORTH)); // Pluto - Memory efficient block lookups
++                i = Math.max(i, this.pluto$getDirectSignal(x, y, z - 1, Direction.NORTH)); // Pluto - Memory allocation optimisations
                  if (i >= 15) {
                      return i;
                  } else {
 -                    i = Math.max(i, this.getDirectSignal(pos.south(), Direction.SOUTH));
-+                    i = Math.max(i, this.pluto$getDirectSignal(x, y, z + 1, Direction.SOUTH)); // Pluto - Memory efficient block lookups
++                    i = Math.max(i, this.pluto$getDirectSignal(x, y, z + 1, Direction.SOUTH)); // Pluto - Memory allocation optimisations
                      if (i >= 15) {
                          return i;
                      } else {
 -                        i = Math.max(i, this.getDirectSignal(pos.west(), Direction.WEST));
-+                        i = Math.max(i, this.pluto$getDirectSignal(x - 1, y, z, Direction.WEST)); // Pluto - Memory efficient block lookups
++                        i = Math.max(i, this.pluto$getDirectSignal(x - 1, y, z, Direction.WEST)); // Pluto - Memory allocation optimisations
                          if (i >= 15) {
                              return i;
                          } else {
 -                            i = Math.max(i, this.getDirectSignal(pos.east(), Direction.EAST));
-+                            i = Math.max(i, this.pluto$getDirectSignal(x + 1, y, z, Direction.EAST)); // Pluto - Memory efficient block lookups
++                            i = Math.max(i, this.pluto$getDirectSignal(x + 1, y, z, Direction.EAST)); // Pluto - Memory allocation optimisations
                              return i >= 15 ? i : i;
                          }
                      }

@@ -4,11 +4,11 @@
          return 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
      }
@@ -17,11 +17,11 @@
          return 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      public final Optional<ResourceKey<LootTable>> getLootTable() {
          return this.drops;
@@ -30,11 +30,11 @@
              return this.getBlock().getSignal(this.asState(), level, pos, direction);
          }
  
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        public int pluto$getSignal(BlockGetter level, int x, int y, int z, Direction direction) {
 +            return this.getBlock().pluto$getSignal(this.asState(), level, x, y, z, direction);
 +        }
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
 +
          public boolean hasAnalogOutputSignal() {
              return this.getBlock().hasAnalogOutputSignal(this.asState());
@@ -44,11 +44,11 @@
              return this.getBlock().getDirectSignal(this.asState(), level, pos, direction);
          }
 +
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        public int pluto$getDirectSignal(BlockGetter level, int x, int y, int z, Direction direction) {
 +            return this.getBlock().pluto$getDirectSignal(this.asState(), level, x, y, z, direction);
 +        }
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
  
          public PushReaction getPistonPushReaction() {
              return !this.isDestroyable() ? PushReaction.BLOCK : this.pushReaction; // Paper - Protect Bedrock and End Portal/Frames from being destroyed

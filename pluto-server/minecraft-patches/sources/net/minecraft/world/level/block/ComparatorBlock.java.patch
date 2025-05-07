@@ -4,12 +4,12 @@
              : super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getOutputSignal(BlockGetter level, int x, int y, int z, BlockState state) {
 +        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof ComparatorBlockEntity comparatorBlockEntity ? comparatorBlockEntity.getOutputSignal() : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected int getOutputSignal(BlockGetter level, BlockPos pos, BlockState state) {

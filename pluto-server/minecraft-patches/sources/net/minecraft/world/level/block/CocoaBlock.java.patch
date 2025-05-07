@@ -5,10 +5,10 @@
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 -        BlockState blockState = level.getBlockState(pos.relative(state.getValue(FACING)));
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        Direction direction = state.getValue(FACING);
 +        BlockState blockState = level.pluto$getBlockState(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(), pos.getZ() + direction.getStepZ());
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
          return blockState.is(BlockTags.JUNGLE_LOGS);
      }
  

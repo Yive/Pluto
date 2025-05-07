@@ -5,7 +5,7 @@
      protected void playStepSound(BlockPos pos, BlockState block) {
          if (!block.liquid()) {
 -            BlockState blockState = this.level().getBlockState(pos.above());
-+            BlockState blockState = this.level().pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState = this.level().pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
              SoundType soundType = block.getSoundType();
              if (blockState.is(Blocks.SNOW)) {
                  soundType = blockState.getSoundType();

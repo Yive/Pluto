@@ -5,7 +5,7 @@
      protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
          return state.is(BlockTags.SMALL_DRIPLEAF_PLACEABLE)
 -            || level.getFluidState(pos.above()).isSourceOfType(Fluids.WATER) && super.mayPlaceOn(state, level, pos);
-+            || level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).isSourceOfType(Fluids.WATER) && super.mayPlaceOn(state, level, pos); // Pluto - Memory efficient block lookups
++            || level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).isSourceOfType(Fluids.WATER) && super.mayPlaceOn(state, level, pos); // Pluto - Memory allocation optimisations
      }
  
      @Nullable

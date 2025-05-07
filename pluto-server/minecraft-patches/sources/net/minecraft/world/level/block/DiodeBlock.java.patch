@@ -4,7 +4,7 @@
          return blockState.getSignal(blockAccess, pos, side);
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
 +        return blockState.pluto$getSignal(blockAccess, x, y, z, side);
@@ -22,7 +22,7 @@
 +    protected int pluto$getOutputSignal(BlockGetter level, int x, int y, int z, BlockState state) {
 +        return 15;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
@@ -33,10 +33,10 @@
          return Math.max(
 -            level.getControlInputSignal(pos.relative(clockWise), clockWise, flag),
 -            level.getControlInputSignal(pos.relative(counterClockWise), counterClockWise, flag)
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            level.pluto$getControlInputSignal(pos.getX() + clockWise.getStepX(), pos.getY() + clockWise.getStepY(), pos.getZ() + clockWise.getStepZ(), clockWise, flag),
 +            level.pluto$getControlInputSignal(pos.getX() + counterClockWise.getStepX(), pos.getY() + counterClockWise.getStepY(), pos.getZ() + counterClockWise.getStepZ(), counterClockWise, flag)
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          );
      }
  
@@ -45,7 +45,7 @@
      public boolean shouldPrioritize(BlockGetter level, BlockPos pos, BlockState state) {
          Direction opposite = state.getValue(FACING).getOpposite();
 -        BlockState blockState = level.getBlockState(pos.relative(opposite));
-+        BlockState blockState = level.pluto$getBlockState(pos.getX() + opposite.getStepX(), pos.getY() + opposite.getStepY(), pos.getZ() + opposite.getStepZ()); // Pluto - Memory efficient block lookups
++        BlockState blockState = level.pluto$getBlockState(pos.getX() + opposite.getStepX(), pos.getY() + opposite.getStepY(), pos.getZ() + opposite.getStepZ()); // Pluto - Memory allocation optimisations
          return isDiode(blockState) && blockState.getValue(FACING) != opposite;
      }
  

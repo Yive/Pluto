@@ -1,0 +1,118 @@
+--- a/ca/spottedleaf/moonrise/patches/collisions/CollisionUtil.java
++++ b/ca/spottedleaf/moonrise/patches/collisions/CollisionUtil.java
+@@ -499,6 +_,115 @@
+         return false;
+     }
+ 
++    // Pluto start - Memory allocation optimisations
++    public static boolean pluto$voxelShapeIntersectNoEmpty(final VoxelShape voxel, final double minX, final double minY, final double minZ, final double maxX, final double maxY, final double maxZ) {
++        if (voxel.isEmpty()) {
++            return false;
++        }
++
++        // note: this function assumes that for any i in coords that coord[i + 1] - coord[i] > COLLISION_EPSILON is true
++
++        // offsets that should be applied to coords
++        final double off_x = ((CollisionVoxelShape)voxel).moonrise$offsetX();
++        final double off_y = ((CollisionVoxelShape)voxel).moonrise$offsetY();
++        final double off_z = ((CollisionVoxelShape)voxel).moonrise$offsetZ();
++
++        final double[] coords_x = ((CollisionVoxelShape)voxel).moonrise$rootCoordinatesX();
++        final double[] coords_y = ((CollisionVoxelShape)voxel).moonrise$rootCoordinatesY();
++        final double[] coords_z = ((CollisionVoxelShape)voxel).moonrise$rootCoordinatesZ();
++
++        final CachedShapeData cached_shape_data = ((CollisionVoxelShape)voxel).moonrise$getCachedVoxelData();
++
++        // note: size = coords.length - 1
++        final int size_x = cached_shape_data.sizeX();
++        final int size_y = cached_shape_data.sizeY();
++        final int size_z = cached_shape_data.sizeZ();
++
++        // note: voxel bitset with set index (x, y, z) indicates that
++        //       an AABB(coords_x[x], coords_y[y], coords_z[z], coords_x[x + 1], coords_y[y + 1], coords_z[z + 1])
++        //       is collidable. this is the fundamental principle of operation for the voxel collision operation
++
++        // note: for intersection, one we find the floor of the min we can use that as the start index
++        //       for the next check as source max >= source min
++        // note: we can fast check intersection on the two other axis by seeing if the min index is >= size,
++        //       as this implies that coords[coords.length - 1] < source min
++        //       we can also fast check by seeing if max index is < 0, as this implies that coords[0] > source max
++
++        final int floor_min_x = Math.max(
++                0,
++                findFloor(coords_x, off_x, minX + COLLISION_EPSILON, 0, size_x)
++        );
++        if (floor_min_x >= size_x) {
++            // cannot intersect
++            return false;
++        }
++
++        final int ceil_max_x = Math.min(
++                size_x,
++                findFloor(coords_x, off_x, maxX - COLLISION_EPSILON, floor_min_x, size_x) + 1
++        );
++        if (floor_min_x >= ceil_max_x) {
++            // cannot intersect
++            return false;
++        }
++
++        final int floor_min_y = Math.max(
++                0,
++                findFloor(coords_y, off_y, minY + COLLISION_EPSILON, 0, size_y)
++        );
++        if (floor_min_y >= size_y) {
++            // cannot intersect
++            return false;
++        }
++
++        final int ceil_max_y = Math.min(
++                size_y,
++                findFloor(coords_y, off_y, maxY - COLLISION_EPSILON, floor_min_y, size_y) + 1
++        );
++        if (floor_min_y >= ceil_max_y) {
++            // cannot intersect
++            return false;
++        }
++
++        final int floor_min_z = Math.max(
++                0,
++                findFloor(coords_z, off_z, minZ + COLLISION_EPSILON, 0, size_z)
++        );
++        if (floor_min_z >= size_z) {
++            // cannot intersect
++            return false;
++        }
++
++        final int ceil_max_z = Math.min(
++                size_z,
++                findFloor(coords_z, off_z, maxZ - COLLISION_EPSILON, floor_min_z, size_z) + 1
++        );
++        if (floor_min_z >= ceil_max_z) {
++            // cannot intersect
++            return false;
++        }
++
++        final long[] bitset = cached_shape_data.voxelSet();
++
++        // check bitset to check if any shapes in range are full
++
++        final int mul_x = size_y*size_z;
++        for (int curr_x = floor_min_x; curr_x < ceil_max_x; ++curr_x) {
++            for (int curr_y = floor_min_y; curr_y < ceil_max_y; ++curr_y) {
++                for (int curr_z = floor_min_z; curr_z < ceil_max_z; ++curr_z) {
++                    final int index = curr_z + curr_y*size_z + curr_x*mul_x;
++                    // note: JLS states long shift operators ANDS shift by 63
++                    if ((bitset[index >>> 6] & (1L << index)) != 0L) {
++                        return true;
++                    }
++                }
++            }
++        }
++
++        return false;
++    }
++    // Pluto end - Memory allocation optimisations
++
+     // assume !target.isEmpty() && abs(source_move) >= COLLISION_EPSILON
+     public static double collideX(final VoxelShape target, final AABB source, final double source_move) {
+         final AABB single_aabb = ((CollisionVoxelShape)target).moonrise$getSingleAABBRepresentation();

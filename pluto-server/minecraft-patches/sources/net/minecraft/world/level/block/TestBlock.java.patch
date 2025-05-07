@@ -4,7 +4,7 @@
          }
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        if (state.getValue(MODE) != TestBlockMode.START) {
@@ -15,7 +15,7 @@
 +            return 0;
 +        }
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {

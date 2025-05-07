@@ -5,11 +5,11 @@
          if (useExperimentalMovement(this.level())) {
              double d = this.getY() - 0.1 - 1.0E-5F;
 -            if (this.level().getBlockState(BlockPos.containing(floor, d, floor2)).is(BlockTags.RAILS)) {
-+            if (this.level().pluto$getBlockState(floor, d, floor2).is(BlockTags.RAILS)) { // Pluto - Memory efficient block lookups
++            if (this.level().pluto$getBlockState(floor, d, floor2).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
                  floor1 = Mth.floor(d);
              }
 -        } else if (this.level().getBlockState(new BlockPos(floor, floor1 - 1, floor2)).is(BlockTags.RAILS)) {
-+        } else if (this.level().pluto$getBlockState(floor, floor1 - 1, floor2).is(BlockTags.RAILS)) { // Pluto - Memory efficient block lookups
++        } else if (this.level().pluto$getBlockState(floor, floor1 - 1, floor2).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
              floor1--;
          }
  

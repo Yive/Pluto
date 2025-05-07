@@ -4,11 +4,11 @@
          this(vector.getX(), vector.getY(), vector.getZ());
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    public long asBlockPosLong() {
 +        return net.minecraft.core.BlockPos.asLong(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      public Vec3 vectorTo(Vec3 vec) {
          return new Vec3(vec.x - this.x, vec.y - this.y, vec.z - this.z);

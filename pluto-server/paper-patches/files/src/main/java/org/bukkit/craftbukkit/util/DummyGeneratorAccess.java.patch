@@ -4,7 +4,7 @@
          throw new UnsupportedOperationException("Not supported yet.");
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
 +        throw new UnsupportedOperationException("Not supported yet.");
@@ -44,7 +44,7 @@
 +    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
 +        throw new UnsupportedOperationException("Not supported yet.");
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      public BlockState getBlockState(BlockPos pos) {

@@ -4,7 +4,7 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public int pluto$getDirectSignal(int x, int y, int z, Direction direction) {
 +        return this.delegate.pluto$getDirectSignal(x, y, z, direction);
@@ -64,7 +64,7 @@
 +    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
 +        return this.delegate.pluto$getFluidStateIfLoaded(packedPos);
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Nullable
      @Override

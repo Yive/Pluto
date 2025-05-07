@@ -14,7 +14,7 @@
      @Override
      public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
 -        return !isDead(state) && level.getBlockState(pos.below()).is(BlockTags.CORAL_BLOCKS);
-+        return !isDead(state) && level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.CORAL_BLOCKS); // Pluto - Memory efficient block lookups
++        return !isDead(state) && level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.CORAL_BLOCKS); // Pluto - Memory allocation optimisations
      }
  
      @Override
@@ -23,7 +23,7 @@
                      BlockPos blockPos = new BlockPos(i4 + i6, i9, pos.getZ() - i5 + i7);
                      if (blockPos != pos && random.nextInt(6) == 0 && level.getBlockState(blockPos).is(Blocks.WATER)) {
 -                        BlockState blockState = level.getBlockState(blockPos.below());
-+                        BlockState blockState = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Memory efficient block lookups | I'm not going to do the above since this is just for bonemeal
++                        BlockState blockState = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Memory allocation optimisations | I'm not going to do the above since this is just for bonemeal
                          if (blockState.is(BlockTags.CORAL_BLOCKS)) {
                              level.setBlock(blockPos, Blocks.SEA_PICKLE.defaultBlockState().setValue(PICKLES, random.nextInt(4) + 1), 3);
                          }

@@ -7,18 +7,18 @@
 -    private final Map<BlockPos, net.minecraft.world.level.block.state.BlockState> dataMap = new HashMap<>();
 -    private final Map<BlockPos, BlockEntity> entityMap = new HashMap<>();
 -    private final LinkedHashMap<BlockPos, CraftBlockState> blocks;
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    private final Map<Long, net.minecraft.world.level.block.state.BlockState> dataMap = new HashMap<>();
 +    private final Map<Long, BlockEntity> entityMap = new HashMap<>();
 +    private final LinkedHashMap<Long, CraftBlockState> blocks;
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
  
      public BlockStateListPopulator(LevelAccessor world) {
          this(world, new LinkedHashMap<>());
      }
  
 -    private BlockStateListPopulator(LevelAccessor world, LinkedHashMap<BlockPos, CraftBlockState> blocks) {
-+    private BlockStateListPopulator(LevelAccessor world, LinkedHashMap<Long, CraftBlockState> blocks) { // Pluto - Memory efficient block lookups
++    private BlockStateListPopulator(LevelAccessor world, LinkedHashMap<Long, CraftBlockState> blocks) { // Pluto - Memory allocation optimisations
          this.world = world;
          this.blocks = blocks;
      }
@@ -26,18 +26,18 @@
      @Override
      public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos) {
 -        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos);
-+        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos.asLong()); // Pluto - Memory efficient block lookups
++        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos.asLong()); // Pluto - Memory allocation optimisations
          return (state != null) ? state : this.world.getBlockState(pos);
      }
  
      @Override
      public FluidState getFluidState(BlockPos pos) {
 -        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos);
-+        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos.asLong()); // Pluto - Memory efficient block lookups
++        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(pos.asLong()); // Pluto - Memory allocation optimisations
          return (state != null) ? state.getFluidState() : this.world.getFluidState(pos);
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(int x, int y, int z) {
 +        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(BlockPos.asLong(x, y, z));
@@ -61,18 +61,18 @@
 +        net.minecraft.world.level.block.state.BlockState state = this.dataMap.get(packedPos);
 +        return (state != null) ? state.getFluidState() : this.world.pluto$getFluidState(packedPos);
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      public BlockEntity getBlockEntity(BlockPos pos) {
          // The contains is important to check for null values
 -        if (this.entityMap.containsKey(pos)) {
 -            return this.entityMap.get(pos);
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        long posLong = pos.asLong();
 +        if (this.entityMap.containsKey(posLong)) {
 +            return this.entityMap.get(posLong);
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          }
  
          return this.world.getBlockEntity(pos);
@@ -81,7 +81,7 @@
          pos = pos.immutable();
          // remove first to keep insertion order
 -        this.blocks.remove(pos);
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        long posLong = pos.asLong();
 +        this.blocks.remove(posLong);
  
@@ -93,7 +93,7 @@
          } else {
 -            this.entityMap.put(pos, null);
 +            this.entityMap.put(posLong, null);
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          }
  
          // use 'this' to ensure that the block state is the correct TileState
@@ -102,7 +102,7 @@
          // set world handle to ensure that updated calls are done to the world and not to this populator
          snapshot.setWorldHandle(this.world);
 -        this.blocks.put(pos, snapshot);
-+        this.blocks.put(posLong, snapshot); // Pluto - Memory efficient block lookups
++        this.blocks.put(posLong, snapshot); // Pluto - Memory allocation optimisations
          return true;
      }
  

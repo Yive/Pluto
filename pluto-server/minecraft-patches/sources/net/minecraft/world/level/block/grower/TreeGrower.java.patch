@@ -8,7 +8,7 @@
 -            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset)).is(block)
 -            && level.getBlockState(pos.offset(xOffset, 0, yOffset + 1)).is(block)
 -            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset + 1)).is(block);
-+        // Pluto start - Memory efficient block lookups | I feel like mojang made a typo with yOffset.
++        // Pluto start - Memory allocation optimisations | I feel like mojang made a typo with yOffset.
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -16,12 +16,12 @@
 +            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset).is(block)
 +            && level.pluto$getBlockState(x + xOffset, y, z + yOffset + 1).is(block)
 +            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset + 1).is(block);
-+        // Pluto end - Memory efficient block lookups
++        // Pluto end - Memory allocation optimisations
      }
  
      private boolean hasFlowers(LevelAccessor level, BlockPos pos) {
 -        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(pos.below().north(2).west(2), pos.above().south(2).east(2))) {
-+        // Pluto start - Memory efficient block lookups | 6 allocations -> 2 allocations
++        // Pluto start - Memory allocation optimisations | 6 allocations -> 2 allocations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -41,7 +41,7 @@
 +        final int maxZ = Math.max(z1, z2);
 +
 +        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              if (level.getBlockState(blockPos).is(BlockTags.FLOWERS)) {
                  return true;
              }

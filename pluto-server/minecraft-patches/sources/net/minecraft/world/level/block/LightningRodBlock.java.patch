@@ -4,7 +4,7 @@
          return state.getValue(POWERED) && state.getValue(FACING) == direction ? 15 : 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return state.getValue(POWERED) ? 15 : 0;
@@ -14,7 +14,7 @@
 +    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return state.getValue(POWERED) && state.getValue(FACING) == direction ? 15 : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      public void onLightningStrike(BlockState state, Level level, BlockPos pos) {
          // CraftBukkit start

@@ -5,7 +5,7 @@
          int y = pos.getY();
          int z = pos.getZ();
 -        BlockPos blockPos;
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        int x1;
 +        int y1;
 +        int z1;
@@ -21,7 +21,7 @@
 +            x1 = x;
 +            y1 = blockEntity.lastCheckY + 1;
 +            z1 = z;
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          }
  
          BeaconBeamOwner.Section section = blockEntity.checkingBeamSections.isEmpty()
@@ -31,11 +31,11 @@
  
 -        for (int i = 0; i < 10 && blockPos.getY() <= height; i++) {
 -            BlockState blockState = level.getBlockState(blockPos);
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunk(x1 >> 4, z1 >> 4);
 +        for (int i = 0; i < 10 && y1 <= height; i++) {
 +            BlockState blockState = chunk.getBlockStateFinal(x1, y1, z1);
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              if (blockState.getBlock() instanceof BeaconBeamBlock beaconBeamBlock) {
                  int textureDiffuseColor = beaconBeamBlock.getColor().getTextureDiffuseColor();
                  if (blockEntity.checkingBeamSections.size() <= 1) {
@@ -44,7 +44,7 @@
              }
  
 -            blockPos = blockPos.above();
-+            y1++; // Pluto - Memory efficient block lookups
++            y1++; // Pluto - Memory allocation optimisations
              blockEntity.lastCheckY++;
          }
  
@@ -53,7 +53,7 @@
              for (int i3 = x - i1; i3 <= x + i1 && flag; i3++) {
                  for (int i4 = z - i1; i4 <= z + i1; i4++) {
 -                    if (!level.getBlockState(new BlockPos(i3, i2, i4)).is(BlockTags.BEACON_BASE_BLOCKS)) {
-+                    if (!level.pluto$getBlockState(i3, i2, i4).is(BlockTags.BEACON_BASE_BLOCKS)) { // Pluto - Memory efficient block lookups
++                    if (!level.pluto$getBlockState(i3, i2, i4).is(BlockTags.BEACON_BASE_BLOCKS)) { // Pluto - Memory allocation optimisations
                          flag = false;
                          break;
                      }

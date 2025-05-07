@@ -6,7 +6,7 @@
      protected double getGroundY(Vec3 vec) {
 -        BlockPos blockPos = BlockPos.containing(vec);
 -        return this.level.getBlockState(blockPos.below()).isAir() ? vec.y : WalkNodeEvaluator.getFloorLevel(this.level, blockPos);
-+        return this.level.pluto$getBlockState(Mth.floor(vec.x), Mth.floor(vec.y) - 1, Mth.floor(vec.z)).isAir() ? vec.y : WalkNodeEvaluator.getFloorLevel(this.level, BlockPos.containing(vec)); // Pluto - Memory efficient block lookups
++        return this.level.pluto$getBlockState(Mth.floor(vec.x), Mth.floor(vec.y) - 1, Mth.floor(vec.z)).isAir() ? vec.y : WalkNodeEvaluator.getFloorLevel(this.level, BlockPos.containing(vec)); // Pluto - Memory allocation optimisations
      }
  
      protected void followThePath() {
@@ -15,7 +15,7 @@
                  Node node = this.path.getNode(i);
                  Node node1 = i + 1 < this.path.getNodeCount() ? this.path.getNode(i + 1) : null;
 -                BlockState blockState = this.level.getBlockState(new BlockPos(node.x, node.y, node.z));
-+                BlockState blockState = this.level.pluto$getBlockState(node.x, node.y, node.z); // Pluto - Memory efficient block lookups
++                BlockState blockState = this.level.pluto$getBlockState(node.x, node.y, node.z); // Pluto - Memory allocation optimisations
                  if (blockState.is(BlockTags.CAULDRONS)) {
                      this.path.replaceNode(i, node.cloneAndMove(node.x, node.y + 1, node.z));
                      if (node1 != null && node.y >= node1.y) {
@@ -25,7 +25,7 @@
      public boolean isStableDestination(BlockPos pos) {
 -        BlockPos blockPos = pos.below();
 -        return this.level.getBlockState(blockPos).isSolidRender();
-+        return this.level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).isSolidRender(); // Pluto - Memory efficient block lookups
++        return this.level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).isSolidRender(); // Pluto - Memory allocation optimisations
      }
  
      public NodeEvaluator getNodeEvaluator() {

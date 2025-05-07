@@ -7,10 +7,10 @@
 -            BlockPos blockPos = this.mob.blockPosition().above();
 -            BlockState blockState = this.level.getBlockState(blockPos);
 -            return blockState.is(Blocks.POWDER_SNOW) || blockState.getCollisionShape(this.level, blockPos) == Shapes.empty();
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            BlockState blockState = this.level.pluto$getBlockState(this.mob.blockPosition().getX(), this.mob.blockPosition().getY() + 1, this.mob.blockPosition().getZ());
 +            return blockState.is(Blocks.POWDER_SNOW) || blockState.getCollisionShape(this.level, this.mob.blockPosition().above()) == Shapes.empty();
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
          } else {
              return false;
          }

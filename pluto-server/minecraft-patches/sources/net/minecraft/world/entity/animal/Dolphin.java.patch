@@ -7,7 +7,7 @@
 -                        BlockPos blockPos = BlockPos.containing(posTowards);
 -                        if (!level.getFluidState(blockPos).is(FluidTags.WATER) || !level.getBlockState(blockPos).isPathfindable(PathComputationType.WATER)) {
 +                        // Pluto start - Decrease chunk/block lookups
-+                        net.minecraft.world.level.block.state.BlockState state = level.pluto$getBlockState(posTowards.asBlockPosLong()); // Pluto - Memory efficient block lookups
++                        net.minecraft.world.level.block.state.BlockState state = level.pluto$getBlockState(posTowards.asBlockPosLong()); // Pluto - Memory allocation optimisations
 +                        if (!state.getFluidState().is(FluidTags.WATER) || !state.isPathfindable(PathComputationType.WATER)) {
 +                            // Pluto end - Decrease chunk/block lookups
                              posTowards = DefaultRandomPos.getPosTowards(this.dolphin, 8, 5, vec3, (float) (Math.PI / 2));

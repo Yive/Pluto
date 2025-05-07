@@ -4,7 +4,7 @@
          return 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    public static int pluto$getOpenCount(BlockGetter level, int x, int y, int z) {
 +        BlockState blockState = level.pluto$getBlockState(x, y, z);
 +        if (blockState.hasBlockEntity()) {
@@ -16,7 +16,7 @@
 +
 +        return 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      public static void swapContents(ChestBlockEntity chest, ChestBlockEntity otherChest) {
          NonNullList<ItemStack> items = chest.getItems();

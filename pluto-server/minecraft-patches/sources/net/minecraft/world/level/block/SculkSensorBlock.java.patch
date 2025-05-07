@@ -4,7 +4,7 @@
          return direction == Direction.UP ? state.getSignal(level, pos, direction) : 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return state.getValue(POWER);
@@ -14,7 +14,7 @@
 +    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return direction == Direction.UP ? state.pluto$getSignal(level, x, y, z, direction) : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      public static SculkSensorPhase getPhase(BlockState state) {
          return state.getValue(PHASE);

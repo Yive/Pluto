@@ -48,7 +48,7 @@
                  && this.random.nextFloat() * 30.0F < (lightLevelDependentMagicValue - 0.4F) * 2.0F
                  && !flag
 -                && this.level().canSeeSky(blockPos)) {
-+                && this.level().canSeeSky(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()))) { // Pluto - Memory efficient block lookups
++                && this.level().canSeeSky(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()))) { // Pluto - Memory allocation optimisations
                  return true;
              }
          }

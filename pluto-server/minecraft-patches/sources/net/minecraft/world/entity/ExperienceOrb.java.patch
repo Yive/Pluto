@@ -5,7 +5,7 @@
              float f = 0.98F;
              if (this.onGround()) {
 -                f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F;
-+                f = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F; // Pluto - Memory efficient block lookups
++                f = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F; // Pluto - Memory allocation optimisations
              }
  
              this.setDeltaMovement(this.getDeltaMovement().scale(f));
@@ -15,15 +15,15 @@
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
 -        return this.getOnPos(0.999999F);
 -    }
-+        return this.getOnPos(0.999999F); // Pluto - Memory efficient block lookups | Diff on change
++        return this.getOnPos(0.999999F); // Pluto - Memory allocation optimisations | Diff on change
 +    }
 +
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
 +        return this.pluto$getOnPos(0.999999F);
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
  
      private void scanForMerges() {
          if (this.level() instanceof ServerLevel) {

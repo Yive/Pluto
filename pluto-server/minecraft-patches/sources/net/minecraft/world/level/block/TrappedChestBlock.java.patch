@@ -5,7 +5,7 @@
          return side == Direction.UP ? blockState.getSignal(blockAccess, pos, side) : 0;
      }
 +
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter blockAccess, int x, int y, int z, Direction direction) {
 +        return Mth.clamp(ChestBlockEntity.pluto$getOpenCount(blockAccess, x, y, z), 0, 15);
@@ -15,5 +15,5 @@
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
 +        return side == Direction.UP ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
  }

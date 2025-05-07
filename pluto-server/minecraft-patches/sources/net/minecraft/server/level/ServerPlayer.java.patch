@@ -22,7 +22,7 @@
          } else {
              boolean isPossibleToRespawnInThis = block.isPossibleToRespawnInThis(blockState);
 -            BlockState blockState1 = level.getBlockState(blockPos.above());
-+            BlockState blockState1 = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()); // Pluto - Memory efficient block lookups
++            BlockState blockState1 = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()); // Pluto - Memory allocation optimisations
              boolean isPossibleToRespawnInThis1 = blockState1.getBlock().isPossibleToRespawnInThis(blockState1);
              return isPossibleToRespawnInThis && isPossibleToRespawnInThis1
                  ? Optional.of(new ServerPlayer.RespawnPosAngle(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.1, blockPos.getZ() + 0.5), f, false, false)) // CraftBukkit

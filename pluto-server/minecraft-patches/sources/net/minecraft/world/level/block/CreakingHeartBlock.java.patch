@@ -4,14 +4,14 @@
      public static boolean hasRequiredLogs(BlockState state, LevelReader level, BlockPos pos) {
          Direction.Axis axis = state.getValue(AXIS);
  
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
          for (Direction direction : axis.getDirections()) {
 -            BlockState blockState = level.getBlockState(pos.relative(direction));
 +            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              if (!blockState.is(BlockTags.PALE_OAK_LOGS) || blockState.getValue(AXIS) != axis) {
                  return false;
              }
@@ -19,7 +19,7 @@
      }
  
      private static boolean isSurroundedByLogs(LevelAccessor level, BlockPos pos) {
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -27,7 +27,7 @@
 -            BlockPos blockPos = pos.relative(direction);
 -            BlockState blockState = level.getBlockState(blockPos);
 +            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              if (!blockState.is(BlockTags.PALE_OAK_LOGS)) {
                  return false;
              }

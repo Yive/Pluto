@@ -4,7 +4,7 @@
          return blockEntity != null && blockEntity.getType() == blockEntityType ? Optional.of((T)blockEntity) : Optional.empty();
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    default BlockState pluto$getBlockState(double x, double y, double z) {
 +        return pluto$getBlockState(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
@@ -28,7 +28,7 @@
 +    }
 +    @Nullable FluidState pluto$getFluidStateIfLoaded(int x, int y, int z);
 +    @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos);
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      BlockState getBlockState(BlockPos pos);
  

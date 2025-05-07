@@ -4,12 +4,12 @@
          return direction != state.getValue(FACING) ? super.getSignal(state, level, pos, direction) : 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return direction != state.getValue(FACING) ? super.pluto$getSignal(state, level, x, y, z, direction) : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

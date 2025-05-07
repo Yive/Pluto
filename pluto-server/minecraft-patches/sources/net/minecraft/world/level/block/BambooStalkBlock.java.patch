@@ -33,7 +33,7 @@
      protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
          if (state.getValue(STAGE) == 0) {
 -            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
-+            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && (level.plutoConfig().bambooStalkIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora // Pluto - Memory efficient block lookups
++            if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && (level.plutoConfig().bambooStalkIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora // Pluto - Memory allocation optimisations
                  int i = this.getHeightBelowUpToMax(level, pos) + 1;
                  if (i < level.paperConfig().maxGrowthHeight.bamboo.max) { // Paper - Configurable cactus/bamboo/reed growth height
                      this.growBamboo(state, level, pos, random, i);
@@ -42,7 +42,7 @@
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 -        return level.getBlockState(pos.below()).is(BlockTags.BAMBOO_PLANTABLE_ON);
-+        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.BAMBOO_PLANTABLE_ON); // Pluto - Memory efficient block lookups
++        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.BAMBOO_PLANTABLE_ON); // Pluto - Memory allocation optimisations
      }
  
      @Override
@@ -51,7 +51,7 @@
          int heightAboveUpToMax = this.getHeightAboveUpToMax(level, pos);
          int heightBelowUpToMax = this.getHeightBelowUpToMax(level, pos);
 -        return heightAboveUpToMax + heightBelowUpToMax + 1 < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.getBlockState(pos.above(heightAboveUpToMax)).getValue(STAGE) != 1; // Paper - Configurable cactus/bamboo/reed growth height
-+        return heightAboveUpToMax + heightBelowUpToMax + 1 < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.pluto$getBlockState(pos.getX(), pos.getY() + heightAboveUpToMax, pos.getZ()).getValue(STAGE) != 1; // Paper - Configurable cactus/bamboo/reed growth height // Pluto - Memory efficient block lookups
++        return heightAboveUpToMax + heightBelowUpToMax + 1 < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.pluto$getBlockState(pos.getX(), pos.getY() + heightAboveUpToMax, pos.getZ()).getValue(STAGE) != 1; // Paper - Configurable cactus/bamboo/reed growth height // Pluto - Memory allocation optimisations
      }
  
      @Override
@@ -59,7 +59,7 @@
          int i = heightAboveUpToMax + heightBelowUpToMax + 1;
          int i1 = 1 + random.nextInt(2);
  
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
@@ -70,12 +70,12 @@
 +            final int y1 = y + heightAboveUpToMax;
 +            BlockState blockState = level.pluto$getBlockState(x, y1, z);
 +            if (i >= level.paperConfig().maxGrowthHeight.bamboo.max || !blockState.is(Blocks.BAMBOO) || blockState.getValue(BambooStalkBlock.STAGE) == 1 || !level.pluto$isEmptyBlock(x, y1 + 1, z)) { // CraftBukkit - If the BlockSpreadEvent was cancelled, we have no bamboo here // Paper - Configurable cactus/bamboo/reed growth height
-+                // Pluto end - Memory efficient block lookups
++                // Pluto end - Memory allocation optimisations
                  return;
              }
  
 -            this.growBamboo(blockState, level, blockPos, random, i);
-+            this.growBamboo(blockState, level, new BlockPos(x, y1, z), random, i); // Pluto - Memory efficient block lookups
++            this.growBamboo(blockState, level, new BlockPos(x, y1, z), random, i); // Pluto - Memory allocation optimisations
              heightAboveUpToMax++;
              i++;
          }
@@ -109,12 +109,12 @@
          int i = 0;
  
 -        while (i < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.getBlockState(pos.above(i + 1)).is(Blocks.BAMBOO)) { // Paper - Configurable cactus/bamboo/reed growth height
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        while (i < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.pluto$getBlockState(x, y + (i + 1), z).is(Blocks.BAMBOO)) { // Paper - Configurable cactus/bamboo/reed growth height
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              i++;
          }
  
@@ -123,12 +123,12 @@
          int i = 0;
  
 -        while (i < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.getBlockState(pos.below(i + 1)).is(Blocks.BAMBOO)) { // Paper - Configurable cactus/bamboo/reed growth height
-+        // Pluto start - Memory efficient block lookups
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        while (i < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max && level.pluto$getBlockState(x, y - (i + 1), z).is(Blocks.BAMBOO)) { // Paper - Configurable cactus/bamboo/reed growth height
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              i++;
          }
  

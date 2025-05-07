@@ -4,12 +4,12 @@
          return level.getBlockEntity(pos) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? 15 : 0;
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
 +        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? 15 : 0;
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      @Override
      protected boolean hasAnalogOutputSignal(BlockState state) {

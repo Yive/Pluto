@@ -6,10 +6,10 @@
              Direction direction = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
 -            BlockPos blockPos = pos.relative(direction);
 -            BlockState blockState = level.getBlockState(blockPos);
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            BlockPos blockPos;
 +            BlockState blockState = level.pluto$getBlockState(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(), pos.getZ() + direction.getStepZ());
-+            // Pluto end - Memory efficient block lookups
++            // Pluto end - Memory allocation optimisations
              Block block = null;
              if (canClusterGrowAtState(blockState)) {
                  block = Blocks.SMALL_AMETHYST_BUD;
@@ -17,7 +17,7 @@
                      .setValue(AmethystClusterBlock.FACING, direction)
                      .setValue(AmethystClusterBlock.WATERLOGGED, blockState.getFluidState().getType() == Fluids.WATER);
                  // Paper start - Have Amethyst throw both spread and grow events
-+                blockPos = pos.relative(direction); // Pluto - Memory efficient block lookups | Moved down
++                blockPos = pos.relative(direction); // Pluto - Memory allocation optimisations | Moved down
                  if (block == Blocks.SMALL_AMETHYST_BUD) {
                      org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState1, 3); // CraftBukkit
                  } else {

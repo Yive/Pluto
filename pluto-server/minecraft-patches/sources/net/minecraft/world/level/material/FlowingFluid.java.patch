@@ -6,7 +6,7 @@
                      if (!blockReader.getBlockState(mutableBlockPos).blocksMotion()) {
 -                        BlockPos blockPos = mutableBlockPos.below();
 -                        FluidState fluidState2 = blockReader.getFluidState(blockPos);
-+                        FluidState fluidState2 = blockReader.pluto$getFluidState(mutableBlockPos.asLong()); // Pluto - Memory efficient block lookups
++                        FluidState fluidState2 = blockReader.pluto$getFluidState(mutableBlockPos.asLong()); // Pluto - Memory allocation optimisations
                          if (this.affectsFlow(fluidState2)) {
                              ownHeight = fluidState2.getOwnHeight();
                              if (ownHeight > 0.0F) {
@@ -24,7 +24,7 @@
  
      private static boolean hasSameAbove(FluidState fluidState, BlockGetter level, BlockPos pos) {
 -        return fluidState.getType().isSame(level.getFluidState(pos.above()).getType());
-+        return fluidState.getType().isSame(level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).getType()); // Pluto - Memory efficient block lookups
++        return fluidState.getType().isSame(level.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).getType()); // Pluto - Memory allocation optimisations
      }
  
      @Override

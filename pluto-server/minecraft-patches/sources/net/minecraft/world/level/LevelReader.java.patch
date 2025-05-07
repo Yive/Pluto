@@ -4,14 +4,14 @@
          return new BlockPos(pos.getX(), this.getHeight(heightmapType, pos.getX(), pos.getZ()), pos.getZ());
      }
  
-+    // Pluto start - Memory efficient block lookups
++    // Pluto start - Memory allocation optimisations
 +    default boolean pluto$isEmptyBlock(int x, int y, int z) {
 +        return this.pluto$getBlockState(x, y, z).isAir();
 +    }
 +    default boolean pluto$isEmptyBlock(long packedPos) {
 +        return this.pluto$getBlockState(packedPos).isAir();
 +    }
-+    // Pluto end - Memory efficient block lookups
++    // Pluto end - Memory allocation optimisations
 +
      default boolean isEmptyBlock(BlockPos pos) {
          return this.getBlockState(pos).isAir();
@@ -22,13 +22,13 @@
              } else {
 -                for (BlockPos var4 = blockPos.below(); var4.getY() > pos.getY(); var4 = var4.below()) {
 -                    BlockState blockState = this.getBlockState(var4);
-+                // Pluto start - Memory efficient block lookups
++                // Pluto start - Memory allocation optimisations
 +                final int originY = pos.getY();
 +                final int x = blockPos.getX();
 +                final int z = blockPos.getZ();
 +                for (int var4 = blockPos.getY(); var4 > originY; var4--) {
 +                    BlockState blockState = this.pluto$getBlockState(x, var4, z);
-+                    // Pluto end - Memory efficient block lookups
++                    // Pluto end - Memory allocation optimisations
                      if (blockState.getLightBlock() > 0 && !blockState.liquid()) {
                          return false;
                      }

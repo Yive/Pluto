@@ -5,14 +5,14 @@
      private static boolean canBeGrass(BlockState state, LevelReader levelReader, BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
 -        return canBeGrass(levelReader.getChunk(pos), state, levelReader, pos);
-+        return canBeGrass(levelReader.getChunk(pos), state, levelReader, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory efficient block lookups
++        return canBeGrass(levelReader.getChunk(pos), state, levelReader, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
      }
 -    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader levelReader, BlockPos pos) {
-+    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader levelReader, int x, int y, int z) { // Pluto - Memory efficient block lookups
++    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader levelReader, int x, int y, int z) { // Pluto - Memory allocation optimisations
          // Paper end - Perf: optimize dirt and snow spreading
 -        BlockPos blockPos = pos.above();
 -        BlockState blockState = chunk.getBlockState(blockPos); // Paper - Perf: optimize dirt and snow spreading
-+        BlockState blockState = chunk.getBlockState(x, y + 1, z); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory efficient block lookups
++        BlockState blockState = chunk.getBlockState(x, y + 1, z); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory allocation optimisations
          if (blockState.is(Blocks.SNOW) && blockState.getValue(SnowLayerBlock.LAYERS) == 1) {
              return true;
          } else if (blockState.getFluidState().getAmount() == 8) {
@@ -21,15 +21,15 @@
      private static boolean canPropagate(BlockState state, LevelReader level, BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
 -        return canPropagate(level.getChunk(pos), state, level, pos);
-+        return canPropagate(level.getChunk(pos), state, level, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory efficient block lookups
++        return canPropagate(level.getChunk(pos), state, level, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
      }
  
 -    private static boolean canPropagate(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader level, BlockPos pos) {
-+    private static boolean canPropagate(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader level, int x, int y, int z) { // Pluto - Memory efficient block lookups
++    private static boolean canPropagate(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader level, int x, int y, int z) { // Pluto - Memory allocation optimisations
          // Paper end - Perf: optimize dirt and snow spreading
 -        BlockPos blockPos = pos.above();
 -        return canBeGrass(chunk, state, level, pos) && !chunk.getFluidState(blockPos).is(FluidTags.WATER); // Paper - Perf: optimize dirt and snow spreading
-+        return canBeGrass(chunk, state, level, x, y, z) && !chunk.pluto$getFluidState(x, y + 1, z).is(FluidTags.WATER); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory efficient block lookups
++        return canBeGrass(chunk, state, level, x, y, z) && !chunk.pluto$getFluidState(x, y + 1, z).is(FluidTags.WATER); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory allocation optimisations
      }
  
      @Override
@@ -38,7 +38,7 @@
          }
  
 -        if (!canBeGrass(cachedBlockChunk, state, level, pos)) {
-+        if (!canBeGrass(cachedBlockChunk, state, level, pos.getX(), pos.getY(), pos.getZ())) { // Pluto - Memory efficient block lookups
++        if (!canBeGrass(cachedBlockChunk, state, level, pos.getX(), pos.getY(), pos.getZ())) { // Pluto - Memory allocation optimisations
              // Paper end - Perf: optimize dirt and snow spreading
              // CraftBukkit start
              if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(level, pos, Blocks.DIRT.defaultBlockState()).isCancelled()) {
@@ -46,7 +46,7 @@
              if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
                  BlockState blockState = this.defaultBlockState();
  
-+                // Pluto start - Memory efficient block lookups
++                // Pluto start - Memory allocation optimisations
 +                final int originX = pos.getX();
 +                final int originY = pos.getY();
 +                final int originZ = pos.getZ();
@@ -58,24 +58,24 @@
                      // Paper start - Perf: optimize dirt and snow spreading
 -                    if (pos.getX() == blockPos.getX() && pos.getY() == blockPos.getY() && pos.getZ() == blockPos.getZ()) {
 +                    if (originX == x && originY == y && originZ == z) {
-+                        // Pluto end - Memory efficient block lookups
++                        // Pluto end - Memory allocation optimisations
                          continue;
                      }
  
                      final net.minecraft.world.level.chunk.ChunkAccess access;
 -                    if (cachedBlockChunk.locX == blockPos.getX() >> 4 && cachedBlockChunk.locZ == blockPos.getZ() >> 4) {
-+                    if (cachedBlockChunk.locX == x >> 4 && cachedBlockChunk.locZ == z >> 4) { // Pluto - Memory efficient block lookups
++                    if (cachedBlockChunk.locX == x >> 4 && cachedBlockChunk.locZ == z >> 4) { // Pluto - Memory allocation optimisations
                          access = cachedBlockChunk;
                      } else {
 -                        access = level.getChunkAt(blockPos);
-+                        access = level.getChunk(x >> 4, z >> 4); // Pluto - Memory efficient block lookups
++                        access = level.getChunk(x >> 4, z >> 4); // Pluto - Memory allocation optimisations
                      }
 -                    if (access.getBlockState(blockPos).is(Blocks.DIRT) && SpreadingSnowyDirtBlock.canPropagate(access, blockState, level, blockPos)) {
 -                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(blockPos.above()))), 3); // CraftBukkit
-+                    // Pluto start - Memory efficient block lookups
++                    // Pluto start - Memory allocation optimisations
 +                    if (access.getBlockState(x, y, z).is(Blocks.DIRT) && SpreadingSnowyDirtBlock.canPropagate(access, blockState, level, x, y, z)) {
 +                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, new BlockPos(x, y, z), blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(x, y + 1, z))), 3); // CraftBukkit
-+                        // Pluto end - Memory efficient block lookups
++                        // Pluto end - Memory allocation optimisations
                          // Paper end - Perf: optimize dirt and snow spreading
                      }
                  }

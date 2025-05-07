@@ -5,7 +5,7 @@
  
                  this.minecart.move(MoverType.SELF, vec36.subtract(vec3));
 -                BlockState blockState = this.level().getBlockState(BlockPos.containing(vec36));
-+                BlockState blockState = this.level().pluto$getBlockState(vec36.x, vec36.y, vec36.z); // Pluto - Memory efficient block lookups
++                BlockState blockState = this.level().pluto$getBlockState(vec36.x, vec36.y, vec36.z); // Pluto - Memory allocation optimisations
                  if (flag) {
                      if (BaseRailBlock.isRail(blockState)) {
                          RailShape railShape1 = blockState.getValue(((BaseRailBlock)blockState.getBlock()).getShapeProperty());

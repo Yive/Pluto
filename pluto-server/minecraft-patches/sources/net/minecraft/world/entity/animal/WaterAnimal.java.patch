@@ -6,7 +6,7 @@
              && pos.getY() <= seaLevel
 -            && level.getFluidState(pos.below()).is(FluidTags.WATER)
 -            && level.getBlockState(pos.above()).is(Blocks.WATER);
-+            // Pluto start - Memory efficient block lookups
++            // Pluto start - Memory allocation optimisations
 +            && level.pluto$getFluidState(pos.getX(), pos.getY() - 1, pos.getZ()).is(FluidTags.WATER)
 +            && level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER);
 +            // Pluto ebd - Memory efficient block lookups
