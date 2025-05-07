@@ -38,6 +38,20 @@
              this.goalSelector.tick();
              profilerFiller.pop();
          }
+@@ -943,6 +_,13 @@
+                 return null;
+             }
+ 
++            // Pluto start - Allow toggling snapshots for certain blocks
++            @Override
++            public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++                return getOwner();
++            }
++            // Pluto end - Allow toggling snapshots for certain blocks
++
+             @Override
+             public void setMaxStackSize(final int size) {
+                 this.maxStackSize = size;
 @@ -1514,12 +_,11 @@
      public boolean isSunBurnTick() {
          if (this.level().isBrightOutside() && !this.level().isClientSide) {

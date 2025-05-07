@@ -28,3 +28,17 @@
      @Override
      protected float getSinglePassengerXOffset() {
          return 0.15F;
+@@ -236,6 +_,13 @@
+         org.bukkit.entity.Entity entity = this.getBukkitEntity();
+         return entity instanceof final org.bukkit.inventory.InventoryHolder inventoryHolder ? inventoryHolder : null;
+     }
++
++    // Pluto start - Allow toggling snapshots for certain blocks
++    @Override
++    public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++        return getOwner();
++    }
++    // Pluto end - Allow toggling snapshots for certain blocks
+ 
+     @Override
+     public int getMaxStackSize() {

@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
+@@ -233,7 +_,7 @@
+         PotionBrewing potionBrewing = level.potionBrewing();
+ 
+         // CraftBukkit start
+-        org.bukkit.inventory.InventoryHolder owner = brewingStandBlockEntity.getOwner();
++        org.bukkit.inventory.InventoryHolder owner = brewingStandBlockEntity.getOwner(level.plutoConfig().brewingStandDoSnapshotForSelf); // Pluto - Allow toggling snapshots for certain blocks
+         java.util.List<org.bukkit.inventory.ItemStack> brewResults = new java.util.ArrayList<>(3);
+         for (int i = 0; i < 3; i++) {
+             brewResults.add(i, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(potionBrewing.mix(itemStack, items.get(i))));

@@ -28,3 +28,17 @@
      @Override
      public void destroy(ServerLevel level, DamageSource damageSource) {
          super.destroy(level, damageSource);
+@@ -201,6 +_,13 @@
+     public @Nullable org.bukkit.inventory.InventoryHolder getOwner() {
+         return this.getBukkitEntity() instanceof final org.bukkit.inventory.InventoryHolder inventoryHolder ? inventoryHolder : null;
+     }
++
++    // Pluto start - Allow toggling snapshots for certain blocks
++    @Override
++    public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++        return getOwner();
++    }
++    // Pluto end - Allow toggling snapshots for certain blocks
+ 
+     @Override
+     public int getMaxStackSize() {

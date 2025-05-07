@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/inventory/TransientCraftingContainer.java
++++ b/net/minecraft/world/inventory/TransientCraftingContainer.java
+@@ -45,6 +_,13 @@
+         return (this.owner == null) ? null : this.owner.getBukkitEntity();
+     }
+ 
++    // Pluto start - Allow toggling snapshots for certain blocks
++    @Override
++    public @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++        return getOwner();
++    }
++    // Pluto end - Allow toggling snapshots for certain blocks
++
+     @Override
+     public int getMaxStackSize() {
+         return this.maxStack;

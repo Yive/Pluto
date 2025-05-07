@@ -956,5 +956,55 @@ public class PlutoConfig {
                     )
             );
         }
+
+        public boolean crafterDoSnapshotForTarget = true;
+        public boolean crafterDoSnapshotForSelf = true;
+        public boolean dropperDoSnapshotForTarget = true;
+        public boolean dropperDoSnapshotForSelf = true;
+        public boolean brewingStandDoSnapshotForSelf = true;
+        private void blocksDoSnapshots() {
+            crafterDoSnapshotForTarget = getBoolean("blocks.crafter.generate-snapshot-for-target", crafterDoSnapshotForTarget);
+            setComments("blocks.crafter.generate-snapshot-for-target",
+                    List.of(
+                            "Should the crafter generate a Bukkit block state snapshot when",
+                            "doing an inventory owner lookup for the target container. 99% of the time plugins",
+                            "don't even need to use block state snapshots so it should be safe to set this to false."
+                    )
+            );
+
+            crafterDoSnapshotForSelf = getBoolean("blocks.crafter.generate-snapshot-for-self", crafterDoSnapshotForSelf);
+            setComments("blocks.crafter.generate-snapshot-for-self",
+                    List.of(
+                            "Should the crafter generate a Bukkit block state snapshot when",
+                            "doing an inventory owner lookup for itself."
+                    )
+            );
+
+            dropperDoSnapshotForTarget = getBoolean("blocks.dropper.generate-snapshot-for-target", dropperDoSnapshotForTarget);
+            setComments("blocks.dropper.generate-snapshot-for-target",
+                    List.of(
+                            "Should the dropper generate a Bukkit block state snapshot when",
+                            "doing an inventory owner lookup for the target container. 99% of the time plugins",
+                            "don't even need to use block state snapshots so it should be safe to set this to false."
+                    )
+            );
+
+            dropperDoSnapshotForSelf = getBoolean("blocks.dropper.generate-snapshot-for-self", dropperDoSnapshotForSelf);
+            setComments("blocks.dropper.generate-snapshot-for-self",
+                    List.of(
+                            "Should the dropper generate a Bukkit block state snapshot when",
+                            "doing an inventory owner lookup for itself."
+                    )
+            );
+
+            brewingStandDoSnapshotForSelf = getBoolean("blocks.brewing-stand.generate-snapshot-for-self", brewingStandDoSnapshotForSelf);
+            setComments("blocks.brewing-stand.generate-snapshot-for-self",
+                    List.of(
+                            "Should the brewing stand generate a Bukkit block state snapshot when",
+                            "doing an inventory owner lookup for itself. 99% of the time plugins",
+                            "don't even need to use block state snapshots so it should be safe to set this to false."
+                    )
+            );
+        }
     }
 }

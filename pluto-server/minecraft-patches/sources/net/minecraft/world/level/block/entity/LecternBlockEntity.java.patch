@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/block/entity/LecternBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/LecternBlockEntity.java
+@@ -78,6 +_,13 @@
+             return LecternBlockEntity.this.getOwner();
+         }
+ 
++        // Pluto start - Allow toggling snapshots for certain blocks
++        @Override
++        public org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++            return LecternBlockEntity.this.getOwner(useSnapshot);
++        }
++        // Pluto end - Allow toggling snapshots for certain blocks
++
+         public LecternBlockEntity getLectern() {
+             return LecternBlockEntity.this;
+         }

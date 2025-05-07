@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/CompoundContainer.java
++++ b/net/minecraft/world/CompoundContainer.java
+@@ -43,6 +_,13 @@
+         return null; // This method won't be called since CraftInventoryDoubleChest doesn't defer to here
+     }
+ 
++    // Pluto start - Allow toggling snapshots for certain blocks
++    @Override
++    public @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++        return null;
++    }
++    // Pluto end - Allow toggling snapshots for certain blocks
++
+     public void setMaxStackSize(int size) {
+         this.container1.setMaxStackSize(size);
+         this.container2.setMaxStackSize(size);

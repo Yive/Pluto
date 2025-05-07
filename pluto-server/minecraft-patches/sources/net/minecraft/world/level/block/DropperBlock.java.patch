@@ -20,3 +20,16 @@
                          // CraftBukkit start - Fire event when pushing items into other inventories
                          org.bukkit.craftbukkit.inventory.CraftItemStack oitemstack = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1));
  
+@@ -73,10 +_,10 @@
+                         if (containerAt instanceof net.minecraft.world.CompoundContainer compoundContainer) {
+                             destinationInventory = new org.bukkit.craftbukkit.inventory.CraftInventoryDoubleChest(compoundContainer);
+                         } else {
+-                            destinationInventory = containerAt.getOwner().getInventory();
++                            destinationInventory = containerAt.getOwner(level.plutoConfig().dropperDoSnapshotForTarget).getInventory(); // Pluto - Allow toggling snapshots for certain blocks
+                         }
+ 
+-                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(dispenserBlockEntity.getOwner().getInventory(), oitemstack, destinationInventory, true);
++                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(dispenserBlockEntity.getOwner(level.plutoConfig().dropperDoSnapshotForSelf).getInventory(), oitemstack, destinationInventory, true); // Pluto - Allow toggling snapshots for certain blocks
+                         level.getCraftServer().getPluginManager().callEvent(event);
+                         if (event.isCancelled()) {
+                             return;

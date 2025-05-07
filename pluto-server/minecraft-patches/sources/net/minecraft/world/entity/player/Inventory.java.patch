@@ -1,5 +1,19 @@
 --- a/net/minecraft/world/entity/player/Inventory.java
 +++ b/net/minecraft/world/entity/player/Inventory.java
+@@ -98,6 +_,13 @@
+         return this.player.getBukkitEntity();
+     }
+ 
++    // Pluto start - Allow toggling snapshots for certain blocks
++    @Override
++    public org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++        return this.player.getBukkitEntity();
++    }
++    // Pluto end - Allow toggling snapshots for certain blocks
++
+     @Override
+     public int getMaxStackSize() {
+         return this.maxStack;
 @@ -326,6 +_,29 @@
      }
  

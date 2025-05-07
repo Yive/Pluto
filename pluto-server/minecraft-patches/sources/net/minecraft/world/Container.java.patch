@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/Container.java
++++ b/net/minecraft/world/Container.java
+@@ -127,6 +_,8 @@
+ 
+     @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner();
+ 
++    @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot); // Pluto - Allow toggling snapshots for certain blocks
++
+     void setMaxStackSize(int size);
+ 
+     @javax.annotation.Nullable org.bukkit.Location getLocation();

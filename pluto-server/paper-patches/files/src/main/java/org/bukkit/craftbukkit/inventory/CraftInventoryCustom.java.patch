@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
+@@ -208,6 +_,13 @@
+             return this.owner;
+         }
+ 
++        // Pluto start - Allow toggling snapshots for certain blocks
++        @Override
++        public InventoryHolder getOwner(boolean useSnapshot) {
++            return getOwner();
++        }
++        // Pluto end - Allow toggling snapshots for certain blocks
++
+         @Override
+         public boolean canPlaceItem(int slot, ItemStack stack) {
+             return true;
