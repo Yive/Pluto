@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/level/material/LavaFluid.java
 +++ b/net/minecraft/world/level/material/LavaFluid.java
+@@ -138,7 +_,7 @@
+     }
+ 
+     private boolean hasFlammableNeighbours(LevelReader level, BlockPos pos) {
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             if (this.isFlammable(level, pos.relative(direction))) {
+                 return true;
+             }
 @@ -219,9 +_,8 @@
      @Override
      protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {

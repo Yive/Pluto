@@ -27,6 +27,15 @@
      @Override
      protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
          if (!blockState.getValue(POWERED)) {
+@@ -99,7 +_,7 @@
+             dropResources(state, level, pos, blockEntity);
+             level.removeBlock(pos, false);
+ 
+-            for (Direction direction : Direction.values()) {
++            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                 level.updateNeighborsAt(pos.relative(direction), this);
+             }
+         }
 @@ -148,8 +_,10 @@
          Direction counterClockWise = direction.getCounterClockWise();
          boolean flag = this.sideInputDiodesOnly();

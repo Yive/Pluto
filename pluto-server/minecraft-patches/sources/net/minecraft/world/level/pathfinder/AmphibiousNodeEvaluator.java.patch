@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/level/pathfinder/AmphibiousNodeEvaluator.java
++++ b/net/minecraft/world/level/pathfinder/AmphibiousNodeEvaluator.java
+@@ -95,11 +_,9 @@
+     public PathType getPathType(PathfindingContext context, int x, int y, int z) {
+         PathType pathTypeFromState = context.getPathTypeFromState(x, y, z);
+         if (pathTypeFromState == PathType.WATER) {
+-            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+ 
+-            for (Direction direction : Direction.values()) {
+-                mutableBlockPos.set(x, y, z).move(direction);
+-                PathType pathTypeFromState1 = context.getPathTypeFromState(mutableBlockPos.getX(), mutableBlockPos.getY(), mutableBlockPos.getZ());
++            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++                PathType pathTypeFromState1 = context.getPathTypeFromState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
+                 if (pathTypeFromState1 == PathType.BLOCKED) {
+                     return PathType.WATER_BORDER;
+                 }

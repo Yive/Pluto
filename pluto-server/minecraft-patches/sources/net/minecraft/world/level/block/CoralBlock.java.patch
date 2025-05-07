@@ -4,13 +4,14 @@
      }
  
      protected boolean scanForWater(BlockGetter level, BlockPos pos) {
+-        for (Direction direction : Direction.values()) {
+-            FluidState fluidState = level.getFluidState(pos.relative(direction));
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        // Pluto end - Memory allocation optimisations
-         for (Direction direction : Direction.values()) {
--            FluidState fluidState = level.getFluidState(pos.relative(direction));
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
 +            FluidState fluidState = level.pluto$getFluidState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
              if (fluidState.is(FluidTags.WATER)) {
                  return true;

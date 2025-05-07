@@ -68,16 +68,17 @@
      }
  
 -    private static boolean allNeighborsEmpty(LevelReader level, BlockPos pos, @Nullable Direction excludingSide) {
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+-            if (direction != excludingSide && !level.isEmptyBlock(pos.relative(direction))) {
 +    // Pluto start - Memory allocation optimisations
 +    private static boolean allNeighborsEmpty(LevelReader level, int x, int y, int z, @Nullable Direction excludingSide) {
-         for (Direction direction : Direction.Plane.HORIZONTAL) {
--            if (direction != excludingSide && !level.isEmptyBlock(pos.relative(direction))) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
 +            if (direction != excludingSide && !level.pluto$isEmptyBlock(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) {
 +                // Pluto end - Memory allocation optimisations
                  return false;
              }
          }
-@@ -181,7 +_,12 @@
+@@ -181,15 +_,20 @@
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
@@ -91,11 +92,12 @@
          if (!blockState.is(this.plant) && !blockState.is(Blocks.END_STONE)) {
              if (!blockState.isAir()) {
                  return false;
-@@ -189,7 +_,7 @@
+             } else {
                  boolean flag = false;
  
-                 for (Direction direction : Direction.Plane.HORIZONTAL) {
+-                for (Direction direction : Direction.Plane.HORIZONTAL) {
 -                    BlockState blockState1 = level.getBlockState(pos.relative(direction));
++                for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
 +                    BlockState blockState1 = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
                      if (blockState1.is(this.plant)) {
                          if (flag) {

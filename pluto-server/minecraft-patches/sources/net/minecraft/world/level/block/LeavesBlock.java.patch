@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/LeavesBlock.java
++++ b/net/minecraft/world/level/block/LeavesBlock.java
+@@ -108,11 +_,14 @@
+ 
+     private static BlockState updateDistance(BlockState state, LevelAccessor level, BlockPos pos) {
+         int i = 7;
+-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
+ 
+-        for (Direction direction : Direction.values()) {
+-            mutableBlockPos.setWithOffset(pos, direction);
+-            i = Math.min(i, getDistanceAt(level.getBlockState(mutableBlockPos)) + 1);
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            i = Math.min(i, getDistanceAt(level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) + 1);
++            // Pluto end - Memory allocation optimisations
+             if (i == 1) {
+                 break;
+             }

@@ -1,9 +1,19 @@
 --- a/net/minecraft/world/level/block/RedstoneTorchBlock.java
 +++ b/net/minecraft/world/level/block/RedstoneTorchBlock.java
-@@ -132,6 +_,18 @@
+@@ -48,7 +_,7 @@
+     private void notifyNeighbors(Level level, BlockPos pos, BlockState state) {
+         Orientation orientation = this.randomOrientation(level, state);
+ 
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             level.updateNeighborsAt(pos.relative(direction), this, ExperimentalRedstoneUtils.withFront(orientation, direction));
+         }
+     }
+@@ -131,6 +_,18 @@
+     protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
          return side == Direction.DOWN ? blockState.getSignal(blockAccess, pos, side) : 0;
      }
- 
++
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
@@ -15,7 +25,6 @@
 +        return side == Direction.DOWN ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
 +    }
 +    // Pluto end - Memory allocation optimisations
-+
+ 
      @Override
      protected boolean isSignalSource(BlockState state) {
-         return true;

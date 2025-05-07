@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
+@@ -348,7 +_,7 @@
+ 
+     @Nullable
+     protected Direction findAttachableSurface(BlockPos pos) {
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             if (this.canStayAt(pos, direction)) {
+                 return direction;
+             }
 @@ -382,6 +_,7 @@
      }
  

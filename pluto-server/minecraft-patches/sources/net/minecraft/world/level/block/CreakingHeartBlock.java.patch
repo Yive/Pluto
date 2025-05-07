@@ -19,13 +19,14 @@
      }
  
      private static boolean isSurroundedByLogs(LevelAccessor level, BlockPos pos) {
+-        for (Direction direction : Direction.values()) {
+-            BlockPos blockPos = pos.relative(direction);
+-            BlockState blockState = level.getBlockState(blockPos);
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-         for (Direction direction : Direction.values()) {
--            BlockPos blockPos = pos.relative(direction);
--            BlockState blockState = level.getBlockState(blockPos);
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
 +            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
 +            // Pluto end - Memory allocation optimisations
              if (!blockState.is(BlockTags.PALE_OAK_LOGS)) {

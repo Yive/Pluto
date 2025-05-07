@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/level/block/FrostedIceBlock.java
++++ b/net/minecraft/world/level/block/FrostedIceBlock.java
+@@ -48,7 +_,7 @@
+             && this.slightlyMelt(state, level, pos)) {
+             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+ 
+-            for (Direction direction : Direction.values()) {
++            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                 mutableBlockPos.setWithOffset(pos, direction);
+                 BlockState blockState = level.getBlockState(mutableBlockPos);
+                 if (blockState.is(this) && !this.slightlyMelt(blockState, level, mutableBlockPos)) {
+@@ -82,11 +_,14 @@
+ 
+     private boolean fewerNeigboursThan(BlockGetter level, BlockPos pos, int neighborsRequired) {
+         int i = 0;
+-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
+ 
+-        for (Direction direction : Direction.values()) {
+-            mutableBlockPos.setWithOffset(pos, direction);
+-            if (level.getBlockState(mutableBlockPos).is(this)) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            if (level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()).is(this)) {
++                // Pluto end - Memory allocation optimisations
+                 if (++i >= neighborsRequired) {
+                     return false;
+                 }

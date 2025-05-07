@@ -1,15 +1,33 @@
 --- a/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/net/minecraft/world/level/material/FlowingFluid.java
+@@ -98,7 +_,7 @@
+         double d1 = 0.0;
+         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+ 
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             mutableBlockPos.setWithOffset(pos, direction);
+             FluidState fluidState1 = blockReader.getFluidState(mutableBlockPos);
+             if (this.affectsFlow(fluidState1)) {
 @@ -106,8 +_,7 @@
                  float f = 0.0F;
                  if (ownHeight == 0.0F) {
                      if (!blockReader.getBlockState(mutableBlockPos).blocksMotion()) {
 -                        BlockPos blockPos = mutableBlockPos.below();
 -                        FluidState fluidState2 = blockReader.getFluidState(blockPos);
-+                        FluidState fluidState2 = blockReader.pluto$getFluidState(mutableBlockPos.asLong()); // Pluto - Memory allocation optimisations
++                        FluidState fluidState2 = blockReader.pluto$getFluidState(mutableBlockPos.getX(), mutableBlockPos.getY() - 1, mutableBlockPos.getZ()); // Pluto - Memory allocation optimisations
                          if (this.affectsFlow(fluidState2)) {
                              ownHeight = fluidState2.getOwnHeight();
                              if (ownHeight > 0.0F) {
+@@ -128,7 +_,7 @@
+ 
+         Vec3 vec3 = new Vec3(d, 0.0, d1);
+         if (fluidState.getValue(FALLING)) {
+-            for (Direction direction1 : Direction.Plane.HORIZONTAL) {
++            for (Direction direction1 : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+                 mutableBlockPos.setWithOffset(pos, direction1);
+                 if (this.isSolidFace(blockReader, mutableBlockPos, direction1) || this.isSolidFace(blockReader, mutableBlockPos.above(), direction1)) {
+                     vec3 = vec3.normalize().add(0.0, -6.0, 0.0);
 @@ -146,7 +_,7 @@
  
      protected boolean isSolidFace(BlockGetter level, BlockPos neighborPos, Direction side) {
@@ -19,6 +37,50 @@
          return !fluidState.getType().isSame(this)
              && (side == Direction.UP || !(blockState.getBlock() instanceof IceBlock) && blockState.isFaceSturdy(level, neighborPos, side));
      }
+@@ -218,7 +_,7 @@
+         int i1 = 0;
+         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+ 
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             BlockPos blockPos = mutableBlockPos.setWithOffset(pos, direction);
+             BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
+             if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
+@@ -339,7 +_,7 @@
+     protected int getSlopeDistance(LevelReader level, BlockPos pos, int depth, Direction direction, BlockState state, FlowingFluid.SpreadContext spreadContext) {
+         int i = 1000;
+ 
+-        for (Direction direction1 : Direction.Plane.HORIZONTAL) {
++        for (Direction direction1 : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             if (direction1 != direction) {
+                 BlockPos blockPos = pos.relative(direction1);
+                 BlockState blockState = spreadContext.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
+@@ -392,9 +_,13 @@
+     private int sourceNeighborCount(LevelReader level, BlockPos pos) {
+         int i = 0;
+ 
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+-            BlockPos blockPos = pos.relative(direction);
+-            FluidState fluidState = level.getFluidState(blockPos);
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
++            FluidState fluidState = level.pluto$getFluidState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
++            // Pluto end - Memory allocation optimisations
+             if (this.isSourceBlockOfThisType(fluidState)) {
+                 i++;
+             }
+@@ -408,7 +_,7 @@
+         Map<Direction, FluidState> map = Maps.newEnumMap(Direction.class);
+         FlowingFluid.SpreadContext spreadContext = null;
+ 
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             BlockPos blockPos = pos.relative(direction);
+             BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
+             if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
 @@ -513,7 +_,7 @@
      }
  

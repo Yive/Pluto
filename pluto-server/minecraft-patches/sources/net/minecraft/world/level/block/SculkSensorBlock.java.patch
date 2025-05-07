@@ -19,3 +19,25 @@
      public static SculkSensorPhase getPhase(BlockState state) {
          return state.getValue(PHASE);
      }
+@@ -256,10 +_,18 @@
+     }
+ 
+     public static void tryResonateVibration(@Nullable Entity entity, Level level, BlockPos pos, int frequency) {
+-        for (Direction direction : Direction.values()) {
+-            BlockPos blockPos = pos.relative(direction);
+-            BlockState blockState = level.getBlockState(blockPos);
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            final int x1 = x + direction.getStepX();
++            final int y1 = y + direction.getStepY();
++            final int z1 = z + direction.getStepZ();
++            BlockState blockState = level.pluto$getBlockState(x1, y1, z1);
+             if (blockState.is(BlockTags.VIBRATION_RESONATORS)) {
++                BlockPos blockPos = new BlockPos(x1, y1, z1);
++                // Pluto end - Memory allocation optimisations
+                 level.gameEvent(VibrationSystem.getResonanceEventByFrequency(frequency), blockPos, GameEvent.Context.of(entity, blockState));
+                 float f = RESONANCE_PITCH_BEND[frequency];
+                 level.playSound(null, blockPos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 1.0F, f);
