@@ -56,6 +56,9 @@
  
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+-            BlockState blockState = level.getBlockState(pos.relative(direction));
+-            if (blockState.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA)) {
 +        // Pluto start - Check if the cactus can even survive being placed
 +        return canSurvive(level, pos);
 +    }
@@ -67,9 +70,7 @@
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        // Pluto end - Memory efficient block lookups
-         for (Direction direction : Direction.Plane.HORIZONTAL) {
--            BlockState blockState = level.getBlockState(pos.relative(direction));
--            if (blockState.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA)) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
 +            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory efficient block lookups
 +            if (blockState.isSolid() || blockState.getFluidState().is(FluidTags.LAVA)) { // Pluto - Decrease chunk/block lookups
                  return false;

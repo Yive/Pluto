@@ -1,0 +1,11 @@
+--- a/net/minecraft/core/Direction.java
++++ b/net/minecraft/core/Direction.java
+@@ -627,7 +_,7 @@
+         HORIZONTAL(new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}, new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}),
+         VERTICAL(new Direction[]{Direction.UP, Direction.DOWN}, new Direction.Axis[]{Direction.Axis.Y});
+ 
+-        private final Direction[] faces;
++        public final Direction[] faces; // Pluto - Expose Direction$Plane's faces | Make public
+         private final Direction.Axis[] axis;
+ 
+         private Plane(final Direction[] faces, final Direction.Axis[] axis) {

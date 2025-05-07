@@ -176,27 +176,35 @@
          }
      }
  
-@@ -1978,12 +_,17 @@
+@@ -1977,17 +_,21 @@
+     public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
-         for (Direction direction : Direction.Plane.HORIZONTAL) {
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+-            BlockPos blockPos = pos.relative(direction);
+-            if (this.hasChunkAt(blockPos)) {
+-                BlockState blockState = this.getBlockState(blockPos);
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
 +            // Pluto start - Decrease chunk/block lookups
 +            final int x = pos.getX() + direction.getStepX();
 +            final int z = pos.getZ() + direction.getStepZ();
-             BlockPos blockPos = pos.relative(direction);
--            if (this.hasChunkAt(blockPos)) {
--                BlockState blockState = this.getBlockState(blockPos);
 +            LevelChunk chunk = this.getChunkIfLoaded(x >> 4, z >> 4);
 +            if (chunk != null) {
 +                BlockState blockState = chunk.getBlockState(x, pos.getY() + direction.getStepY(), z);
++                BlockPos blockPos = pos.relative(direction);
                  if (blockState.is(Blocks.COMPARATOR)) {
                      this.neighborChanged(blockState, blockPos, block, null, false);
--                } else if (blockState.isRedstoneConductor(this, blockPos)) {
-+                } else if (blockState.isRedstoneConductor(this, blockPos = pos.relative(direction))) {
+                 } else if (blockState.isRedstoneConductor(this, blockPos)) {
+-                    blockPos = blockPos.relative(direction);
+-                    blockState = this.getBlockState(blockPos);
 +                    // Pluto end - Decrease chunk/block lookups
-                     blockPos = blockPos.relative(direction);
-                     blockState = this.getBlockState(blockPos);
++                    blockState = this.pluto$getBlockState(blockPos.getX() + direction.getStepX(), blockPos.getY() + direction.getStepY(), blockPos.getZ() + direction.getStepZ()); // Pluto - Memory efficient block lookups
                      if (blockState.is(Blocks.COMPARATOR)) {
+-                        this.neighborChanged(blockState, blockPos, block, null, false);
++                        this.neighborChanged(blockState, blockPos.relative(direction), block, null, false); // Pluto - Memory efficient block lookups
+                     }
+                 }
+             }
 @@ -1998,9 +_,12 @@
      public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
          long l = 0L;
