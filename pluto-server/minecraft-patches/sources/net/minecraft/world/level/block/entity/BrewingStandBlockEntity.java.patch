@@ -1,5 +1,38 @@
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
+@@ -134,6 +_,15 @@
+         this.items = items;
+     }
+ 
++    // Pluto start - Cache isBrewable result in Brewing Stands
++    protected net.minecraft.util.TriState isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++    @Override
++    public void setChanged() {
++        super.setChanged();
++        isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++    }
++    // Pluto end - Cache isBrewable result in Brewing Stands
++
+     public static void serverTick(Level level, BlockPos pos, BlockState state, BrewingStandBlockEntity blockEntity) {
+         ItemStack itemStack = blockEntity.items.get(4);
+         if (blockEntity.fuel <= 0 && itemStack.is(ItemTags.BREWING_FUEL)) {
+@@ -155,7 +_,15 @@
+             setChanged(level, pos, state);
+         }
+ 
+-        boolean isBrewable = isBrewable(level.potionBrewing(), blockEntity.items);
++        // Pluto start - Cache isBrewable result in Brewing Stands
++        boolean isBrewable;
++        if (blockEntity.isBrewableCache == net.minecraft.util.TriState.DEFAULT) {
++            isBrewable = isBrewable(level.potionBrewing(), blockEntity.items);
++            blockEntity.isBrewableCache = isBrewable ? net.minecraft.util.TriState.TRUE : net.minecraft.util.TriState.FALSE;
++        } else {
++            isBrewable = blockEntity.isBrewableCache == net.minecraft.util.TriState.TRUE;
++        }
++        // Pluto end - Cache isBrewable result in Brewing Stands
+         boolean flag = blockEntity.brewTime > 0;
+         ItemStack itemStack1 = blockEntity.items.get(3);
+         if (flag) {
 @@ -233,7 +_,7 @@
          PotionBrewing potionBrewing = level.potionBrewing();
  
