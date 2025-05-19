@@ -94,8 +94,8 @@
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 +        this.plutoConfig = new dev.yive.pluto.PlutoConfig.WorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Pluto - Config
-         this.generator = gen;
-         this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
+         this.generator = generator;
+         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
  
 @@ -1019,7 +_,7 @@
      public final BlockState getBlockStateIfLoaded(BlockPos pos) {
