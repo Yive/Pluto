@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
-@@ -787,6 +_,68 @@
+@@ -787,10 +_,71 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  
@@ -69,3 +69,7 @@
      @Nullable
      @Override
      public ChunkAccess getChunkIfLoadedImmediately(final int x, final int z) {
+         return this.delegate.getChunkIfLoadedImmediately(x, z);
+     }
+ }
+-
