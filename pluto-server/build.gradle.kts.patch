@@ -74,7 +74,7 @@
 -            "Brand-Name" to "Pufferfish", // Pufferfish
 +            "Specification-Vendor" to "Yive", // Pufferfish // Pluto - Branding
 +            "Brand-Id" to "yive:pluto", // Pufferfish // Pluto - Branding
-+            "Brand-Name" to "Yive", // Pufferfish // Pluto - Branding
++            "Brand-Name" to "Pluto", // Pufferfish // Pluto - Branding
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
