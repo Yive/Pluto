@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/ThrownEnderpearl.java
 +++ b/net/minecraft/world/entity/projectile/ThrownEnderpearl.java
-@@ -196,11 +_,13 @@
+@@ -193,11 +_,13 @@
          }
  
          if (this.isAlive()) {

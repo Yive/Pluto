@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftCreatureSpawner.java
-@@ -61,6 +_,7 @@
+@@ -68,6 +_,7 @@
  
          RandomSource rand = (this.isPlaced()) ? this.getWorldHandle().getRandom() : RandomSource.create();
          this.getSnapshot().setEntityId(CraftEntityType.bukkitToMinecraft(entityType), rand);
@@ -8,7 +8,7 @@
      }
  
      @Override
-@@ -95,6 +_,7 @@
+@@ -102,6 +_,7 @@
          CompoundTag compoundTag = ((CraftEntitySnapshot) snapshot).getData();
  
          spawner.nextSpawnData = new SpawnData(compoundTag, Optional.ofNullable(CraftCreatureSpawner.toMinecraftRule(spawnRule)), CraftCreatureSpawner.getEquipment(equipment));
@@ -16,7 +16,7 @@
      }
  
      @Override
-@@ -111,6 +_,7 @@
+@@ -118,6 +_,7 @@
          spawner.spawnPotentials.unwrap().forEach(entry -> builder.add(entry.value(), entry.weight()));
          builder.add(new SpawnData(compoundTag, Optional.ofNullable(CraftCreatureSpawner.toMinecraftRule(spawnRule)), CraftCreatureSpawner.getEquipment(equipment)), weight);
          spawner.spawnPotentials = builder.build();
@@ -24,7 +24,7 @@
      }
  
      @Override
-@@ -199,6 +_,7 @@
+@@ -209,6 +_,7 @@
      @Override
      public void setDelay(int delay) {
          this.getSnapshot().getSpawner().spawnDelay = delay;
@@ -32,7 +32,7 @@
      }
  
      @Override
-@@ -210,6 +_,7 @@
+@@ -220,6 +_,7 @@
      public void setMinSpawnDelay(int spawnDelay) {
          Preconditions.checkArgument(spawnDelay <= this.getMaxSpawnDelay(), "Minimum Spawn Delay must be less than or equal to Maximum Spawn Delay");
          this.getSnapshot().getSpawner().minSpawnDelay = spawnDelay;
@@ -40,7 +40,7 @@
      }
  
      @Override
-@@ -222,6 +_,7 @@
+@@ -232,6 +_,7 @@
          Preconditions.checkArgument(spawnDelay > 0, "Maximum Spawn Delay must be greater than 0.");
          Preconditions.checkArgument(spawnDelay >= this.getMinSpawnDelay(), "Maximum Spawn Delay must be greater than or equal to Minimum Spawn Delay");
          this.getSnapshot().getSpawner().maxSpawnDelay = spawnDelay;
@@ -48,7 +48,7 @@
      }
  
      @Override
-@@ -232,6 +_,7 @@
+@@ -242,6 +_,7 @@
      @Override
      public void setMaxNearbyEntities(int maxNearbyEntities) {
          this.getSnapshot().getSpawner().maxNearbyEntities = maxNearbyEntities;
@@ -56,7 +56,7 @@
      }
  
      @Override
-@@ -242,6 +_,7 @@
+@@ -252,6 +_,7 @@
      @Override
      public void setSpawnCount(int count) {
          this.getSnapshot().getSpawner().spawnCount = count;
@@ -64,7 +64,7 @@
      }
  
      @Override
-@@ -252,6 +_,7 @@
+@@ -262,6 +_,7 @@
      @Override
      public void setRequiredPlayerRange(int requiredPlayerRange) {
          this.getSnapshot().getSpawner().requiredPlayerRange = requiredPlayerRange;
@@ -72,7 +72,7 @@
      }
  
      @Override
-@@ -262,6 +_,7 @@
+@@ -272,6 +_,7 @@
      @Override
      public void setSpawnRange(int spawnRange) {
          this.getSnapshot().getSpawner().spawnRange = spawnRange;

@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -751,14 +_,17 @@
+@@ -755,14 +_,17 @@
          if (!this.isDebug() && runsNormally) {
              long l = this.getGameTime();
              profilerFiller.push("blockTicks");
@@ -18,7 +18,7 @@
              this.raids.tick(this);
          }
  
-@@ -766,6 +_,7 @@
+@@ -770,6 +_,7 @@
          this.getChunkSource().tick(hasTimeLeft, true);
          profilerFiller.popPush("blockEvents");
          if (runsNormally) {
@@ -26,7 +26,7 @@
              this.runBlockEvents();
          }
  
-@@ -784,6 +_,7 @@
+@@ -788,6 +_,7 @@
                  profilerFiller.pop();
              }
  
@@ -34,7 +34,7 @@
              io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
              this.entityTickList
                  .forEach(
-@@ -792,6 +_,7 @@
+@@ -796,6 +_,7 @@
                          if (!entity.isRemoved()) {
                              if (!tickRateManager.isEntityFrozen(entity)) {
                                  profilerFiller.push("checkDespawn");

@@ -27,9 +27,9 @@
 +    activeFork = pluto
 +    // Pluto end - Branding
 +
-     //updatingMinecraft {
-     //    oldPaperCommit = "f4f275519f7c1fbe9db173b7144a4fe81440e365"
-     //}
+     updatingMinecraft {
+         oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
+     }
 @@ -128,10 +_,18 @@
      main {
          java { srcDir("../paper-server/src/main/java") }

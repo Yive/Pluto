@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -209,10 +_,10 @@
+@@ -212,10 +_,10 @@
      public void inactiveTick() {
          super.inactiveTick();
          boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
@@ -13,7 +13,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -733,20 +_,20 @@
+@@ -750,20 +_,20 @@
          int i = this.tickCount + this.getId();
          if (i % 2 != 0 && this.tickCount > 1) {
              profilerFiller.push("targetSelector");
@@ -38,7 +38,7 @@
              this.goalSelector.tick();
              profilerFiller.pop();
          }
-@@ -943,6 +_,13 @@
+@@ -964,6 +_,13 @@
                  return null;
              }
  
@@ -52,7 +52,7 @@
              @Override
              public void setMaxStackSize(final int size) {
                  this.maxStackSize = size;
-@@ -1514,12 +_,11 @@
+@@ -1540,12 +_,11 @@
      public boolean isSunBurnTick() {
          if (this.level().isBrightOutside() && !this.level().isClientSide) {
              float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
-@@ -348,7 +_,7 @@
+@@ -349,7 +_,7 @@
  
      @Nullable
      protected Direction findAttachableSurface(BlockPos pos) {
@@ -9,7 +9,7 @@
              if (this.canStayAt(pos, direction)) {
                  return direction;
              }
-@@ -382,6 +_,7 @@
+@@ -383,6 +_,7 @@
      }
  
      protected boolean teleportSomewhere() {
@@ -17,7 +17,7 @@
          if (!this.isNoAi() && this.isAlive()) {
              BlockPos blockPos = this.blockPosition();
  
-@@ -461,6 +_,7 @@
+@@ -462,6 +_,7 @@
          Vec3 vec3 = this.position();
          AABB boundingBox = this.getBoundingBox();
          if (!this.isClosed() && this.teleportSomewhere()) {

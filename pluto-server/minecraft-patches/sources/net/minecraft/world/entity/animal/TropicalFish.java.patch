@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/TropicalFish.java
 +++ b/net/minecraft/world/entity/animal/TropicalFish.java
-@@ -262,8 +_,10 @@
+@@ -263,8 +_,10 @@
      public static boolean checkTropicalFishSpawnRules(
          EntityType<TropicalFish> entityType, LevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
      ) {

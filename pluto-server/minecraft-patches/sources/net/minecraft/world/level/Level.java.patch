@@ -247,7 +247,7 @@
          }
      }
  
-@@ -1977,17 +_,21 @@
+@@ -1981,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
@@ -276,7 +276,7 @@
                      }
                  }
              }
-@@ -1998,9 +_,12 @@
+@@ -2002,9 +_,12 @@
      public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
          long l = 0L;
          float f = 0.0F;

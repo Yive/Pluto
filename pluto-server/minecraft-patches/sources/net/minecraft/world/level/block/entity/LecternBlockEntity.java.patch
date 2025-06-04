@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/LecternBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/LecternBlockEntity.java
-@@ -78,6 +_,13 @@
+@@ -75,6 +_,13 @@
              return LecternBlockEntity.this.getOwner();
          }
  

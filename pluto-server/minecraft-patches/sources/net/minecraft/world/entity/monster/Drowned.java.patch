@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Drowned.java
 +++ b/net/minecraft/world/entity/monster/Drowned.java
-@@ -321,8 +_,10 @@
+@@ -316,8 +_,10 @@
  
          @Override
          protected boolean isValidTarget(LevelReader level, BlockPos pos) {

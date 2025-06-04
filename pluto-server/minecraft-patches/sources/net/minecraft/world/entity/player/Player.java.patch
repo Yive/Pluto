@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -1262,8 +_,10 @@
+@@ -1274,8 +_,10 @@
                              if (flag3) {
                                  float f5 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * f;
  
@@ -11,7 +11,7 @@
                                      if (livingEntity2 != this
                                          && livingEntity2 != target
                                          && !this.isAlliedTo(livingEntity2)
-@@ -1550,7 +_,7 @@
+@@ -1562,7 +_,7 @@
              if (this.isSwimming()) {
                  double d = this.getLookAngle().y;
                  double d1 = d < -0.2 ? 0.085 : 0.06;

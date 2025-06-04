@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/Fox.java
 +++ b/net/minecraft/world/entity/animal/Fox.java
-@@ -739,7 +_,7 @@
+@@ -736,7 +_,7 @@
              double d4 = d2 == 0.0 ? d1 * (i1 / 6.0F) : d3 / d2;
  
              for (int i2 = 1; i2 < 4; i2++) {

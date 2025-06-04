@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
 +++ b/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
-@@ -31,6 +_,27 @@
+@@ -32,6 +_,27 @@
          super(entityType, level);
      }
  
@@ -28,7 +28,7 @@
      @Override
      public void destroy(ServerLevel level, DamageSource damageSource) {
          super.destroy(level, damageSource);
-@@ -201,6 +_,13 @@
+@@ -202,6 +_,13 @@
      public @Nullable org.bukkit.inventory.InventoryHolder getOwner() {
          return this.getBukkitEntity() instanceof final org.bukkit.inventory.InventoryHolder inventoryHolder ? inventoryHolder : null;
      }
