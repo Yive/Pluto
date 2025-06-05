@@ -1,0 +1,50 @@
+--- a/io/papermc/paper/entity/activation/ActivationRange.java
++++ b/io/papermc/paper/entity/activation/ActivationRange.java
+@@ -114,6 +_,24 @@
+             || entity instanceof ThrownTrident;
+     }
+ 
++    // Pluto start - Allow defining the vertical activation range
++    public static int pluto$getVerticalActivationRange(final Level level, final ActivationType type, final int horizontal, final int height) {
++        if (!level.plutoConfig().useVerticalActivationRange) return height;
++
++        final int vertical = switch (type) {
++            case MISC -> level.plutoConfig().miscVerticalActivationRange;
++            case WATER -> level.plutoConfig().waterVerticalActivationRange;
++            case ANIMAL -> level.plutoConfig().animalVerticalActivationRange;
++            case RAIDER -> level.plutoConfig().raiderVerticalActivationRange;
++            case MONSTER -> level.plutoConfig().monsterVerticalActivationRange;
++            case VILLAGER -> level.plutoConfig().villagersVerticalActivationRange;
++            case FLYING_MONSTER -> level.plutoConfig().flyingMonstersVerticalActivationRange;
++        };
++
++        return vertical == -1 ? horizontal : vertical;
++    }
++    // Pluto end - Allow defining the vertical activation range
++
+     /**
+      * Find what entities are in range of the players in the world and set
+      * active if in range.
+@@ -149,13 +_,15 @@
+ 
+             final int worldHeight = world.getHeight();
+             ActivationRange.maxBB = player.getBoundingBox().inflate(maxRange, worldHeight, maxRange);
+-            ActivationType.MISC.boundingBox = player.getBoundingBox().inflate(miscActivationRange, worldHeight, miscActivationRange);
+-            ActivationType.RAIDER.boundingBox = player.getBoundingBox().inflate(raiderActivationRange, worldHeight, raiderActivationRange);
+-            ActivationType.ANIMAL.boundingBox = player.getBoundingBox().inflate(animalActivationRange, worldHeight, animalActivationRange);
+-            ActivationType.MONSTER.boundingBox = player.getBoundingBox().inflate(monsterActivationRange, worldHeight, monsterActivationRange);
+-            ActivationType.WATER.boundingBox = player.getBoundingBox().inflate(waterActivationRange, worldHeight, waterActivationRange);
+-            ActivationType.FLYING_MONSTER.boundingBox = player.getBoundingBox().inflate(flyingActivationRange, worldHeight, flyingActivationRange);
+-            ActivationType.VILLAGER.boundingBox = player.getBoundingBox().inflate(villagerActivationRange, worldHeight, villagerActivationRange);
++            // Pluto start - Allow defining the vertical activation range
++            ActivationType.MISC.boundingBox = player.getBoundingBox().inflate(miscActivationRange, pluto$getVerticalActivationRange(world, ActivationType.MISC, miscActivationRange, worldHeight), miscActivationRange);
++            ActivationType.RAIDER.boundingBox = player.getBoundingBox().inflate(raiderActivationRange, pluto$getVerticalActivationRange(world, ActivationType.RAIDER, raiderActivationRange, worldHeight), raiderActivationRange);
++            ActivationType.ANIMAL.boundingBox = player.getBoundingBox().inflate(animalActivationRange, pluto$getVerticalActivationRange(world, ActivationType.ANIMAL, animalActivationRange, worldHeight), animalActivationRange);
++            ActivationType.MONSTER.boundingBox = player.getBoundingBox().inflate(monsterActivationRange, pluto$getVerticalActivationRange(world, ActivationType.MONSTER, monsterActivationRange, worldHeight), monsterActivationRange);
++            ActivationType.WATER.boundingBox = player.getBoundingBox().inflate(waterActivationRange, pluto$getVerticalActivationRange(world, ActivationType.WATER, waterActivationRange, worldHeight), waterActivationRange);
++            ActivationType.FLYING_MONSTER.boundingBox = player.getBoundingBox().inflate(flyingActivationRange, pluto$getVerticalActivationRange(world, ActivationType.FLYING_MONSTER, flyingActivationRange, worldHeight), flyingActivationRange);
++            ActivationType.VILLAGER.boundingBox = player.getBoundingBox().inflate(villagerActivationRange, pluto$getVerticalActivationRange(world, ActivationType.VILLAGER, villagerActivationRange, worldHeight), villagerActivationRange);
++            // Pluto end - Allow defining the vertical activation range
+ 
+             final List<Entity> entities = world.getEntities((Entity) null, ActivationRange.maxBB, e -> true);
+             final boolean tickMarkers = world.paperConfig().entities.markers.tick;
