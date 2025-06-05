@@ -956,5 +956,71 @@ public class PlutoConfig {
                     )
             );
         }
+
+        public boolean useVerticalActivationRange = false;
+        public int waterVerticalActivationRange = -1;
+        public int flyingMonstersVerticalActivationRange = -1;
+        public int villagersVerticalActivationRange = -1;
+        public int monsterVerticalActivationRange = -1;
+        public int animalVerticalActivationRange = -1;
+        public int raiderVerticalActivationRange = -1;
+        public int miscVerticalActivationRange = -1;
+        private void verticalActivationRanges() {
+            useVerticalActivationRange = getBoolean("entities.vertical-activation-range.enabled", useVerticalActivationRange);
+            setComments("entities.vertical-activation-range.enabled",
+                    List.of(
+                            "Makes the server use the activation range instead of world height for vertical distance"
+                    )
+            );
+
+            waterVerticalActivationRange = getInt("entities.vertical-activation-range.water", waterVerticalActivationRange);
+            setComments("entities.vertical-activation-range.water",
+                    List.of(
+                            "Vertical activation range for water based mobs. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            flyingMonstersVerticalActivationRange = getInt("entities.vertical-activation-range.flying-monsters", flyingMonstersVerticalActivationRange);
+            setComments("entities.vertical-activation-range.flying-monsters",
+                    List.of(
+                            "Vertical activation range for flying monsters. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            villagersVerticalActivationRange = getInt("entities.vertical-activation-range.villagers", villagersVerticalActivationRange);
+            setComments("entities.vertical-activation-range.villagers",
+                    List.of(
+                            "Vertical activation range for villagers. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            monsterVerticalActivationRange = getInt("entities.vertical-activation-range.monster", monsterVerticalActivationRange);
+            setComments("entities.vertical-activation-range.monster",
+                    List.of(
+                            "Vertical activation range for monsters. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            animalVerticalActivationRange = getInt("entities.vertical-activation-range.animal", animalVerticalActivationRange);
+            setComments("entities.vertical-activation-range.animal",
+                    List.of(
+                            "Vertical activation range for animals. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            raiderVerticalActivationRange = getInt("entities.vertical-activation-range.raider", raiderVerticalActivationRange);
+            setComments("entities.vertical-activation-range.raider",
+                    List.of(
+                            "Vertical activation range for raiders. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+
+            miscVerticalActivationRange = getInt("entities.vertical-activation-range.misc", miscVerticalActivationRange);
+            setComments("entities.vertical-activation-range.misc",
+                    List.of(
+                            "Vertical activation range for misc entities. -1 will use the distance defined in spigot.yml"
+                    )
+            );
+        }
     }
 }
