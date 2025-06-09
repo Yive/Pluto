@@ -233,7 +233,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1863,8 +_,11 @@
+@@ -1856,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(BlockPos pos) {
@@ -247,7 +247,7 @@
          }
      }
  
-@@ -1981,17 +_,21 @@
+@@ -1974,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
@@ -276,7 +276,7 @@
                      }
                  }
              }
-@@ -2002,9 +_,12 @@
+@@ -1995,9 +_,12 @@
      public DifficultyInstance getCurrentDifficultyAt(BlockPos pos) {
          long l = 0L;
          float f = 0.0F;
