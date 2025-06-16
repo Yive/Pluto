@@ -27,10 +27,10 @@
 +    activeFork = pluto
 +    // Pluto end - Branding
 +
-     updatingMinecraft {
-         oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
-     }
-@@ -129,10 +_,18 @@
+     spigot {
+         enabled = false
+         buildDataRef = "702e1a0a5072b2c4082371d5228cb30525687efc"
+@@ -125,10 +_,18 @@
      main {
          java { srcDir("../paper-server/src/main/java") }
          resources { srcDir("../paper-server/src/main/resources") }
@@ -49,7 +49,7 @@
      }
  }
  
-@@ -161,7 +_,7 @@
+@@ -157,7 +_,7 @@
  }
  
  dependencies {
@@ -58,7 +58,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -237,14 +_,14 @@
+@@ -233,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

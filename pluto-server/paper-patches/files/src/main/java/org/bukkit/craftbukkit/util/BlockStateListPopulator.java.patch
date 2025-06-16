@@ -1,107 +1,94 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
-@@ -24,8 +_,34 @@
+@@ -24,7 +_,33 @@
  public class BlockStateListPopulator extends DummyGeneratorAccess {
  
-     private final LevelAccessor world;
--    private final Map<BlockPos, CapturedBlock> dataMap = new LinkedHashMap<>();
--    private final Map<BlockPos, BlockEntity> entityMap = new HashMap<>();
+     private final LevelAccessor level;
+-    private final Map<BlockPos, CapturedBlock> blocks = new LinkedHashMap<>();
 +    // Pluto start - Memory allocation optimisations
-+    private final Map<Long, CapturedBlock> dataMap = new LinkedHashMap<>();
-+    private final Map<Long, BlockEntity> entityMap = new HashMap<>();
++    private final it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<CapturedBlock> blocks = new it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<>();
 +
 +    @Override
 +    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(int x, int y, int z) {
-+        CapturedBlock state = this.dataMap.get(BlockPos.asLong(x, y, z));
-+        return (state != null) ? state.state() : this.world.pluto$getBlockState(x, y, z);
++        CapturedBlock state = this.blocks.get(BlockPos.asLong(x, y, z));
++        return (state != null) ? state.state() : this.level.pluto$getBlockState(x, y, z);
 +    }
 +
 +    @Override
 +    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(long packedPos) {
-+        CapturedBlock state = this.dataMap.get(packedPos);
-+        return (state != null) ? state.state() : this.world.pluto$getBlockState(packedPos);
++        CapturedBlock state = this.blocks.get(packedPos);
++        return (state != null) ? state.state() : this.level.pluto$getBlockState(packedPos);
 +    }
 +
 +    @Override
 +    public FluidState pluto$getFluidState(int x, int y, int z) {
-+        CapturedBlock state = this.dataMap.get(BlockPos.asLong(x, y, z));
-+        return (state != null) ? state.state().getFluidState() : this.world.pluto$getFluidState(x, y, z);
++        CapturedBlock state = this.blocks.get(BlockPos.asLong(x, y, z));
++        return (state != null) ? state.state().getFluidState() : this.level.pluto$getFluidState(x, y, z);
 +    }
 +
 +    @Override
 +    public FluidState pluto$getFluidState(long packedPos) {
-+        CapturedBlock state = this.dataMap.get(packedPos);
-+        return (state != null) ? state.state().getFluidState() : this.world.pluto$getFluidState(packedPos);
++        CapturedBlock state = this.blocks.get(packedPos);
++        return (state != null) ? state.state().getFluidState() : this.level.pluto$getFluidState(packedPos);
 +    }
 +    // Pluto end - Memory allocation optimisations
  
-     private List<CraftBlockState> blocks;
+     private List<CraftBlockState> snapshots;
  
-@@ -35,21 +_,24 @@
+@@ -34,19 +_,19 @@
  
      @Override
      public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos) {
--        CapturedBlock block = this.dataMap.get(pos);
-+        CapturedBlock block = this.dataMap.get(pos.asLong()); // Pluto - Memory allocation optimisations
-         return (block != null) ? block.state() : this.world.getBlockState(pos);
+-        CapturedBlock block = this.blocks.get(pos);
++        CapturedBlock block = this.blocks.get(pos.asLong()); // Pluto - Memory allocation optimisations
+         return block != null ? block.state() : this.level.getBlockState(pos);
      }
  
      @Override
      public FluidState getFluidState(BlockPos pos) {
--        CapturedBlock block = this.dataMap.get(pos);
-+        CapturedBlock block = this.dataMap.get(pos.asLong()); // Pluto - Memory allocation optimisations
-         return (block != null) ? block.state().getFluidState() : this.world.getFluidState(pos);
+-        CapturedBlock block = this.blocks.get(pos);
++        CapturedBlock block = this.blocks.get(pos.asLong()); // Pluto - Memory allocation optimisations
+         return block != null ? block.state().getFluidState() : this.level.getFluidState(pos);
      }
  
      @Override
      public BlockEntity getBlockEntity(BlockPos pos) {
-         // The contains is important to check for null values
--        if (this.entityMap.containsKey(pos)) {
--            return this.entityMap.get(pos);
-+        // Pluto start - Memory allocation optimisations
-+        final long posLong = pos.asLong();
-+        if (this.entityMap.containsKey(posLong)) {
-+            return this.entityMap.get(posLong);
-+            // Pluto end - Memory allocation optimisations
-         }
+-        CapturedBlock block = this.blocks.get(pos);
++        CapturedBlock block = this.blocks.get(pos.asLong()); // Pluto - Memory allocation optimisations
+         return block != null ? block.blockEntity() : this.level.getBlockEntity(pos);
+     }
  
-         return this.world.getBlockEntity(pos);
-@@ -59,9 +_,12 @@
+@@ -54,7 +_,10 @@
      public boolean setBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState state, int flags, int recursionLeft) {
          pos = pos.immutable();
-         // remove first to keep insertion order
--        this.dataMap.remove(pos);
+         // remove first to keep last updated order
+-        this.blocks.remove(pos);
 +        // Pluto start - Memory allocation optimisations
 +        final long posLong = pos.asLong();
-+        this.dataMap.remove(posLong);
++        this.blocks.remove(posLong);
 +        // Pluto end - Memory allocation optimisations
  
--        this.dataMap.put(pos, new CapturedBlock(state, flags));
-+        this.dataMap.put(posLong, new CapturedBlock(state, flags)); // Pluto - Memory allocation optimisations
+         final BlockEntity newBlockEntity;
          if (state.getBlock() instanceof EntityBlock entityBlock) {
-             // based on LevelChunk#setBlockState
-             BlockEntity currentBlockEntity = this.getBlockEntity(pos);
-@@ -72,9 +_,9 @@
-             } else {
-                 newBlockEntity = entityBlock.newBlockEntity(pos, state); // create a new one when the block change
-             }
--            this.entityMap.put(pos, newBlockEntity);
-+            this.entityMap.put(posLong, newBlockEntity); // Pluto - Memory allocation optimisations
-         } else {
--            this.entityMap.put(pos, null);
-+            this.entityMap.put(posLong, null); // Pluto - Memory allocation optimisations
+@@ -70,7 +_,7 @@
+             newBlockEntity = null;
          }
+ 
+-        this.blocks.put(pos, new CapturedBlock(state, flags, newBlockEntity));
++        this.blocks.put(posLong, new CapturedBlock(state, flags, newBlockEntity)); // Pluto - Memory allocation optimisations
          return true;
      }
-@@ -90,9 +_,9 @@
+ 
+@@ -91,10 +_,10 @@
      }
  
      private void iterateSnapshots(Consumer<CraftBlockState> callback) {
--        for (Map.Entry<BlockPos, CapturedBlock> entry : this.dataMap.entrySet()) {
-+        for (Map.Entry<Long, CapturedBlock> entry : this.dataMap.entrySet()) { // Pluto - Memory allocation optimisations
-             // use 'this' to ensure that the block state is the correct TileState
--            CraftBlockState snapshot = (CraftBlockState) CraftBlock.at(this, entry.getKey()).getState();
-+            CraftBlockState snapshot = (CraftBlockState) CraftBlock.at(this, BlockPos.of(entry.getKey())).getState(); // Pluto - Memory allocation optimisations
-             snapshot.setFlags(entry.getValue().flags());
-             // set world handle to ensure that updated calls are done to the world and not to this populator
-             snapshot.setWorldHandle(this.world);
+-        for (Map.Entry<BlockPos, CapturedBlock> entry : this.blocks.entrySet()) {
++        for (final it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap.Entry<CapturedBlock> entry : this.blocks.long2ObjectEntrySet()) { // Pluto - Memory allocation optimisations
+             CapturedBlock block = entry.getValue();
+             CraftBlockState snapshot = CraftBlockStates.getBlockState(
+-                this.getMinecraftWorld().getWorld(), entry.getKey(), block.state(), block.blockEntity()
++                this.getMinecraftWorld().getWorld(), BlockPos.of(entry.getLongKey()), block.state(), block.blockEntity() // Pluto - Memory allocation optimisations
+             );
+             snapshot.setFlags(block.flags());
+             callback.accept(snapshot);
