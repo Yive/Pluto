@@ -91,4 +91,4 @@
 +                this.getMinecraftWorld().getWorld(), BlockPos.of(entry.getLongKey()), block.state(), block.blockEntity() // Pluto - Memory allocation optimisations
              );
              snapshot.setFlags(block.flags());
-             callback.accept(snapshot);
+             snapshot.setWorldHandle(this.level);
