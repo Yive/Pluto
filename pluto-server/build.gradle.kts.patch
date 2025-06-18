@@ -62,17 +62,16 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
--            "Implementation-Title" to "Pufferfish", // Pufferfish
+-            "Implementation-Title" to "Tetraodontidae", // Pufferfish
 +            "Implementation-Title" to "Pluto", // Pufferfish // Pluto - Branding
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date,
--            "Specification-Title" to "Pufferfish", // Pufferfish
+-            "Specification-Title" to "Tetraodontidae", // Pufferfish
 +            "Specification-Title" to "Pluto", // Pufferfish // Pluto - Branding
              "Specification-Version" to project.version,
--            "Specification-Vendor" to "Pufferfish Studios LLC", // Pufferfish
--            "Brand-Id" to "pufferfish:pufferfish", // Pufferfish
--            "Brand-Name" to "Pufferfish", // Pufferfish
-+            "Specification-Vendor" to "Yive", // Pufferfish // Pluto - Branding
+             "Specification-Vendor" to "Yive", // Pufferfish
+-            "Brand-Id" to "yive:tetraodontidae", // Pufferfish
+-            "Brand-Name" to "Tetraodontidae", // Pufferfish
 +            "Brand-Id" to "yive:pluto", // Pufferfish // Pluto - Branding
 +            "Brand-Name" to "Pluto", // Pufferfish // Pluto - Branding
              "Build-Number" to (build ?: ""),

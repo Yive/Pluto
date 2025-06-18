@@ -6,7 +6,7 @@
 ## Features
 | Feature                                                      | Description                                                                                                                                                         |
 |--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Fork of [Pufferfish](https://github.com/Yive/Pufferfish)** | Includes a bunch of performance patches.                                                                                                                            |
+| **Fork of [Pufferfish](https://github.com/Yive/Tetraodontidae)** | Includes a bunch of performance patches.                                                                                                                            |
 | **Decreased Memory Allocations**                             | The JVM will have less pressure on the memory meaning less garbage collections, less time the CPU waits for memory & increased memory throughput                    | 
 | **Optimized Hoppers**                                        | Certain entities will search for hoppers allowing for a higher capacity of hoppers.                                                                                 |
 | **Optimisations for Farms**                                  | Certain farm related blocks can skip heavy tasks such as farmland searching for nearby water.                                                                       |

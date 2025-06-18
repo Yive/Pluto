@@ -10,7 +10,7 @@
 set -e
 PS1="$"
 
-pufferfish=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Yive/Pufferfish/compare/$1...$2 | jq -r '.commits[] | "Yive/Pufferfish@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
+pufferfish=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Yive/Tetraodontidae/compare/$1...$2 | jq -r '.commits[] | "Yive/Tetraodontidae@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
 
 updated=""
 logsuffix=""
