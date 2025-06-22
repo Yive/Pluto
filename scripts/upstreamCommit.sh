@@ -10,13 +10,13 @@
 set -e
 PS1="$"
 
-pufferfish=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Yive/Tetraodontidae/compare/$1...$2 | jq -r '.commits[] | "Yive/Tetraodontidae@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
+tetraodontidae=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Yive/Tetraodontidae/compare/$1...$2 | jq -r '.commits[] | "Yive/Tetraodontidae@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
 
 updated=""
 logsuffix=""
-if [ ! -z "pufferfish" ]; then
-    logsuffix="$logsuffix\n\nPufferfish Changes:\n$pufferfish"
-    updated="Pufferfish"
+if [ ! -z "tetraodontidae" ]; then
+    logsuffix="$logsuffix\n\nTetraodontidae Changes:\n$tetraodontidae"
+    updated="Tetraodontidae"
 fi
 disclaimer="Upstream has released updates that appear to apply and compile correctly"
 
