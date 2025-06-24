@@ -1,6 +1,6 @@
 --- a/pufferfish-server/build.gradle.kts
 +++ b/pufferfish-server/build.gradle.kts
-@@ -33,10 +_,27 @@
+@@ -35,10 +_,27 @@
              outputDir = rootDirectory.dir("paper-server")
          }
      }
@@ -30,7 +30,7 @@
      spigot {
          enabled = true
          buildDataRef = "281ac0de7a76d808753ede97d11b034bc801b63d"
-@@ -125,10 +_,18 @@
+@@ -127,10 +_,18 @@
      main {
          java { srcDir("../paper-server/src/main/java") }
          resources { srcDir("../paper-server/src/main/resources") }
@@ -49,7 +49,7 @@
      }
  }
  
-@@ -157,7 +_,7 @@
+@@ -159,7 +_,7 @@
  }
  
  dependencies {
@@ -58,7 +58,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -233,14 +_,14 @@
+@@ -235,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
