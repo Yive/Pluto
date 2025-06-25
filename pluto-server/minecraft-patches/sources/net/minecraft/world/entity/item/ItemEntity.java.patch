@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
-@@ -125,6 +_,7 @@
+@@ -133,6 +_,7 @@
      @Override
      public void inactiveTick() {
          super.inactiveTick();
@@ -8,7 +8,7 @@
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              this.pickupDelay--;
          }
-@@ -144,12 +_,19 @@
+@@ -152,12 +_,19 @@
      }
      // Paper end - EAR 2
  
@@ -28,7 +28,7 @@
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  this.pickupDelay--;
              }
-@@ -184,7 +_,7 @@
+@@ -192,7 +_,7 @@
                      f = 1F;
                  } else if (this.onGround()) {
                      // Paper end - Friction API
@@ -37,7 +37,7 @@
                  }
  
                  this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98, f));
-@@ -196,11 +_,11 @@
+@@ -204,11 +_,11 @@
                  }
              }
  
@@ -54,7 +54,7 @@
                  this.mergeWithNeighbours();
              }
  
-@@ -230,8 +_,15 @@
+@@ -238,8 +_,15 @@
  
      @Override
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
