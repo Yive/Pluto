@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -2977,6 +_,24 @@
+@@ -2978,6 +_,24 @@
          return matchMaterial(name, false);
      }
  
@@ -25,7 +25,7 @@
      /**
       * Attempts to match the Material with the given name.
       * <p>
-@@ -2998,9 +_,45 @@
+@@ -2999,9 +_,45 @@
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
  
