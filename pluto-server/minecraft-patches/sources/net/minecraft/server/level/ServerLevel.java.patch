@@ -42,3 +42,35 @@
                                  entity.checkDespawn();
                                  profilerFiller.pop();
                                  if (true) { // Paper - rewrite chunk system
+@@ -963,6 +_,31 @@
+                 boolean flag = this.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)
+                     && this.random.nextDouble() < currentDifficultyAt.getEffectiveDifficulty() * this.paperConfig().entities.spawning.skeletonHorseThunderSpawnChance.or(0.01) // Paper - Configurable spawn chances for skeleton horses
+                     && !this.getBlockState(blockPos.below()).is(Blocks.LIGHTNING_ROD);
++
++                // Pluto start - Async spawning chunks
++                if (this.plutoConfig().useAsyncSpawningChunks) {
++                    io.papermc.paper.util.MCUtil.ensureMain(() -> {
++                        if (flag) {
++                            SkeletonHorse skeletonHorse = EntityType.SKELETON_HORSE.create(this, EntitySpawnReason.EVENT);
++                            if (skeletonHorse != null) {
++                                skeletonHorse.setTrap(true);
++                                skeletonHorse.setAge(0);
++                                skeletonHorse.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
++                                this.addFreshEntity(skeletonHorse, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.LIGHTNING); // CraftBukkit
++                            }
++                        }
++
++                        LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(this, EntitySpawnReason.EVENT);
++                        if (lightningBolt != null) {
++                            lightningBolt.snapTo(Vec3.atBottomCenterOf(blockPos));
++                            lightningBolt.setVisualOnly(flag);
++                            this.strikeLightning(lightningBolt, org.bukkit.event.weather.LightningStrikeEvent.Cause.WEATHER); // CraftBukkit
++                        }
++                    });
++                    return;
++                }
++                // Pluto end - Async spawning chunks
++
+                 if (flag) {
+                     SkeletonHorse skeletonHorse = EntityType.SKELETON_HORSE.create(this, EntitySpawnReason.EVENT);
+                     if (skeletonHorse != null) {

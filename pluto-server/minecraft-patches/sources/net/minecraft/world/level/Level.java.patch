@@ -9,11 +9,12 @@
      public Map<BlockPos, BlockEntity> capturedTileEntities = new java.util.LinkedHashMap<>(); // Paper - Retain block place order when capturing blockstates
      @Nullable
      public List<net.minecraft.world.entity.item.ItemEntity> captureDrops;
-@@ -160,6 +_,8 @@
+@@ -160,6 +_,9 @@
      }
      // Paper end - add paper world config
  
 +    private final dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig; public dev.yive.pluto.PlutoConfig.WorldConfig plutoConfig() { return this.plutoConfig; } // Pluto - Config
++    private final java.util.concurrent.ExecutorService pluto$spawningChunksExecutor; public java.util.concurrent.ExecutorService plutoSpawningChunksExecutor() { return pluto$spawningChunksExecutor; } // Pluto - Async spawning chunks
 +
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
      private int tileTickPosition;
@@ -89,11 +90,12 @@
      }
      // Paper end - optimise collisions
      // Paper start - getblock optimisations - cache world height/sections
-@@ -840,6 +_,7 @@
+@@ -840,6 +_,8 @@
          // Paper end - getblock optimisations - cache world height/sections
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 +        this.plutoConfig = new dev.yive.pluto.PlutoConfig.WorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Pluto - Config
++        this.pluto$spawningChunksExecutor = java.util.concurrent.Executors.newSingleThreadExecutor(new com.google.common.util.concurrent.ThreadFactoryBuilder().setNameFormat(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName() + " - Spawning Chunks Executor").build()); // Pluto - Async spawning chunks
          this.generator = generator;
          this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
  

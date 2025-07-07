@@ -1,0 +1,68 @@
+--- a/net/minecraft/world/level/NaturalSpawner.java
++++ b/net/minecraft/world/level/NaturalSpawner.java
+@@ -193,6 +_,65 @@
+         profilerFiller.pop();
+     }
+ 
++    // Pluto start - Async spawning chunks
++    public static void pluto$spawnForChunk(ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnState spawnState, List<MobCategory> categories) {
++        List<Runnable> tasks = new ArrayList<>();
++        for (MobCategory mobCategory : categories) {
++            // Paper start - Optional per player mob spawns
++            final boolean canSpawn;
++            int maxSpawns = Integer.MAX_VALUE;
++            if (level.paperConfig().entities.spawning.perPlayerMobSpawns) {
++                // Copied from getFilteredSpawningCategories
++                int limit = mobCategory.getMaxInstancesPerChunk();
++                org.bukkit.entity.SpawnCategory spawnCategory = org.bukkit.craftbukkit.util.CraftSpawnCategory.toBukkit(mobCategory);
++                if (org.bukkit.craftbukkit.util.CraftSpawnCategory.isValidForLimits(spawnCategory)) {
++                    limit = level.getWorld().getSpawnLimit(spawnCategory);
++                }
++
++                // Apply per-player limit
++                int minDiff = Integer.MAX_VALUE;
++                final ca.spottedleaf.moonrise.common.list.ReferenceList<net.minecraft.server.level.ServerPlayer> inRange =
++                    level.moonrise$getNearbyPlayers().getPlayers(chunk.getPos(), ca.spottedleaf.moonrise.common.misc.NearbyPlayers.NearbyMapType.TICK_VIEW_DISTANCE);
++                if (inRange != null) {
++                    final net.minecraft.server.level.ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
++                    for (int k = 0, len = inRange.size(); k < len; k++) {
++                        minDiff = Math.min(limit - level.getChunkSource().chunkMap.getMobCountNear(backingSet[k], mobCategory), minDiff);
++                    }
++                }
++
++                maxSpawns = (minDiff == Integer.MAX_VALUE) ? 0 : minDiff;
++                canSpawn = maxSpawns > 0;
++            } else {
++                canSpawn = spawnState.canSpawnForCategoryLocal(mobCategory, chunk.getPos());
++            }
++            if (canSpawn) {
++                final Runnable runnable = pluto$spawnCategoryForChunk(mobCategory, level, chunk, spawnState::canSpawn, spawnState::afterSpawn,
++                    maxSpawns, level.paperConfig().entities.spawning.perPlayerMobSpawns ? level.getChunkSource().chunkMap::updatePlayerMobTypeMap : null);
++                // Paper end - Optional per player mob spawns
++                if (runnable == null) continue;
++                tasks.add(runnable);
++            }
++        }
++
++        if (tasks.isEmpty()) return;
++
++        // Send the actual entity spawns to the main thread
++        io.papermc.paper.util.MCUtil.ensureMain(() -> {
++            for (final Runnable task : tasks) {
++                task.run();
++            }
++        });
++    }
++
++    @Nullable
++    public static Runnable pluto$spawnCategoryForChunk(
++        MobCategory category, ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnPredicate filter, NaturalSpawner.AfterSpawnCallback callback, final int maxSpawns, final Consumer<Entity> trackEntity
++    ) {
++        BlockPos randomPosWithin = getRandomPosWithin(level, chunk);
++        return randomPosWithin.getY() >= level.getMinY() + 1 ? () -> spawnCategoryForPosition(category, level, chunk, randomPosWithin, filter, callback, maxSpawns, trackEntity) : null;
++    }
++    // Pluto end - Async spawning chunks
++
+     // Paper start - Add mobcaps commands
+     public static int globalLimitForCategory(final ServerLevel level, final MobCategory category, final int spawnableChunkCount) {
+         final int categoryLimit = level.getWorld().getSpawnLimitUnsafe(org.bukkit.craftbukkit.util.CraftSpawnCategory.toBukkit(category));

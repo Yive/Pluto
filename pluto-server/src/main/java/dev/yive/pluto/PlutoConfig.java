@@ -1072,5 +1072,15 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean useAsyncSpawningChunks = false;
+        private void asyncSpawningChunks() {
+            useAsyncSpawningChunks = getBoolean("spawning-chunks.use-async", useAsyncSpawningChunks);
+            setComments("spawning-chunks.use-async",
+                List.of(
+                    "Makes the logic for ticking spawning chunks async. Note: When a mob is spawned, the task will be sent to the main thread."
+                )
+            );
+        }
     }
 }

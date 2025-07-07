@@ -1,0 +1,49 @@
+--- a/net/minecraft/server/level/ServerChunkCache.java
++++ b/net/minecraft/server/level/ServerChunkCache.java
+@@ -625,6 +_,30 @@
+             filteredSpawningCategories = List.of();
+         }
+ 
++        // Pluto start - Async spawning chunks
++        if (this.level.plutoConfig().useAsyncSpawningChunks) {
++            final long next = this.level.random.nextLong(); // Considering this is unsafe, we should do this on the main thread.
++            this.level.plutoSpawningChunksExecutor().submit(() -> {
++                List<LevelChunk> list = new ObjectArrayList<>();
++
++                try {
++                    this.chunkMap.collectSpawningChunks(list);
++                    // Paper start - chunk tick iteration optimisation
++                    this.shuffleRandom.setSeed(next); // This random is only used for spawning chunks.
++                    if (!this.level.paperConfig().entities.spawning.perPlayerMobSpawns) Util.shuffle(list, this.shuffleRandom); // Paper - Optional per player mob spawns; do not need this when per-player is enabled
++                    // Paper end - chunk tick iteration optimisation
++
++                    for (LevelChunk levelChunk : list) {
++                        // Probably should do this outside of the loop, but it is possible for this to become populated during the loop.
++                        if (lastSpawnState == null) continue;
++                        this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, lastSpawnState); // Pufferfish
++                    }
++                } finally {
++                    list.clear();
++                }
++            });
++        } else {
++        // Pluto end - Async spawning chunks
+         List<LevelChunk> list = this.spawningChunks;
+ 
+         try {
+@@ -643,6 +_,7 @@
+         } finally {
+             list.clear();
+         }
++        } // Pluto - Async spawning chunks
+ 
+         profiler.popPush("tickTickingChunks");
+         this.iterateTickingChunksFaster(); // Paper - chunk tick iteration optimisations
+@@ -662,6 +_,7 @@
+ 
+         if (!spawnCategories.isEmpty()) {
+             if (this.level.getWorldBorder().isWithinBounds(pos) && (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning || _pufferfish_spawnCountsReady.get())) { // Pufferfish
++                if (this.level.plutoConfig().useAsyncSpawningChunks) NaturalSpawner.pluto$spawnForChunk(this.level, chunk, spawnState, spawnCategories); else // Pluto - Async spawning chunks
+                 NaturalSpawner.spawnForChunk(this.level, chunk, spawnState, spawnCategories);
+             }
+         }
