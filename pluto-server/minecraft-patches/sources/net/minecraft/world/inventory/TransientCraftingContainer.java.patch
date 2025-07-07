@@ -14,3 +14,12 @@
      @Override
      public int getMaxStackSize() {
          return this.maxStack;
+@@ -138,6 +_,8 @@
+     public boolean stillValid(Player player) {
+         return true;
+     }
++
++    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
+ 
+     @Override
+     public void clearContent() {

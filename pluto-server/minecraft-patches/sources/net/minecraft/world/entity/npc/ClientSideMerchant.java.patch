@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/npc/ClientSideMerchant.java
++++ b/net/minecraft/world/entity/npc/ClientSideMerchant.java
+@@ -56,6 +_,8 @@
+         return this.source == player;
+     }
+ 
++    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
++
+     // Paper start
+     @Override
+     public org.bukkit.craftbukkit.inventory.CraftMerchant getCraftMerchant() {

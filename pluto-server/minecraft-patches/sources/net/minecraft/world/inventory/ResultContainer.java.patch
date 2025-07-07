@@ -14,3 +14,12 @@
      // Don't need a transaction; the InventoryCrafting keeps track of it for us
      public void onOpen(org.bukkit.craftbukkit.entity.CraftHumanEntity player) {}
      public void onClose(org.bukkit.craftbukkit.entity.CraftHumanEntity player) {}
+@@ -106,6 +_,8 @@
+     public boolean stillValid(Player player) {
+         return true;
+     }
++
++    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
+ 
+     @Override
+     public void clearContent() {

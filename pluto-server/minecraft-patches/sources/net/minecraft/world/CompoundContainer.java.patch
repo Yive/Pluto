@@ -14,3 +14,12 @@
      public void setMaxStackSize(int size) {
          this.container1.setMaxStackSize(size);
          this.container2.setMaxStackSize(size);
+@@ -118,6 +_,8 @@
+     public boolean stillValid(Player player) {
+         return this.container1.stillValid(player) && this.container2.stillValid(player);
+     }
++
++    @Override public boolean stillValid() { return this.container1.stillValid() && this.container2.stillValid(); } // Pluto - Hoppers cache containers
+ 
+     @Override
+     public void startOpen(Player player) {

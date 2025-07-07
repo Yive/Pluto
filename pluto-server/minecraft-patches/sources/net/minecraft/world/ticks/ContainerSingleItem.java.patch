@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/ticks/ContainerSingleItem.java
++++ b/net/minecraft/world/ticks/ContainerSingleItem.java
+@@ -62,5 +_,7 @@
+         default boolean stillValid(Player player) {
+             return Container.stillValidBlockEntity(this.getContainerBlockEntity(), player);
+         }
++
++        @Override default boolean stillValid() { return !getContainerBlockEntity().isRemoved(); } // Pluto - Hoppers cache containers
+     }
+ }

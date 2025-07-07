@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/vehicle/ContainerEntity.java
++++ b/net/minecraft/world/entity/vehicle/ContainerEntity.java
+@@ -52,6 +_,8 @@
+ 
+     boolean isRemoved();
+ 
++    @Override default boolean stillValid() { return !isRemoved(); } // Pluto - Hoppers cache containers
++
+     @Override
+     default boolean isEmpty() {
+         return this.isChestVehicleEmpty();

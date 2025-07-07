@@ -14,3 +14,12 @@
          public LecternBlockEntity getLectern() {
              return LecternBlockEntity.this;
          }
+@@ -147,6 +_,8 @@
+         public boolean stillValid(Player player) {
+             return Container.stillValidBlockEntity(LecternBlockEntity.this, player) && LecternBlockEntity.this.hasBook();
+         }
++
++        @Override public boolean stillValid() { return !LecternBlockEntity.this.isRemoved(); } // Pluto - Hoppers cache containers
+ 
+         @Override
+         public boolean canPlaceItem(int slot, ItemStack stack) {

@@ -1,5 +1,28 @@
 --- a/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/HopperBlockEntity.java
+@@ -38,6 +_,11 @@
+     private long tickedGameTime;
+     private Direction facing;
+ 
++    // Pluto start - Hoppers cache containers
++    private java.lang.ref.WeakReference<Container> pushContainer = new java.lang.ref.WeakReference<>(null);
++    private java.lang.ref.WeakReference<Container> pullContainer = new java.lang.ref.WeakReference<>(null);
++    // Pluto end - Hoppers cache containers
++
+     // CraftBukkit start - add fields and methods
+     public List<org.bukkit.entity.HumanEntity> transaction = new java.util.ArrayList<>();
+     private int maxStack = MAX_STACK;
+@@ -75,6 +_,10 @@
+     public HopperBlockEntity(BlockPos pos, BlockState blockState) {
+         super(BlockEntityType.HOPPER, pos, blockState);
+         this.facing = blockState.getValue(HopperBlock.FACING);
++        // Pluto start - Hoppers cache containers
++        this.pushContainer = new java.lang.ref.WeakReference<>(null);
++        this.pullContainer = new java.lang.ref.WeakReference<>(null);
++        // Pluto end - Hoppers cache containers
+     }
+ 
+     @Override
 @@ -180,7 +_,9 @@
      }
      // Paper end - Perf: Optimize Hoppers
@@ -18,9 +41,48 @@
                      flag |= validator.getAsBoolean(); // Paper - note: this is not a validator, it's what adds/sucks in items
                  }
  
-@@ -528,9 +_,19 @@
+@@ -417,7 +_,18 @@
+     // Paper end - Perf: Optimize Hoppers
+ 
+     private static boolean ejectItems(Level level, BlockPos pos, HopperBlockEntity blockEntity) {
+-        Container attachedContainer = getAttachedContainer(level, pos, blockEntity);
++        // Pluto start - Hoppers cache containers
++        final Container cached = blockEntity.pushContainer.get();
++        Container attachedContainer = null;
++        if (cached != null) {
++            attachedContainer = cached.stillValid() ? cached : null;
++        }
++
++        if (attachedContainer == null) {
++            attachedContainer = getAttachedContainer(level, pos, blockEntity);
++            blockEntity.pushContainer = new java.lang.ref.WeakReference<>(attachedContainer);
++        }
++        // Pluto end - Hoppers cache containers
+         if (attachedContainer == null) {
+             return false;
+         } else {
+@@ -527,10 +_,44 @@
+         return true;
      }
  
++    // Pluto start - Hoppers cache containers
++    public static boolean suckInItems(Level level, HopperBlockEntity hopper) {
++        BlockPos blockPos = null;
++        BlockState blockState = null;
++        final Container cached = hopper.pullContainer.get();
++        Container sourceContainer = null;
++        if (cached != null) {
++            sourceContainer = cached.stillValid() ? cached : null;
++        }
++
++        if (sourceContainer == null) {
++            sourceContainer = getSourceContainer(level, hopper, blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ()), blockState = level.getBlockState(blockPos));
++            hopper.pullContainer = new java.lang.ref.WeakReference<>(sourceContainer);
++        }
++        return suckInItems(level, hopper, sourceContainer, net.minecraft.util.Mth.floor(hopper.getLevelX()), net.minecraft.util.Mth.floor(hopper.getLevelY() + 1.0), net.minecraft.util.Mth.floor(hopper.getLevelZ()), blockState);
++    }
++    // Pluto end - Hoppers cache containers
++
      public static boolean suckInItems(Level level, Hopper hopper) {
 -        BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
 -        BlockState blockState = level.getBlockState(blockPos);
@@ -38,6 +100,12 @@
 +        BlockState blockState = level.pluto$getBlockState(x, y, z);
 +        if (sourceContainer == null) sourceContainer = getSourceContainer(level, hopper, new BlockPos(x, y, z), blockState); // Pluto - Entities search for hoppers
 +        // Pluto end - Memory allocation optimisations
++        // Pluto start - Hoppers cache containers
++        return suckInItems(level, hopper, sourceContainer, x, y, z, blockState);
++    }
++
++    public static boolean suckInItems(Level level, Hopper hopper, @Nullable Container sourceContainer, int x, int y, int z, BlockState blockState) {
++        // Pluto end - Hoppers cache containers
          if (sourceContainer != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
@@ -47,7 +115,7 @@
          } else {
 -            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
 +            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
-+            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory allocation optimisations
++            boolean flag = hopper.isGridAligned() && (blockState == null ? blockState = level.pluto$getBlockState(x, y, z) : blockState).isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory allocation optimisations // Pluto - Hoppers cache containers
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
                      if (addItem(hopper, itemEntity)) {

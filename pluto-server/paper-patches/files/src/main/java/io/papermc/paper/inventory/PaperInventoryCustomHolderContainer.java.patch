@@ -1,16 +1,25 @@
 --- a/src/main/java/io/papermc/paper/inventory/PaperInventoryCustomHolderContainer.java
 +++ b/src/main/java/io/papermc/paper/inventory/PaperInventoryCustomHolderContainer.java
-@@ -124,6 +_,13 @@
-         return this.owner;
+@@ -99,6 +_,8 @@
+         return this.delegate.stillValid(player);
      }
  
++    @Override public boolean stillValid() { return this.delegate.stillValid(); } // Pluto - Hoppers cache containers
++
+     @Override
+     public List<ItemStack> getContents() {
+         return this.delegate.getContents();
+@@ -123,6 +_,13 @@
+     public InventoryHolder getOwner() {
+         return this.owner;
+     }
++
 +    // Pluto start - Allow toggling snapshots for certain blocks
 +    @Override
 +    public InventoryHolder getOwner(boolean useSnapshot) {
 +        return getOwner();
 +    }
 +    // Pluto end - Allow toggling snapshots for certain blocks
-+
+ 
      @Override
      public void setMaxStackSize(int size) {
-         this.delegate.setMaxStackSize(size);

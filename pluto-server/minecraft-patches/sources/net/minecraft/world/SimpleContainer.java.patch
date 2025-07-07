@@ -14,3 +14,12 @@
      @Override
      public @Nullable org.bukkit.Location getLocation() {
          // Paper start - Fix inventories returning null Locations
+@@ -244,6 +_,8 @@
+     public boolean stillValid(Player player) {
+         return true;
+     }
++
++    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
+ 
+     @Override
+     public void clearContent() {

@@ -1,11 +1,20 @@
 --- a/net/minecraft/world/Container.java
 +++ b/net/minecraft/world/Container.java
-@@ -127,6 +_,8 @@
+@@ -36,6 +_,8 @@
+ 
+     boolean stillValid(Player player);
+ 
++    boolean stillValid(); // Pluto - Hoppers cache containers
++
+     default void startOpen(Player player) {
+     }
+ 
+@@ -126,6 +_,8 @@
+     java.util.List<org.bukkit.entity.HumanEntity> getViewers();
  
      @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner();
- 
-+    @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot); // Pluto - Allow toggling snapshots for certain blocks
 +
++    @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot); // Pluto - Allow toggling snapshots for certain blocks
+ 
      void setMaxStackSize(int size);
  
-     @javax.annotation.Nullable org.bukkit.Location getLocation();
