@@ -217,6 +217,15 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
+@@ -1995,7 +_,7 @@
+             FluidState fluidState = this.level().getFluidState(blockPos);
+             double d = blockPos.getY() + fluidState.getHeight(this.level(), blockPos);
+             if (d > eyeY) {
+-                fluidState.getTags().forEach(this.fluidOnEyes::add);
++                this.fluidOnEyes.addAll(fluidState.pluto$tags()); // Pluto - Streamless tags
+             }
+         }
+     }
 @@ -2041,11 +_,11 @@
  
      @Deprecated
