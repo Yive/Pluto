@@ -12,9 +12,9 @@
      // CraftBukkit start - add fields and methods
      public List<org.bukkit.entity.HumanEntity> transaction = new java.util.ArrayList<>();
      private int maxStack = MAX_STACK;
-@@ -75,6 +_,10 @@
-     public HopperBlockEntity(BlockPos pos, BlockState blockState) {
-         super(BlockEntityType.HOPPER, pos, blockState);
+@@ -120,6 +_,10 @@
+     public void setBlockState(BlockState blockState) {
+         super.setBlockState(blockState);
          this.facing = blockState.getValue(HopperBlock.FACING);
 +        // Pluto start - Hoppers cache containers
 +        this.pushContainer = new java.lang.ref.WeakReference<>(null);
