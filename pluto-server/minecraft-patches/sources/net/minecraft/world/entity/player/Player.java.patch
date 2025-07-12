@@ -11,7 +11,7 @@
                                      if (livingEntity2 != this
                                          && livingEntity2 != target
                                          && !this.isAlliedTo(livingEntity2)
-@@ -1562,7 +_,7 @@
+@@ -1561,7 +_,7 @@
              if (this.isSwimming()) {
                  double d = this.getLookAngle().y;
                  double d1 = d < -0.2 ? 0.085 : 0.06;
