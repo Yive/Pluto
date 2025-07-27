@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -212,10 +_,10 @@
+@@ -213,10 +_,10 @@
      public void inactiveTick() {
          super.inactiveTick();
          boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
@@ -13,7 +13,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -750,20 +_,20 @@
+@@ -763,20 +_,20 @@
          int i = this.tickCount + this.getId();
          if (i % 2 != 0 && this.tickCount > 1) {
              profilerFiller.push("targetSelector");
@@ -38,7 +38,7 @@
              this.goalSelector.tick();
              profilerFiller.pop();
          }
-@@ -927,6 +_,8 @@
+@@ -940,6 +_,8 @@
                  return player.getVehicle() == Mob.this || player.canInteractWithEntity(Mob.this, 4.0);
              }
  
@@ -47,7 +47,7 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -964,6 +_,13 @@
+@@ -977,6 +_,13 @@
                  return null;
              }
  
@@ -61,7 +61,7 @@
              @Override
              public void setMaxStackSize(final int size) {
                  this.maxStackSize = size;
-@@ -1540,12 +_,11 @@
+@@ -1553,12 +_,11 @@
      public boolean isSunBurnTick() {
          if (this.level().isBrightOutside() && !this.level().isClientSide) {
              float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();
