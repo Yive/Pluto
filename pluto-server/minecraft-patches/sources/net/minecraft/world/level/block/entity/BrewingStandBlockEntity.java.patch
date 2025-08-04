@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-@@ -134,6 +_,15 @@
+@@ -134,6 +_,21 @@
          this.items = items;
      }
  
@@ -9,7 +9,13 @@
 +    @Override
 +    public void setChanged() {
 +        super.setChanged();
-+        isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++        this.isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++    }
++
++    @Override
++    public void setBlockState(BlockState blockState) {
++        super.setBlockState(blockState);
++        this.isBrewableCache = net.minecraft.util.TriState.DEFAULT;
 +    }
 +    // Pluto end - Cache isBrewable result in Brewing Stands
 +
@@ -33,7 +39,12 @@
          boolean flag = blockEntity.brewTime > 0;
          ItemStack itemStack1 = blockEntity.items.get(3);
          if (flag) {
-@@ -233,7 +_,7 @@
+@@ -229,11 +_,12 @@
+     }
+ 
+     private static void doBrew(Level level, BlockPos pos, NonNullList<ItemStack> items, BrewingStandBlockEntity brewingStandBlockEntity) { // CraftBukkit
++        brewingStandBlockEntity.isBrewableCache = net.minecraft.util.TriState.DEFAULT; // Pluto - Cache isBrewable result in Brewing Stands
+         ItemStack itemStack = items.get(3);
          PotionBrewing potionBrewing = level.potionBrewing();
  
          // CraftBukkit start

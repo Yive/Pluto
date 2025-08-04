@@ -27,7 +27,7 @@
                          furnace.setRecipeUsed(recipeHolder);
                      }
  
-@@ -271,27 +_,48 @@
+@@ -271,27 +_,54 @@
          }
      }
  
@@ -36,6 +36,12 @@
 +    @Override
 +    public void setChanged() {
 +        super.setChanged();
++        this.canBurnCache = net.minecraft.util.TriState.DEFAULT;
++    }
++
++    @Override
++    public void setBlockState(BlockState blockState) {
++        super.setBlockState(blockState);
 +        this.canBurnCache = net.minecraft.util.TriState.DEFAULT;
 +    }
 +    // Pluto end - Cache canBurn result in Furnaces
