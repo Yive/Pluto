@@ -119,25 +119,16 @@
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
                      if (addItem(hopper, itemEntity)) {
-@@ -736,6 +_,7 @@
-         // CraftBukkit start
-         BlockPos searchPosition = pos.relative(blockEntity.facing);
-         Container inventory = getContainerAt(level, searchPosition);
-+        if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
- 
-         org.bukkit.craftbukkit.block.CraftBlock hopper = org.bukkit.craftbukkit.block.CraftBlock.at(level, pos);
-         org.bukkit.craftbukkit.block.CraftBlock searchBlock = org.bukkit.craftbukkit.block.CraftBlock.at(level, searchPosition);
-@@ -751,7 +_,8 @@
+@@ -752,7 +_,7 @@
      @Nullable
      private static Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
-         // CraftBukkit start
+         // Paper start
 -        final Container inventory = HopperBlockEntity.getContainerAt(level, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
 +        final Container inventory = HopperBlockEntity.getContainerAt(level, hopper, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ(), false); // Pluto - Entities search for hoppers
-+        if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory; // Pluto - Small hopper optimisations
+         if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-         org.bukkit.craftbukkit.block.CraftBlock hopperBlock = org.bukkit.craftbukkit.block.CraftBlock.at(level, hopperPos);
-@@ -772,20 +_,20 @@
+@@ -774,20 +_,20 @@
  
      @Nullable
      public static Container getContainerAt(Level level, BlockPos pos) {
@@ -162,7 +153,7 @@
          }
  
          return blockContainer;
-@@ -793,11 +_,17 @@
+@@ -795,11 +_,17 @@
  
      @Nullable
      private static Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
@@ -182,7 +173,7 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
                  container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
              }
-@@ -809,7 +_,10 @@
+@@ -811,7 +_,10 @@
      }
  
      @Nullable

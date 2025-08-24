@@ -58,7 +58,7 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4265,19 +_,27 @@
+@@ -4281,19 +_,27 @@
          double z1 = this.getZ();
          double d = y;
          boolean flag = false;
@@ -92,7 +92,7 @@
                  }
              }
  
-@@ -4419,8 +_,7 @@
+@@ -4435,8 +_,7 @@
                  Direction direction = blockState.getValue(BedBlock.FACING);
                  this.level().setBlock(blockPos, blockState.setValue(BedBlock.OCCUPIED, false), 3);
                  Vec3 vec31 = BedBlock.findStandUpPosition(this.getType(), this.level(), blockPos, direction, this.getYRot()).orElseGet(() -> {
