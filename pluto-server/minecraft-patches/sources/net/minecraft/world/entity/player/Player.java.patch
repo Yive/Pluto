@@ -1,5 +1,13 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
+@@ -618,6 +_,7 @@
+         }
+ 
+         this.bob = this.bob + (f - this.bob) * 0.4F;
++        if (this.level().plutoConfig().playersDoNearbyEntityLookups) // Pluto - Toggle players doing nearby entity lookups
+         if (this.getHealth() > 0.0F && !this.isSpectator()) {
+             AABB aabb;
+             if (this.isPassenger() && !this.getVehicle().isRemoved()) {
 @@ -1274,8 +_,10 @@
                              if (flag3) {
                                  float f5 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * f;

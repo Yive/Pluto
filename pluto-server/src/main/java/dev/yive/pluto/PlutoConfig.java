@@ -1082,5 +1082,17 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean playersDoNearbyEntityLookups = true;
+        private void playersDoNearbyEntityLookups() {
+            playersDoNearbyEntityLookups = getBoolean("entities.player.do-nearby-entity-lookups", playersDoNearbyEntityLookups);
+            setComments("entities.player.do-nearby-entity-lookups",
+                List.of(
+                    "Makes the player no longer do nearby entity lookups.",
+                    "This removes the ability for players to pick up / touch entities.",
+                    "Likely only useful on limbo or hubs."
+                )
+            );
+        }
     }
 }
