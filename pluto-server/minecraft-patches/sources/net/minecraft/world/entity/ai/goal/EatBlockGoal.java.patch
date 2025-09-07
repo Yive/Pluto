@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
-@@ -35,7 +_,12 @@
+@@ -30,7 +_,12 @@
              return false;
          } else {
              BlockPos blockPos = this.mob.blockPosition();
