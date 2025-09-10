@@ -1,0 +1,14 @@
+--- a/net/minecraft/network/Connection.java
++++ b/net/minecraft/network/Connection.java
+@@ -431,6 +_,11 @@
+             return;
+         }
+ 
++        // Pluto start - Option to disable all sound packets
++        final net.minecraft.server.level.ServerPlayer player = this.getPlayer();
++        if (player != null && player.level().plutoConfig().disableAllSounds && packet.type().id().getPath().startsWith("sound")) return;
++        // Pluto end - Option to disable all sound packets
++
+         packet.onPacketDispatch(this.getPlayer());
+         if (connected && (InnerUtil.canSendImmediate(this, packet)
+             || (io.papermc.paper.util.MCUtil.isMainThread() && packet.isReady() && this.pendingActions.isEmpty()

@@ -1106,5 +1106,21 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean disableAllSounds = false;
+        private void disableAllSounds() {
+            disableAllSounds = getBoolean("misc.networking.disable-all-sound-packets", disableAllSounds);
+            setComments("misc.networking.disable-all-sound-packets",
+                List.of(
+                    "Prevents the server from sending sound packets.",
+                    "",
+                    "NOTE:",
+                    "- Packets sent via packet api plugins might bypass this.",
+                    "- Not all sounds are handled by the server. Break breaking for example.",
+                    "",
+                    "Only useful on limbo or hubs."
+                )
+            );
+        }
     }
 }
