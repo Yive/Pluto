@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/redstone/NeighborUpdater.java
++++ b/net/minecraft/world/level/redstone/NeighborUpdater.java
+@@ -49,6 +_,7 @@
+     static void executeUpdate(Level level, BlockState state, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston, BlockPos sourcePos) {
+         // Paper end - Add source block to BlockPhysicsEvent
+         try {
++            if (level instanceof net.minecraft.server.level.ServerLevel serverLevel && serverLevel.hasPhysicsEvent) { // Pluto - Don't fire BlockPhysicsEvent if we don't have anything listening to it.
+             // CraftBukkit start
+             org.bukkit.event.block.BlockPhysicsEvent event = new org.bukkit.event.block.BlockPhysicsEvent(org.bukkit.craftbukkit.block.CraftBlock.at(level, pos), org.bukkit.craftbukkit.block.data.CraftBlockData.fromData(state), org.bukkit.craftbukkit.block.CraftBlock.at(level, sourcePos)); // Paper - Add source block to BlockPhysicsEvent
+             level.getCraftServer().getPluginManager().callEvent(event);
+@@ -57,6 +_,7 @@
+                 return;
+             }
+             // CraftBukkit end
++            } // Pluto - Don't fire BlockPhysicsEvent if we don't have anything listening to it.
+             state.handleNeighborChanged(level, pos, neighborBlock, orientation, movedByPiston);
+             // Spigot start
+         } catch (StackOverflowError ex) {
