@@ -1,0 +1,10 @@
+--- a/net/minecraft/server/level/ChunkMap.java
++++ b/net/minecraft/server/level/ChunkMap.java
+@@ -1306,6 +_,7 @@
+                     flag = false;
+                 }
+                 // CraftBukkit end
++                if (level.plutoConfig().disablePlayerTracking) flag = false; // Pluto - Option to disable entity tracking for players.
+                 if (flag) {
+                     if (this.seenBy.add(player.connection)) {
+                         // Paper start - entity tracking events

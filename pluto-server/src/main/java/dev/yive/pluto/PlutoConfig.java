@@ -1094,5 +1094,17 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean disablePlayerTracking = false;
+        private void disablePlayerTracking() {
+            disablePlayerTracking = getBoolean("misc.tracker.disable-player-tracking", disablePlayerTracking);
+            setComments("misc.tracker.disable-player-tracking",
+                List.of(
+                    "Makes players no longer appear visually to other players.",
+                    "More efficient this way than using a plugin to hide everyone.",
+                    "Only useful on limbo or hubs."
+                )
+            );
+        }
     }
 }
