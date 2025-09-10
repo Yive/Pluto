@@ -1122,5 +1122,21 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean disableAllParticles = false;
+        private void disableAllParticles() {
+            disableAllParticles = getBoolean("misc.networking.disable-all-particle-packets", disableAllParticles);
+            setComments("misc.networking.disable-all-sound-packets",
+                List.of(
+                    "Prevents the server from sending particle packets.",
+                    "",
+                    "NOTE:",
+                    "- Packets sent via packet api plugins might bypass this.",
+                    "- Not all particles are handled by the server. Break breaking for example.",
+                    "",
+                    "Only useful on limbo or hubs."
+                )
+            );
+        }
     }
 }
