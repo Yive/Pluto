@@ -1,5 +1,16 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
+@@ -411,6 +_,10 @@
+     public final int[] mobCounts = new int[MOBCATEGORY_TOTAL_ENUMS];
+     // Paper end - Optional per player mob spawns
+     public final int[] mobBackoffCounts = new int[MOBCATEGORY_TOTAL_ENUMS]; // Paper - per player mob count backoff
++    // Pluto start - Async Spawning Chunks
++    public final java.util.Map<Integer, Integer> mobCountsAsync = new java.util.concurrent.ConcurrentHashMap<>(MOBCATEGORY_TOTAL_ENUMS);
++    public final java.util.Map<Integer, Integer> mobBackoffCountsAsync = new java.util.concurrent.ConcurrentHashMap<>(MOBCATEGORY_TOTAL_ENUMS);
++    // Pluto end - Async Spawning Chunks
+     // CraftBukkit start
+     public String displayName;
+     public net.kyori.adventure.text.Component adventure$displayName; // Paper
 @@ -821,6 +_,16 @@
                  super.tick();
              }
