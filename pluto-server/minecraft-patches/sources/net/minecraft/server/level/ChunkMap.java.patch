@@ -1,5 +1,26 @@
 --- a/net/minecraft/server/level/ChunkMap.java
 +++ b/net/minecraft/server/level/ChunkMap.java
+@@ -259,6 +_,7 @@
+         final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
+         for (int i = 0, len = inRange.size(); i < len; i++) {
+             ++(backingSet[i].mobCounts[index]);
++            if (entity.level().plutoConfig().useAsyncSpawningChunks) backingSet[i].mobCountsAsync.put(index, backingSet[i].mobCounts[index]); // Pluto - Async Spawning Chunks
+         }
+     }
+ 
+@@ -276,10 +_,12 @@
+         final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
+         for (int i = 0, len = inRange.size(); i < len; i++) {
+             ++(backingSet[i].mobBackoffCounts[idx]);
++            if (this.level.plutoConfig().useAsyncSpawningChunks) backingSet[i].mobBackoffCountsAsync.put(idx, backingSet[i].mobBackoffCounts[idx]); // Pluto - Async Spawning Chunks
+         }
+     }
+     // Paper end - per player mob count backoff
+     public int getMobCountNear(final ServerPlayer player, final net.minecraft.world.entity.MobCategory mobCategory) {
++        if (player.level().plutoConfig().useAsyncSpawningChunks) return player.mobCountsAsync.getOrDefault(mobCategory.ordinal(), 0) + player.mobBackoffCountsAsync.getOrDefault(mobCategory.ordinal(), 0); // Pluto - Async Spawning Chunks
+         return player.mobCounts[mobCategory.ordinal()] + player.mobBackoffCounts[mobCategory.ordinal()]; // Paper - per player mob count backoff
+      }
+     // Paper end - Optional per player mob spawns
 @@ -1306,6 +_,7 @@
                      flag = false;
                  }

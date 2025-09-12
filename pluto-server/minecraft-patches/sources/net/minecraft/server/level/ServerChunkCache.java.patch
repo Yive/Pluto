@@ -1,5 +1,35 @@
 --- a/net/minecraft/server/level/ServerChunkCache.java
 +++ b/net/minecraft/server/level/ServerChunkCache.java
+@@ -530,12 +_,14 @@
+                     // Paper start - per player mob spawning backoff
+                     for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
+                         player.mobCounts[ii] = 0;
++                        if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
+ 
+                         int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+                         if (newBackoff < 0) {
+                             newBackoff = 0;
+                         }
+                         player.mobBackoffCounts[ii] = newBackoff;
++                        if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobBackoffCountsAsync.put(ii, newBackoff); // Pluto - Async Spawning Chunks
+                     }
+                     // Paper end - per player mob spawning backoff
+                 }
+@@ -589,12 +_,14 @@
+                 // Paper start - per player mob spawning backoff
+                 for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
+                     player.mobCounts[ii] = 0;
++                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
+ 
+                     int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+                     if (newBackoff < 0) {
+                         newBackoff = 0;
+                     }
+                     player.mobBackoffCounts[ii] = newBackoff;
++                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobBackoffCountsAsync.put(ii, newBackoff); // Pluto - Async Spawning Chunks
+                 }
+                 // Paper end - per player mob spawning backoff
+             }
 @@ -625,6 +_,30 @@
              filteredSpawningCategories = List.of();
          }
