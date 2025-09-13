@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/NaturalSpawner.java
 +++ b/net/minecraft/world/level/NaturalSpawner.java
-@@ -193,6 +_,65 @@
+@@ -193,6 +_,66 @@
          profilerFiller.pop();
      }
  
@@ -47,11 +47,12 @@
 +        if (tasks.isEmpty()) return;
 +
 +        // Send the actual entity spawns to the main thread
-+        io.papermc.paper.util.MCUtil.ensureMain(() -> {
-+            for (final Runnable task : tasks) {
-+                task.run();
-+            }
-+        });
++        java.util.List<java.util.concurrent.CompletableFuture<Void>> list = new java.util.ArrayList<>();
++        for (Runnable runnable : tasks) {
++            list.add(java.util.concurrent.CompletableFuture.runAsync(runnable, level.getChunkSource().mainThreadProcessor));
++        }
++        // We have to wait for the main thread else the mob caps get ignored.
++        java.util.concurrent.CompletableFuture.allOf(list.toArray(new java.util.concurrent.CompletableFuture[0])).join();
 +    }
 +
 +    @Nullable

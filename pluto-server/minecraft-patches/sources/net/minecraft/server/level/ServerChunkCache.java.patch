@@ -6,7 +6,8 @@
                          player.mobCounts[ii] = 0;
 +                        if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
  
-                         int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+-                        int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
++                        int newBackoff = this.level.plutoConfig().useAsyncSpawningChunks ? player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1 : player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm? // Pluto - Async Spawning Chunks
                          if (newBackoff < 0) {
                              newBackoff = 0;
                          }
@@ -21,7 +22,8 @@
                      player.mobCounts[ii] = 0;
 +                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
  
-                     int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+-                    int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
++                    int newBackoff = this.level.plutoConfig().useAsyncSpawningChunks ? player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1 : player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm? // Pluto - Async Spawning Chunks
                      if (newBackoff < 0) {
                          newBackoff = 0;
                      }
