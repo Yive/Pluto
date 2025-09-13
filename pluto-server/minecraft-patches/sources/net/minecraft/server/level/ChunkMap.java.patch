@@ -4,7 +4,7 @@
          final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
          for (int i = 0, len = inRange.size(); i < len; i++) {
              ++(backingSet[i].mobCounts[index]);
-+            if (entity.level().plutoConfig().useAsyncSpawningChunks) backingSet[i].mobCountsAsync.put(index, backingSet[i].mobCounts[index]); // Pluto - Async Spawning Chunks
++            if (entity.level().plutoConfig().useAsyncSpawningChunks) backingSet[i].mobCountsAsync.put(index, backingSet[i].mobCountsAsync.getOrDefault(index, 0) + 1); // Pluto - Async Spawning Chunks
          }
      }
  
