@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/monster/Ghast.java
++++ b/net/minecraft/world/entity/monster/Ghast.java
+@@ -309,7 +_,7 @@
+                 } else if (blockState.is(BlockTags.HAPPY_GHAST_AVOIDS)) {
+                     return false;
+                 } else {
+-                    FluidState fluidState = level.getFluidState(pos);
++                    FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
+                     if (!fluidState.isEmpty() && (!flag || this.ghast.collidedWithFluid(fluidState, pos, from, to))) {
+                         if (fluidState.is(FluidTags.WATER)) {
+                             return isInLava;
