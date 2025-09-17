@@ -1,8 +1,16 @@
 --- a/net/minecraft/server/level/ServerChunkCache.java
 +++ b/net/minecraft/server/level/ServerChunkCache.java
-@@ -530,12 +_,14 @@
+@@ -526,16 +_,20 @@
+ 
+             // Pufferfish start - optimize mob spawning
+             if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) {
+-                for (ServerPlayer player : this.level.players) {
++                // Pluto start - Swap for loops around for per player mob spawns
++                for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
                      // Paper start - per player mob spawning backoff
-                     for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
+-                    for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
++                    for (ServerPlayer player : this.level.players) {
++                        // Pluto end - Swap for loops around for per player mob spawns
                          player.mobCounts[ii] = 0;
 +                        if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
  
@@ -24,9 +32,17 @@
      private void tickChunks(ProfilerFiller profiler, long timeInhabited) {
          profiler.popPush("naturalSpawnCount");
          int naturalSpawnChunkCount = this.distanceManager.getNaturalSpawnChunkCount();
-@@ -589,12 +_,14 @@
+@@ -585,16 +_,20 @@
+         if ((this.spawnFriendlies || this.spawnEnemies) && this.level.paperConfig().entities.spawning.perPlayerMobSpawns) { // don't count mobs when animals and monsters are disabled
+             if (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) { // Pufferfish - moved down when async processing
+             // re-set mob counts
+-            for (ServerPlayer player : this.level.players) {
++            // Pluto start - Swap for loops around for per player mob spawns
++            for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
                  // Paper start - per player mob spawning backoff
-                 for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
+-                for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
++                for (ServerPlayer player : this.level.players) {
++                    // Pluto end - Swap for loops around for per player mob spawns
                      player.mobCounts[ii] = 0;
 +                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
  
