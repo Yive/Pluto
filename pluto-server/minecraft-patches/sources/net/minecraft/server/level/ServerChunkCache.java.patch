@@ -16,6 +16,14 @@
                      }
                      // Paper end - per player mob spawning backoff
                  }
+@@ -577,6 +_,7 @@
+         profiler.pop();
+     }
+ 
++    public final java.util.concurrent.atomic.AtomicBoolean pluto$stillSpawningEntities = new java.util.concurrent.atomic.AtomicBoolean(false); // Pluto - Async Spawning Chunks
+     private void tickChunks(ProfilerFiller profiler, long timeInhabited) {
+         profiler.popPush("naturalSpawnCount");
+         int naturalSpawnChunkCount = this.distanceManager.getNaturalSpawnChunkCount();
 @@ -589,12 +_,14 @@
                  // Paper start - per player mob spawning backoff
                  for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
@@ -32,12 +40,15 @@
                  }
                  // Paper end - per player mob spawning backoff
              }
-@@ -625,6 +_,30 @@
+@@ -625,6 +_,34 @@
              filteredSpawningCategories = List.of();
          }
  
 +        // Pluto start - Async spawning chunks
++        spawningChunks:
 +        if (this.level.plutoConfig().useAsyncSpawningChunks) {
++            if (this.pluto$stillSpawningEntities.get()) break spawningChunks;
++            this.pluto$stillSpawningEntities.set(true);
 +            final long next = this.level.random.nextLong(); // Considering this is unsafe, we should do this on the main thread.
 +            this.level.plutoSpawningChunksExecutor().submit(() -> {
 +                List<LevelChunk> list = new ObjectArrayList<>();
@@ -56,6 +67,7 @@
 +                    }
 +                } finally {
 +                    list.clear();
++                    level.chunkSource.pluto$stillSpawningEntities.set(false);
 +                }
 +            });
 +        } else {
