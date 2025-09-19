@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ChunkMap.java
 +++ b/net/minecraft/server/level/ChunkMap.java
-@@ -255,6 +_,7 @@
+@@ -257,6 +_,7 @@
          final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
          for (int i = 0, len = inRange.size(); i < len; i++) {
              ++(backingSet[i].mobCounts[index]);
@@ -8,7 +8,7 @@
          }
      }
  
-@@ -272,10 +_,12 @@
+@@ -274,10 +_,12 @@
          final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
          for (int i = 0, len = inRange.size(); i < len; i++) {
              ++(backingSet[i].mobBackoffCounts[idx]);
@@ -21,7 +21,7 @@
          return player.mobCounts[mobCategory.ordinal()] + player.mobBackoffCounts[mobCategory.ordinal()]; // Paper - per player mob count backoff
       }
      // Paper end - Optional per player mob spawns
-@@ -735,6 +_,7 @@
+@@ -737,6 +_,7 @@
          Objects.checkFromToIndex(0, size, raw.length);
          for (int i = 0; i < size; ++i) {
              final LevelChunk levelChunk = raw[i];
@@ -29,7 +29,7 @@
  
              if (!this.isChunkNearPlayer((ChunkMap)(Object)this, levelChunk.getPos(), levelChunk)) {
                  continue;
-@@ -1344,6 +_,7 @@
+@@ -1346,6 +_,7 @@
                      flag = false;
                  }
                  // CraftBukkit end
