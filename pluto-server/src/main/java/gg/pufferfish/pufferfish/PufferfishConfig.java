@@ -38,9 +38,7 @@ public class PufferfishConfig {
 		getString("info.version", "1.0");
 		setComment("info",
 				"Pufferfish Configuration",
-				"Check out Pufferfish Host for maximum performance server hosting: https://pufferfish.host",
-				"Join our Discord for support: https://discord.gg/reZw4vQV9H",
-				"Download new builds at https://ci.pufferfish.host/job/Pufferfish");
+				"Check out Pufferfish Host for maximum performance server hosting: https://pufferfish.host");
 		
 		for (Method method : PufferfishConfig.class.getDeclaredMethods()) {
 			if (Modifier.isStatic(method.getModifiers()) && Modifier.isPrivate(method.getModifiers()) && method.getParameterCount() == 0 &&
