@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/MinecraftServer.java
 +++ b/net/minecraft/server/MinecraftServer.java
-@@ -309,6 +_,7 @@
+@@ -310,6 +_,7 @@
      public boolean isIteratingOverLevels = false; // Paper - Throw exception on world create while being ticked
      private final Set<String> pluginsBlockingSleep = new java.util.HashSet<>(); // Paper - API to allow/disallow tick sleeping
      public static final long SERVER_INIT = System.nanoTime(); // Paper - Lag compensation
@@ -8,7 +8,7 @@
  
      public static <S extends MinecraftServer> S spin(Function<Thread, S> threadFunction) {
          AtomicReference<S> atomicReference = new AtomicReference<>();
-@@ -1189,6 +_,12 @@
+@@ -1193,6 +_,12 @@
                      profilerFiller.popPush("nextTickWait");
                      this.mayHaveDelayedTasks = true;
                      this.delayedTasksMaxNextTickTimeNanos = Math.max(Util.getNanos() + l, this.nextTickTimeNanos);
@@ -21,7 +21,7 @@
                      this.startMeasuringTaskExecutionTime();
                      this.waitUntilNextTick();
                      this.finishMeasuringTaskExecutionTime();
-@@ -2567,6 +_,7 @@
+@@ -2571,6 +_,7 @@
      // CraftBukkit end
  
      private ProfilerFiller createProfiler() {

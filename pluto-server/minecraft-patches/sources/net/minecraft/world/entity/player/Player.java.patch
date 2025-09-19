@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -501,6 +_,7 @@
+@@ -500,6 +_,7 @@
          this.updateSwingTime();
          this.yHeadRot = this.getYRot();
          this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
@@ -8,7 +8,7 @@
          if (this.getHealth() > 0.0F && !this.isSpectator()) {
              AABB aabb;
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -1127,8 +_,10 @@
+@@ -1126,8 +_,10 @@
                              if (flag3) {
                                  float f5 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * f;
  
@@ -19,7 +19,7 @@
                                      if (livingEntity2 != this
                                          && livingEntity2 != target
                                          && !this.isAlliedTo(livingEntity2)
-@@ -1418,7 +_,7 @@
+@@ -1417,7 +_,7 @@
              if (this.isSwimming()) {
                  double d = this.getLookAngle().y;
                  double d1 = d < -0.2 ? 0.085 : 0.06;
