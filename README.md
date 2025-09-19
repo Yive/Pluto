@@ -21,7 +21,7 @@
 You can download pre-compiled paperclip jars [here](https://ci.yive.dev/job/Pluto/)
 
 ## API
-You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/1.21.8-R0.1-SNAPSHOT).
+You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/1.21.9-R0.1-SNAPSHOT).
 
 Maven:
 ```xml

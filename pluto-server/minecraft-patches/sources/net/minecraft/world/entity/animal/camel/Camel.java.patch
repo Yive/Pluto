@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/entity/animal/camel/Camel.java
++++ b/net/minecraft/world/entity/animal/camel/Camel.java
+@@ -156,11 +_,13 @@
+         return pose == Pose.SITTING ? SITTING_DIMENSIONS.scale(this.getAgeScale()) : super.getDefaultDimensions(pose);
+     }
+ 
++    private int behaviourTick = 0; // Pluto - Add DAB to more entities
+     @Override
+     protected void customServerAiStep(ServerLevel level) {
+         ProfilerFiller profilerFiller = Profiler.get();
+         profilerFiller.push("camelBrain");
+         Brain<?> brain = this.getBrain();
++        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
+         ((Brain<Camel>)brain).tick(level, this);
+         profilerFiller.pop();
+         profilerFiller.push("camelActivityUpdate");

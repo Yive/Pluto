@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/animal/sniffer/Sniffer.java
++++ b/net/minecraft/world/entity/animal/sniffer/Sniffer.java
+@@ -462,10 +_,12 @@
+         return Brain.provider(SnifferAi.MEMORY_TYPES, SnifferAi.SENSOR_TYPES);
+     }
+ 
++    private int behaviourTick = 0; // Pluto - Add DAB to more entities
+     @Override
+     protected void customServerAiStep(ServerLevel level) {
+         ProfilerFiller profilerFiller = Profiler.get();
+         profilerFiller.push("snifferBrain");
++        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
+         this.getBrain().tick(level, this);
+         profilerFiller.popPush("snifferActivityUpdate");
+         SnifferAi.updateActivity(this);

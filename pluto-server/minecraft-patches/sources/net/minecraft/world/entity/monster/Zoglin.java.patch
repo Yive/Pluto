@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/monster/Zoglin.java
++++ b/net/minecraft/world/entity/monster/Zoglin.java
+@@ -247,10 +_,12 @@
+         this.setAggressive(this.brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
+     }
+ 
++    private int behaviourTick = 0; // Pluto - Add DAB to more entities
+     @Override
+     protected void customServerAiStep(ServerLevel level) {
+         ProfilerFiller profilerFiller = Profiler.get();
+         profilerFiller.push("zoglinBrain");
++        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
+         this.getBrain().tick(level, this);
+         profilerFiller.pop();
+         this.updateActivity();

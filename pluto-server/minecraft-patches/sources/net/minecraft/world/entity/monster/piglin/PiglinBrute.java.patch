@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/monster/piglin/PiglinBrute.java
++++ b/net/minecraft/world/entity/monster/piglin/PiglinBrute.java
+@@ -113,10 +_,12 @@
+         return stack.is(Items.GOLDEN_AXE) && super.wantsToPickUp(level, stack);
+     }
+ 
++    private int behaviourTick = 0; // Pluto - Add DAB to more entities
+     @Override
+     protected void customServerAiStep(ServerLevel level) {
+         ProfilerFiller profilerFiller = Profiler.get();
+         profilerFiller.push("piglinBruteBrain");
++        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
+         this.getBrain().tick(level, this);
+         profilerFiller.pop();
+         PiglinBruteAi.updateActivity(this);
