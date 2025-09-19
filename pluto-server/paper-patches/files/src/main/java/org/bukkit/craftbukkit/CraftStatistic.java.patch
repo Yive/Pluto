@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
-@@ -244,6 +_,7 @@
+@@ -242,6 +_,7 @@
      }
  
      public static void setStatistic(ServerStatsCounter manager, Statistic statistic, int newValue, ServerPlayer player) {
@@ -8,7 +8,7 @@
          Preconditions.checkArgument(statistic != null, "Statistic cannot be null");
          Preconditions.checkArgument(statistic.getType() == Type.UNTYPED, "Must supply additional parameter for this statistic");
          Preconditions.checkArgument(newValue >= 0, "Value must be greater than or equal to 0");
-@@ -296,6 +_,7 @@
+@@ -294,6 +_,7 @@
      }
  
      public static void setStatistic(ServerStatsCounter manager, Statistic statistic, Material material, int newValue, ServerPlayer player) {
@@ -16,7 +16,7 @@
          Preconditions.checkArgument(statistic != null, "Statistic cannot be null");
          Preconditions.checkArgument(material != null, "Material cannot be null");
          Preconditions.checkArgument(newValue >= 0, "Value must be greater than or equal to 0");
-@@ -350,6 +_,7 @@
+@@ -348,6 +_,7 @@
      }
  
      public static void setStatistic(ServerStatsCounter manager, Statistic statistic, EntityType entityType, int newValue, ServerPlayer player) {

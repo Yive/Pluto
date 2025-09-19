@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/TrappedChestBlock.java
 +++ b/net/minecraft/world/level/block/TrappedChestBlock.java
-@@ -51,4 +_,16 @@
+@@ -52,4 +_,16 @@
      protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
          return side == Direction.UP ? blockState.getSignal(blockAccess, pos, side) : 0;
      }

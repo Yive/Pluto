@@ -1,15 +1,21 @@
 --- a/net/minecraft/world/Container.java
 +++ b/net/minecraft/world/Container.java
-@@ -36,6 +_,8 @@
+@@ -38,6 +_,14 @@
  
      boolean stillValid(Player player);
  
-+    boolean stillValid(); // Pluto - Hoppers cache containers
++    // Pluto start - Hoppers cache containers
++    boolean stillValid();
++    static boolean stillValidBlockEntity(BlockEntity blockEntity) {
++        Level level = blockEntity.getLevel();
++        return level != null && level.getBlockEntity(blockEntity.getBlockPos()) == blockEntity;
++    }
++    // Pluto end - Hoppers cache containers
 +
-     default void startOpen(Player player) {
+     default void startOpen(ContainerUser user) {
      }
  
-@@ -126,6 +_,8 @@
+@@ -132,6 +_,8 @@
      java.util.List<org.bukkit.entity.HumanEntity> getViewers();
  
      @javax.annotation.Nullable org.bukkit.inventory.InventoryHolder getOwner();

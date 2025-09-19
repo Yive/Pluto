@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/HopperBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/HopperBlockEntity.java
-@@ -38,6 +_,11 @@
+@@ -39,6 +_,11 @@
      private long tickedGameTime;
      private Direction facing;
  
@@ -12,7 +12,7 @@
      // CraftBukkit start - add fields and methods
      public List<org.bukkit.entity.HumanEntity> transaction = new java.util.ArrayList<>();
      private int maxStack = MAX_STACK;
-@@ -120,6 +_,10 @@
+@@ -121,6 +_,10 @@
      public void setBlockState(BlockState blockState) {
          super.setBlockState(blockState);
          this.facing = blockState.getValue(HopperBlock.FACING);
@@ -23,17 +23,17 @@
      }
  
      @Override
-@@ -180,7 +_,9 @@
+@@ -181,7 +_,9 @@
      }
      // Paper end - Perf: Optimize Hoppers
  
 +    private boolean canAcceptItems = false; public boolean canAcceptItems() { return canAcceptItems; } // Pluto - Entities search for hoppers
      private static boolean tryMoveItems(Level level, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier validator) {
 +        blockEntity.canAcceptItems = false; // Pluto - Entities search for hoppers
-         if (level.isClientSide) {
+         if (level.isClientSide()) {
              return false;
          } else {
-@@ -192,6 +_,7 @@
+@@ -193,6 +_,7 @@
                  }
  
                  if (fullState != HOPPER_IS_FULL || flag) { // Paper - Perf: Optimize Hoppers
@@ -41,7 +41,7 @@
                      flag |= validator.getAsBoolean(); // Paper - note: this is not a validator, it's what adds/sucks in items
                  }
  
-@@ -417,7 +_,18 @@
+@@ -418,7 +_,18 @@
      // Paper end - Perf: Optimize Hoppers
  
      private static boolean ejectItems(Level level, BlockPos pos, HopperBlockEntity blockEntity) {
@@ -61,7 +61,7 @@
          if (attachedContainer == null) {
              return false;
          } else {
-@@ -527,10 +_,44 @@
+@@ -528,10 +_,44 @@
          return true;
      }
  
@@ -109,7 +109,7 @@
          if (sourceContainer != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
-@@ -543,7 +_,8 @@
+@@ -544,7 +_,8 @@
  
              return false;
          } else {
@@ -119,7 +119,7 @@
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
                      if (addItem(hopper, itemEntity)) {
-@@ -752,7 +_,7 @@
+@@ -753,7 +_,7 @@
      @Nullable
      private static Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
          // Paper start
@@ -128,7 +128,7 @@
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -774,20 +_,20 @@
+@@ -775,20 +_,20 @@
  
      @Nullable
      public static Container getContainerAt(Level level, BlockPos pos) {
@@ -153,7 +153,7 @@
          }
  
          return blockContainer;
-@@ -795,11 +_,17 @@
+@@ -796,11 +_,17 @@
  
      @Nullable
      private static Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
@@ -173,7 +173,7 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
                  container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
              }
-@@ -811,7 +_,10 @@
+@@ -812,7 +_,10 @@
      }
  
      @Nullable

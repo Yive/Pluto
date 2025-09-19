@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -129,8 +_,10 @@
+@@ -117,8 +_,10 @@
          }
  
          if (!this.trackedPlayers.isEmpty() && this.entity instanceof ItemFrame itemFrame /*&& this.tickCount % 10 == 0*/) { // CraftBukkit - moved tickCount below // Paper - Perf: Only tick item frames if players can see it

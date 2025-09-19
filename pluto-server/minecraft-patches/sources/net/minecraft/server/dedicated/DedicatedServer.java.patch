@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -184,6 +_,9 @@
+@@ -277,6 +_,9 @@
          this.server.spark.registerCommandBeforePlugins(this.server); // Paper - spark
          com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
@@ -8,12 +8,12 @@
 +        gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
 +        dev.yive.pluto.PlutoConfig.init((java.io.File) options.valueOf("pluto-settings")); // Pluto - Config
  
-         this.setPvpAllowed(properties.pvp);
-         this.setFlightAllowed(properties.allowFlight);
-@@ -308,6 +_,7 @@
-                 LOGGER.info("JMX monitoring enabled");
+         // this.worldData.setGameType(properties.gameMode.get()); // CraftBukkit - moved to world loading
+         LOGGER.info("Default game type: {}", properties.gameMode.get());
+@@ -394,6 +_,7 @@
              }
  
+             this.notificationManager().serverStarted();
 +            if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) mobSpawnExecutor.start(); // Pufferfish
              return true;
          }

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
 +++ b/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
-@@ -37,6 +_,27 @@
+@@ -38,6 +_,27 @@
          super(entityType, level, dropItem);
      }
  
@@ -28,7 +28,7 @@
      @Override
      protected float getSinglePassengerXOffset() {
          return 0.15F;
-@@ -233,6 +_,13 @@
+@@ -234,6 +_,13 @@
          org.bukkit.entity.Entity entity = this.getBukkitEntity();
          return entity instanceof final org.bukkit.inventory.InventoryHolder inventoryHolder ? inventoryHolder : null;
      }

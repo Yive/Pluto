@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/entity/ShelfBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/ShelfBlockEntity.java
+@@ -122,6 +_,8 @@
+         return Container.stillValidBlockEntity(this, player);
+     }
+ 
++    @Override public boolean stillValid() { return Container.stillValidBlockEntity(this); } // Pluto - Hoppers cache containers
++
+     public ItemStack swapItemNoUpdate(int slot, ItemStack stack) {
+         ItemStack itemStack = this.removeItemNoUpdate(slot);
+         this.setItemNoUpdate(slot, stack);

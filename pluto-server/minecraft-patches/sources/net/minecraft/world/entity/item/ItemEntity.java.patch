@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
-@@ -133,6 +_,7 @@
+@@ -124,6 +_,7 @@
      @Override
      public void inactiveTick() {
          super.inactiveTick();
@@ -8,7 +8,7 @@
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              this.pickupDelay--;
          }
-@@ -152,12 +_,19 @@
+@@ -143,12 +_,19 @@
      }
      // Paper end - EAR 2
  
@@ -28,7 +28,7 @@
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  this.pickupDelay--;
              }
-@@ -192,7 +_,7 @@
+@@ -183,7 +_,7 @@
                      f = 1F;
                  } else if (this.onGround()) {
                      // Paper end - Friction API
@@ -37,7 +37,7 @@
                  }
  
                  this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98, f));
-@@ -204,11 +_,11 @@
+@@ -195,11 +_,11 @@
                  }
              }
  
@@ -45,16 +45,16 @@
 -                || Mth.floor(this.yo) != Mth.floor(this.getY())
 -                || Mth.floor(this.zo) != Mth.floor(this.getZ());
 -            int i = flag ? 2 : 40;
--            if (this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
+-            if (this.tickCount % i == 0 && !this.level().isClientSide() && this.isMergable()) {
 +            // Pluto start - Configuration for item merging
 +            boolean flag = this.xo != this.getX() || this.yo != this.getY() || this.zo != this.getZ(); // Flooring makes the movement check inconsistent
 +            int i = flag ? this.level().plutoConfig().itemMergeMovingInterval : this.level().plutoConfig().itemMergeStaticInterval;
-+            if ((!flag || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % i == 0 && !this.level().isClientSide && this.isMergable()) {
++            if ((!flag || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % i == 0 && !this.level().isClientSide() && this.isMergable()) {
 +            // Pluto end - Configuration for item merging
                  this.mergeWithNeighbours();
              }
  
-@@ -238,8 +_,15 @@
+@@ -229,8 +_,15 @@
  
      @Override
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {

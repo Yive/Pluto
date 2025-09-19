@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Inventory.java
 +++ b/net/minecraft/world/entity/player/Inventory.java
-@@ -115,6 +_,13 @@
+@@ -116,6 +_,13 @@
          return this.player.getBukkitEntity();
      }
  
@@ -14,7 +14,7 @@
      @Override
      public int getMaxStackSize() {
          return this.maxStack;
-@@ -343,6 +_,29 @@
+@@ -344,6 +_,29 @@
      }
  
      public void tick() {
@@ -44,7 +44,7 @@
          for (int i = 0; i < this.items.size(); i++) {
              ItemStack item = this.getItem(i);
              if (!item.isEmpty()) {
-@@ -571,8 +_,13 @@
+@@ -572,8 +_,13 @@
          return true;
      }
  

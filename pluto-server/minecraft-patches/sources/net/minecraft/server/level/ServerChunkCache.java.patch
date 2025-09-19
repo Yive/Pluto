@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerChunkCache.java
 +++ b/net/minecraft/server/level/ServerChunkCache.java
-@@ -184,6 +_,8 @@
+@@ -185,6 +_,8 @@
      }
      // Paper end - chunk tick iteration optimisations
  
@@ -9,7 +9,7 @@
  
      public ServerChunkCache(
          ServerLevel level,
-@@ -521,6 +_,47 @@
+@@ -516,6 +_,47 @@
  
              this.broadcastChangedChunks(profilerFiller);
              profilerFiller.pop();
@@ -57,13 +57,13 @@
          }
      }
  
-@@ -538,32 +_,40 @@
+@@ -533,32 +_,40 @@
          profiler.pop();
      }
  
 +    public final java.util.concurrent.atomic.AtomicBoolean pluto$stillSpawningEntities = new java.util.concurrent.atomic.AtomicBoolean(false); // Pluto - Async Spawning Chunks
      private void tickChunks(ProfilerFiller profiler, long timeInhabited) {
-         profiler.popPush("naturalSpawnCount");
+         profiler.push("naturalSpawnCount");
          int naturalSpawnChunkCount = this.distanceManager.getNaturalSpawnChunkCount();
          // Paper start - Optional per player mob spawns
          NaturalSpawner.SpawnState spawnState;
@@ -101,10 +101,10 @@
          }
          // Paper end - Optional per player mob spawns
 -        this.lastSpawnState = spawnState;
-         profiler.popPush("spawnAndTick");
          boolean _boolean = this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && !this.level.players().isEmpty(); // CraftBukkit
          int _int = this.level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
-@@ -578,11 +_,39 @@
+         List<MobCategory> filteredSpawningCategories;
+@@ -572,11 +_,39 @@
              }
              // Paper end - PlayerNaturallySpawnCreaturesEvent
              boolean flag = this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) != 0L && this.level.getLevelData().getGameTime() % this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) == 0L; // CraftBukkit
@@ -145,7 +145,7 @@
          List<LevelChunk> list = this.spawningChunks;
  
          try {
-@@ -596,11 +_,12 @@
+@@ -590,11 +_,12 @@
              profiler.popPush("tickSpawningChunks");
  
              for (LevelChunk levelChunk : list) {
@@ -159,7 +159,7 @@
  
          profiler.popPush("tickTickingChunks");
          this.iterateTickingChunksFaster(); // Paper - chunk tick iteration optimisations
-@@ -619,7 +_,8 @@
+@@ -614,7 +_,8 @@
          }
  
          if (!spawnCategories.isEmpty()) {

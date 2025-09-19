@@ -7,9 +7,9 @@
 -    static final Color[] colors = {
 +    public static final Color[] colors = { // Pufferfish - public access
          // Start generate - MapPalette#colors
-         // @GeneratedFrom 1.21.8
          new Color(0x00000000, true),
-@@ -395,6 +_,12 @@
+         new Color(0x00000000, true),
+@@ -394,6 +_,12 @@
          temp.getRGB(0, 0, temp.getWidth(), temp.getHeight(), pixels, 0, temp.getWidth());
  
          byte[] result = new byte[temp.getWidth() * temp.getHeight()];

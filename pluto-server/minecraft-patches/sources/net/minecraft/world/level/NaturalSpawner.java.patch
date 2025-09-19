@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/NaturalSpawner.java
 +++ b/net/minecraft/world/level/NaturalSpawner.java
-@@ -193,6 +_,68 @@
+@@ -195,6 +_,68 @@
          profilerFiller.pop();
      }
  

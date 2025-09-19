@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1092,6 +_,8 @@
-     private final EntityDimensions dimensions;
+@@ -1200,6 +_,8 @@
      private final float spawnDimensionsScale;
      private final FeatureFlagSet requiredFeatures;
+     private final boolean allowedInPeaceful;
 +    public boolean dabEnabled = false; // Pufferfish
 +    public int spawnerTTL = -1; // Pluto - TTL setting for entities from spawners
  

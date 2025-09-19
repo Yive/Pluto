@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/phys/Vec3.java
 +++ b/net/minecraft/world/phys/Vec3.java
-@@ -78,6 +_,12 @@
+@@ -81,6 +_,12 @@
          this(vector.getX(), vector.getY(), vector.getZ());
      }
  

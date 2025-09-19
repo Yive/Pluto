@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -93,6 +_,18 @@
+@@ -100,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end
  
@@ -19,7 +19,7 @@
      // Paper start
      boolean loadedTicketLevel;
      // Paper end
-@@ -155,6 +_,8 @@
+@@ -162,6 +_,8 @@
              }
          }
  
@@ -28,7 +28,7 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -465,6 +_,48 @@
+@@ -472,6 +_,48 @@
      public BlockEntity getBlockEntity(BlockPos pos) {
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }

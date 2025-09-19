@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/BlockItem.java
 +++ b/net/minecraft/world/item/BlockItem.java
-@@ -252,6 +_,7 @@
+@@ -245,6 +_,7 @@
      public void onDestroyed(ItemEntity itemEntity) {
          ItemContainerContents itemContainerContents = itemEntity.getItem().set(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
          if (itemContainerContents != null) {

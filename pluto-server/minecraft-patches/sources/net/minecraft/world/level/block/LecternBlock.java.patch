@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LecternBlock.java
 +++ b/net/minecraft/world/level/block/LecternBlock.java
-@@ -219,6 +_,18 @@
+@@ -220,6 +_,18 @@
          return side == Direction.UP && blockState.getValue(POWERED) ? 15 : 0;
      }
  

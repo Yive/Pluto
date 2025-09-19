@@ -36,4 +36,4 @@
 +
      protected void setOwner(@Nullable EntityReference<Entity> owner) {
          this.owner = owner;
-     }
+         this.refreshProjectileSource(false); // Paper

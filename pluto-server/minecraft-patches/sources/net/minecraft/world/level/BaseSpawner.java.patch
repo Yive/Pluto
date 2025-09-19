@@ -12,7 +12,7 @@
          tickDelay = serverLevel.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
--        if (this.isNearPlayer(serverLevel, pos)) {
+-        if (this.isNearPlayer(serverLevel, pos) && serverLevel.getServer().isSpawnerBlockEnabled()) {
 +
 +        // Pluto start - Options for spawner settings
 +        if (!wasApiUsed && serverLevel.plutoConfig().spawnerSettingsEnabled) {

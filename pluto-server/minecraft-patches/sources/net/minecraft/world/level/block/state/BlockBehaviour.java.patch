@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
-@@ -367,6 +_,12 @@
+@@ -370,6 +_,12 @@
          return 0;
      }
  
@@ -13,7 +13,7 @@
      protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
      }
  
-@@ -374,6 +_,12 @@
+@@ -377,6 +_,12 @@
          return 0;
      }
  
@@ -26,7 +26,7 @@
      public final Optional<ResourceKey<LootTable>> getLootTable() {
          return this.drops;
      }
-@@ -742,6 +_,12 @@
+@@ -745,6 +_,12 @@
              return this.getBlock().getSignal(this.asState(), level, pos, direction);
          }
  
@@ -39,7 +39,7 @@
          public boolean hasAnalogOutputSignal() {
              return this.getBlock().hasAnalogOutputSignal(this.asState());
          }
-@@ -761,6 +_,12 @@
+@@ -764,6 +_,12 @@
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
              return this.getBlock().getDirectSignal(this.asState(), level, pos, direction);
          }

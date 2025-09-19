@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/net/minecraft/world/level/material/FlowingFluid.java
-@@ -98,7 +_,7 @@
+@@ -99,7 +_,7 @@
          double d1 = 0.0;
          BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
  
@@ -9,7 +9,7 @@
              mutableBlockPos.setWithOffset(pos, direction);
              FluidState fluidState1 = blockReader.getFluidState(mutableBlockPos);
              if (this.affectsFlow(fluidState1)) {
-@@ -106,8 +_,7 @@
+@@ -107,8 +_,7 @@
                  float f = 0.0F;
                  if (ownHeight == 0.0F) {
                      if (!blockReader.getBlockState(mutableBlockPos).blocksMotion()) {
@@ -19,7 +19,7 @@
                          if (this.affectsFlow(fluidState2)) {
                              ownHeight = fluidState2.getOwnHeight();
                              if (ownHeight > 0.0F) {
-@@ -128,7 +_,7 @@
+@@ -129,7 +_,7 @@
  
          Vec3 vec3 = new Vec3(d, 0.0, d1);
          if (fluidState.getValue(FALLING)) {
@@ -28,7 +28,7 @@
                  mutableBlockPos.setWithOffset(pos, direction1);
                  if (this.isSolidFace(blockReader, mutableBlockPos, direction1) || this.isSolidFace(blockReader, mutableBlockPos.above(), direction1)) {
                      vec3 = vec3.normalize().add(0.0, -6.0, 0.0);
-@@ -146,7 +_,7 @@
+@@ -147,7 +_,7 @@
  
      protected boolean isSolidFace(BlockGetter level, BlockPos neighborPos, Direction side) {
          BlockState blockState = level.getBlockState(neighborPos);
@@ -37,7 +37,7 @@
          return !fluidState.getType().isSame(this)
              && (side == Direction.UP || !(blockState.getBlock() instanceof IceBlock) && blockState.isFaceSturdy(level, neighborPos, side));
      }
-@@ -218,7 +_,7 @@
+@@ -219,7 +_,7 @@
          int i1 = 0;
          BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
  
@@ -46,7 +46,7 @@
              BlockPos blockPos = mutableBlockPos.setWithOffset(pos, direction);
              BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
              if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -339,7 +_,7 @@
+@@ -342,7 +_,7 @@
      protected int getSlopeDistance(LevelReader level, BlockPos pos, int depth, Direction direction, BlockState state, FlowingFluid.SpreadContext spreadContext) {
          int i = 1000;
  
@@ -55,7 +55,7 @@
              if (direction1 != direction) {
                  BlockPos blockPos = pos.relative(direction1);
                  BlockState blockState = spreadContext.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
-@@ -392,9 +_,13 @@
+@@ -395,9 +_,13 @@
      private int sourceNeighborCount(LevelReader level, BlockPos pos) {
          int i = 0;
  
@@ -72,7 +72,7 @@
              if (this.isSourceBlockOfThisType(fluidState)) {
                  i++;
              }
-@@ -408,7 +_,7 @@
+@@ -411,7 +_,7 @@
          Map<Direction, FluidState> map = Maps.newEnumMap(Direction.class);
          FlowingFluid.SpreadContext spreadContext = null;
  
@@ -81,7 +81,7 @@
              BlockPos blockPos = pos.relative(direction);
              BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
              if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -513,7 +_,7 @@
+@@ -516,7 +_,7 @@
      }
  
      private static boolean hasSameAbove(FluidState fluidState, BlockGetter level, BlockPos pos) {

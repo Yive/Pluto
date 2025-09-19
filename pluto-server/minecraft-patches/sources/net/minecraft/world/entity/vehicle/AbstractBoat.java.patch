@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/entity/vehicle/AbstractBoat.java
 +++ b/net/minecraft/world/entity/vehicle/AbstractBoat.java
-@@ -325,7 +_,14 @@
+@@ -323,7 +_,14 @@
          if (!entities.isEmpty()) {
-             boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
+             boolean flag = !this.level().isClientSide() && !(this.getControllingPassenger() instanceof Player);
  
 +            int boatCount = 0; // Pluto - Option to remove excess vehicles on collision
              for (Entity entity : entities) {

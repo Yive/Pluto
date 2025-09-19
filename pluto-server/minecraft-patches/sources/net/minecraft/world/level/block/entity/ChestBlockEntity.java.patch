@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/ChestBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ChestBlockEntity.java
-@@ -196,6 +_,20 @@
+@@ -208,6 +_,20 @@
          return 0;
      }
  
