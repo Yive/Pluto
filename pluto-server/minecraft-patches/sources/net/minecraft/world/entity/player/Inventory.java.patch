@@ -44,12 +44,18 @@
          for (int i = 0; i < this.items.size(); i++) {
              ItemStack item = this.getItem(i);
              if (!item.isEmpty()) {
-@@ -570,6 +_,8 @@
-     public boolean stillValid(Player player) {
+@@ -571,8 +_,13 @@
          return true;
      }
-+
-+    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
  
++    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
++
      public boolean contains(ItemStack stack) {
-         // Pufferfish start - don't allocate iterators
+-        for (ItemStack itemStack : this) {
++        // Pufferfish start - don't allocate iterators
++        for (int slot = 0; slot < this.getContainerSize(); slot++) {
++            ItemStack itemStack = this.getItem(slot);
++            // Pufferfish end - don't allocate iterators
+             if (!itemStack.isEmpty() && ItemStack.isSameItemSameComponents(itemStack, stack)) {
+                 return true;
+             }

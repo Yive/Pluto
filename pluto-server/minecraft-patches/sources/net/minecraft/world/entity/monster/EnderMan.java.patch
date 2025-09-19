@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/entity/monster/EnderMan.java
++++ b/net/minecraft/world/entity/monster/EnderMan.java
+@@ -296,11 +_,15 @@
+     private boolean teleport(double x, double y, double z) {
+         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
+ 
+-        while (mutableBlockPos.getY() > this.level().getMinY() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
++        // Pufferfish start - single chunk lookup
++        net.minecraft.world.level.chunk.LevelChunk chunk = this.level().getChunkIfLoaded(mutableBlockPos);
++        if (chunk == null) return false;
++        while (mutableBlockPos.getY() > this.level().getMinY() && !chunk.getBlockState(mutableBlockPos).blocksMotion()) {
++        // Pufferfish end
+             mutableBlockPos.move(Direction.DOWN);
+         }
+ 
+-        BlockState blockState = this.level().getBlockState(mutableBlockPos);
++        BlockState blockState = chunk.getBlockState(mutableBlockPos); // Pufferfish
+         boolean flag = blockState.blocksMotion();
+         boolean isWater = blockState.getFluidState().is(FluidTags.WATER);
+         if (flag && !isWater) {

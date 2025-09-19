@@ -26,7 +26,7 @@
              this.runBlockEvents();
          }
  
-@@ -788,6 +_,7 @@
+@@ -788,13 +_,16 @@
                  profilerFiller.pop();
              }
  
@@ -34,7 +34,8 @@
              io.papermc.paper.entity.activation.ActivationRange.activateEntities(this); // Paper - EAR
              this.entityTickList
                  .forEach(
-@@ -796,6 +_,7 @@
+                     entity -> {
++                        entity.activatedPriorityReset = false; // Pufferfish - DAB
                          if (!entity.isRemoved()) {
                              if (!tickRateManager.isEntityFrozen(entity)) {
                                  profilerFiller.push("checkDespawn");
@@ -42,7 +43,36 @@
                                  entity.checkDespawn();
                                  profilerFiller.pop();
                                  if (true) { // Paper - rewrite chunk system
-@@ -963,6 +_,31 @@
+@@ -808,7 +_,19 @@
+                                     }
+ 
+                                     profilerFiller.push("tick");
+-                                    this.guardEntityTick(this::tickNonPassenger, entity);
++                                    // Pufferfish start - copied from this.guardEntityTick
++                                    try {
++                                        this.tickNonPassenger(entity);
++                                    } catch (Throwable var6) {
++                                        // Paper start - Prevent block entity and entity crashes
++                                        final String msg = String.format("Entity threw exception at %s:%s,%s,%s", entity.level().getWorld().getName(), entity.getX(), entity.getY(), entity.getZ());
++                                        MinecraftServer.LOGGER.error(msg, var6);
++                                        getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, var6))); // Paper - ServerExceptionEvent
++                                        entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD);
++                                        // Paper end - Prevent block entity and entity crashes
++                                    }
++                                    this.moonrise$midTickTasks(); // Paper - rewrite chunk system
++                                    // Pufferfish end
+                                     profilerFiller.pop();
+                                 }
+                             }
+@@ -943,13 +_,38 @@
+         int minBlockZ = pos.getMinBlockZ();
+         ProfilerFiller profilerFiller = Profiler.get();
+         profilerFiller.push("thunder");
+-        if (!this.paperConfig().environment.disableThunder && isRaining && this.isThundering() && this.spigotConfig.thunderChance > 0 && this.random.nextInt(this.spigotConfig.thunderChance) == 0) { // Spigot // Paper - Option to disable thunder
++        if (!this.paperConfig().environment.disableThunder && isRaining && this.isThundering() && this.spigotConfig.thunderChance > 0 && /*simpleRandom.nextInt(this.spigotConfig.thunderChance) == 0*/ chunk.shouldDoLightning(this.random)) { // Spigot // Paper - Option to disable thunder // Paper - optimise random ticking // Pufferfish - replace random with shouldDoLightning
+             BlockPos blockPos = this.findLightningTargetAround(this.getBlockRandomPos(minBlockX, 0, minBlockZ, 15));
+             if (this.isRainingAt(blockPos)) {
+                 DifficultyInstance currentDifficultyAt = this.getCurrentDifficultyAt(blockPos);
                  boolean flag = this.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)
                      && this.random.nextDouble() < currentDifficultyAt.getEffectiveDifficulty() * this.paperConfig().entities.spawning.skeletonHorseThunderSpawnChance.or(0.01) // Paper - Configurable spawn chances for skeleton horses
                      && !this.getBlockState(blockPos.below()).is(Blocks.LIGHTNING_ROD);
@@ -74,7 +104,7 @@
                  if (flag) {
                      SkeletonHorse skeletonHorse = EntityType.SKELETON_HORSE.create(this, EntitySpawnReason.EVENT);
                      if (skeletonHorse != null) {
-@@ -1038,7 +_,10 @@
+@@ -1025,7 +_,10 @@
      public BlockPos findLightningTargetAround(BlockPos pos, boolean returnNullWhenNoTarget) {
          // Paper end - Add methods to find targets for lightning strikes
          BlockPos heightmapPos = this.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);

@@ -9,30 +9,24 @@ plugins {
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
 
 paperweight {
-    upstreams.register("pufferfish") {
-        repo = github("Yive", "Pufferfish")
-        ref = providers.gradleProperty("pufferfishRef")
+    upstreams.paper {
+        ref = providers.gradleProperty("paperRef")
 
         patchFile {
-            path = "pufferfish-server/build.gradle.kts"
+            path = "paper-server/build.gradle.kts"
             outputFile = file("pluto-server/build.gradle.kts")
             patchFile = file("pluto-server/build.gradle.kts.patch")
         }
         patchFile {
-            path = "pufferfish-api/build.gradle.kts"
+            path = "paper-api/build.gradle.kts"
             outputFile = file("pluto-api/build.gradle.kts")
             patchFile = file("pluto-api/build.gradle.kts.patch")
         }
-        patchRepo("paperApi") {
+        patchDir("paperApi") {
             upstreamPath = "paper-api"
+            excludes = setOf("build.gradle.kts")
             patchesDir = file("pluto-api/paper-patches")
             outputDir = file("paper-api")
-        }
-        patchDir("pufferfishApi") {
-            upstreamPath = "pufferfish-api"
-            excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches")
-            patchesDir = file("pluto-api/pufferfish-patches")
-            outputDir = file("pufferfish-api")
         }
     }
 }

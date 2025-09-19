@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -437,7 +_,7 @@
+ 
+         if (this.isAlive() && this.level() instanceof ServerLevel serverLevel1) {
+             boolean flag = this instanceof Player;
+-            if (this.isInWall()) {
++            if (shouldCheckForSuffocation() && this.isInWall()) { // Pufferfish - optimize suffocation
+                 this.hurtServer(serverLevel1, this.damageSources().inWall(), 1.0F);
+             } else if (flag && !serverLevel1.getWorldBorder().isWithinBounds(this.getBoundingBox())) {
+                 double d = serverLevel1.getWorldBorder().getDistanceToBorder(this) + serverLevel1.getWorldBorder().getDamageSafeZone();
 @@ -450,7 +_,7 @@
              }
  
@@ -9,7 +18,27 @@
                  boolean flag1 = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
                      && (!flag || !((Player)this).getAbilities().invulnerable);
-@@ -2841,6 +_,11 @@
+@@ -2120,6 +_,19 @@
+         return this.lastClimbablePos;
+     }
+ 
++    // Pufferfish start
++    private boolean cachedOnClimable = false;
++    private BlockPos lastClimbingPosition = null;
++
++    public boolean onClimbableCached() {
++        if (!this.blockPosition().equals(this.lastClimbingPosition)) {
++            this.cachedOnClimable = this.onClimbable();
++            this.lastClimbingPosition = this.blockPosition();
++        }
++        return this.cachedOnClimable;
++    }
++    // Pufferfish end
++
+     public boolean onClimbable() {
+         if (this.isSpectator()) {
+             return false;
+@@ -2828,6 +_,11 @@
          }
      }
  
@@ -21,7 +50,7 @@
      public float getSoundVolume() {
          return 1.0F;
      }
-@@ -2989,15 +_,17 @@
+@@ -2976,15 +_,17 @@
      }
  
      private void travelInAir(Vec3 travelVector) {
@@ -42,7 +71,7 @@
              d -= this.getEffectiveGravity();
          } else if (this.getY() > this.level().getMinY()) {
              d = -0.1;
-@@ -3581,6 +_,7 @@
+@@ -3568,6 +_,7 @@
              this.checkAutoSpinAttack(boundingBox, this.getBoundingBox());
          }
  
@@ -50,7 +79,7 @@
          this.pushEntities();
          profilerFiller.pop();
          // Paper start - Add EntityMoveEvent
-@@ -3674,6 +_,7 @@
+@@ -3661,6 +_,7 @@
              return;
          }
          // Paper end - don't run getEntities if we're not going to use its result
@@ -58,7 +87,7 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4281,19 +_,27 @@
+@@ -4268,19 +_,27 @@
          double z1 = this.getZ();
          double d = y;
          boolean flag = false;
@@ -92,7 +121,7 @@
                  }
              }
  
-@@ -4435,8 +_,7 @@
+@@ -4422,8 +_,7 @@
                  Direction direction = blockState.getValue(BedBlock.FACING);
                  this.level().setBlock(blockPos, blockState.setValue(BedBlock.OCCUPIED, false), 3);
                  Vec3 vec31 = BedBlock.findStandUpPosition(this.getType(), this.level(), blockPos, direction, this.getYRot()).orElseGet(() -> {
@@ -102,3 +131,23 @@
                  });
                  Vec3 vec32 = Vec3.atBottomCenterOf(blockPos).subtract(vec31).normalize();
                  float f = (float)Mth.wrapDegrees(Mth.atan2(vec32.z, vec32.x) * 180.0F / (float)Math.PI - 90.0);
+@@ -4448,6 +_,19 @@
+     public boolean isInWall() {
+         return !this.isSleeping() && super.isInWall();
+     }
++
++    // Pufferfish start - optimize suffocation
++    public boolean couldPossiblyBeHurt(float amount) {
++        if ((float) this.invulnerableTime > (float) this.invulnerableDuration / 2.0F && amount <= this.lastHurt) {
++            return false;
++        }
++        return true;
++    }
++
++    public boolean shouldCheckForSuffocation() {
++        return !gg.pufferfish.pufferfish.PufferfishConfig.enableSuffocationOptimization || (tickCount % 10 == 0 && couldPossiblyBeHurt(1.0F));
++    }
++    // Pufferfish end
+ 
+     public ItemStack getProjectile(ItemStack weaponStack) {
+         return ItemStack.EMPTY;

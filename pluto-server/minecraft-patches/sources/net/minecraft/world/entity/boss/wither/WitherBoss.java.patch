@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/entity/boss/wither/WitherBoss.java
++++ b/net/minecraft/world/entity/boss/wither/WitherBoss.java
+@@ -87,6 +_,13 @@
+         this.xpReward = 50;
+     }
+ 
++    // Pufferfish start - optimize suffocation
++    @Override
++    public boolean shouldCheckForSuffocation() {
++        return true;
++    }
++    // Pufferfish end
++
+     @Override
+     protected PathNavigation createNavigation(Level level) {
+         FlyingPathNavigation flyingPathNavigation = new FlyingPathNavigation(this, level);

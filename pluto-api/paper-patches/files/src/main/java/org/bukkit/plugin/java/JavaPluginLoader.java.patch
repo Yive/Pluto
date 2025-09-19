@@ -1,0 +1,22 @@
+--- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+@@ -329,7 +_,9 @@
+             try {
+                 jPlugin.setEnabled(true);
+             } catch (Throwable ex) {
++                gg.pufferfish.pufferfish.sentry.SentryContext.setPluginContext(plugin); // Pufferfish
+                 server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
++                gg.pufferfish.pufferfish.sentry.SentryContext.removePluginContext(); // Pufferfish
+             }
+ 
+             // Perhaps abort here, rather than continue going, but as it stands,
+@@ -354,7 +_,9 @@
+             try {
+                 jPlugin.setEnabled(false);
+             } catch (Throwable ex) {
++                gg.pufferfish.pufferfish.sentry.SentryContext.setPluginContext(plugin); // Pufferfish
+                 server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
++                gg.pufferfish.pufferfish.sentry.SentryContext.removePluginContext(); // Pufferfish
+             }
+ 
+             if (cloader instanceof PluginClassLoader) {

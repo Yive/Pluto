@@ -1,0 +1,43 @@
+--- a/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java
+@@ -51,6 +_,7 @@
+     private io.papermc.paper.plugin.provider.classloader.PluginClassLoaderGroup classLoaderGroup; // Paper
+     public io.papermc.paper.plugin.provider.entrypoint.DependencyContext dependencyContext; // Paper
+ 
++    private boolean closed = false; // Pufferfish
+     static {
+         ClassLoader.registerAsParallelCapable();
+     }
+@@ -205,6 +_,7 @@
+         throw new ClassNotFoundException(name);
+     }
+ 
++    public boolean _airplane_hasClass(@NotNull String name) { return this.classes.containsKey(name); } // Pufferfish
+     @Override
+     protected Class<?> findClass(String name) throws ClassNotFoundException {
+         if (name.startsWith("org.bukkit.") || name.startsWith("net.minecraft.")) {
+@@ -212,7 +_,7 @@
+         }
+         Class<?> result = classes.get(name);
+ 
+-        if (result == null) {
++        if (result == null && !this.closed) { // Pufferfish
+             String path = name.replace('.', '/').concat(".class");
+             // Add details to zip file errors - help debug classloading
+             JarEntry entry;
+@@ -268,6 +_,7 @@
+             this.setClass(name, result); // Paper
+         }
+ 
++        if (result == null) throw new ClassNotFoundException(name); // Pufferfish
+         return result;
+     }
+ 
+@@ -282,6 +_,7 @@
+             // Paper end
+             super.close();
+         } finally {
++            this.closed = true; // Pufferfish
+             jar.close();
+         }
+     }
