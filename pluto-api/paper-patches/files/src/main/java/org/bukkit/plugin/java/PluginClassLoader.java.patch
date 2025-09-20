@@ -8,14 +8,6 @@
      static {
          ClassLoader.registerAsParallelCapable();
      }
-@@ -205,6 +_,7 @@
-         throw new ClassNotFoundException(name);
-     }
- 
-+    public boolean _airplane_hasClass(@NotNull String name) { return this.classes.containsKey(name); } // Pufferfish
-     @Override
-     protected Class<?> findClass(String name) throws ClassNotFoundException {
-         if (name.startsWith("org.bukkit.") || name.startsWith("net.minecraft.")) {
 @@ -212,7 +_,7 @@
          }
          Class<?> result = classes.get(name);

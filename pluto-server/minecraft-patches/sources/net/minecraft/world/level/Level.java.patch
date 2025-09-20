@@ -235,6 +235,21 @@
              if (previous != null) {
                  return previous.getHandle();
              }
+@@ -1431,12 +_,12 @@
+     public <T extends Entity> void guardEntityTick(Consumer<T> action, T entity) {
+         try {
+             action.accept(entity);
+-        } catch (Throwable var6) {
++        } catch (Throwable var6) { // Pufferfish - diff on change ServerLevel.tick
+             // Paper start - Prevent block entity and entity crashes
+             final String msg = String.format("Entity threw exception at %s:%s,%s,%s", entity.level().getWorld().getName(), entity.getX(), entity.getY(), entity.getZ());
+             MinecraftServer.LOGGER.error(msg, var6);
+             getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, var6))); // Paper - ServerExceptionEvent
+-            entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD);
++            entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD); // Pufferfish - diff on change ServerLevel.tick
+             // Paper end - Prevent block entity and entity crashes
+         }
+         this.moonrise$midTickTasks(); // Paper - rewrite chunk system
 @@ -1845,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  

@@ -1,11 +1,12 @@
 --- a/net/minecraft/world/entity/ai/goal/GoalSelector.java
 +++ b/net/minecraft/world/entity/ai/goal/GoalSelector.java
-@@ -36,9 +_,12 @@
+@@ -36,9 +_,13 @@
      }
  
      // Paper start - EAR 2
 -    public boolean inactiveTick() {
-+    public boolean inactiveTick(int tickRate, boolean inactive) { // Pufferfish start
++    // Pufferfish start
++    public boolean inactiveTick(int tickRate, boolean inactive) {
 +        if (inactive && !gg.pufferfish.pufferfish.PufferfishConfig.dearEnabled) tickRate = 4; // reset to Paper's
 +        tickRate = Math.min(tickRate, 3);
          this.curRate++;

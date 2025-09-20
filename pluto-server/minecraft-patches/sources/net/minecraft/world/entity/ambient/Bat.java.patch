@@ -11,10 +11,12 @@
      private static boolean isHalloween() {
 +        if (net.minecraft.server.MinecraftServer.currentTick - lastSpookyCheck > ONE_HOUR) {
          LocalDate localDate = LocalDate.now();
-         int i = localDate.get(ChronoField.DAY_OF_MONTH);
-         int i1 = localDate.get(ChronoField.MONTH_OF_YEAR);
+-        int i = localDate.get(ChronoField.DAY_OF_MONTH);
+-        int i1 = localDate.get(ChronoField.MONTH_OF_YEAR);
 -        return i1 == 10 && i >= 20 || i1 == 11 && i <= 3;
-+        isSpookySeason = i1 == 10 && i >= 20 || i1 == 11 && i <= 3;
++        int day = localDate.getDayOfMonth();
++        int month = localDate.getMonthValue();
++        isSpookySeason = month == 10 && day >= 20 || month == 11 && day <= 3;
 +        lastSpookyCheck = net.minecraft.server.MinecraftServer.currentTick;
 +        }
 +        return isSpookySeason;
