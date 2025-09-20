@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -971,6 +_,22 @@
+@@ -975,6 +_,22 @@
       */
      <T> void setMemory(@NotNull MemoryKey<T> memoryKey, @Nullable T memoryValue);
  
