@@ -56,7 +56,7 @@
                  }
                  // Paper end - per player mob spawning backoff
              }
-@@ -625,6 +_,71 @@
+@@ -625,6 +_,68 @@
              filteredSpawningCategories = List.of();
          }
  
@@ -74,13 +74,10 @@
 +                if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) {
 +                    for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
 +                        for (ServerPlayer player : this.level.players) {
++                            // Due to being async, the player might no longer be in this world or server.
++                            if (player == null) continue;
 +                            player.mobCountsAsync.put(ii, 0);
-+
-+                            int newBackoff = player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1;
-+                            if (newBackoff < 0) {
-+                                newBackoff = 0;
-+                            }
-+                            player.mobBackoffCountsAsync.put(ii, newBackoff);
++                            player.mobBackoffCountsAsync.put(ii, Math.max(player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1, 0));
 +                        }
 +                    }
 +
