@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/NaturalSpawner.java
 +++ b/net/minecraft/world/level/NaturalSpawner.java
-@@ -195,6 +_,68 @@
+@@ -195,6 +_,66 @@
          profilerFiller.pop();
      }
  
@@ -35,13 +35,11 @@
 +    public static void pluto$spawnForChunk(ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnState spawnState, List<MobCategory> categories) {
 +        List<Runnable> tasks = new ArrayList<>();
 +        for (MobCategory mobCategory : categories) {
-+            // Paper start - Optional per player mob spawns
-+            if (pluto$canSpawn(level, chunk, spawnState, mobCategory) > 0) {
-+                final Runnable runnable = pluto$spawnCategoryForChunk(mobCategory, level, chunk, spawnState);
-+                // Paper end - Optional per player mob spawns
-+                if (runnable == null) continue;
-+                tasks.add(runnable);
-+            }
++            if (pluto$canSpawn(level, chunk, spawnState, mobCategory) <= 0) continue;
++
++            final Runnable runnable = pluto$spawnCategoryForChunk(mobCategory, level, chunk, spawnState);
++            if (runnable == null) continue;
++            tasks.add(runnable);
 +        }
 +
 +        if (tasks.isEmpty()) return;
