@@ -56,7 +56,7 @@
                  }
                  // Paper end - per player mob spawning backoff
              }
-@@ -625,6 +_,34 @@
+@@ -625,6 +_,71 @@
              filteredSpawningCategories = List.of();
          }
  
@@ -64,22 +64,59 @@
 +        spawningChunks:
 +        if (this.level.plutoConfig().useAsyncSpawningChunks) {
 +            if (this.pluto$stillSpawningEntities.get()) break spawningChunks;
++
 +            this.pluto$stillSpawningEntities.set(true);
 +            final long next = this.level.random.nextLong(); // Considering this is unsafe, we should do this on the main thread.
++
 +            this.level.plutoSpawningChunksExecutor().submit(() -> {
 +                List<LevelChunk> list = new ObjectArrayList<>();
 +
++                if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) {
++                    for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
++                        for (ServerPlayer player : this.level.players) {
++                            player.mobCountsAsync.put(ii, 0);
++
++                            int newBackoff = player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1;
++                            if (newBackoff < 0) {
++                                newBackoff = 0;
++                            }
++                            player.mobBackoffCountsAsync.put(ii, newBackoff);
++                        }
++                    }
++
++                    if (firstRunSpawnCounts) {
++                        firstRunSpawnCounts = false;
++                        _pufferfish_spawnCountsReady.set(true);
++                    }
++
++                    if (_pufferfish_spawnCountsReady.getAndSet(false)) {
++                        net.minecraft.server.MinecraftServer.getServer().mobSpawnExecutor.submit(() -> {
++                            int mapped = distanceManager.getNaturalSpawnChunkCount();
++                            ca.spottedleaf.moonrise.common.list.IteratorSafeOrderedReferenceSet.Iterator<Entity> objectiterator =
++                                level.entityTickList.entities.iterator(ca.spottedleaf.moonrise.common.list.IteratorSafeOrderedReferenceSet.ITERATOR_FLAG_SEE_ADDITIONS);
++                            try {
++                                gg.pufferfish.pufferfish.util.IterableWrapper<Entity> wrappedIterator =
++                                    new gg.pufferfish.pufferfish.util.IterableWrapper<>(objectiterator);
++                                lastSpawnState = NaturalSpawner.createState(mapped, wrappedIterator, this::getFullChunk, null, true);
++                            } finally {
++                                objectiterator.finishedIterating();
++                            }
++                            _pufferfish_spawnCountsReady.set(true);
++                        });
++                    }
++                }
++
 +                try {
 +                    this.chunkMap.collectSpawningChunks(list);
-+                    // Paper start - chunk tick iteration optimisation
 +                    this.shuffleRandom.setSeed(next); // This random is only used for spawning chunks.
-+                    if (!this.level.paperConfig().entities.spawning.perPlayerMobSpawns) Util.shuffle(list, this.shuffleRandom); // Paper - Optional per player mob spawns; do not need this when per-player is enabled
-+                    // Paper end - chunk tick iteration optimisation
++
++                    if (!this.level.paperConfig().entities.spawning.perPlayerMobSpawns)
++                        Util.shuffle(list, this.shuffleRandom); // Paper - Optional per player mob spawns; do not need this when per-player is enabled
 +
 +                    for (LevelChunk levelChunk : list) {
-+                        // Probably should do this outside of the loop, but it is possible for this to become populated during the loop.
++                        // This shouldn't happen, but just to be safe.
 +                        if (lastSpawnState == null) continue;
-+                        this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, lastSpawnState); // Pufferfish
++                        this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, lastSpawnState);
 +                    }
 +                } finally {
 +                    list.clear();
