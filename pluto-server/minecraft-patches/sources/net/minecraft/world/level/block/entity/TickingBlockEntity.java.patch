@@ -1,0 +1,9 @@
+--- a/net/minecraft/world/level/block/entity/TickingBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/TickingBlockEntity.java
+@@ -10,4 +_,6 @@
+     BlockPos getPos();
+ 
+     String getType();
++
++    default long getChunkPos() { return net.minecraft.world.level.ChunkPos.asLong(getPos()); } // Pluto - Optimise block entity ticking
+ }

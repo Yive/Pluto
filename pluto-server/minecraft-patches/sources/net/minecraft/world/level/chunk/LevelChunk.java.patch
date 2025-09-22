@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
+@@ -83,6 +_,8 @@
+         public String getType() {
+             return "<null>";
+         }
++
++        @Override public long getChunkPos() { return ChunkPos.ZERO.toLong(); } // Pluto - Optimise block entity ticking
+     };
+     private final Map<BlockPos, LevelChunk.RebindableTickingBlockEntityWrapper> tickersInLevel = Maps.newHashMap();
+     public boolean loaded;
 @@ -100,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end
@@ -28,11 +37,10 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -472,6 +_,48 @@
-     public BlockEntity getBlockEntity(BlockPos pos) {
+@@ -473,6 +_,48 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
-+
+ 
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
@@ -74,6 +82,68 @@
 +        return getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +    // Pluto end - Memory allocation optimisations
- 
++
      @Nullable
      public BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
+         // CraftBukkit start
+@@ -530,6 +_,30 @@
+             );
+     }
+ 
++    // Pluto start - Optimise block entity ticking
++    int pluto$currentTick = -1;
++    boolean pluto$wholeChunkIsTickable = false;
++    boolean pluto$isTicking(BlockPos pos) {
++        if (!this.level.plutoConfig().useOptimisedBlockEntityTicking) return this.isTicking(pos);
++
++        if (pluto$currentTick == net.minecraft.server.MinecraftServer.currentTick)
++            return this.pluto$wholeChunkIsTickable || pluto$optimisedIsTicking(pos); // Fallback if the whole chunk isn't ticking.
++
++        this.pluto$currentTick = net.minecraft.server.MinecraftServer.currentTick;
++        this.pluto$wholeChunkIsTickable = this.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
++            && this.level.getWorldBorder().isChunkInBounds(this.locX, this.locZ)
++            && this.level.areEntitiesLoaded(this.chunkPos.longKey);
++        return this.pluto$wholeChunkIsTickable || pluto$optimisedIsTicking(pos); // Fallback if the whole chunk isn't ticking.
++    }
++
++    boolean pluto$optimisedIsTicking(BlockPos pos) {
++        // Check the chunk status before the world border
++        return this.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
++            && this.level.getWorldBorder().isWithinBounds(pos)
++            && this.level.areEntitiesLoaded(this.chunkPos.longKey);
++    }
++    // Pluto end - Optimise block entity ticking
++
+     @Override
+     public void setBlockEntity(BlockEntity blockEntity) {
+         BlockPos blockPos = blockEntity.getBlockPos();
+@@ -944,17 +_,19 @@
+         private final T blockEntity;
+         private final BlockEntityTicker<T> ticker;
+         private boolean loggedInvalidBlockState;
++        private final long chunkKey; @Override public long getChunkPos() { return chunkKey; } // Pluto - Optimise block entity ticking
+ 
+         BoundTickingBlockEntity(final T blockEntity, final BlockEntityTicker<T> ticker) {
+             this.blockEntity = blockEntity;
+             this.ticker = ticker;
++            this.chunkKey = ChunkPos.asLong(blockEntity.getBlockPos()); // Pluto - Optimise block entity ticking
+         }
+ 
+         @Override
+         public void tick() {
+             if (!this.blockEntity.isRemoved() && this.blockEntity.hasLevel()) {
+                 BlockPos blockPos = this.blockEntity.getBlockPos();
+-                if (LevelChunk.this.isTicking(blockPos)) {
++                if (LevelChunk.this.pluto$isTicking(blockPos)) { // Pluto - Optimise block entity ticking
+                     try {
+                         ProfilerFiller profilerFiller = Profiler.get();
+                         profilerFiller.push(this::getType);
+@@ -1052,6 +_,8 @@
+         public String toString() {
+             return this.ticker + " <wrapped>";
+         }
++
++        @Override public long getChunkPos() { return this.ticker.getChunkPos(); } // Pluto - Optimise block entity ticking
+     }
+ 
+     @FunctionalInterface

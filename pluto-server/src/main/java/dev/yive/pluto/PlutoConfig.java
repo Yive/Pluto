@@ -1138,5 +1138,24 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean useOptimisedBlockEntityTicking = false;
+        private void useOptimisedBlockEntityTicking() {
+            useOptimisedBlockEntityTicking = getBoolean("blocks.global.optimised-block-entity-ticking", useOptimisedBlockEntityTicking);
+            setComments("blocks.global.optimised-block-entity-ticking",
+                List.of(
+                    "Optimises ticking block entities by doing the following:",
+                    "",
+                    "- Uses a map to cache if blocks can be ticked at chunk coordinates.",
+                    "- Caches if the whole chunk can be ticked instead of checking per block position.",
+                    "- Delays heavier lookups when checking if a block position is tickable.",
+                    "",
+                    "Considering that most chunks are within the world border and chunks",
+                    "that do have block entities tend to have more than one within the chunk.",
+                    "",
+                    "Note: Does fall back to cacheless version if the whole chunk isn't tickable."
+                )
+            );
+        }
     }
 }
