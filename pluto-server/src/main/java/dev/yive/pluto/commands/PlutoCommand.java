@@ -2,6 +2,7 @@ package dev.yive.pluto.commands;
 
 import dev.yive.pluto.commands.subcommands.ChannelsCommand;
 import dev.yive.pluto.commands.subcommands.SchedulersCommand;
+import dev.yive.pluto.commands.subcommands.SlotsCommand;
 import it.unimi.dsi.fastutil.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public final class PlutoCommand extends Command {
 
         commands.put(Set.of("channels"), new ChannelsCommand());
         commands.put(Set.of("schedulers"), new SchedulersCommand());
+        commands.put(Set.of("slots"), new SlotsCommand());
 
         return commands.entrySet().stream()
             .flatMap(entry -> entry.getKey().stream().map(s -> Map.entry(s, entry.getValue())))
