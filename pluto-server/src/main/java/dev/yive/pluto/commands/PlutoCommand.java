@@ -1,5 +1,6 @@
 package dev.yive.pluto.commands;
 
+import dev.yive.pluto.commands.subcommands.ChannelsCommand;
 import it.unimi.dsi.fastutil.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,8 @@ public final class PlutoCommand extends Command {
     // subcommand label -> subcommand
     private static final Map<String, PlutoSubcommand> SUBCOMMANDS = Util.make(() -> {
         final Map<Set<String>, PlutoSubcommand> commands = new HashMap<>();
+
+        commands.put(Set.of("channels"), new ChannelsCommand());
 
         return commands.entrySet().stream()
             .flatMap(entry -> entry.getKey().stream().map(s -> Map.entry(s, entry.getValue())))
