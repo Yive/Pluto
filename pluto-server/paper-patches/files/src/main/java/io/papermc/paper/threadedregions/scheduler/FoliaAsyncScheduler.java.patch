@@ -1,0 +1,19 @@
+--- a/src/main/java/io/papermc/paper/threadedregions/scheduler/FoliaAsyncScheduler.java
++++ b/src/main/java/io/papermc/paper/threadedregions/scheduler/FoliaAsyncScheduler.java
+@@ -60,6 +_,16 @@
+ 
+     private final Set<AsyncScheduledTask> tasks = ConcurrentHashMap.newKeySet();
+ 
++    // Pluto start - Add schedulers subcommand
++    public java.util.Map<String, Integer> getTaskCount() {
++        java.util.Map<String, Integer> map = new java.util.HashMap<>();
++        for (final AsyncScheduledTask task : tasks) {
++            map.compute(task.getOwningPlugin().getName(), (s, integer) -> integer == null ? 1 : integer + 1);
++        }
++        return map;
++    }
++    // Pluto end - Add schedulers subcommand
++
+     @Override
+     public ScheduledTask runNow(final Plugin plugin, final Consumer<ScheduledTask> task) {
+         Objects.requireNonNull(plugin, "Plugin may not be null");
