@@ -1,15 +1,14 @@
-package dev.yive.pluto;
+package dev.yive.pluto.config;
 
 import com.destroystokyo.paper.util.SneakyThrow;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PlutoConfig {
     public static final List<String> CONFIG_HEADER = List.of(
