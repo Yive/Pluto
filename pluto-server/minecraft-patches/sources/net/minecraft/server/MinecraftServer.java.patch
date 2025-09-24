@@ -7,8 +7,8 @@
 +    public gg.pufferfish.pufferfish.util.AsyncExecutor mobSpawnExecutor = new gg.pufferfish.pufferfish.util.AsyncExecutor("MobSpawning"); // Pufferfish - optimize mob spawning
  
      public static <S extends MinecraftServer> S spin(Function<Thread, S> threadFunction) {
-         AtomicReference<S> atomicReference = new AtomicReference<>();
-@@ -1193,6 +_,12 @@
+         ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry.init(); // Paper - rewrite data converter system
+@@ -1194,6 +_,12 @@
                      profilerFiller.popPush("nextTickWait");
                      this.mayHaveDelayedTasks = true;
                      this.delayedTasksMaxNextTickTimeNanos = Math.max(Util.getNanos() + l, this.nextTickTimeNanos);
@@ -21,7 +21,7 @@
                      this.startMeasuringTaskExecutionTime();
                      this.waitUntilNextTick();
                      this.finishMeasuringTaskExecutionTime();
-@@ -2571,6 +_,7 @@
+@@ -2572,6 +_,7 @@
      // CraftBukkit end
  
      private ProfilerFiller createProfiler() {
