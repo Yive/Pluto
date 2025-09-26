@@ -62,7 +62,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.5")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -201,14 +_,14 @@
+@@ -200,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -81,7 +81,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -227,7 +_,7 @@
+@@ -226,7 +_,7 @@
  
  // Bump compile tasks to 1GB memory to avoid OOMs
  tasks.withType<JavaCompile>().configureEach {
@@ -90,7 +90,7 @@
  }
  
  val scanJarForBadCalls by tasks.registering(io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
-@@ -267,7 +_,7 @@
+@@ -266,7 +_,7 @@
      jvmArgumentProviders.add(provider)
  }
  

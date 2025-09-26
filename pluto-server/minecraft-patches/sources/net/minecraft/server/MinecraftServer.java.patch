@@ -21,7 +21,7 @@
                      this.startMeasuringTaskExecutionTime();
                      this.waitUntilNextTick();
                      this.finishMeasuringTaskExecutionTime();
-@@ -2572,6 +_,7 @@
+@@ -2574,6 +_,7 @@
      // CraftBukkit end
  
      private ProfilerFiller createProfiler() {
