@@ -73,9 +73,10 @@
 -            "Specification-Title" to "Paper",
 +            "Specification-Title" to "Pluto", // Pluto - Branding
              "Specification-Version" to project.version,
-             "Specification-Vendor" to "Paper Team",
+-            "Specification-Vendor" to "Paper Team",
 -            "Brand-Id" to "papermc:paper",
 -            "Brand-Name" to "Paper",
++            "Specification-Vendor" to "Yive", // Pluto - Branding
 +            "Brand-Id" to "yive:pluto", // Pluto - Branding
 +            "Brand-Name" to "Pluto", // Pluto - Branding
              "Build-Number" to (build ?: ""),
