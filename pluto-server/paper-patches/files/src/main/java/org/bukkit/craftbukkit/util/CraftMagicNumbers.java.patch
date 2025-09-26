@@ -1,16 +1,25 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -776,6 +_,13 @@
-         return compound;
+@@ -481,7 +_,7 @@
+ 
+     @Override
+     public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
+-        return new com.destroystokyo.paper.PaperVersionFetcher();
++        return new gg.pufferfish.pufferfish.PufferfishVersionFetcher(); // Pufferfish
      }
  
+     @Override
+@@ -775,6 +_,13 @@
+         Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
+         return compound;
+     }
++
 +    // Pluto start - Add method to obtain current entity id
 +    @Override
 +    public int currentEntityId() {
 +        return net.minecraft.world.entity.Entity.currentEntityId();
 +    }
 +    // Pluto end - Add method to obtain current entity id
-+
+ 
      @Override
      public int nextEntityId() {
-         return net.minecraft.world.entity.Entity.nextEntityId();
