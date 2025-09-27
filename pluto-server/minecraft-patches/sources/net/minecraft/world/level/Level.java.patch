@@ -235,43 +235,18 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1408,9 +_,36 @@
-         int tickedEntities = 0; // Paper - rewrite chunk system
-         var toRemove = new it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<TickingBlockEntity>(); // Paper - Fix MC-117075; use removeAll
-         toRemove.add(null); // Paper - Fix MC-117075
-+        it.unimi.dsi.fastutil.longs.Long2BooleanMap canTickMap = this.plutoConfig().useOptimisedBlockEntityTicking ? new it.unimi.dsi.fastutil.longs.Long2BooleanOpenHashMap() : null; // Pluto - Optimise block entity ticking
+@@ -1411,9 +_,10 @@
          for (this.tileTickPosition = 0; this.tileTickPosition < this.blockEntityTickers.size(); this.tileTickPosition++) { // Paper - Disable tick limiters
              TickingBlockEntity tickingBlockEntity = this.blockEntityTickers.get(this.tileTickPosition);
              // Spigot end
-+            // Pluto start - Optimise block entity ticking
-+            if (this.plutoConfig().useOptimisedBlockEntityTicking) {
-+                if (tickingBlockEntity.isRemoved()) {
-+                    toRemove.add(tickingBlockEntity);
-+                    continue;
-+                }
-+
-+                if (!runsNormally) continue;
-+
-+                final long key = tickingBlockEntity.getChunkPos();
-+                boolean canTick = canTickMap.get(key);
-+                if (!canTick) {
-+                    final boolean shouldTickBlocksAt = this.shouldTickBlocksAt(key);
-+                    canTickMap.put(key, shouldTickBlocksAt);
-+                    canTick = shouldTickBlocksAt;
-+                }
-+
-+                if (!canTick) continue;
-+
-+                tickingBlockEntity.tick();
-+                if ((++tickedEntities & 7) != 0) continue;
-+                this.moonrise$midTickTasks();
-+                continue;
-+            }
-+            // Pluto end - Optimise block entity ticking
 +
              if (tickingBlockEntity.isRemoved()) {
                  toRemove.add(tickingBlockEntity); // Paper - Fix MC-117075; use removeAll
-             } else if (runsNormally && this.shouldTickBlocksAt(tickingBlockEntity.getPos())) {
+-            } else if (runsNormally && this.shouldTickBlocksAt(tickingBlockEntity.getPos())) {
++            } else if (runsNormally && this.shouldTickBlocksAt(tickingBlockEntity.getChunkPos())) { // Pluto - Optimise block entity ticking
+                 tickingBlockEntity.tick();
+                 // Paper start - rewrite chunk system
+                 if ((++tickedEntities & 7) == 0) {
 @@ -1431,12 +_,12 @@
      public <T extends Entity> void guardEntityTick(Consumer<T> action, T entity) {
          try {
