@@ -1145,7 +1145,6 @@ public class PlutoConfig {
                 List.of(
                     "Optimises ticking block entities by doing the following:",
                     "",
-                    "- Uses a map to cache if blocks can be ticked at chunk coordinates.",
                     "- Caches if the whole chunk can be ticked instead of checking per block position.",
                     "- Delays heavier lookups when checking if a block position is tickable.",
                     "",
