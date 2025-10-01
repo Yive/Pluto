@@ -8,7 +8,7 @@
      static {
          ClassLoader.registerAsParallelCapable();
      }
-@@ -212,7 +_,7 @@
+@@ -215,7 +_,7 @@
          }
          Class<?> result = classes.get(name);
  
@@ -17,7 +17,7 @@
              String path = name.replace('.', '/').concat(".class");
              // Add details to zip file errors - help debug classloading
              JarEntry entry;
-@@ -268,6 +_,7 @@
+@@ -271,6 +_,7 @@
              this.setClass(name, result); // Paper
          }
  
@@ -25,7 +25,7 @@
          return result;
      }
  
-@@ -282,6 +_,7 @@
+@@ -285,6 +_,7 @@
              // Paper end
              super.close();
          } finally {
