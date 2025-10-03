@@ -46,7 +46,7 @@
              BlockPos blockPos = mutableBlockPos.setWithOffset(pos, direction);
              BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
              if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -342,7 +_,7 @@
+@@ -340,7 +_,7 @@
      protected int getSlopeDistance(LevelReader level, BlockPos pos, int depth, Direction direction, BlockState state, FlowingFluid.SpreadContext spreadContext) {
          int i = 1000;
  
@@ -55,7 +55,7 @@
              if (direction1 != direction) {
                  BlockPos blockPos = pos.relative(direction1);
                  BlockState blockState = spreadContext.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
-@@ -395,9 +_,13 @@
+@@ -393,9 +_,13 @@
      private int sourceNeighborCount(LevelReader level, BlockPos pos) {
          int i = 0;
  
@@ -72,7 +72,7 @@
              if (this.isSourceBlockOfThisType(fluidState)) {
                  i++;
              }
-@@ -411,7 +_,7 @@
+@@ -409,7 +_,7 @@
          Map<Direction, FluidState> map = Maps.newEnumMap(Direction.class);
          FlowingFluid.SpreadContext spreadContext = null;
  
@@ -81,7 +81,7 @@
              BlockPos blockPos = pos.relative(direction);
              BlockState blockState = level.getBlockStateIfLoaded(blockPos); // Paper - Prevent chunk loading from fluid flowing
              if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -516,7 +_,7 @@
+@@ -514,7 +_,7 @@
      }
  
      private static boolean hasSameAbove(FluidState fluidState, BlockGetter level, BlockPos pos) {
