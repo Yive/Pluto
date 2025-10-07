@@ -53,8 +53,8 @@
                  for (int i = 0; i < 4; i++) {
 -                    BlockPos blockPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 +                    final int x = originX + (random.nextInt(3) - 1);
-+                    final int y = originX + (random.nextInt(5) - 3);
-+                    final int z = originX + (random.nextInt(3) - 1);
++                    final int y = originY + (random.nextInt(5) - 3);
++                    final int z = originZ + (random.nextInt(3) - 1);
                      // Paper start - Perf: optimize dirt and snow spreading
 -                    if (pos.getX() == blockPos.getX() && pos.getY() == blockPos.getY() && pos.getZ() == blockPos.getZ()) {
 +                    if (originX == x && originY == y && originZ == z) {
