@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -772,14 +_,17 @@
+@@ -779,14 +_,17 @@
          if (!this.isDebug() && runsNormally) {
              long l = this.getGameTime();
              profilerFiller.push("blockTicks");
@@ -18,7 +18,7 @@
              this.raids.tick(this);
          }
  
-@@ -787,6 +_,7 @@
+@@ -794,6 +_,7 @@
          this.getChunkSource().tick(hasTimeLeft, true);
          profilerFiller.popPush("blockEvents");
          if (runsNormally) {
@@ -26,7 +26,7 @@
              this.runBlockEvents();
          }
  
-@@ -809,13 +_,16 @@
+@@ -816,13 +_,16 @@
                  profilerFiller.pop();
              }
  
@@ -43,7 +43,7 @@
                                  entity.checkDespawn();
                                  profilerFiller.pop();
                                  if (true) { // Paper - rewrite chunk system
-@@ -829,7 +_,19 @@
+@@ -836,7 +_,19 @@
                                      }
  
                                      profilerFiller.push("tick");
@@ -64,7 +64,7 @@
                                      profilerFiller.pop();
                                  }
                              }
-@@ -975,13 +_,38 @@
+@@ -982,13 +_,38 @@
          int minBlockZ = pos.getMinBlockZ();
          ProfilerFiller profilerFiller = Profiler.get();
          profilerFiller.push("thunder");
@@ -104,7 +104,7 @@
                  if (flag) {
                      SkeletonHorse skeletonHorse = EntityType.SKELETON_HORSE.create(this, EntitySpawnReason.EVENT);
                      if (skeletonHorse != null) {
-@@ -1057,7 +_,10 @@
+@@ -1064,7 +_,10 @@
      public BlockPos findLightningTargetAround(BlockPos pos, boolean returnNullWhenNoTarget) {
          // Paper end - Add methods to find targets for lightning strikes
          BlockPos heightmapPos = this.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
