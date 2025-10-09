@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java
++++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java
+@@ -51,6 +_,13 @@
+         executor.prestartAllCoreThreads();
+     }
+ 
++    // Pluto start - Add schedulers subcommand
++    @Override
++    public int pluto$getThreadCount() {
++        return executor.getPoolSize();
++    }
++    // Pluto end - Add schedulers subcommand
++
+     @Override
+     public void cancelTask(int taskId) {
+         this.management.execute(() -> this.removeTask(taskId));

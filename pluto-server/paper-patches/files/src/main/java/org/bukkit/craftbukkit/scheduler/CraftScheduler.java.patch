@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
++++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
+@@ -132,6 +_,13 @@
+     }
+     // Paper end
+ 
++
++    // Pluto start - Add schedulers subcommand
++    public int pluto$getThreadCount() {
++        return asyncScheduler instanceof CraftAsyncScheduler ? asyncScheduler.pluto$getThreadCount() : 0;
++    }
++    // Pluto end - Add schedulers subcommand
++
+     @Override
+     public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable task) {
+         return this.scheduleSyncDelayedTask(plugin, task, 0L);

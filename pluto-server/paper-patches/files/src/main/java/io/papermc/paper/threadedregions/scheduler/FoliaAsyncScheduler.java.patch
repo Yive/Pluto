@@ -1,19 +1,37 @@
 --- a/src/main/java/io/papermc/paper/threadedregions/scheduler/FoliaAsyncScheduler.java
 +++ b/src/main/java/io/papermc/paper/threadedregions/scheduler/FoliaAsyncScheduler.java
-@@ -60,6 +_,16 @@
+@@ -23,7 +_,7 @@
+ 
+     private static final Logger LOGGER = LogUtils.getClassLogger();
+ 
+-    private final Executor executors = new ThreadPoolExecutor(Math.max(4, Runtime.getRuntime().availableProcessors() / 2), Integer.MAX_VALUE,
++    private final ThreadPoolExecutor executorService = new ThreadPoolExecutor(Math.max(4, Runtime.getRuntime().availableProcessors() / 2), Integer.MAX_VALUE, // Pluto - Add schedulers subcommand
+         30L, TimeUnit.SECONDS, new SynchronousQueue<>(),
+         new ThreadFactory() {
+             private final AtomicInteger idGenerator = new AtomicInteger();
+@@ -59,6 +_,25 @@
+     });
  
      private final Set<AsyncScheduledTask> tasks = ConcurrentHashMap.newKeySet();
- 
++
 +    // Pluto start - Add schedulers subcommand
-+    public java.util.Map<String, Integer> getTaskCount() {
-+        java.util.Map<String, Integer> map = new java.util.HashMap<>();
++    private final Executor executors = executorService; // Just if something requires this to be an Executor instead of a ThreadPoolExecutor
++    public java.util.Map<String, java.util.Map<ScheduledTask.ExecutionState, Integer>> pluto$getTaskCount() {
++        java.util.Map<String, java.util.Map<ScheduledTask.ExecutionState, Integer>> output = new java.util.HashMap<>();
 +        for (final AsyncScheduledTask task : tasks) {
-+            map.compute(task.getOwningPlugin().getName(), (s, integer) -> integer == null ? 1 : integer + 1);
++            output.compute(task.getOwningPlugin().namespace(), (s, map) -> {
++                if (map == null) map = new java.util.HashMap<>();
++                map.compute(task.getExecutionState(), (executionState, integer) -> integer == null ? 1 : integer + 1);
++                return map;
++            });
 +        }
-+        return map;
++        return output;
++    }
++
++    public int pluto$getThreadCount() {
++        return executorService.getPoolSize();
 +    }
 +    // Pluto end - Add schedulers subcommand
-+
+ 
      @Override
      public ScheduledTask runNow(final Plugin plugin, final Consumer<ScheduledTask> task) {
-         Objects.requireNonNull(plugin, "Plugin may not be null");
