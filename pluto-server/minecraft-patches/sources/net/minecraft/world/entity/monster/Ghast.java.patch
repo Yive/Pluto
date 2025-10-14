@@ -9,3 +9,12 @@
                      if (!fluidState.isEmpty() && (!flag || this.ghast.collidedWithFluid(fluidState, pos, from, to))) {
                          if (fluidState.is(FluidTags.WATER)) {
                              return isInLava;
+@@ -461,7 +_,7 @@
+                 if (!level.getBlockState(blockPos).isAir()) {
+                     return false;
+                 } else {
+-                    for (Direction direction : Direction.values()) {
++                    for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                         for (int i = 1; i < distanceToBlocks; i++) {
+                             BlockPos blockPos1 = blockPos.relative(direction, i);
+                             if (!level.getBlockState(blockPos1).isAir()) {

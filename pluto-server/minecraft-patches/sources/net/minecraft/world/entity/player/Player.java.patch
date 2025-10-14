@@ -24,7 +24,7 @@
                  double d = this.getLookAngle().y;
                  double d1 = d < -0.2 ? 0.085 : 0.06;
 -                if (d <= 0.0 || this.jumping || !this.level().getFluidState(BlockPos.containing(this.getX(), this.getY() + 1.0 - 0.1, this.getZ())).isEmpty()) {
-+                if (d <= 0.0 || this.jumping || !this.level().pluto$getFluidState(this.getX(), this.getY() + 1.0 - 0.1, this.getZ()).isEmpty()) {
++                if (d <= 0.0 || this.jumping || !this.level().pluto$getFluidState(this.getX(), this.getY() + 1.0 - 0.1, this.getZ()).isEmpty()) { // Pluto - Memory allocation optimisations
                      Vec3 deltaMovement = this.getDeltaMovement();
                      this.setDeltaMovement(deltaMovement.add(0.0, (d - deltaMovement.y) * d1, 0.0));
                  }

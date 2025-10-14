@@ -43,8 +43,8 @@
      }
  
 +    // Pluto start - Expose some sound related functions
-+    public float plutoGetSoundVolume() { return getSoundVolume(); }
-+    public float plutoGetVoicePitch() { return getVoicePitch(); }
++    public float pluto$GetSoundVolume() { return getSoundVolume(); }
++    public float pluto$GetVoicePitch() { return getVoicePitch(); }
 +    // Pluto end - Expose some sound related functions
 +
      public float getSoundVolume() {

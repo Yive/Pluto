@@ -3,10 +3,10 @@
 @@ -304,8 +_,7 @@
      }
  
-     protected double getGroundY(Vec3 vec) {
--        BlockPos blockPos = BlockPos.containing(vec);
--        return this.level.getBlockState(blockPos.below()).isAir() ? vec.y : WalkNodeEvaluator.getFloorLevel(this.level, blockPos);
-+        return this.level.pluto$getBlockState(Mth.floor(vec.x), Mth.floor(vec.y) - 1, Mth.floor(vec.z)).isAir() ? vec.y : WalkNodeEvaluator.getFloorLevel(this.level, BlockPos.containing(vec)); // Pluto - Memory allocation optimisations
+     protected double getGroundY(Vec3 pos) {
+-        BlockPos blockPos = BlockPos.containing(pos);
+-        return this.level.getBlockState(blockPos.below()).isAir() ? pos.y : WalkNodeEvaluator.getFloorLevel(this.level, blockPos);
++        return this.level.pluto$getBlockState(Mth.floor(pos.x), Mth.floor(pos.y) - 1, Mth.floor(pos.z)).isAir() ? pos.y : WalkNodeEvaluator.getFloorLevel(this.level, BlockPos.containing(pos)); // Pluto - Memory allocation optimisations
      }
  
      protected void followThePath() {

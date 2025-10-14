@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/ButtonBlock.java
 +++ b/net/minecraft/world/level/block/ButtonBlock.java
 @@ -149,6 +_,18 @@
-         return blockState.getValue(POWERED) && getConnectedDirection(blockState) == side ? 15 : 0;
+         return state.getValue(POWERED) && getConnectedDirection(state) == side ? 15 : 0;
      }
  
 +    // Pluto start - Memory allocation optimisations

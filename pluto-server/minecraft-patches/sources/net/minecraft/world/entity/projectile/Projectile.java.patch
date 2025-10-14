@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/projectile/Projectile.java
 +++ b/net/minecraft/world/entity/projectile/Projectile.java
 @@ -51,6 +_,36 @@
-         super(entityType, level);
+         super(type, level);
      }
  
 +    // Pufferfish start

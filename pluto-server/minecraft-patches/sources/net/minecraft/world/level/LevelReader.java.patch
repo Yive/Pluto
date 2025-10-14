@@ -33,9 +33,9 @@
                          return false;
                      }
 @@ -164,12 +_,11 @@
-         int ceil1 = Mth.ceil(bb.maxY);
-         int floor2 = Mth.floor(bb.minZ);
-         int ceil2 = Mth.ceil(bb.maxZ);
+         int ceil1 = Mth.ceil(aabb.maxY);
+         int floor2 = Mth.floor(aabb.minZ);
+         int ceil2 = Mth.ceil(aabb.maxZ);
 -        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
  
          for (int i = floor; i < ceil; i++) {

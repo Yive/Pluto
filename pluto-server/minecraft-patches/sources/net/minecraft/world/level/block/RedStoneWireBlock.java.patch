@@ -92,7 +92,7 @@
              if (level.getBlockState(blockPos).isRedstoneConductor(level, blockPos)) {
                  this.checkCornerChangeAt(level, blockPos.above());
 @@ -425,6 +_,76 @@
-         return !this.shouldSignal ? 0 : blockState.getSignal(blockAccess, pos, side);
+         return !this.shouldSignal ? 0 : state.getSignal(level, pos, side);
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -166,7 +166,7 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
          if (this.shouldSignal && side != Direction.DOWN) {
 @@ -484,7 +_,7 @@
      public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {

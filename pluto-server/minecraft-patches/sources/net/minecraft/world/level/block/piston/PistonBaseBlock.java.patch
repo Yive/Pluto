@@ -3,10 +3,10 @@
 @@ -127,7 +_,7 @@
      }
  
-     private boolean getNeighborSignal(SignalGetter signalGetter, BlockPos pos, Direction direction) {
+     private boolean getNeighborSignal(SignalGetter level, BlockPos pos, Direction direction) {
 -        for (Direction direction1 : Direction.values()) {
 +        for (Direction direction1 : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-             if (direction1 != direction && signalGetter.hasSignal(pos.relative(direction1), direction1)) {
+             if (direction1 != direction && level.hasSignal(pos.relative(direction1), direction1)) {
                  return true;
              }
 @@ -138,7 +_,7 @@
@@ -15,6 +15,6 @@
  
 -            for (Direction direction2 : Direction.values()) {
 +            for (Direction direction2 : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                 if (direction2 != Direction.DOWN && signalGetter.hasSignal(blockPos.relative(direction2), direction2)) {
+                 if (direction2 != Direction.DOWN && level.hasSignal(blockPos.relative(direction2), direction2)) {
                      return true;
                  }

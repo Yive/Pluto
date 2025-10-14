@@ -11,13 +11,13 @@
              }
 @@ -220,9 +_,8 @@
      @Override
-     protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
+     protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState state, Direction direction, FluidState fluidState) {
          if (direction == Direction.DOWN) {
 -            FluidState fluidState1 = level.getFluidState(pos);
 -            if (this.is(FluidTags.LAVA) && fluidState1.is(FluidTags.WATER)) {
--                if (blockState.getBlock() instanceof LiquidBlock) {
+-                if (state.getBlock() instanceof LiquidBlock) {
 +            if (this.is(FluidTags.LAVA) && level.getFluidState(pos).is(FluidTags.WATER)) { // Pluto - Decrease chunk/block lookups
-+                if (blockState.getBlock() instanceof LiquidBlock && !level.getMinecraftWorld().plutoConfig().disableBlockGenerationFromFluids) { // Pluto - Toggle for block generation from fluids
++                if (state.getBlock() instanceof LiquidBlock && !level.getMinecraftWorld().plutoConfig().disableBlockGenerationFromFluids) { // Pluto - Toggle for block generation from fluids
                      // CraftBukkit start
                      if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level.getMinecraftWorld(), pos, Blocks.STONE.defaultBlockState(), 3)) {
                          return;

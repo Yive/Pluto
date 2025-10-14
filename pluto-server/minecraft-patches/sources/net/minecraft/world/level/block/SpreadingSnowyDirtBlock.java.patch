@@ -2,12 +2,12 @@
 +++ b/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
 @@ -18,12 +_,11 @@
  
-     private static boolean canBeGrass(BlockState state, LevelReader levelReader, BlockPos pos) {
+     private static boolean canBeGrass(BlockState state, LevelReader level, BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
--        return canBeGrass(levelReader.getChunk(pos), state, levelReader, pos);
-+        return canBeGrass(levelReader.getChunk(pos), state, levelReader, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
+-        return canBeGrass(level.getChunk(pos), state, level, pos);
++        return canBeGrass(level.getChunk(pos), state, level, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
      }
--    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader levelReader, BlockPos pos) {
+-    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader level, BlockPos pos) {
 +    private static boolean canBeGrass(net.minecraft.world.level.chunk.ChunkAccess chunk, BlockState state, LevelReader levelReader, int x, int y, int z) { // Pluto - Memory allocation optimisations
          // Paper end - Perf: optimize dirt and snow spreading
 -        BlockPos blockPos = pos.above();

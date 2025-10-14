@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
+@@ -259,7 +_,7 @@
+     public int getParticleAmount() {
+         int i = 0;
+ 
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             i += this.shouldRenderFace(direction) ? 1 : 0;
+         }
+ 

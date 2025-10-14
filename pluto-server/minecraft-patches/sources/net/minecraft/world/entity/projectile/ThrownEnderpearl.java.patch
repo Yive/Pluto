@@ -5,15 +5,15 @@
  
              if (this.isAlive()) {
 -                BlockPos blockPos = BlockPos.containing(this.position());
-+            long blockPos = this.position().asBlockPosLong(); // Pluto - Memory allocation optimisations
++                long blockPos = this.position().asBlockPosLong(); // Pluto - Memory allocation optimisations
                  if ((
                          --this.ticketTimer <= 0L
 -                            || var7 != SectionPos.blockToSectionCoord(blockPos.getX())
 -                            || sectionPosZ != SectionPos.blockToSectionCoord(blockPos.getZ())
-+                        // Pluto start - Memory allocation optimisations
-+                        || var7 != SectionPos.blockToSectionCoord(BlockPos.getX(blockPos))
-+                        || sectionPosZ != SectionPos.blockToSectionCoord(BlockPos.getZ(blockPos))
-+                        // Pluto end - Memory allocation optimisations
++                            // Pluto start - Memory allocation optimisations
++                            || var7 != SectionPos.blockToSectionCoord(BlockPos.getX(blockPos))
++                            || sectionPosZ != SectionPos.blockToSectionCoord(BlockPos.getZ(blockPos))
++                            // Pluto end - Memory allocation optimisations
                      )
                      && entity instanceof ServerPlayer serverPlayer1) {
                      this.ticketTimer = serverPlayer1.registerAndUpdateEnderPearlTicket(this);

@@ -54,19 +54,15 @@
                  this.mergeWithNeighbours();
              }
  
-@@ -229,8 +_,15 @@
- 
-     @Override
+@@ -231,6 +_,13 @@
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
--        return this.getOnPos(0.999999F);
--    }
-+        return this.getOnPos(0.999999F); // Pluto - Memory allocation optimisations | Diff on change
-+    }
+         return this.getOnPos(0.999999F);
+     }
 +
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
-+        return this.pluto$getOnPos(0.999999F);
++        return this.pluto$getOnPos((float) DELTA_AFFECTED_BY_BLOCKS_BELOW_1_0);
 +    }
 +    // Pluto end - Memory allocation optimisations
  

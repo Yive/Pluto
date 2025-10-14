@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/level/redstone/Orientation.java
++++ b/net/minecraft/world/level/redstone/Orientation.java
+@@ -135,7 +_,7 @@
+                 start.withSideBias.put(sideBias, generateContext(new Orientation(start.up, start.front, sideBias), output));
+             }
+ 
+-            for (Direction direction : Direction.values()) {
++            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                 Direction direction1 = start.up;
+                 if (direction == start.up) {
+                     direction1 = start.front.getOpposite();
+@@ -148,7 +_,7 @@
+                 start.withFront.put(direction, generateContext(new Orientation(direction1, direction, start.sideBias), output));
+             }
+ 
+-            for (Direction direction : Direction.values()) {
++            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                 Direction direction1x = start.front;
+                 if (direction == start.front) {
+                     direction1x = start.up.getOpposite();

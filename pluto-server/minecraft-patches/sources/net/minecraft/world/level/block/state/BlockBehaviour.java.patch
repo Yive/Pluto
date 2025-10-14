@@ -10,7 +10,7 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean flag) {
+     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean pastEdges) {
      }
  
 @@ -377,6 +_,12 @@

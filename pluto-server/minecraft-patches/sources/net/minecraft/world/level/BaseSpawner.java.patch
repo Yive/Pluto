@@ -9,52 +9,52 @@
      public void setEntityId(EntityType<?> type, @Nullable Level level, RandomSource random, BlockPos pos) {
          this.getOrCreateNextSpawnData(level, random, pos).getEntityToSpawn().putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
 @@ -90,7 +_,19 @@
-         tickDelay = serverLevel.paperConfig().tickRates.mobSpawner;
+         tickDelay = level.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
--        if (this.isNearPlayer(serverLevel, pos) && serverLevel.getServer().isSpawnerBlockEnabled()) {
+-        if (this.isNearPlayer(level, pos) && level.getServer().isSpawnerBlockEnabled()) {
 +
 +        // Pluto start - Options for spawner settings
-+        if (!wasApiUsed && serverLevel.plutoConfig().spawnerSettingsEnabled) {
-+            this.minSpawnDelay = serverLevel.plutoConfig().spawnerMinSpawnDelay;
-+            this.maxSpawnDelay = serverLevel.plutoConfig().spawnerMaxSpawnDelay;
-+            this.spawnCount = serverLevel.plutoConfig().spawnerSpawnCount;
-+            this.maxNearbyEntities = serverLevel.plutoConfig().spawnerMaxNearbyEntities;
-+            this.requiredPlayerRange = serverLevel.plutoConfig().spawnerRequiredPlayerRange;
-+            this.spawnRange = serverLevel.plutoConfig().spawnerSpawnRange;
++        if (!wasApiUsed && level.plutoConfig().spawnerSettingsEnabled) {
++            this.minSpawnDelay = level.plutoConfig().spawnerMinSpawnDelay;
++            this.maxSpawnDelay = level.plutoConfig().spawnerMaxSpawnDelay;
++            this.spawnCount = level.plutoConfig().spawnerSpawnCount;
++            this.maxNearbyEntities = level.plutoConfig().spawnerMaxNearbyEntities;
++            this.requiredPlayerRange = level.plutoConfig().spawnerRequiredPlayerRange;
++            this.spawnRange = level.plutoConfig().spawnerSpawnRange;
 +        }
 +        // Pluto end - Options for spawner settings
 +
-+        if (!serverLevel.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(serverLevel, pos)) { // Pluto - Options for spawner settings
++        if (!level.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(level, pos)) { // Pluto - Options for spawner settings
              if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
-                 this.delay(serverLevel, pos);
+                 this.delay(level, pos);
              }
 @@ -119,7 +_,7 @@
                                      pos.getZ() + (random.nextDouble() - random.nextDouble()) * this.spawnRange + 0.5
                                  )
                              );
--                        if (serverLevel.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) {
-+                        if (!serverLevel.plutoConfig().spawnerCheckForBlockCollision || serverLevel.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) { // Pluto - Options for spawner settings
+-                        if (level.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) {
++                        if (!level.plutoConfig().spawnerCheckForBlockCollision || level.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) { // Pluto - Options for spawner settings
                              BlockPos blockPos = BlockPos.containing(vec3);
                              if (nextSpawnData.getCustomSpawnRules().isPresent()) {
-                                 if (!optional.get().getCategory().isFriendly() && serverLevel.getDifficulty() == Difficulty.PEACEFUL) {
-@@ -160,7 +_,7 @@
+                                 if (!optional.get().getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL) {
+@@ -158,7 +_,7 @@
                                  return;
                              }
  
--                            int size = serverLevel.getEntities(
-+                            int size = !serverLevel.plutoConfig().spawnerCheckForNearbyEntities ? 0 : serverLevel.getEntities( // Pluto - Options for spawner settings
+-                            int size = level.getEntities(
++                            int size = !level.plutoConfig().spawnerCheckForNearbyEntities ? 0 : level.getEntities( // Pluto - Options for spawner settings
                                      EntityTypeTest.forExactClass(entity.getClass()),
                                      new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(this.spawnRange),
                                      EntitySelector.NO_SPECTATORS
-@@ -185,6 +_,15 @@
-                                         .finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null);
+@@ -182,6 +_,15 @@
+                                     ((Mob)entity).finalizeSpawn(level, level.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null);
                                  }
  
 +                                // Pluto start - Options for spawner settings
 +                                // I wish I could put this higher up in the chain, but the baby
 +                                // state only gets assigned after the finalizeSpawn method is called.
-+                                if (serverLevel.plutoConfig().spawnerDisableBabySpawns && mob.isBaby()) {
++                                if (level.plutoConfig().spawnerDisableBabySpawns && mob.isBaby()) {
 +                                    if (mob.getVehicle() != null) mob.getVehicle().discard(); // Due to jockeys
 +                                    continue;
 +                                }
@@ -63,15 +63,15 @@
                                  nextSpawnData.getEquipment().ifPresent(mob::equip);
                                  // Spigot start
                                  if (mob.level().spigotConfig.nerfSpawnerMobs) {
-@@ -206,6 +_,7 @@
+@@ -203,6 +_,7 @@
                                  return;
                              }
  
-+                            if (serverLevel.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
-                             serverLevel.levelEvent(2004, pos, 0);
-                             serverLevel.gameEvent(entity, GameEvent.ENTITY_PLACE, blockPos);
++                            if (level.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
+                             level.levelEvent(2004, pos, 0);
+                             level.gameEvent(entity, GameEvent.ENTITY_PLACE, blockPos);
                              if (entity instanceof Mob) {
-@@ -252,9 +_,11 @@
+@@ -249,9 +_,11 @@
          this.requiredPlayerRange = input.getIntOr("RequiredPlayerRange", 16);
          this.spawnRange = input.getIntOr("SpawnRange", 4);
          this.displayEntity = null;

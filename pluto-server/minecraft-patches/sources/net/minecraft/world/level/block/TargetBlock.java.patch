@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/TargetBlock.java
 +++ b/net/minecraft/world/level/block/TargetBlock.java
 @@ -117,6 +_,13 @@
-         return blockState.getValue(OUTPUT_POWER);
+         return state.getValue(OUTPUT_POWER);
      }
  
 +    // Pluto start - Memory allocation optimisations

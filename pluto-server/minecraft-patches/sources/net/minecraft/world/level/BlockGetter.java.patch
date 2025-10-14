@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/BlockGetter.java
 +++ b/net/minecraft/world/level/BlockGetter.java
 @@ -30,6 +_,32 @@
-         return blockEntity != null && blockEntity.getType() == blockEntityType ? Optional.of((T)blockEntity) : Optional.empty();
+         return blockEntity != null && blockEntity.getType() == type ? Optional.of((T)blockEntity) : Optional.empty();
      }
  
 +    // Pluto start - Memory allocation optimisations

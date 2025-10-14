@@ -3,15 +3,15 @@
 @@ -80,10 +_,14 @@
      }
  
-     private boolean validPos(BlockPos pos, ServerLevel serverLevel) {
--        BlockState blockState = serverLevel.getBlockState(pos);
+     private boolean validPos(BlockPos pos, ServerLevel level) {
+-        BlockState blockState = level.getBlockState(pos);
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.LevelChunk chunk = serverLevel.getChunkIfLoaded(pos);
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
 +        if (chunk == null) return false;
 +
 +        BlockState blockState = chunk.getBlockState(pos);
          Block block = blockState.getBlock();
--        Block block1 = serverLevel.getBlockState(pos.below()).getBlock();
+-        Block block1 = level.getBlockState(pos.below()).getBlock();
 -        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && block1 instanceof FarmBlock;
 +        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState) || blockState.isAir() && chunk.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).getBlock() instanceof FarmBlock;
 +        // Pluto end - Decrease chunk/block lookups

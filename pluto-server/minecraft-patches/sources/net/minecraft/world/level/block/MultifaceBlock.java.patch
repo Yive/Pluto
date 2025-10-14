@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/level/block/MultifaceBlock.java
++++ b/net/minecraft/world/level/block/MultifaceBlock.java
+@@ -74,7 +_,7 @@
+         } else {
+             Set<Direction> set = EnumSet.noneOf(Direction.class);
+ 
+-            for (Direction direction : Direction.values()) {
++            for (Direction direction : DIRECTIONS) { // Pluto - Avoid excessive calls to Enum#values
+                 if (hasFace(state, direction)) {
+                     set.add(direction);
+                 }
+@@ -87,7 +_,7 @@
+     public static Set<Direction> unpack(byte packedDirections) {
+         Set<Direction> set = EnumSet.noneOf(Direction.class);
+ 
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : DIRECTIONS) { // Pluto - Avoid excessive calls to Enum#values
+             if ((packedDirections & (byte)(1 << direction.ordinal())) > 0) {
+                 set.add(direction);
+             }

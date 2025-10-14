@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/DiodeBlock.java
 +++ b/net/minecraft/world/level/block/DiodeBlock.java
 @@ -81,6 +_,26 @@
-         return blockState.getSignal(blockAccess, pos, side);
+         return state.getSignal(level, pos, side);
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -25,8 +25,8 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
-         if (!blockState.getValue(POWERED)) {
+     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
+         if (!state.getValue(POWERED)) {
 @@ -99,7 +_,7 @@
              dropResources(state, level, pos, blockEntity);
              level.removeBlock(pos, false);

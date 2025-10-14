@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/PoweredBlock.java
 +++ b/net/minecraft/world/level/block/PoweredBlock.java
 @@ -28,4 +_,11 @@
-     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
          return 15;
      }
 +

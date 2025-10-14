@@ -10,8 +10,8 @@
          }
      }
 @@ -131,6 +_,18 @@
-     protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
-         return side == Direction.DOWN ? blockState.getSignal(blockAccess, pos, side) : 0;
+     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
+         return side == Direction.DOWN ? state.getSignal(level, pos, side) : 0;
      }
 +
 +    // Pluto start - Memory allocation optimisations

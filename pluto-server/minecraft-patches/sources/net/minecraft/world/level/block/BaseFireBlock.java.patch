@@ -3,16 +3,16 @@
 @@ -43,8 +_,7 @@
      }
  
-     public static BlockState getState(BlockGetter reader, BlockPos pos) {
+     public static BlockState getState(BlockGetter level, BlockPos pos) {
 -        BlockPos blockPos = pos.below();
--        BlockState blockState = reader.getBlockState(blockPos);
-+        BlockState blockState = reader.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return SoulFireBlock.canSurviveOnBlock(blockState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(reader, pos);
+-        BlockState blockState = level.getBlockState(blockPos);
++        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return SoulFireBlock.canSurviveOnBlock(blockState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(level, pos);
      }
  
 @@ -164,7 +_,7 @@
      @Override
-     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
+     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
          if (!oldState.is(state.getBlock())) {
 -            if (inPortalDimension(level)) {
 +            if (!level.plutoConfig().disableNetherPortalGeneration && inPortalDimension(level)) { // Pluto - Toggle for nether portal generation

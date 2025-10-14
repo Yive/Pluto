@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/ObserverBlock.java
 +++ b/net/minecraft/world/level/block/ObserverBlock.java
 @@ -111,6 +_,18 @@
-         return blockState.getSignal(blockAccess, pos, side);
+         return state.getSignal(level, pos, side);
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -17,5 +17,5 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
-         return blockState.getValue(POWERED) && blockState.getValue(FACING) == side ? 15 : 0;
+     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
+         return state.getValue(POWERED) && state.getValue(FACING) == side ? 15 : 0;

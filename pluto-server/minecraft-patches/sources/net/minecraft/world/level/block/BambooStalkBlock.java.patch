@@ -1,21 +1,22 @@
 --- a/net/minecraft/world/level/block/BambooStalkBlock.java
 +++ b/net/minecraft/world/level/block/BambooStalkBlock.java
-@@ -82,11 +_,16 @@
+@@ -82,11 +_,17 @@
      @Nullable
      @Override
      public BlockState getStateForPlacement(BlockPlaceContext context) {
 -        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.LevelChunk chunk = context.getLevel().getChunkIfLoaded(context.getClickedPos());
++        final BlockPos clickedPos = context.getClickedPos();
++        net.minecraft.world.level.chunk.LevelChunk chunk = context.getLevel().getChunkIfLoaded(clickedPos);
 +        if (chunk == null) return null;
 +
-+        FluidState fluidState = chunk.getFluidState(context.getClickedPos());
++        FluidState fluidState = chunk.getFluidState(clickedPos);
 +        // Pluto end - Decrease chunk/block lookups
          if (!fluidState.isEmpty()) {
              return null;
          } else {
 -            BlockState blockState = context.getLevel().getBlockState(context.getClickedPos().below());
-+            BlockState blockState = chunk.getBlockState(context.getClickedPos().getX(), context.getClickedPos().getY() - 1, context.getClickedPos().getZ()); // Pluto - Decrease chunk/block lookups
++            BlockState blockState = chunk.getBlockState(clickedPos.getX(), clickedPos.getY() - 1, clickedPos.getZ()); // Pluto - Decrease chunk/block lookups
              if (blockState.is(BlockTags.BAMBOO_PLANTABLE_ON)) {
                  if (blockState.is(Blocks.BAMBOO_SAPLING)) {
                      return this.defaultBlockState().setValue(AGE, 0);
@@ -24,7 +25,7 @@
                      return this.defaultBlockState().setValue(AGE, i);
                  } else {
 -                    BlockState blockState1 = context.getLevel().getBlockState(context.getClickedPos().above());
-+                    BlockState blockState1 = chunk.getBlockState(context.getClickedPos().getX(), context.getClickedPos().getY() + 1, context.getClickedPos().getZ()); // Pluto - Decrease chunk/block lookups
++                    BlockState blockState1 = chunk.getBlockState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ()); // Pluto - Decrease chunk/block lookups
                      return blockState1.is(Blocks.BAMBOO)
                          ? this.defaultBlockState().setValue(AGE, blockState1.getValue(AGE))
                          : Blocks.BAMBOO_SAPLING.defaultBlockState();

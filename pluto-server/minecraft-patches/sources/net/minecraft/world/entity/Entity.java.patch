@@ -95,25 +95,6 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1412,15 +_,15 @@
- 
-     @Deprecated
-     public BlockPos getOnPosLegacy() {
--        return this.getOnPos(0.2F);
-+        return this.getOnPos(0.2F); // Pluto - Memory allocation optimisations | Diff on change
-     }
- 
-     public BlockPos getBlockPosBelowThatAffectsMyMovement() {
--        return this.getOnPos(0.500001F);
-+        return this.getOnPos(0.500001F); // Pluto - Memory allocation optimisations | Diff on change
-     }
- 
-     public BlockPos getOnPos() {
--        return this.getOnPos(1.0E-5F);
-+        return this.getOnPos(1.0E-5F); // Pluto - Memory allocation optimisations | Diff on change
-     }
- 
-     protected BlockPos getOnPos(float yOffset) {
 @@ -1444,9 +_,45 @@
          }
      }
@@ -121,21 +102,21 @@
 +    // Pluto start - Memory allocation optimisations
 +    @Deprecated
 +    public long pluto$getOnPosLegacy() {
-+        return this.pluto$getOnPos(0.2F);
++        return this.pluto$getOnPos(DELTA_AFFECTED_BY_BLOCKS_BELOW_0_2);
 +    }
 +
 +    public long pluto$getOnPos() {
-+        return this.pluto$getOnPos(1.0E-5F);
++        return this.pluto$getOnPos(Mth.EPSILON);
 +    }
 +
 +    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
-+        return this.pluto$getOnPos(0.500001F);
++        return this.pluto$getOnPos((float) DELTA_AFFECTED_BY_BLOCKS_BELOW_0_5);
 +    }
 +
 +    protected long pluto$getOnPos(float yOffset) {
 +        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) != null) { // Paper - ensure no loads
 +            BlockPos blockPos = this.mainSupportingBlockPos.get();
-+            if (!(yOffset > 1.0E-5F)) {
++            if (!(yOffset > Mth.EPSILON)) {
 +                return blockPos.asLong();
 +            } else {
 +                BlockState blockState = this.level().getBlockState(blockPos);
@@ -184,7 +165,7 @@
      }
  
      protected void playCombinationStepSounds(BlockState primaryState, BlockState secondaryState) {
-@@ -1966,10 +_,25 @@
+@@ -1966,10 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -197,8 +178,7 @@
 +
 +        this.lastRainCheck = this.tickCount;
 +
-+        // The nether & end can't have rain
-+        // Both dimensions have skylight set to false.
++        // Dimensions without skylight can't have rain.
 +        if (!this.level().dimensionType().hasSkyLight()) {
 +            this.lastRainCheckResult = false;
 +            return false;

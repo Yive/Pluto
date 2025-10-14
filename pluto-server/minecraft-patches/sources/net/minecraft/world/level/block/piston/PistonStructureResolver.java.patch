@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/piston/PistonStructureResolver.java
++++ b/net/minecraft/world/level/block/piston/PistonStructureResolver.java
+@@ -168,7 +_,7 @@
+     private boolean addBranchingBlocks(BlockPos fromPos) {
+         BlockState blockState = this.level.getBlockState(fromPos);
+ 
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             if (direction.getAxis() != this.pushDirection.getAxis()) {
+                 BlockPos blockPos = fromPos.relative(direction);
+                 BlockState blockState1 = this.level.getBlockState(blockPos);

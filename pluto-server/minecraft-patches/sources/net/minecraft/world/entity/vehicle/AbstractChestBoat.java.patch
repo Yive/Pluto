@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
 +++ b/net/minecraft/world/entity/vehicle/AbstractChestBoat.java
 @@ -38,6 +_,27 @@
-         super(entityType, level, dropItem);
+         super(type, level, dropItem);
      }
  
 +    // Pluto start - Entities search for hoppers

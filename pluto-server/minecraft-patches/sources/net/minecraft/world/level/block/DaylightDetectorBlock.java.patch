@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/DaylightDetectorBlock.java
 +++ b/net/minecraft/world/level/block/DaylightDetectorBlock.java
 @@ -56,6 +_,13 @@
-         return blockState.getValue(POWER);
+         return state.getValue(POWER);
      }
  
 +    // Pluto start - Memory allocation optimisations

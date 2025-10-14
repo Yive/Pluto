@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/chunk/ProtoChunk.java
 +++ b/net/minecraft/world/level/chunk/ProtoChunk.java
-@@ -204,6 +_,52 @@
+@@ -202,6 +_,52 @@
          return this.blockEntities.get(pos);
      }
  
