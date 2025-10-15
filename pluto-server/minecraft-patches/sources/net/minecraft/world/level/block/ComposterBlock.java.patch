@@ -1,0 +1,28 @@
+--- a/net/minecraft/world/level/block/ComposterBlock.java
++++ b/net/minecraft/world/level/block/ComposterBlock.java
+@@ -431,6 +_,8 @@
+         public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+             return false;
+         }
++
++        @Override public boolean stillValid() { return false; } // Pluto - Hoppers cache containers
+     }
+ 
+     public static class InputContainer extends SimpleContainer implements WorldlyContainer {
+@@ -482,6 +_,8 @@
+                 this.removeItemNoUpdate(0);
+             }
+         }
++
++        @Override public boolean stillValid() { return false; } // Pluto - Hoppers cache containers
+     }
+ 
+     public static class OutputContainer extends SimpleContainer implements WorldlyContainer {
+@@ -530,5 +_,7 @@
+             }
+             // CraftBukkit end
+         }
++
++        @Override public boolean stillValid() { return false; } // Pluto - Hoppers cache containers
+     }
+ }
