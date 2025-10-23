@@ -47,7 +47,7 @@
                                      EntityTypeTest.forExactClass(entity.getClass()),
                                      new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(this.spawnRange),
                                      EntitySelector.NO_SPECTATORS
-@@ -182,6 +_,15 @@
+@@ -181,6 +_,15 @@
                                      ((Mob)entity).finalizeSpawn(level, level.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null);
                                  }
  
@@ -63,7 +63,7 @@
                                  nextSpawnData.getEquipment().ifPresent(mob::equip);
                                  // Spigot start
                                  if (mob.level().spigotConfig.nerfSpawnerMobs) {
-@@ -203,6 +_,7 @@
+@@ -202,6 +_,7 @@
                                  return;
                              }
  
@@ -71,7 +71,7 @@
                              level.levelEvent(2004, pos, 0);
                              level.gameEvent(entity, GameEvent.ENTITY_PLACE, blockPos);
                              if (entity instanceof Mob) {
-@@ -249,9 +_,11 @@
+@@ -248,9 +_,11 @@
          this.requiredPlayerRange = input.getIntOr("RequiredPlayerRange", 16);
          this.spawnRange = input.getIntOr("SpawnRange", 4);
          this.displayEntity = null;
