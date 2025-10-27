@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/AbstractThrownPotion.java
 +++ b/net/minecraft/world/entity/projectile/AbstractThrownPotion.java
-@@ -57,7 +_,7 @@
+@@ -58,7 +_,7 @@
                  this.dowseFire(blockPos1);
                  this.dowseFire(blockPos1.relative(direction.getOpposite()));
  

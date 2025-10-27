@@ -28,6 +28,6 @@
              if (blockState.is(state.getBlock()) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
                  BlockState blockState1 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
 +                BlockPos blockPos = pos.below(); // Pluto - Memory allocation optimisations
-                 level.setBlock(blockPos, blockState1, 35);
-                 level.levelEvent(player, 2001, blockPos, Block.getId(blockState));
+                 level.setBlock(blockPos, blockState1, Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(blockState));
              }

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/sniffer/Sniffer.java
 +++ b/net/minecraft/world/entity/animal/sniffer/Sniffer.java
-@@ -462,10 +_,12 @@
+@@ -463,10 +_,12 @@
          return Brain.provider(SnifferAi.MEMORY_TYPES, SnifferAi.SENSOR_TYPES);
      }
  

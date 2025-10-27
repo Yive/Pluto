@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/behavior/RamTarget.java
 +++ b/net/minecraft/world/entity/ai/behavior/RamTarget.java
-@@ -115,8 +_,15 @@
+@@ -116,8 +_,15 @@
  
      private boolean hasRammedHornBreakingBlock(ServerLevel level, Goat owner) {
          Vec3 vec3 = owner.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize();

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -199,7 +_,7 @@
+@@ -200,7 +_,7 @@
              }
  
              int maxStackSize = furnace.getMaxStackSize();
@@ -9,7 +9,7 @@
                  // CraftBukkit start
                  org.bukkit.craftbukkit.inventory.CraftItemStack fuel = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack);
  
-@@ -225,7 +_,7 @@
+@@ -226,7 +_,7 @@
                  }
              }
  
@@ -18,7 +18,7 @@
                  // CraftBukkit start
                  if (recipeHolder != null && furnace.cookingTimer == 0) {
                      org.bukkit.craftbukkit.inventory.CraftItemStack source = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(furnace.items.get(0));
-@@ -247,7 +_,7 @@
+@@ -248,7 +_,7 @@
                  if (furnace.cookingTimer >= furnace.cookingTotalTime) { // Paper - cook speed multiplier API
                      furnace.cookingTimer = 0;
                      furnace.cookingTotalTime = getTotalCookTime(level, furnace, furnace.recipeType, furnace.cookSpeedMultiplier); // Paper - cook speed multiplier API
@@ -27,7 +27,7 @@
                          furnace.setRecipeUsed(recipeHolder);
                      }
  
-@@ -271,27 +_,54 @@
+@@ -272,27 +_,54 @@
          }
      }
  
@@ -83,7 +83,7 @@
              return false;
          }
      }
-@@ -303,9 +_,13 @@
+@@ -304,9 +_,13 @@
          NonNullList<ItemStack> items,
          int maxStackSize,
          net.minecraft.world.level.Level level, // CraftBukkit

@@ -19,6 +19,6 @@
 +                                }
 +                                // Pluto end - Prevent x-ray exploits when players are inside certain blocks
 +
-                                 if (this.level().setBlock(blockPos, this.blockState, 3)) {
+                                 if (this.level().setBlock(blockPos, this.blockState, Block.UPDATE_ALL)) {
                                      serverLevel.getChunkSource()
                                          .chunkMap

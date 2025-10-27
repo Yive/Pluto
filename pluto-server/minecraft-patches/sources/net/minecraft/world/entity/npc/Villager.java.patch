@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/npc/Villager.java
 +++ b/net/minecraft/world/entity/npc/Villager.java
-@@ -287,6 +_,10 @@
+@@ -288,6 +_,10 @@
      }
      // Paper end - EAR 2
  
@@ -11,7 +11,7 @@
      @Override
      protected void customServerAiStep(ServerLevel level) {
          // Paper start - EAR 2
-@@ -296,7 +_,11 @@
+@@ -297,7 +_,11 @@
          // Paper end - EAR 2
          ProfilerFiller profilerFiller = Profiler.get();
          profilerFiller.push("villagerBrain");

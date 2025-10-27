@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/dimension/end/EndDragonFight.java
 +++ b/net/minecraft/world/level/dimension/end/EndDragonFight.java
-@@ -556,7 +_,7 @@
+@@ -557,7 +_,7 @@
              List<EndCrystal> list = Lists.newArrayList();
              BlockPos blockPos1 = blockPos.above(1);
  

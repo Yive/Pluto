@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/behavior/PrepareRamNearestTarget.java
 +++ b/net/minecraft/world/entity/ai/behavior/PrepareRamNearestTarget.java
-@@ -145,7 +_,7 @@
+@@ -146,7 +_,7 @@
              List<BlockPos> list = Lists.newArrayList();
              BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();
  

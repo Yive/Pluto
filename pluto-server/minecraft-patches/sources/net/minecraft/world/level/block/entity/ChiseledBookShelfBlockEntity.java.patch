@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/ChiseledBookShelfBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ChiseledBookShelfBlockEntity.java
-@@ -122,6 +_,8 @@
+@@ -123,6 +_,8 @@
          return itemStack;
      }
  

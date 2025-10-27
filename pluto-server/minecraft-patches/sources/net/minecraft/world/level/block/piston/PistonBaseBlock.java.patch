@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-@@ -127,7 +_,7 @@
+@@ -128,7 +_,7 @@
      }
  
      private boolean getNeighborSignal(SignalGetter level, BlockPos pos, Direction direction) {
@@ -9,7 +9,7 @@
              if (direction1 != direction && level.hasSignal(pos.relative(direction1), direction1)) {
                  return true;
              }
-@@ -138,7 +_,7 @@
+@@ -139,7 +_,7 @@
          } else {
              BlockPos blockPos = pos.above();
  

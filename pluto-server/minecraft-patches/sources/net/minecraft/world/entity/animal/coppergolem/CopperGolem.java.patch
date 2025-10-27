@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java
 +++ b/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java
-@@ -181,10 +_,12 @@
+@@ -183,10 +_,12 @@
          this.setWeatherState(input.read("weather_state", WeatheringCopper.WeatherState.CODEC).orElse(WeatheringCopper.WeatherState.UNAFFECTED));
      }
  

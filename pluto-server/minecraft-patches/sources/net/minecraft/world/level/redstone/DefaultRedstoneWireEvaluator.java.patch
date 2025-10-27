@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/redstone/DefaultRedstoneWireEvaluator.java
 +++ b/net/minecraft/world/level/redstone/DefaultRedstoneWireEvaluator.java
-@@ -34,7 +_,7 @@
+@@ -35,7 +_,7 @@
              Set<BlockPos> set = Sets.newHashSet();
              set.add(pos);
  

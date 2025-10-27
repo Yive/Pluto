@@ -30,15 +30,17 @@
                          if (!blockState1.is(this.plant)) {
                              if (blockState1.is(Blocks.END_STONE)) {
                                  flag1 = true;
-@@ -95,8 +_,8 @@
+@@ -95,8 +_,10 @@
                      flag = true;
                  }
  
 -                if (flag && allNeighborsEmpty(level, blockPos, null) && level.isEmptyBlock(pos.above(2))) {
 -                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
++                // Pluto start - Memory allocation optimisations
 +                if (flag && allNeighborsEmpty(level, x, y + 1, z, null) && level.pluto$isEmptyBlock(x, y + 2, z)) {
 +                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos = pos.above(), this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
-                     level.setBlock(pos, ChorusPlantBlock.getStateWithConnections(level, pos, this.plant.defaultBlockState()), 2);
++                    // Pluto end - Memory allocation optimisations
+                     level.setBlock(pos, ChorusPlantBlock.getStateWithConnections(level, pos, this.plant.defaultBlockState()), Block.UPDATE_CLIENTS);
                      this.placeGrownFlower(level, blockPos, ageValue);
                      } // CraftBukkit
 @@ -110,11 +_,16 @@
@@ -64,7 +66,7 @@
                              flag2 = true;
                              } // CraftBukkit
 @@ -151,9 +_,11 @@
-         level.levelEvent(1034, pos, 0);
+         level.levelEvent(LevelEvent.SOUND_CHORUS_DEATH, pos, 0);
      }
  
 -    private static boolean allNeighborsEmpty(LevelReader level, BlockPos pos, @Nullable Direction excludingSide) {
@@ -119,10 +121,10 @@
              }
  
 +            BlockPos blockPos = branchPos.above(i1 + 1); // Pluto - Memory allocation optimisations | Moved down
-             level.setBlock(blockPos, ChorusPlantBlock.getStateWithConnections(level, blockPos, block.defaultBlockState()), 2);
-             level.setBlock(blockPos.below(), ChorusPlantBlock.getStateWithConnections(level, blockPos.below(), block.defaultBlockState()), 2);
+             level.setBlock(blockPos, ChorusPlantBlock.getStateWithConnections(level, blockPos, block.defaultBlockState()), Block.UPDATE_CLIENTS);
+             level.setBlock(blockPos.below(), ChorusPlantBlock.getStateWithConnections(level, blockPos.below(), block.defaultBlockState()), Block.UPDATE_CLIENTS);
          }
-@@ -246,13 +_,18 @@
+@@ -246,12 +_,17 @@
  
              for (int i2 = 0; i2 < randomInt; i2++) {
                  Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
@@ -141,9 +143,8 @@
 +                    && level.pluto$isEmptyBlock(x1, y1, z1)
 +                    && level.pluto$isEmptyBlock(x1, y1 - 1, z1)
 +                    && allNeighborsEmpty(level, x1, y1, z1, randomDirection.getOpposite())) {
++                    BlockPos blockPos1 = new BlockPos(x1, y1, z1); // Moved down
 +                    // Pluto end - Memory allocation optimisations
                      flag = true;
-+                    BlockPos blockPos1 = new BlockPos(x1, y1, z1); // Pluto - Memory allocation optimisations | Moved down
-                     level.setBlock(blockPos1, ChorusPlantBlock.getStateWithConnections(level, blockPos1, block.defaultBlockState()), 2);
+                     level.setBlock(blockPos1, ChorusPlantBlock.getStateWithConnections(level, blockPos1, block.defaultBlockState()), Block.UPDATE_CLIENTS);
                      level.setBlock(
-                         blockPos1.relative(randomDirection.getOpposite()),
