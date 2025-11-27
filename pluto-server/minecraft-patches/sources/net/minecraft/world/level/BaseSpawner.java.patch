@@ -25,7 +25,7 @@
 +        }
 +        // Pluto end - Options for spawner settings
 +
-+        if (!serverLevel.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(serverLevel, pos)) { // Pluto - Options for spawner settings
++        if (serverLevel.getServer().isSpawnerBlockEnabled() && (!serverLevel.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(serverLevel, pos))) { // Pluto - Options for spawner settings
              if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
                  this.delay(serverLevel, pos);
              }
