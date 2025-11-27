@@ -12,10 +12,10 @@
      }
  
      private void onAttributeModified(AttributeInstance instance) {
-@@ -44,7 +_,7 @@
+@@ -43,7 +_,7 @@
+     }
  
-     @Nullable
-     public AttributeInstance getInstance(Holder<Attribute> attribute) {
+     public @Nullable AttributeInstance getInstance(Holder<Attribute> attribute) {
 -        return this.attributes.computeIfAbsent(attribute, holder -> this.supplier.createInstance(this::onAttributeModified, (Holder<Attribute>)holder));
 +        return this.attributes.computeIfAbsent(attribute, this.createInstance); // Pufferfish - cache lambda, as for some reason java allocates it anyways
      }

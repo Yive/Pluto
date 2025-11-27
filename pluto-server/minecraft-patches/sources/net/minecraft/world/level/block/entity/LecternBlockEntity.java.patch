@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/LecternBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/LecternBlockEntity.java
-@@ -75,6 +_,13 @@
+@@ -76,6 +_,13 @@
              return LecternBlockEntity.this.getOwner();
          }
  
@@ -14,7 +14,7 @@
          public LecternBlockEntity getLectern() {
              return LecternBlockEntity.this;
          }
-@@ -147,6 +_,8 @@
+@@ -148,6 +_,8 @@
          public boolean stillValid(Player player) {
              return Container.stillValidBlockEntity(LecternBlockEntity.this, player) && LecternBlockEntity.this.hasBook();
          }

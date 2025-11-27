@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/BaseContainerBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BaseContainerBlockEntity.java
-@@ -158,6 +_,8 @@
+@@ -133,6 +_,8 @@
          return Container.stillValidBlockEntity(this, player);
      }
  

@@ -18,7 +18,7 @@
      }
  
      public static enum Kind {
-@@ -237,6 +_,8 @@
+@@ -234,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return this.boundTags().stream();
          }

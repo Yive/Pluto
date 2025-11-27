@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/EmptyBlockAndTintGetter.java
 +++ b/net/minecraft/world/level/EmptyBlockAndTintGetter.java
-@@ -34,6 +_,48 @@
+@@ -33,6 +_,48 @@
          return null;
      }
  

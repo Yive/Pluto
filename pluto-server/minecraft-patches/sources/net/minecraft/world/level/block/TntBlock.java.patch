@@ -5,6 +5,6 @@
      @Override
      public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
 +        if (level.plutoConfig().disableTntChainReaction) return; // Pluto - Option to disable TNT chain reactions | Might remove in future version due to gamerule
-         if (level.getGameRules().getBoolean(GameRules.RULE_TNT_EXPLODES)) {
+         if (level.getGameRules().get(GameRules.TNT_EXPLODES)) {
              PrimedTnt primedTnt = new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, explosion.getIndirectSourceEntity());
              int fuse = primedTnt.getFuse();

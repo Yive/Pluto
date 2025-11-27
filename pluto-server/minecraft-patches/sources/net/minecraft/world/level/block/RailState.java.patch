@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/RailState.java
 +++ b/net/minecraft/world/level/block/RailState.java
-@@ -103,14 +_,17 @@
+@@ -102,14 +_,17 @@
          if (BaseRailBlock.isRail(blockState)) {
              return new RailState(this.level, pos, blockState);
          } else {
@@ -24,7 +24,7 @@
              }
          }
      }
-@@ -133,7 +_,7 @@
+@@ -132,7 +_,7 @@
      protected int countPotentialConnections() {
          int i = 0;
  

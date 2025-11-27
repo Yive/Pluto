@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SeagrassBlock.java
 +++ b/net/minecraft/world/level/block/SeagrassBlock.java
-@@ -74,7 +_,7 @@
+@@ -73,7 +_,7 @@
  
      @Override
      public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {

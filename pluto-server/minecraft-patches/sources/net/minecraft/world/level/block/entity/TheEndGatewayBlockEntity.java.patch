@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-@@ -259,7 +_,7 @@
+@@ -256,7 +_,7 @@
      public int getParticleAmount() {
          int i = 0;
  

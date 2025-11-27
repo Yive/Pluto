@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
-@@ -171,13 +_,21 @@
+@@ -165,13 +_,21 @@
          int x = pos.getX();
          int y = pos.getY();
          int z = pos.getZ();
@@ -25,7 +25,7 @@
          }
  
          BeaconBeamOwner.Section section = blockEntity.checkingBeamSections.isEmpty()
-@@ -185,8 +_,11 @@
+@@ -179,8 +_,11 @@
              : blockEntity.checkingBeamSections.get(blockEntity.checkingBeamSections.size() - 1);
          int height = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
  
@@ -39,7 +39,7 @@
              if (blockState.getBlock() instanceof BeaconBeamBlock beaconBeamBlock) {
                  int textureDiffuseColor = beaconBeamBlock.getColor().getTextureDiffuseColor();
                  if (blockEntity.checkingBeamSections.size() <= 1) {
-@@ -210,7 +_,7 @@
+@@ -204,7 +_,7 @@
                  section.increaseHeight();
              }
  
@@ -48,7 +48,7 @@
              blockEntity.lastCheckY++;
          }
  
-@@ -267,7 +_,7 @@
+@@ -261,7 +_,7 @@
  
              for (int i3 = x - i1; i3 <= x + i1 && flag; i3++) {
                  for (int i4 = z - i1; i4 <= z + i1; i4++) {

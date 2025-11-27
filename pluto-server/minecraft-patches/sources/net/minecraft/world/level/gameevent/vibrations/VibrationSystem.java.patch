@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/gameevent/vibrations/VibrationSystem.java
 +++ b/net/minecraft/world/level/gameevent/vibrations/VibrationSystem.java
-@@ -256,7 +_,7 @@
+@@ -254,7 +_,7 @@
              Vec3 vec3 = new Vec3(Mth.floor(eventPos.x) + 0.5, Mth.floor(eventPos.y) + 0.5, Mth.floor(eventPos.z) + 0.5);
              Vec3 vec31 = new Vec3(Mth.floor(vibrationUserPos.x) + 0.5, Mth.floor(vibrationUserPos.y) + 0.5, Mth.floor(vibrationUserPos.z) + 0.5);
  

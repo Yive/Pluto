@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
 +++ b/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
-@@ -153,7 +_,7 @@
+@@ -152,7 +_,7 @@
          Vec3 pos = DefaultRandomPos.getPos(pathfinder, radius, verticalDistance);
          int i = 0;
  

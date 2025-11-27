@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SculkSensorBlock.java
 +++ b/net/minecraft/world/level/block/SculkSensorBlock.java
-@@ -198,6 +_,18 @@
+@@ -195,6 +_,18 @@
          return direction == Direction.UP ? state.getSignal(level, pos, direction) : 0;
      }
  
@@ -19,7 +19,7 @@
      public static SculkSensorPhase getPhase(BlockState state) {
          return state.getValue(PHASE);
      }
-@@ -256,10 +_,18 @@
+@@ -253,10 +_,18 @@
      }
  
      public static void tryResonateVibration(@Nullable Entity entity, Level level, BlockPos pos, int frequency) {

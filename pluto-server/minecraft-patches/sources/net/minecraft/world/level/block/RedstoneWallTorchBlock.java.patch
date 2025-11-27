@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/RedstoneWallTorchBlock.java
 +++ b/net/minecraft/world/level/block/RedstoneWallTorchBlock.java
-@@ -90,6 +_,13 @@
+@@ -89,6 +_,13 @@
          return state.getValue(LIT) && state.getValue(FACING) != side ? 15 : 0;
      }
  

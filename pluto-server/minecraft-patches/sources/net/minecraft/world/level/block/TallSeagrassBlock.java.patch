@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/TallSeagrassBlock.java
 +++ b/net/minecraft/world/level/block/TallSeagrassBlock.java
-@@ -55,7 +_,10 @@
-     public BlockState getStateForPlacement(BlockPlaceContext context) {
+@@ -54,7 +_,10 @@
+     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
          BlockState blockState = super.getStateForPlacement(context);
          if (blockState != null) {
 -            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos().above());
@@ -12,7 +12,7 @@
              if (fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8) {
                  return blockState;
              }
-@@ -67,7 +_,7 @@
+@@ -66,7 +_,7 @@
      @Override
      protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
          if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {

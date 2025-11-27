@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
-@@ -203,6 +_,48 @@
+@@ -209,6 +_,48 @@
          throw new UnsupportedOperationException("Not supported yet.");
      }
  

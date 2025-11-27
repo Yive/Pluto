@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Zoglin.java
 +++ b/net/minecraft/world/entity/monster/Zoglin.java
-@@ -248,10 +_,12 @@
+@@ -247,10 +_,12 @@
          this.setAggressive(this.brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
      }
  

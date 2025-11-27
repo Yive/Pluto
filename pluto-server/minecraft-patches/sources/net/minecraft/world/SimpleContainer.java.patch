@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/SimpleContainer.java
 +++ b/net/minecraft/world/SimpleContainer.java
-@@ -64,6 +_,13 @@
+@@ -63,6 +_,13 @@
          return this.bukkitOwner;
      }
  
 +    // Pluto start - Allow toggling snapshots for certain blocks
 +    @Override
-+    public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++    public org.bukkit.inventory.@Nullable InventoryHolder getOwner(boolean useSnapshot) {
 +        return getOwner();
 +    }
 +    // Pluto end - Allow toggling snapshots for certain blocks
 +
      @Override
-     public @Nullable org.bukkit.Location getLocation() {
+     public org.bukkit.@Nullable Location getLocation() {
          // Paper start - Fix inventories returning null Locations
-@@ -244,6 +_,8 @@
+@@ -243,6 +_,8 @@
      public boolean stillValid(Player player) {
          return true;
      }

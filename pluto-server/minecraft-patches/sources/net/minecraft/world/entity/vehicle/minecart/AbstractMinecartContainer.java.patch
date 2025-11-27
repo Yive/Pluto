@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
-+++ b/net/minecraft/world/entity/vehicle/AbstractMinecartContainer.java
-@@ -32,6 +_,27 @@
+--- a/net/minecraft/world/entity/vehicle/minecart/AbstractMinecartContainer.java
++++ b/net/minecraft/world/entity/vehicle/minecart/AbstractMinecartContainer.java
+@@ -32,6 +_,34 @@
          super(type, level);
      }
  
@@ -25,20 +25,13 @@
 +    }
 +    // Pluto end - Entities search for hoppers
 +
-     @Override
-     public void destroy(ServerLevel level, DamageSource damageSource) {
-         super.destroy(level, damageSource);
-@@ -202,6 +_,13 @@
-     public @Nullable org.bukkit.inventory.InventoryHolder getOwner() {
-         return this.getBukkitEntity() instanceof final org.bukkit.inventory.InventoryHolder inventoryHolder ? inventoryHolder : null;
-     }
-+
 +    // Pluto start - Allow toggling snapshots for certain blocks
 +    @Override
-+    public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++    public org.bukkit.inventory.@Nullable InventoryHolder getOwner(boolean useSnapshot) {
 +        return getOwner();
 +    }
 +    // Pluto end - Allow toggling snapshots for certain blocks
- 
++
      @Override
-     public int getMaxStackSize() {
+     public void destroy(ServerLevel level, DamageSource damageSource) {
+         super.destroy(level, damageSource);

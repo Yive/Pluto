@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CampfireBlock.java
 +++ b/net/minecraft/world/level/block/CampfireBlock.java
-@@ -257,16 +_,24 @@
+@@ -256,16 +_,24 @@
      }
  
      public static boolean isSmokeyPos(Level level, BlockPos pos) {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/TripWireHookBlock.java
 +++ b/net/minecraft/world/level/block/TripWireHookBlock.java
-@@ -267,6 +_,22 @@
+@@ -266,6 +_,22 @@
          }
      }
  

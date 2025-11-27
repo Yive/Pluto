@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/TestBlock.java
 +++ b/net/minecraft/world/level/block/TestBlock.java
-@@ -117,6 +_,19 @@
+@@ -115,6 +_,19 @@
          }
      }
  

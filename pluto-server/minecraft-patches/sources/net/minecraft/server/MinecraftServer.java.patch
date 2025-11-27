@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/MinecraftServer.java
 +++ b/net/minecraft/server/MinecraftServer.java
-@@ -302,6 +_,7 @@
+@@ -306,6 +_,7 @@
      public boolean isIteratingOverLevels = false; // Paper - Throw exception on world create while being ticked
      private final Set<String> pluginsBlockingSleep = new java.util.HashSet<>(); // Paper - API to allow/disallow tick sleeping
      public static final long SERVER_INIT = System.nanoTime(); // Paper - Lag compensation
@@ -8,7 +8,7 @@
      // Paper start - improve tick loop
      public final ca.spottedleaf.moonrise.common.time.TickData tickTimes1s  = new ca.spottedleaf.moonrise.common.time.TickData(java.util.concurrent.TimeUnit.SECONDS.toNanos(1L));
      public final ca.spottedleaf.moonrise.common.time.TickData tickTimes5s  = new ca.spottedleaf.moonrise.common.time.TickData(java.util.concurrent.TimeUnit.SECONDS.toNanos(5L));
-@@ -1301,7 +_,7 @@
+@@ -1303,7 +_,7 @@
                      final long ticksBehind = Math.max(1L, this.tickSchedule.getPeriodsAhead(l, tickStart));
                      final long catchup = (long)Math.max(
                          1,
@@ -17,7 +17,7 @@
                      );
  
                      // adjust ticksBehind so that it is not greater-than catchup
-@@ -2719,6 +_,7 @@
+@@ -2706,6 +_,7 @@
      // CraftBukkit end
  
      private ProfilerFiller createProfiler() {

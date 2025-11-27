@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/vehicle/OldMinecartBehavior.java
-+++ b/net/minecraft/world/entity/vehicle/OldMinecartBehavior.java
-@@ -369,10 +_,17 @@
+--- a/net/minecraft/world/entity/vehicle/minecart/OldMinecartBehavior.java
++++ b/net/minecraft/world/entity/vehicle/minecart/OldMinecartBehavior.java
+@@ -367,10 +_,17 @@
      @Override
      public boolean pushAndPickupEntities() {
          AABB aabb = this.minecart.getBoundingBox().inflate(0.2F, 0.0, 0.2F);
@@ -18,7 +18,7 @@
                      if (!(entity instanceof Player)
                          && !(entity instanceof IronGolem)
                          && !(entity instanceof AbstractMinecart)
-@@ -400,6 +_,12 @@
+@@ -398,6 +_,12 @@
              }
          } else {
              for (Entity entity1 : this.level().getEntities(this.minecart, aabb)) {

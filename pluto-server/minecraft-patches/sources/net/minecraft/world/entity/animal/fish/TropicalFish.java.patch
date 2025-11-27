@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/animal/TropicalFish.java
-+++ b/net/minecraft/world/entity/animal/TropicalFish.java
-@@ -263,8 +_,10 @@
+--- a/net/minecraft/world/entity/animal/fish/TropicalFish.java
++++ b/net/minecraft/world/entity/animal/fish/TropicalFish.java
+@@ -261,8 +_,10 @@
      public static boolean checkTropicalFishSpawnRules(
          EntityType<TropicalFish> entityType, LevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
      ) {
@@ -9,7 +9,7 @@
 +        // Pluto start - Memory allocation optimisations
 +        return level.pluto$getFluidState(pos.getX(), pos.getY() - 1, pos.getZ()).is(FluidTags.WATER)
 +            && level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(Blocks.WATER)
-+                // Pluto end - Memory allocation optimisations
++            // Pluto end - Memory allocation optimisations
              && (
                  level.getBiome(pos).is(BiomeTags.ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT)
                      || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, level, spawnReason, pos, random)

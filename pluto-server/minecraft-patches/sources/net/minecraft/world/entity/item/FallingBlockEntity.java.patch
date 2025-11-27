@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/FallingBlockEntity.java
 +++ b/net/minecraft/world/entity/item/FallingBlockEntity.java
-@@ -214,6 +_,21 @@
+@@ -213,6 +_,21 @@
                                      return;
                                  }
                                  // CraftBukkit end
@@ -10,7 +10,7 @@
 +                                    org.bukkit.Material material = this.level().pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()).getBukkitMaterial(); // Pluto - Memory allocation optimisations
 +                                    if (material == org.bukkit.Material.COMPOSTER || material.toString().contains("CAULDRON")) { // Yes I know this is terrible
 +                                        this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN);
-+                                        if (this.dropItem && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
++                                        if (this.dropItem && serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
 +                                            this.callOnBrokenAfterFall(block, blockPos);
 +                                            this.spawnAtLocation(serverLevel, block);
 +                                        }

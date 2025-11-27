@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -421,6 +_,10 @@
+@@ -411,6 +_,10 @@
      // Paper end - cancellable death event
      // Paper start - Optional per player mob spawns
      public static final int MOBCATEGORY_TOTAL_ENUMS = net.minecraft.world.entity.MobCategory.values().length;
@@ -11,7 +11,7 @@
      public final int[] mobCounts = new int[MOBCATEGORY_TOTAL_ENUMS];
      // Paper end - Optional per player mob spawns
      public final int[] mobBackoffCounts = new int[MOBCATEGORY_TOTAL_ENUMS]; // Paper - per player mob count backoff
-@@ -822,6 +_,16 @@
+@@ -819,6 +_,16 @@
                  }
              }
  
@@ -28,7 +28,7 @@
              for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
                  ItemStack item = this.getInventory().getItem(i);
                  if (!item.isEmpty()) {
-@@ -1452,7 +_,7 @@
+@@ -1451,7 +_,7 @@
              return Optional.empty();
          } else {
              boolean isPossibleToRespawnInThis = block.isPossibleToRespawnInThis(blockState);

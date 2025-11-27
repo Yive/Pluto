@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/monster/Stray.java
-+++ b/net/minecraft/world/entity/monster/Stray.java
-@@ -25,14 +_,19 @@
+--- a/net/minecraft/world/entity/monster/skeleton/Stray.java
++++ b/net/minecraft/world/entity/monster/skeleton/Stray.java
+@@ -26,14 +_,20 @@
      public static boolean checkStraySpawnRules(
          EntityType<Stray> entityType, ServerLevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
      ) {
@@ -9,15 +9,16 @@
 +        final int x = pos.getX();
 +        int y = pos.getY();
 +        final int z = pos.getZ();
- 
++
 +        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);
+ 
          do {
 -            blockPos = blockPos.above();
 -        } while (level.getBlockState(blockPos).is(Blocks.POWDER_SNOW));
 +            y++;
 +        } while (chunk.getBlockState(x, y, z).is(Blocks.POWDER_SNOW));
  
-         return checkMonsterSpawnRules(entityType, level, spawnReason, pos, random)
+         return Monster.checkMonsterSpawnRules(entityType, level, spawnReason, pos, random)
 -            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(blockPos.below()));
 +            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(new BlockPos(x, y - 1, z)));
 +        // Pluto end - Memory allocation optimisations

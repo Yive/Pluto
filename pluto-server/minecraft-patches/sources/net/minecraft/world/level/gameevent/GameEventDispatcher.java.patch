@@ -13,18 +13,18 @@
 +        if (this.level.plutoConfig().useGameEventCache) {
 +            String name = gameEvent.getRegisteredName();
 +            if (name.contains("[unregistered]")) {
-+                bukkitEvent = org.bukkit.craftbukkit.CraftGameEvent.minecraftToBukkit(gameEvent.value());
++                bukkitEvent = org.bukkit.craftbukkit.CraftGameEvent.minecraftHolderToBukkit(gameEvent);
 +            } else {
-+                bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(name, s -> org.bukkit.craftbukkit.CraftGameEvent.minecraftToBukkit(gameEvent.value()));
++                bukkitEvent = GAME_EVENT_CACHE.computeIfAbsent(name, s -> org.bukkit.craftbukkit.CraftGameEvent.minecraftHolderToBukkit(gameEvent));
 +            }
 +        } else {
-+            bukkitEvent = org.bukkit.craftbukkit.CraftGameEvent.minecraftToBukkit(gameEvent.value());
++            bukkitEvent = org.bukkit.craftbukkit.CraftGameEvent.minecraftHolderToBukkit(gameEvent);
 +        }
 +        if (bukkitEvent != null) {
 +        // Pluto end - Cache GameEvent lookups
          // CraftBukkit start
          org.bukkit.event.world.GenericGameEvent apiEvent = new org.bukkit.event.world.GenericGameEvent(
--            org.bukkit.craftbukkit.CraftGameEvent.minecraftToBukkit(gameEvent.value()), org.bukkit.craftbukkit.util.CraftLocation.toBukkit(blockPos, this.level),
+-            org.bukkit.craftbukkit.CraftGameEvent.minecraftHolderToBukkit(gameEvent), org.bukkit.craftbukkit.util.CraftLocation.toBukkit(blockPos, this.level),
 +            bukkitEvent, org.bukkit.craftbukkit.util.CraftLocation.toBukkit(blockPos, this.level.getWorld()), // Pluto - Cache GameEvent lookups
              (context.sourceEntity() == null) ? null : context.sourceEntity().getBukkitEntity(), notificationRadius, !org.bukkit.Bukkit.isPrimaryThread());
          if (!apiEvent.callEvent()) {

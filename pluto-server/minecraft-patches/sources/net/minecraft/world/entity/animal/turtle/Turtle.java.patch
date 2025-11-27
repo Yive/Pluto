@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/animal/Turtle.java
-+++ b/net/minecraft/world/entity/animal/Turtle.java
-@@ -392,7 +_,7 @@
+--- a/net/minecraft/world/entity/animal/turtle/Turtle.java
++++ b/net/minecraft/world/entity/animal/turtle/Turtle.java
+@@ -383,7 +_,7 @@
                      posTowards = DefaultRandomPos.getPosTowards(this.turtle, 8, 7, vec3, (float) (Math.PI / 2));
                  }
  
@@ -9,7 +9,7 @@
                      posTowards = DefaultRandomPos.getPosTowards(this.turtle, 16, 5, vec3, (float) (Math.PI / 2));
                  }
  
-@@ -490,7 +_,7 @@
+@@ -481,7 +_,7 @@
  
          @Override
          protected boolean isValidTarget(LevelReader level, BlockPos pos) {

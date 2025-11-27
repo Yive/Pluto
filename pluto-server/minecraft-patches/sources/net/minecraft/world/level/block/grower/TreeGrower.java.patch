@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/grower/TreeGrower.java
 +++ b/net/minecraft/world/level/block/grower/TreeGrower.java
-@@ -185,14 +_,39 @@
+@@ -183,14 +_,39 @@
  
      private static boolean isTwoByTwoSapling(BlockState state, BlockGetter level, BlockPos pos, int xOffset, int yOffset) {
          Block block = state.getBlock();

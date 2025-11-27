@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/FireBlock.java
 +++ b/net/minecraft/world/level/block/FireBlock.java
-@@ -133,15 +_,19 @@
+@@ -131,15 +_,19 @@
      }
  
      protected BlockState getStateForPlacement(BlockGetter level, BlockPos pos) {
@@ -25,7 +25,7 @@
                  }
              }
  
-@@ -310,8 +_,13 @@
+@@ -306,8 +_,13 @@
      }
  
      private boolean isValidFireLocation(BlockGetter level, BlockPos pos) {
@@ -41,7 +41,7 @@
                  return true;
              }
          }
-@@ -325,8 +_,13 @@
+@@ -321,8 +_,13 @@
          } else {
              int i = 0;
  

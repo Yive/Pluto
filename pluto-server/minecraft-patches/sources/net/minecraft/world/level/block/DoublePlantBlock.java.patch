@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/DoublePlantBlock.java
 +++ b/net/minecraft/world/level/block/DoublePlantBlock.java
-@@ -65,7 +_,7 @@
-     public BlockState getStateForPlacement(BlockPlaceContext context) {
+@@ -64,7 +_,7 @@
+     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
          BlockPos clickedPos = context.getClickedPos();
          Level level = context.getLevel();
 -        return clickedPos.getY() < level.getMaxY() && level.getBlockState(clickedPos.above()).canBeReplaced(context)
@@ -9,7 +9,7 @@
              ? super.getStateForPlacement(context)
              : null;
      }
-@@ -81,7 +_,7 @@
+@@ -80,7 +_,7 @@
          if (state.getValue(HALF) != DoubleBlockHalf.UPPER) {
              return super.canSurvive(state, level, pos);
          } else {
@@ -18,7 +18,7 @@
              return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
          }
      }
-@@ -122,10 +_,10 @@
+@@ -121,10 +_,10 @@
          // CraftBukkit end
          DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
          if (doubleBlockHalf == DoubleBlockHalf.UPPER) {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/PathNavigationRegion.java
 +++ b/net/minecraft/world/level/PathNavigationRegion.java
-@@ -124,6 +_,56 @@
+@@ -123,6 +_,56 @@
          return chunk.getBlockEntity(pos);
      }
  

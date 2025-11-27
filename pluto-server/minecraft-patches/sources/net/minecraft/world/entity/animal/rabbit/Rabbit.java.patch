@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/animal/Rabbit.java
-+++ b/net/minecraft/world/entity/animal/Rabbit.java
-@@ -613,7 +_,7 @@
+--- a/net/minecraft/world/entity/animal/rabbit/Rabbit.java
++++ b/net/minecraft/world/entity/animal/rabbit/Rabbit.java
+@@ -611,7 +_,7 @@
          protected boolean isValidTarget(LevelReader level, BlockPos pos) {
              BlockState blockState = level.getBlockState(pos);
              if (blockState.is(Blocks.FARMLAND) && this.wantsToRaid && !this.canRaid) {

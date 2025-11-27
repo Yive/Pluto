@@ -1,5 +1,5 @@
---- a/net/minecraft/world/entity/animal/WaterAnimal.java
-+++ b/net/minecraft/world/entity/animal/WaterAnimal.java
+--- a/net/minecraft/world/entity/animal/fish/WaterAnimal.java
++++ b/net/minecraft/world/entity/animal/fish/WaterAnimal.java
 @@ -78,7 +_,9 @@
          // Paper end - Make water animal spawn height configurable
          return pos.getY() >= i

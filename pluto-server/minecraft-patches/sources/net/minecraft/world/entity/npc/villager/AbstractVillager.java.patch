@@ -1,0 +1,9 @@
+--- a/net/minecraft/world/entity/npc/villager/AbstractVillager.java
++++ b/net/minecraft/world/entity/npc/villager/AbstractVillager.java
+@@ -287,4 +_,6 @@
+     public boolean stillValid(Player player) {
+         return this.getTradingPlayer() == player && this.isAlive() && player.isWithinEntityInteractionRange(this, 4.0);
+     }
++
++    @Override public boolean stillValid() { return !this.isRemoved(); } // Pluto - Hoppers cache containers
+ }

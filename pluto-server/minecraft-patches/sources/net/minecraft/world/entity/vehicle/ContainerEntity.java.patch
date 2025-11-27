@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/ContainerEntity.java
 +++ b/net/minecraft/world/entity/vehicle/ContainerEntity.java
-@@ -52,6 +_,8 @@
+@@ -51,6 +_,8 @@
  
      boolean isRemoved();
  

@@ -114,24 +114,24 @@
              return false;
          } else {
 -            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
-+            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
++            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.minecart.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
 +            boolean flag = hopper.isGridAligned() && (blockState == null ? blockState = level.pluto$getBlockState(x, y, z) : blockState).isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory allocation optimisations // Pluto - Hoppers cache containers
              if (!flag) {
                  for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
                      if (addItem(hopper, itemEntity)) {
-@@ -753,7 +_,7 @@
-     @Nullable
-     private static Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
+@@ -750,7 +_,7 @@
+ 
+     private static @Nullable Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
          // Paper start
 -        final Container inventory = HopperBlockEntity.getContainerAt(level, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
 +        final Container inventory = HopperBlockEntity.getContainerAt(level, hopper, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ(), false); // Pluto - Entities search for hoppers
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -775,20 +_,20 @@
+@@ -771,30 +_,36 @@
+     }
  
-     @Nullable
-     public static Container getContainerAt(Level level, BlockPos pos) {
+     public static @Nullable Container getContainerAt(Level level, BlockPos pos) {
 -        return getContainerAt(level, pos, level.getBlockState(pos), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, true); // Paper - Optimize hoppers
 +        return getContainerAt(level, null, pos, level.getBlockState(pos), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, true); // Paper - Optimize hoppers // Pluto - Entities search for hoppers
      }
@@ -142,8 +142,7 @@
 -        return HopperBlockEntity.getContainerAt(level, pos, state, x, y, z, false);
 +        return HopperBlockEntity.getContainerAt(level, null, pos, state, x, y, z, false); // Pluto - Entities search for hoppers
      }
-     @Nullable
--    private static Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) {
+-    private static @Nullable Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) {
 +    private static Container getContainerAt(Level level, Hopper hopper, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) { // Pluto - Entities search for hoppers
          // Paper end - Perf: Optimize Hoppers
          Container blockContainer = getBlockContainer(level, pos, state);
@@ -153,10 +152,9 @@
          }
  
          return blockContainer;
-@@ -796,11 +_,17 @@
+     }
  
-     @Nullable
-     private static Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
+     private static @Nullable Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
 -        if (!level.spigotConfig.hopperCanLoadChunks && !level.hasChunkAt(pos)) return null; // Spigot
 +        // Pluto start - Small hopper optimisations
 +        net.minecraft.world.level.chunk.LevelChunk chunk = null;
@@ -173,14 +171,14 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
                  container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
              }
-@@ -812,7 +_,10 @@
+@@ -805,7 +_,10 @@
+         }
      }
  
-     @Nullable
--    private static Container getEntityContainer(Level level, double x, double y, double z) {
+-    private static @Nullable Container getEntityContainer(Level level, double x, double y, double z) {
 +    // Pluto start - Entities search for hoppers
 +    private static Container getEntityContainer(Level level, Hopper hopper, double x, double y, double z) {
-+        if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof  net.minecraft.world.entity.vehicle.MinecartHopper)) return null;
++        if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof  net.minecraft.world.entity.vehicle.minecart.MinecartHopper)) return null;
 +        // Pluto end - Entities search for hoppers
          List<Entity> entities = level.getEntitiesOfClass(
              (Class) Container.class, new AABB(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z + 0.5), EntitySelector.CONTAINER_ENTITY_SELECTOR // Paper - Perf: Optimize hoppers

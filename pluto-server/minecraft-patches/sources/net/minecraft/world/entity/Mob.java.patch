@@ -19,7 +19,21 @@
              this.targetSelector.tick();
          }
      }
-@@ -772,16 +_,20 @@
+@@ -578,12 +_,11 @@
+     public boolean isSunBurnTick() {
+         if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
+             float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();
+-            BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
+             boolean flag = this.isInWater() || this.isInPowderSnow || this.wasInPowderSnow;
+             if (lightLevelDependentMagicValue > 0.5F
+                 && this.random.nextFloat() * 30.0F < (lightLevelDependentMagicValue - 0.4F) * 2.0F
+                 && !flag
+-                && this.level().canSeeSky(blockPos)) {
++                && this.level().canSeeSky(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()))) { // Pluto - Memory allocation optimisations
+                 return true;
+             }
+         }
+@@ -810,16 +_,20 @@
          int i = this.tickCount + this.getId();
          if (i % 2 != 0 && this.tickCount > 1) {
              profilerFiller.push("targetSelector");
@@ -40,8 +54,8 @@
              this.goalSelector.tick();
              profilerFiller.pop();
          }
-@@ -940,6 +_,8 @@
-                 return player.getVehicle() == Mob.this || player.canInteractWithEntity(Mob.this, 4.0);
+@@ -978,6 +_,8 @@
+                 return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
              }
  
 +            @Override public boolean stillValid() { return !Mob.this.isRemoved(); } // Pluto - Hoppers cache containers
@@ -49,31 +63,17 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -977,6 +_,13 @@
+@@ -1014,6 +_,13 @@
+                 }
                  return null;
              }
- 
++
 +            // Pluto start - Allow toggling snapshots for certain blocks
 +            @Override
-+            public @Nullable org.bukkit.inventory.InventoryHolder getOwner(boolean useSnapshot) {
++            public org.bukkit.inventory.@Nullable InventoryHolder getOwner(boolean useSnapshot) {
 +                return getOwner();
 +            }
 +            // Pluto end - Allow toggling snapshots for certain blocks
-+
+ 
              @Override
              public void setMaxStackSize(final int size) {
-                 this.maxStackSize = size;
-@@ -1566,12 +_,11 @@
-     public boolean isSunBurnTick() {
-         if (this.level().isBrightOutside() && !this.level().isClientSide()) {
-             float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();
--            BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
-             boolean flag = this.isInWaterOrRain() || this.isInPowderSnow || this.wasInPowderSnow;
-             if (lightLevelDependentMagicValue > 0.5F
-                 && this.random.nextFloat() * 30.0F < (lightLevelDependentMagicValue - 0.4F) * 2.0F
-                 && !flag
--                && this.level().canSeeSky(blockPos)) {
-+                && this.level().canSeeSky(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()))) { // Pluto - Memory allocation optimisations
-                 return true;
-             }
-         }

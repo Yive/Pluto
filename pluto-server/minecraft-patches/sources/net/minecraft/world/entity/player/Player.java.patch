@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -501,6 +_,7 @@
+@@ -498,6 +_,7 @@
          this.updateSwingTime();
          this.yHeadRot = this.getYRot();
          this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
@@ -8,18 +8,17 @@
          if (this.getHealth() > 0.0F && !this.isSpectator()) {
              AABB aabb;
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -1123,8 +_,10 @@
-                             if (flag3) {
-                                 float f5 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * f;
+@@ -1245,7 +_,9 @@
+         if (this.level() instanceof ServerLevel serverLevel) {
+             float var12 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * damageAmount;
  
-+                                int entityCount = 1; // Pluto - Implement entity limit for sweeping attacks | Start at one due to original target
-                                 for (LivingEntity livingEntity2 : this.level()
-                                     .getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.0, 0.25, 1.0))) {
-+                                    if (this.level().plutoConfig().sweepingAttackLimit != -1 && entityCount++ >= this.level().plutoConfig().sweepingAttackLimit) continue; // Pluto - Implement entity limit for sweeping attacks
-                                     if (livingEntity2 != this
-                                         && livingEntity2 != target
-                                         && !this.isAlliedTo(livingEntity2)
-@@ -1414,7 +_,7 @@
++            int entityCount = 1; // Pluto - Implement entity limit for sweeping attacks | Start at one due to original target
+             for (LivingEntity livingEntity : this.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1.0, 0.25, 1.0))) {
++                if (this.level().plutoConfig().sweepingAttackLimit != -1 && entityCount++ >= this.level().plutoConfig().sweepingAttackLimit) continue; // Pluto - Implement entity limit for sweeping attacks
+                 if (livingEntity != this
+                     && livingEntity != entity
+                     && !this.isAlliedTo(livingEntity)
+@@ -1492,7 +_,7 @@
              if (this.isSwimming()) {
                  double d = this.getLookAngle().y;
                  double d1 = d < -0.2 ? 0.085 : 0.06;

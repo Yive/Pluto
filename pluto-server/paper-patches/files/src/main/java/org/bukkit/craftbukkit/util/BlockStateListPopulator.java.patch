@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
-@@ -24,7 +_,33 @@
+@@ -25,7 +_,33 @@
  public class BlockStateListPopulator extends DummyGeneratorAccess {
  
      private final LevelAccessor level;
@@ -35,7 +35,7 @@
  
      private List<CraftBlockState> snapshots;
  
-@@ -34,19 +_,19 @@
+@@ -35,19 +_,19 @@
  
      @Override
      public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos) {
@@ -58,8 +58,8 @@
          return block != null ? block.blockEntity() : this.level.getBlockEntity(pos);
      }
  
-@@ -54,7 +_,10 @@
-     public boolean setBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState state, int flags, int recursionLeft) {
+@@ -55,7 +_,10 @@
+     public boolean setBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState state, @Block.UpdateFlags int flags, int recursionLeft) {
          pos = pos.immutable();
          // remove first to keep last updated order
 -        this.blocks.remove(pos);
@@ -70,7 +70,7 @@
  
          final BlockEntity newBlockEntity;
          if (state.getBlock() instanceof EntityBlock entityBlock) {
-@@ -70,7 +_,7 @@
+@@ -71,7 +_,7 @@
              newBlockEntity = null;
          }
  
@@ -79,7 +79,7 @@
          return true;
      }
  
-@@ -91,10 +_,10 @@
+@@ -92,10 +_,10 @@
      }
  
      private void iterateSnapshots(Consumer<CraftBlockState> callback) {

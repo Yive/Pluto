@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DelegatedGeneratorAccess.java
-@@ -787,10 +_,71 @@
+@@ -773,10 +_,71 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CalibratedSculkSensorBlock.java
 +++ b/net/minecraft/world/level/block/CalibratedSculkSensorBlock.java
-@@ -61,6 +_,13 @@
+@@ -58,6 +_,13 @@
          return direction != state.getValue(FACING) ? super.getSignal(state, level, pos, direction) : 0;
      }
  

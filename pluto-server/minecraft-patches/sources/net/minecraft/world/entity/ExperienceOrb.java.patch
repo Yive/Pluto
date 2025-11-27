@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ExperienceOrb.java
 +++ b/net/minecraft/world/entity/ExperienceOrb.java
-@@ -183,7 +_,7 @@
+@@ -180,7 +_,7 @@
              this.applyEffectsFromBlocks();
              float f = 0.98F;
              if (this.onGround()) {
@@ -9,7 +9,7 @@
              }
  
              this.setDeltaMovement(this.getDeltaMovement().scale(f));
-@@ -242,6 +_,13 @@
+@@ -239,6 +_,13 @@
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
          return this.getOnPos(0.999999F);
      }

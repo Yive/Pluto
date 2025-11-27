@@ -1,12 +1,12 @@
---- a/net/minecraft/world/entity/vehicle/AbstractBoat.java
-+++ b/net/minecraft/world/entity/vehicle/AbstractBoat.java
-@@ -323,7 +_,14 @@
+--- a/net/minecraft/world/entity/vehicle/boat/AbstractBoat.java
++++ b/net/minecraft/world/entity/vehicle/boat/AbstractBoat.java
+@@ -324,7 +_,14 @@
          if (!entities.isEmpty()) {
              boolean flag = !this.level().isClientSide() && !(this.getControllingPassenger() instanceof Player);
  
-+            int boatCount = 0; // Pluto - Option to remove excess vehicles on collision
++            // Pluto start - Option to remove excess vehicles on collision
++            int boatCount = 0;
              for (Entity entity : entities) {
-+                // Pluto start - Option to remove excess vehicles on collision
 +                if (entity instanceof Boat && this.level().plutoConfig().removeExcessBoats && boatCount++ >= this.level().plutoConfig().excessBoatsLimit) {
 +                    entity.discard();
 +                    continue;

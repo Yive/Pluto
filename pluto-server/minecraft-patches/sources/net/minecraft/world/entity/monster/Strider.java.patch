@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Strider.java
 +++ b/net/minecraft/world/entity/monster/Strider.java
-@@ -322,7 +_,7 @@
+@@ -321,7 +_,7 @@
          if (this.isInLava()) {
              CollisionContext collisionContext = CollisionContext.of(this);
              if (collisionContext.isAbove(LiquidBlock.SHAPE_STABLE, this.blockPosition(), true)
@@ -9,7 +9,7 @@
                  this.setOnGround(true);
              } else {
                  this.setDeltaMovement(this.getDeltaMovement().scale(0.5).add(0.0, 0.05, 0.0));
-@@ -499,7 +_,10 @@
+@@ -495,7 +_,10 @@
  
          @Override
          protected boolean isValidTarget(LevelReader level, BlockPos pos) {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SeaPickleBlock.java
 +++ b/net/minecraft/world/level/block/SeaPickleBlock.java
-@@ -51,7 +_,7 @@
+@@ -50,7 +_,7 @@
          if (blockState.is(this)) {
              return blockState.setValue(PICKLES, Math.min(4, blockState.getValue(PICKLES) + 1));
          } else {
@@ -9,7 +9,7 @@
              boolean flag = fluidState.getType() == Fluids.WATER;
              return super.getStateForPlacement(context).setValue(WATERLOGGED, flag);
          }
-@@ -122,7 +_,7 @@
+@@ -121,7 +_,7 @@
  
      @Override
      public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
@@ -18,10 +18,10 @@
      }
  
      @Override
-@@ -146,7 +_,7 @@
+@@ -145,7 +_,7 @@
                  for (int i9 = i8 - 2; i9 < i8; i9++) {
                      BlockPos blockPos = new BlockPos(i4 + i6, i9, pos.getZ() - i5 + i7);
-                     if (blockPos != pos && random.nextInt(6) == 0 && level.getBlockState(blockPos).is(Blocks.WATER)) {
+                     if (!blockPos.equals(pos) && random.nextInt(6) == 0 && level.getBlockState(blockPos).is(Blocks.WATER)) {
 -                        BlockState blockState = level.getBlockState(blockPos.below());
 +                        BlockState blockState = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Memory allocation optimisations
                          if (blockState.is(BlockTags.CORAL_BLOCKS)) {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -83,6 +_,8 @@
+@@ -84,6 +_,8 @@
          public String getType() {
              return "<null>";
          }
@@ -9,7 +9,7 @@
      };
      private final Map<BlockPos, LevelChunk.RebindableTickingBlockEntityWrapper> tickersInLevel = Maps.newHashMap();
      public boolean loaded;
-@@ -100,6 +_,18 @@
+@@ -99,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end
  
@@ -28,7 +28,7 @@
      // Paper start
      boolean loadedTicketLevel;
      // Paper end
-@@ -162,6 +_,8 @@
+@@ -161,6 +_,8 @@
              }
          }
  
@@ -37,7 +37,7 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -475,6 +_,48 @@
+@@ -471,6 +_,48 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
  
@@ -83,10 +83,10 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     @Nullable
-     public BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
+     public @Nullable BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
          // CraftBukkit start
-@@ -532,6 +_,30 @@
+         BlockEntity blockEntity = this.level.capturedTileEntities.get(pos);
+@@ -527,6 +_,30 @@
              );
      }
  
@@ -117,7 +117,7 @@
      @Override
      public void setBlockEntity(BlockEntity blockEntity) {
          BlockPos blockPos = blockEntity.getBlockPos();
-@@ -946,17 +_,19 @@
+@@ -940,17 +_,19 @@
          private final T blockEntity;
          private final BlockEntityTicker<T> ticker;
          private boolean loggedInvalidBlockState;
@@ -138,7 +138,7 @@
                      try {
                          ProfilerFiller profilerFiller = Profiler.get();
                          profilerFiller.push(this::getType);
-@@ -1054,6 +_,8 @@
+@@ -1048,6 +_,8 @@
          public String toString() {
              return this.ticker + " <wrapped>";
          }

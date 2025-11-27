@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/Projectile.java
 +++ b/net/minecraft/world/entity/projectile/Projectile.java
-@@ -51,6 +_,36 @@
+@@ -50,6 +_,36 @@
          super(type, level);
      }
  
