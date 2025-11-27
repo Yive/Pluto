@@ -1,0 +1,42 @@
+--- a/net/minecraft/util/SpecialDates.java
++++ b/net/minecraft/util/SpecialDates.java
+@@ -13,15 +_,37 @@
+     public static final MonthDay CHRISTMAS = MonthDay.of(Month.DECEMBER, 24);
+     public static final MonthDay NEW_YEAR = MonthDay.of(Month.JANUARY, 1);
+ 
++    // Pluto start - Cached checks for special dates
++    private static final int ONE_HOUR = 20 * 60 * 60;
++    private static boolean IS_CURRENTLY_HALLOWEEN = false;
++    private static boolean IS_CURRENTLY_CHRISTMAS = false;
++    private static int LAST_HALLOWEEN_CHECK = -ONE_HOUR;
++    private static int LAST_CHRISTMAS_CHECK = -ONE_HOUR;
++    // Pluto end - Cached checks for special dates
++
+     public static MonthDay dayNow() {
+         return MonthDay.from(ZonedDateTime.now());
+     }
+ 
+     public static boolean isHalloween() {
+-        return HALLOWEEN.equals(dayNow());
++        // Pluto start - Cached checks for special dates
++        if (net.minecraft.server.MinecraftServer.currentTick - LAST_HALLOWEEN_CHECK > ONE_HOUR) {
++            IS_CURRENTLY_HALLOWEEN = HALLOWEEN.equals(dayNow());
++            LAST_HALLOWEEN_CHECK = net.minecraft.server.MinecraftServer.currentTick;
++        }
++
++        return IS_CURRENTLY_HALLOWEEN;
++        // Pluto end - Cached checks for special dates
+     }
+ 
+     public static boolean isExtendedChristmas() {
+-        return CHRISTMAS_RANGE.contains(dayNow());
++        // Pluto start - Cached checks for special dates
++        if (net.minecraft.server.MinecraftServer.currentTick - LAST_CHRISTMAS_CHECK > ONE_HOUR) {
++            IS_CURRENTLY_CHRISTMAS = CHRISTMAS_RANGE.contains(dayNow());
++            LAST_CHRISTMAS_CHECK = net.minecraft.server.MinecraftServer.currentTick;
++        }
++
++        return IS_CURRENTLY_CHRISTMAS;
++        // Pluto end - Cached checks for special dates
+     }
+ }
