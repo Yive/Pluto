@@ -143,7 +143,7 @@
 +        return HopperBlockEntity.getContainerAt(level, null, pos, state, x, y, z, false); // Pluto - Entities search for hoppers
      }
 -    private static @Nullable Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) {
-+    private static Container getContainerAt(Level level, Hopper hopper, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) { // Pluto - Entities search for hoppers
++    private static @Nullable Container getContainerAt(Level level, Hopper hopper, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) { // Pluto - Entities search for hoppers
          // Paper end - Perf: Optimize Hoppers
          Container blockContainer = getBlockContainer(level, pos, state);
          if (blockContainer == null && (!optimizeEntities || !level.paperConfig().hopper.ignoreOccludingBlocks || !state.getBukkitMaterial().isOccluding())) { // Paper - Perf: Optimize Hoppers
@@ -177,7 +177,7 @@
  
 -    private static @Nullable Container getEntityContainer(Level level, double x, double y, double z) {
 +    // Pluto start - Entities search for hoppers
-+    private static Container getEntityContainer(Level level, Hopper hopper, double x, double y, double z) {
++    private static @Nullable Container getEntityContainer(Level level, Hopper hopper, double x, double y, double z) {
 +        if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof  net.minecraft.world.entity.vehicle.minecart.MinecartHopper)) return null;
 +        // Pluto end - Entities search for hoppers
          List<Entity> entities = level.getEntitiesOfClass(
