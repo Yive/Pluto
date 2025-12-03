@@ -78,7 +78,7 @@
              boolean flag = onPos.equals(pos);
              boolean flag1 = this.vibrationAndSoundEffectsFromBlock(pos, state, movementEmission.emitsSounds(), flag, movement);
              if (!flag) {
-@@ -1341,6 +_,7 @@
+@@ -1345,6 +_,7 @@
              boolean isOnFire = this.isOnFire();
              boolean isFreezing = this.isFreezing();
              int remainingFireTicks = this.getRemainingFireTicks();
@@ -86,7 +86,7 @@
              this.checkInsideBlocks(movements, this.insideEffectCollector);
              this.insideEffectCollector.applyAndClear(this);
              if (this.isInRain()) {
-@@ -1418,7 +_,7 @@
+@@ -1422,7 +_,7 @@
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
              this.onFlap();
@@ -95,7 +95,7 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1458,9 +_,45 @@
+@@ -1462,9 +_,45 @@
          }
      }
  
@@ -142,7 +142,7 @@
          return jumpFactor == 1.0 ? jumpFactor1 : jumpFactor;
      }
  
-@@ -1468,7 +_,7 @@
+@@ -1472,7 +_,7 @@
          BlockState blockState = this.level().getBlockState(this.blockPosition());
          float speedFactor = blockState.getBlock().getSpeedFactor();
          if (!blockState.is(Blocks.WATER) && !blockState.is(Blocks.BUBBLE_COLUMN)) {
@@ -151,7 +151,7 @@
          } else {
              return speedFactor;
          }
-@@ -1828,9 +_,10 @@
+@@ -1832,9 +_,10 @@
      }
  
      protected BlockPos getPrimaryStepSoundBlockPos(BlockPos pos) {
@@ -165,7 +165,7 @@
      }
  
      protected void playCombinationStepSounds(BlockState primaryState, BlockState secondaryState) {
-@@ -1980,10 +_,24 @@
+@@ -1984,10 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -192,7 +192,7 @@
      }
  
      public boolean isInWaterOrRain() {
-@@ -2030,6 +_,13 @@
+@@ -2034,6 +_,13 @@
          this.fluidHeight.clear();
          this.updateInWaterStateAndDoWaterCurrentPushing();
          double d = this.level.environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 0.007 : 0.0023333333333333335;
@@ -206,7 +206,7 @@
          boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
          return this.isInWater() || flag;
      }
-@@ -2063,7 +_,7 @@
+@@ -2067,7 +_,7 @@
              FluidState fluidState = this.level().getFluidState(blockPos);
              double d = blockPos.getY() + fluidState.getHeight(this.level(), blockPos);
              if (d > eyeY) {
@@ -215,7 +215,7 @@
              }
          }
      }
-@@ -2109,11 +_,11 @@
+@@ -2113,11 +_,11 @@
  
      @Deprecated
      protected BlockState getBlockStateOnLegacy() {
@@ -229,7 +229,7 @@
      }
  
      public boolean canSpawnSprintParticle() {
-@@ -2121,19 +_,25 @@
+@@ -2125,19 +_,25 @@
      }
  
      protected void spawnSprintParticle() {
@@ -261,7 +261,7 @@
              }
  
              this.level()
-@@ -5415,6 +_,42 @@
+@@ -5419,6 +_,42 @@
              return this.save;
          }
      }
