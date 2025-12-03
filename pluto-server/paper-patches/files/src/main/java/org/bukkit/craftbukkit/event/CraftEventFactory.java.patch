@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2231,7 +_,7 @@
+@@ -2230,7 +_,7 @@
      public static boolean handleBlockFailedDispenseEvent(ServerLevel serverLevel, BlockPos pos) {
          org.bukkit.block.Block block = CraftBlock.at(serverLevel, pos);
          io.papermc.paper.event.block.BlockFailedDispenseEvent event = new io.papermc.paper.event.block.BlockFailedDispenseEvent(block);
