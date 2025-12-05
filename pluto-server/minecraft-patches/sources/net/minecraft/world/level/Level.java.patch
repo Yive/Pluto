@@ -99,7 +99,7 @@
          this.generator = generator;
          this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
  
-@@ -971,7 +_,7 @@
+@@ -981,7 +_,7 @@
      public final BlockState getBlockStateIfLoaded(BlockPos pos) {
          // CraftBukkit start - tree generation
          if (this.captureTreeGeneration) {
@@ -108,7 +108,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1035,15 +_,16 @@
+@@ -1045,15 +_,16 @@
      @Override
      public boolean setBlock(BlockPos pos, BlockState state, @Block.UpdateFlags int flags, int recursionLeft) {
          // CraftBukkit start - tree generation
@@ -127,7 +127,7 @@
              }
              blockstate.setData(state);
              blockstate.setFlags(flags);
-@@ -1061,12 +_,12 @@
+@@ -1071,12 +_,12 @@
              boolean captured = false;
              if (this.captureBlockStates) {
                  final CraftBlockState snapshot;
@@ -143,7 +143,7 @@
                  }
                  snapshot.setFlags(flags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
              }
-@@ -1076,7 +_,7 @@
+@@ -1086,7 +_,7 @@
              if (blockState == null) {
                  // CraftBukkit start - remove blockstate if failed (or the same)
                  if (this.captureBlockStates && captured) {
@@ -152,11 +152,19 @@
                  }
                  // CraftBukkit end
                  return false;
-@@ -1276,11 +_,81 @@
+@@ -1286,11 +_,89 @@
          return this.getChunkSource().getLightEngine();
      }
  
 +    // Pluto start - Memory allocation optimisations
++    public boolean isInValidBounds(int x, int y, int z) {
++        return !this.isOutsideBuildHeight(y) && isInValidBoundsHorizontal(x, z);
++    }
++
++    private static boolean isInValidBoundsHorizontal(int x, int z) {
++        return ChunkPos.isValid(x >> 4, z >> 4);
++    }
++
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
 +        if (this.captureTreeGeneration) {
@@ -166,7 +174,7 @@
 +            }
 +        }
 +
-+        if (this.isOutsideBuildHeight(y))
++        if (!this.isInValidBounds(x, y, z))
 +            return Blocks.VOID_AIR.defaultBlockState();
 +
 +        return this.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getBlockState(x, y, z);
@@ -186,7 +194,7 @@
 +            }
 +        }
 +
-+        if (this.isOutsideBuildHeight(y))
++        if (!this.isInValidBounds(x, y, z))
 +            return Blocks.VOID_AIR.defaultBlockState();
 +
 +        ChunkAccess chunk = this.getChunkIfLoadedImmediately(x >> 4, z >> 4);
@@ -200,7 +208,7 @@
 +
 +    @Override
 +    public FluidState pluto$getFluidState(int x, int y, int z) {
-+        if (this.isOutsideBuildHeight(y))
++        if (!this.isInValidBounds(x, y, z))
 +            return Fluids.EMPTY.defaultFluidState();
 +
 +        return this.getChunk(x >> 4, z >> 4).pluto$getFluidState(x, y, z);
@@ -213,7 +221,7 @@
 +
 +    @Override
 +    public @Nullable FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
-+        if (this.isOutsideBuildHeight(y))
++        if (!this.isInValidBounds(x, y, z))
 +            return Fluids.EMPTY.defaultFluidState();
 +
 +        ChunkAccess chunk = this.getChunkIfLoadedImmediately(x >> 4, z >> 4);
@@ -235,7 +243,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1397,9 +_,10 @@
+@@ -1407,9 +_,10 @@
          for (this.tileTickPosition = 0; this.tileTickPosition < this.blockEntityTickers.size(); this.tileTickPosition++) { // Paper - Disable tick limiters
              TickingBlockEntity tickingBlockEntity = this.blockEntityTickers.get(this.tileTickPosition);
              // Spigot end
@@ -247,7 +255,7 @@
                  tickingBlockEntity.tick();
                  // Paper start - rewrite chunk system
                  if ((++tickedEntities & 7) == 0) {
-@@ -1417,12 +_,12 @@
+@@ -1427,12 +_,12 @@
      public <T extends Entity> void guardEntityTick(Consumer<T> action, T entity) {
          try {
              action.accept(entity);
@@ -262,7 +270,7 @@
              // Paper end - Prevent block entity and entity crashes
          }
          this.moonrise$midTickTasks(); // Paper - rewrite chunk system
-@@ -1822,8 +_,11 @@
+@@ -1832,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(BlockPos pos) {
@@ -276,7 +284,7 @@
          }
      }
  
-@@ -1935,17 +_,21 @@
+@@ -1945,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(BlockPos pos, Block block) {
