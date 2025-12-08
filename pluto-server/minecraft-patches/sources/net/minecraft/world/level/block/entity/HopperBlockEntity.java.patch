@@ -128,7 +128,7 @@
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -771,30 +_,36 @@
+@@ -771,29 +_,35 @@
      }
  
      public static @Nullable Container getContainerAt(Level level, BlockPos pos) {
@@ -136,8 +136,7 @@
 +        return getContainerAt(level, null, pos, level.getBlockState(pos), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, true); // Paper - Optimize hoppers // Pluto - Entities search for hoppers
      }
  
-     @Nullable
-     private static Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z) {
+     private static @Nullable Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z) {
          // Paper start - Perf: Optimize Hoppers
 -        return HopperBlockEntity.getContainerAt(level, pos, state, x, y, z, false);
 +        return HopperBlockEntity.getContainerAt(level, null, pos, state, x, y, z, false); // Pluto - Entities search for hoppers
@@ -171,7 +170,7 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
                  container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
              }
-@@ -805,7 +_,10 @@
+@@ -804,7 +_,10 @@
          }
      }
  

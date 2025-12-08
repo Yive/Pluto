@@ -24,7 +24,7 @@
          if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
              float lightLevelDependentMagicValue = this.getLightLevelDependentMagicValue();
 -            BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
-             boolean flag = this.isInWater() || this.isInPowderSnow || this.wasInPowderSnow;
+             boolean flag = this.isInWaterOrRain() || this.isInPowderSnow || this.wasInPowderSnow;
              if (lightLevelDependentMagicValue > 0.5F
                  && this.random.nextFloat() * 30.0F < (lightLevelDependentMagicValue - 0.4F) * 2.0F
                  && !flag
