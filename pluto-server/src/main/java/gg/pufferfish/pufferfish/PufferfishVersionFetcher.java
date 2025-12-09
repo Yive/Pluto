@@ -31,8 +31,8 @@ public class PufferfishVersionFetcher implements VersionFetcher {
 	private static final HttpClient client = HttpClient.newHttpClient();
 	
 	// Pluto start - Branding
-	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.21.10/lastSuccessfulBuild/buildNumber");
-	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.21.10...%s";
+	private static final URI JENKINS_URI = URI.create("https://ci.yive.dev/job/Pluto/job/1.21.11/lastSuccessfulBuild/buildNumber");
+	private static final String GITHUB_FORMAT = "https://api.github.com/repos/Yive/Pluto/compare/ver/1.21.11...%s";
 	// Pluto end - Branding
 	
 	private static final HttpResponse.BodyHandler<JsonObject> JSON_OBJECT_BODY_HANDLER = responseInfo -> HttpResponse.BodySubscribers
