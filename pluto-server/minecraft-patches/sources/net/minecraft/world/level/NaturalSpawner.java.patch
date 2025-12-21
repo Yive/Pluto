@@ -37,9 +37,7 @@
 +        for (MobCategory mobCategory : categories) {
 +            if (pluto$canSpawn(level, chunk, spawnState, mobCategory) <= 0) continue;
 +
-+            final Runnable runnable = pluto$spawnCategoryForChunk(mobCategory, level, chunk, spawnState);
-+            if (runnable == null) continue;
-+            tasks.add(runnable);
++            tasks.add(pluto$spawnCategoryForChunk(mobCategory, level, chunk, spawnState));
 +        }
 +
 +        if (tasks.isEmpty()) return;
@@ -53,14 +51,16 @@
 +        java.util.concurrent.CompletableFuture.allOf(list.toArray(new java.util.concurrent.CompletableFuture[0])).join();
 +    }
 +
-+    @Nullable
 +    public static Runnable pluto$spawnCategoryForChunk(MobCategory category, ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnState spawnState) {
-+        BlockPos randomPosWithin = getRandomPosWithin(level, chunk);
-+        return randomPosWithin.getY() >= level.getMinY() + 1 ? () -> {
++        return () -> {
++            BlockPos randomPosWithin = getRandomPosWithin(level, chunk);
++            if (randomPosWithin.getY() < level.getMinY() + 1) return;
++
 +            final int maxSpawns = pluto$canSpawn(level, chunk, spawnState, category);
 +            if (maxSpawns <= 0) return;
++
 +            spawnCategoryForPosition(category, level, chunk, randomPosWithin, spawnState::canSpawn, spawnState::afterSpawn, maxSpawns, level.paperConfig().entities.spawning.perPlayerMobSpawns ? level.getChunkSource().chunkMap::updatePlayerMobTypeMap : null);
-+        } : null;
++        };
 +    }
 +    // Pluto end - Async spawning chunks
 +
