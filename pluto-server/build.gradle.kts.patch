@@ -18,8 +18,8 @@
 +    // Pluto end - Branding
 +
      spigot {
-         enabled = false
-         buildDataRef = "42d18d4c4653ffc549778dbe223f6994a031d69e"
+         enabled = true
+         buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
 @@ -45,6 +_,8 @@
      }
  }
