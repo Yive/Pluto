@@ -71,11 +71,11 @@
 +                        access = level.getChunkIfLoaded(x >> 4, z >> 4); // Pluto - Memory allocation optimisations
                      }
 -                    if (access.getBlockState(blockPos).is(Blocks.DIRT) && SpreadingSnowyDirtBlock.canPropagate(access, blockState, level, blockPos)) {
--                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(blockPos.above()))), 3); // CraftBukkit
+-                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(blockPos.above()))), Block.UPDATE_ALL); // CraftBukkit
 +                    if (access == null) continue; // Pluto - Don't load chunks to spread grass | Apparently this can happen.
 +                    // Pluto start - Memory allocation optimisations
 +                    if (access.getBlockState(x, y, z).is(Blocks.DIRT) && SpreadingSnowyDirtBlock.canPropagate(access, blockState, level, x, y, z)) {
-+                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, new BlockPos(x, y, z), blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(x, y + 1, z))), 3); // CraftBukkit
++                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, new BlockPos(x, y, z), blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(x, y + 1, z))), Block.UPDATE_ALL); // CraftBukkit
 +                        // Pluto end - Memory allocation optimisations
                          // Paper end - Perf: optimize dirt and snow spreading
                      }

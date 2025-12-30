@@ -97,11 +97,11 @@
          boolean shouldUpdateOthers = false; // CraftBukkit
          if (age >= 1) {
 @@ -212,7 +_,7 @@
-         if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, pos.above(), this.defaultBlockState().setValue(AGE, i).setValue(LEAVES, bambooLeaves).setValue(STAGE, i1), 3)) {
+         if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, pos.above(), this.defaultBlockState().setValue(AGE, i).setValue(LEAVES, bambooLeaves).setValue(STAGE, i1), Block.UPDATE_ALL)) {
              if (shouldUpdateOthers) {
-                 level.setBlock(pos.below(), blockState.setValue(BambooStalkBlock.LEAVES, BambooLeaves.SMALL), 3);
--                level.setBlock(blockPos, blockState1.setValue(BambooStalkBlock.LEAVES, BambooLeaves.NONE), 3);
-+                level.setBlock(pos.below(2), blockState1.setValue(BambooStalkBlock.LEAVES, BambooLeaves.NONE), 3); // Pluto - Decrease chunk/block lookups
+                 level.setBlock(pos.below(), blockState.setValue(BambooStalkBlock.LEAVES, BambooLeaves.SMALL), Block.UPDATE_ALL);
+-                level.setBlock(blockPos, blockState1.setValue(BambooStalkBlock.LEAVES, BambooLeaves.NONE), Block.UPDATE_ALL);
++                level.setBlock(pos.below(2), blockState1.setValue(BambooStalkBlock.LEAVES, BambooLeaves.NONE), Block.UPDATE_ALL); // Pluto - Decrease chunk/block lookups
              }
          }
          // CraftBukkit end

@@ -12,7 +12,7 @@
                  int ageValue = state.getValue(AGE);
                  if (ageValue < 7) {
 @@ -77,15 +_,22 @@
-                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos, state, 2); // CraftBukkit
+                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos, state, Block.UPDATE_CLIENTS); // CraftBukkit
                  } else {
                      Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
 -                    BlockPos blockPos = pos.relative(randomDirection);
@@ -33,8 +33,8 @@
                          Optional<Block> optional1 = registry.getOptional(this.attachedStem);
                          if (optional.isPresent() && optional1.isPresent()) {
                              // CraftBukkit start
--                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, optional.get().defaultBlockState(), 3)) {
-+                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos.relative(randomDirection), optional.get().defaultBlockState(), 3)) { // Pluto - Decrease chunk/block lookups
+-                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, optional.get().defaultBlockState(), Block.UPDATE_ALL)) {
++                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos.relative(randomDirection), optional.get().defaultBlockState(), Block.UPDATE_ALL)) { // Pluto - Decrease chunk/block lookups
                                  return;
                              }
                              // CraftBukkit end

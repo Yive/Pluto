@@ -35,10 +35,10 @@
                  }
  
 -                if (flag && allNeighborsEmpty(level, blockPos, null) && level.isEmptyBlock(pos.above(2))) {
--                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
+-                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, this.defaultBlockState().setValue(AGE, ageValue), Block.UPDATE_CLIENTS)) { // CraftBukkit - add event
 +                // Pluto start - Memory allocation optimisations
 +                if (flag && allNeighborsEmpty(level, x, y + 1, z, null) && level.pluto$isEmptyBlock(x, y + 2, z)) {
-+                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos = pos.above(), this.defaultBlockState().setValue(AGE, ageValue), 2)) { // CraftBukkit - add event
++                    if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos = pos.above(), this.defaultBlockState().setValue(AGE, ageValue), Block.UPDATE_CLIENTS)) { // CraftBukkit - add event
 +                    // Pluto end - Memory allocation optimisations
                      level.setBlock(pos, ChorusPlantBlock.getStateWithConnections(level, pos, this.plant.defaultBlockState()), Block.UPDATE_CLIENTS);
                      this.placeGrownFlower(level, blockPos, ageValue);
@@ -51,7 +51,7 @@
 -                        if (level.isEmptyBlock(blockPos1)
 -                            && level.isEmptyBlock(blockPos1.below())
 -                            && allNeighborsEmpty(level, blockPos1, randomDirection.getOpposite())) {
--                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1, this.defaultBlockState().setValue(AGE, ageValue + 1), 2)) { // CraftBukkit - add event
+-                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1, this.defaultBlockState().setValue(AGE, ageValue + 1), Block.UPDATE_CLIENTS)) { // CraftBukkit - add event
 +                        // Pluto start - Memory allocation optimisations
 +                        final int x1 = x + randomDirection.getStepX();
 +                        final int y1 = y + randomDirection.getStepY();
@@ -60,7 +60,7 @@
 +                        if (level.pluto$isEmptyBlock(x1, y1, z1)
 +                            && level.pluto$isEmptyBlock(x1, y1 - 1, z1)
 +                            && allNeighborsEmpty(level, x1, y1, z1, randomDirection.getOpposite())) {
-+                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1 = pos.relative(randomDirection), this.defaultBlockState().setValue(AGE, ageValue + 1), 2)) { // CraftBukkit - add event
++                            if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos1 = pos.relative(randomDirection), this.defaultBlockState().setValue(AGE, ageValue + 1), Block.UPDATE_CLIENTS)) { // CraftBukkit - add event
 +                            // Pluto end - Memory allocation optimisations
                              this.placeGrownFlower(level, blockPos1, ageValue + 1);
                              flag2 = true;

@@ -7,5 +7,5 @@
 -        if (ageValue < 3 && random.nextFloat() < (level.spigotConfig.sweetBerryModifier / (100.0F * 5)) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
 +        if (ageValue < 3 && random.nextFloat() < (level.spigotConfig.sweetBerryModifier / (100.0F * 5)) &&  (level.plutoConfig().sweetBerryBushIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora
              BlockState blockState = state.setValue(AGE, ageValue + 1);
-             if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos, blockState, 2)) return; // CraftBukkit
+             if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos, blockState, Block.UPDATE_CLIENTS)) return; // CraftBukkit
              level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));
