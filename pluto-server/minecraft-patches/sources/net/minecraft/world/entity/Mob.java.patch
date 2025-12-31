@@ -33,6 +33,46 @@
                  return true;
              }
          }
+@@ -757,12 +_,38 @@
+     }
+     // Paper end - allow changing despawnInPeaceful
+ 
++    // Pluto start - Avoid looping over all players in a world per entity for despawns
++    private @Nullable Entity pluto$getNearestPlayer(Entity entity, double maxDistance, @Nullable Predicate<Entity> predicate) {
++        // Fallback if this entity is somehow not from a server level or if the world has a small amount of players.
++        if (this.level().players().size() <= 10 || !(this.level() instanceof ServerLevel serverLevel)) return this.level().findNearbyPlayer(entity, maxDistance, predicate);
++
++        // Copied from EntityGetter#findNearbyPlayer(double, double, double, double, Predicate), but using moonrise's nearby players.
++        double x = entity.getX();
++        double y = entity.getY();
++        double z = entity.getZ();
++        double d = -1.0;
++        Player player = null;
++
++        for (final net.minecraft.server.level.ServerPlayer player1 : serverLevel.moonrise$getNearbyPlayers().getPlayers(entity.blockPosition(), ca.spottedleaf.moonrise.common.misc.NearbyPlayers.NearbyMapType.TICK_VIEW_DISTANCE)) {
++            if (predicate == null || predicate.test(player1)) {
++                double d1 = player1.distanceToSqr(x, y, z);
++                if ((maxDistance < 0.0 || d1 < maxDistance * maxDistance) && (d == -1.0 || d1 < d)) {
++                    d = d1;
++                    player = player1;
++                }
++            }
++        }
++
++        return player;
++    }
++    // Pluto end - Avoid looping over all players in a world per entity for despawns
++
+     @Override
+     public void checkDespawn() {
+         if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) { // Paper - allow changing despawnInPeaceful
+             this.discard(EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
+         } else if (!this.isPersistenceRequired() && !this.requiresCustomPersistence()) {
+-            Entity nearestPlayer = this.level().findNearbyPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING); // Paper - Affects Spawning API
++            Entity nearestPlayer = this.level().plutoConfig().useFasterNearbyPlayerDespawnCheck ? pluto$getNearestPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING) : this.level().findNearbyPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING); // Paper - Affects Spawning API // Pluto - Avoid looping over all players in a world per entity for despawns
+             if (nearestPlayer != null) {
+                 // Paper start - Configurable despawn distances
+                 final io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DespawnRangePair despawnRangePair = this.level().paperConfig().entities.spawning.despawnRanges.get(this.getType().getCategory());
 @@ -810,16 +_,20 @@
          int i = this.tickCount + this.getId();
          if (i % 2 != 0 && this.tickCount > 1) {

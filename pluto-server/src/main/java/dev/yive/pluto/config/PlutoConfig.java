@@ -1155,5 +1155,17 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public boolean useFasterNearbyPlayerDespawnCheck = false;
+        private void useFasterNearbyPlayerDespawnCheck() {
+            useFasterNearbyPlayerDespawnCheck = getBoolean("entities.global.faster-despawn-nearby-player-check", useFasterNearbyPlayerDespawnCheck);
+            setComments("entities.global.faster-despawn-nearby-player-check",
+                List.of(
+                    "Optimises the nearby player lookup per entity by using",
+                    "the simulation distance to find nearby players instead",
+                    "of looping over every single player in the entity's world."
+                )
+            );
+        }
     }
 }
