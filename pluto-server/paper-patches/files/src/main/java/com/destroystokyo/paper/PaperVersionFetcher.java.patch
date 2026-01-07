@@ -1,0 +1,10 @@
+--- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
++++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
+@@ -70,6 +_,7 @@
+     }
+ 
+     public static void getUpdateStatusStartupMessage() {
++        if (true) dev.yive.pluto.PlutoVersionFetcher.getUpdateStatusStartupMessage(); // Pluto - Use Pluto's version fetcher.
+         int distance = DISTANCE_ERROR;
+ 
+         final OptionalInt buildNumber = BUILD_INFO.buildNumber();
