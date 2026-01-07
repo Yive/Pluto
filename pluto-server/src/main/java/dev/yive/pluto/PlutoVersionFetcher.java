@@ -40,14 +40,11 @@ public class PlutoVersionFetcher implements VersionFetcher {
     private static final int DISTANCE_UNKNOWN = -2;
     private static final String DOWNLOAD_PAGE;
     private static final String REPOSITORY = "Yive/Pluto";
-    private static final ServerBuildInfo BUILD_INFO;
-    private static final String USER_AGENT;
+    private static final ServerBuildInfo BUILD_INFO = ServerBuildInfo.buildInfo();
+    private static final String USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE);
     private static final Gson GSON = new Gson();
 
     static {
-        BUILD_INFO = ServerBuildInfo.buildInfo();
-        USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE);
-
         // TODO: Probably have to change this with the new versioning of 26.x.
         String downloadPage = "https://ci.yive.dev/job/Pluto/";
         final String versionId = BUILD_INFO.minecraftVersionId();
