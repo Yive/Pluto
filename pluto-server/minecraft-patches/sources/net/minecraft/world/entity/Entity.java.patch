@@ -95,7 +95,22 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1462,9 +_,45 @@
+@@ -1442,12 +_,12 @@
+     }
+ 
+     protected BlockPos getOnPos(float yOffset) {
+-        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) != null) { // Paper - ensure no loads
++        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) instanceof net.minecraft.world.level.chunk.ChunkAccess chunk) { // Paper - ensure no loads // Pluto - Decrease chunk/block lookups
+             BlockPos blockPos = this.mainSupportingBlockPos.get();
+             if (!(yOffset > 1.0E-5F)) {
+                 return blockPos;
+             } else {
+-                BlockState blockState = this.level().getBlockState(blockPos);
++                BlockState blockState = chunk.getBlockState(blockPos); // Pluto - Decrease chunk/block lookups
+                 return (!(yOffset <= 0.5) || !blockState.is(BlockTags.FENCES))
+                         && !blockState.is(BlockTags.WALLS)
+                         && !(blockState.getBlock() instanceof FenceGateBlock)
+@@ -1462,9 +_,48 @@
          }
      }
  
@@ -113,25 +128,28 @@
 +        return this.pluto$getOnPos((float) DELTA_AFFECTED_BY_BLOCKS_BELOW_0_5);
 +    }
 +
-+    protected long pluto$getOnPos(float yOffset) {
-+        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) != null) { // Paper - ensure no loads
-+            BlockPos blockPos = this.mainSupportingBlockPos.get();
-+            if (!(yOffset > Mth.EPSILON)) {
-+                return blockPos.asLong();
-+            } else {
-+                BlockState blockState = this.level().getBlockState(blockPos);
-+                return (!(yOffset <= 0.5) || !blockState.is(BlockTags.FENCES))
-+                        && !blockState.is(BlockTags.WALLS)
-+                        && !(blockState.getBlock() instanceof FenceGateBlock)
-+                        ? BlockPos.asLong(blockPos.getX(), Mth.floor(this.position.y - yOffset), blockPos.getZ())
-+                        : blockPos.asLong();
++    protected long pluto$getOnPos(float offset) {
++        supportingPosPresent:
++        if (this.mainSupportingBlockPos.isPresent()) {
++            final BlockPos getOnPos = this.mainSupportingBlockPos.get();
++            final net.minecraft.world.level.chunk.ChunkAccess chunk = this.level().getChunkIfLoadedImmediately(getOnPos); // Paper - ensure no loads
++            if (chunk == null) {
++                break supportingPosPresent;
 +            }
-+        } else {
-+            int floor = Mth.floor(this.position.x);
-+            int floor1 = Mth.floor(this.position.y - yOffset);
-+            int floor2 = Mth.floor(this.position.z);
-+            return BlockPos.asLong(floor, floor1, floor2);
++
++            if (!(offset > Mth.EPSILON)) {
++                return getOnPos.asLong();
++            }
++
++            final BlockState belowState = chunk.getBlockState(getOnPos);
++            return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
++                && !belowState.is(BlockTags.WALLS)
++                && !(belowState.getBlock() instanceof FenceGateBlock)
++                ? BlockPos.asLong(getOnPos.getX(), Mth.floor(this.position.y - offset), getOnPos.getZ())
++                : getOnPos.asLong();
 +        }
++
++        return BlockPos.asLong(Mth.floor(this.position.x), Mth.floor(this.position.y - offset), Mth.floor(this.position.z));
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
