@@ -12,7 +12,7 @@
          tickDelay = level.paperConfig().tickRates.mobSpawner;
          if (tickDelay == -1) { return; } // If disabled
          // Paper end - Configurable mob spawner tick rate
--        if (this.isNearPlayer(level, pos) && level.getServer().isSpawnerBlockEnabled()) {
+-        if (this.isNearPlayer(level, pos) && level.isSpawnerBlockEnabled()) { // Paper - per level game rules - spawner block enabled
 +
 +        // Pluto start - Options for spawner settings
 +        if (!wasApiUsed && level.plutoConfig().spawnerSettingsEnabled) {
@@ -25,7 +25,7 @@
 +        }
 +        // Pluto end - Options for spawner settings
 +
-+        if (level.getServer().isSpawnerBlockEnabled() && (!level.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(level, pos))) { // Pluto - Options for spawner settings
++        if (level.isSpawnerBlockEnabled() && (!level.plutoConfig().spawnerCheckForNearbyPlayers || this.isNearPlayer(level, pos))) { // Pluto - Options for spawner settings // Paper - per level game rules - spawner block enabled
              if (this.spawnDelay < -tickDelay) { // Paper - Configurable mob spawner tick rate
                  this.delay(level, pos);
              }
