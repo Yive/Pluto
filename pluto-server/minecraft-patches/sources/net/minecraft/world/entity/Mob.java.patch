@@ -33,7 +33,7 @@
                  return true;
              }
          }
-@@ -757,12 +_,38 @@
+@@ -757,12 +_,41 @@
      }
      // Paper end - allow changing despawnInPeaceful
  
@@ -49,7 +49,10 @@
 +        double d = -1.0;
 +        Player player = null;
 +
-+        for (final net.minecraft.server.level.ServerPlayer player1 : serverLevel.moonrise$getNearbyPlayers().getPlayers(entity.blockPosition(), ca.spottedleaf.moonrise.common.misc.NearbyPlayers.NearbyMapType.TICK_VIEW_DISTANCE)) {
++        final ca.spottedleaf.moonrise.common.list.ReferenceList<net.minecraft.server.level.ServerPlayer> players = serverLevel.moonrise$getNearbyPlayers().getPlayers(entity.blockPosition(), ca.spottedleaf.moonrise.common.misc.NearbyPlayers.NearbyMapType.TICK_VIEW_DISTANCE);
++        if (players == null) return null;
++
++        for (final net.minecraft.server.level.ServerPlayer player1 : players) {
 +            if (predicate == null || predicate.test(player1)) {
 +                double d1 = player1.distanceToSqr(x, y, z);
 +                if ((maxDistance < 0.0 || d1 < maxDistance * maxDistance) && (d == -1.0 || d1 < d)) {
