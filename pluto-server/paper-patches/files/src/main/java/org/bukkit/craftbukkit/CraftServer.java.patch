@@ -7,7 +7,7 @@
 +        dev.yive.pluto.config.PlutoConfig.init((File) console.options.valueOf("pluto-settings")); // Pluto - Config
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
-             world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && world.getGameRules().get(GameRules.SPAWN_MONSTERS)); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+             world.setSpawnSettings(world.isSpawningMonsters()); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
 @@ -1023,6 +_,7 @@
          this.reloadData();
          org.spigotmc.SpigotConfig.registerCommands(); // Spigot

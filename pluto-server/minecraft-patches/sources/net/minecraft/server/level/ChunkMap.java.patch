@@ -33,7 +33,7 @@
                      flag = false;
                  }
                  // CraftBukkit end
-+                if (level.plutoConfig().disablePlayerTracking) flag = false; // Pluto - Option to disable entity tracking for players.
++                if (flag && level.plutoConfig().disablePlayerTracking && this.entity instanceof ServerPlayer) flag = false; // Pluto - Option to disable players seeing other players.
                  if (flag) {
                      if (this.seenBy.add(player.connection)) {
                          // Paper start - entity tracking events

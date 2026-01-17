@@ -15,7 +15,7 @@ public class SlotsCommand implements PlutoSubcommand {
     @Override
     public boolean execute(final CommandSender sender, final String subCommand, final String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(Component.text("Use /mercury slots <number|get>", NamedTextColor.RED));
+            sender.sendMessage(Component.text("Use /pluto slots <number|get>", NamedTextColor.RED));
             return false;
         }
 
