@@ -46,7 +46,7 @@ public class PlutoVersionFetcher implements VersionFetcher {
 
     static {
         // TODO: Probably have to change this with the new versioning of 26.x.
-        String downloadPage = "https://ci.yive.dev/job/Pluto/";
+        String downloadPage = "https://ci.yive.dev/job/Pluto/job/";
         final String versionId = BUILD_INFO.minecraftVersionId();
         if (versionId.contains("-")) {
             downloadPage += versionId.substring(0, versionId.indexOf("-"));
