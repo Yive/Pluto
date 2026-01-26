@@ -111,7 +111,7 @@
 -        Optional<BlockPos> optional = this.findLightningRod(heightmapPos);
 +        // Pluto start - Async Spawning Chunks
 +        final BlockPos heightmapPosFinal = heightmapPos;
-+        Optional<BlockPos> optional = this.plutoConfig().useAsyncSpawningChunks && !ca.spottedleaf.moonrise.common.util.TickThread.isTickThread() ? java.util.concurrent.CompletableFuture.supplyAsync(() -> this.findLightningRod(heightmapPosFinal), this.chunkSource.mainThreadProcessor).join() : this.findLightningRod(heightmapPos);
++        Optional<BlockPos> optional = this.plutoConfig().useAsyncSpawningChunks && !ca.spottedleaf.moonrise.common.util.TickThread.isTickThread() ? dev.yive.pluto.async.AsyncUtils.completeOnMain(() -> this.findLightningRod(heightmapPosFinal)).join() : this.findLightningRod(heightmapPos);
 +        // Pluto end - Async Spawning Chunks
          if (optional.isPresent()) {
              return optional.get();
