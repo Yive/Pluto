@@ -45,7 +45,6 @@ public class PlutoVersionFetcher implements VersionFetcher {
     private static final Gson GSON = new Gson();
 
     static {
-        // TODO: Probably have to change this with the new versioning of 26.x.
         String downloadPage = "https://ci.yive.dev/job/Pluto/job/";
         final String versionId = BUILD_INFO.minecraftVersionId();
         if (versionId.contains("-")) {
@@ -53,7 +52,8 @@ public class PlutoVersionFetcher implements VersionFetcher {
         } else if (versionId.contains(".")) {
             downloadPage += versionId;
         }
-        DOWNLOAD_PAGE = downloadPage;
+        // Fallback to the main folder for Pluto if a version wasn't found.
+        DOWNLOAD_PAGE = downloadPage.endsWith("/job/") ? "https://ci.yive.dev/job/Pluto/" : downloadPage;
     }
 
     @Override

@@ -1167,5 +1167,16 @@ public class PlutoConfig {
                 )
             );
         }
+
+        public int itemMergeWithNeighboursLimit = 100;
+        private void itemEntityMergeWithNeighboursLimit() {
+            itemMergeWithNeighboursLimit = getInt("entities.item.merge-with-neighbours-limit", itemMergeWithNeighboursLimit);
+            setComments("entities.item.merge-with-neighbours-limit",
+                List.of(
+                    "Implements a limit for the merge with neighbours check.",
+                    "This might make dealing with 1000s of dropped items in a single spot a bit easier."
+                )
+            );
+        }
     }
 }

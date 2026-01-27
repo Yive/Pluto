@@ -54,17 +54,31 @@
                  this.mergeWithNeighbours();
              }
  
-@@ -228,6 +_,13 @@
-     public BlockPos getBlockPosBelowThatAffectsMyMovement() {
+@@ -229,6 +_,13 @@
          return this.getOnPos(0.999999F);
      }
-+
+ 
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public long pluto$getBlockPosBelowThatAffectsMyMovement() {
 +        return this.pluto$getOnPos((float) DELTA_AFFECTED_BY_BLOCKS_BELOW_1_0);
 +    }
 +    // Pluto end - Memory allocation optimisations
- 
++
      private void setUnderwaterMovement() {
          this.setFluidMovement(0.99F);
+     }
+@@ -245,8 +_,11 @@
+     private void mergeWithNeighbours() {
+         if (this.isMergable()) {
+             double radius = this.level().spigotConfig.itemMerge; // Spigot
+-            for (ItemEntity itemEntity : this.level()
+-                .getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(radius, this.level().paperConfig().entities.behavior.onlyMergeItemsHorizontally ? 0 : radius - 0.5D, radius), neighbour -> neighbour != this && neighbour.isMergable())) { // Spigot // Paper - configuration to only merge items horizontally
++            // Pluto start - Implement limit for item's merge with neighbours action
++            java.util.List<ItemEntity> entities = new java.util.ArrayList<>();
++            this.level().moonrise$getEntityLookup().getEntities(ItemEntity.class, null, this.getBoundingBox().inflate(radius, this.level().paperConfig().entities.behavior.onlyMergeItemsHorizontally ? 0 : radius - 0.5D, radius), entities, neighbour -> neighbour != this && neighbour.isMergable(), this.level().plutoConfig().itemMergeWithNeighboursLimit);
++            for (ItemEntity itemEntity : entities) { // Spigot // Paper - configuration to only merge items horizontally
++                // Pluto end - Implement limit for item's merge with neighbours action
+                 if (itemEntity.isMergable()) {
+                     // Paper start - Fix items merging through walls
+                     if (this.level().paperConfig().fixes.fixItemsMergingThroughWalls) {
