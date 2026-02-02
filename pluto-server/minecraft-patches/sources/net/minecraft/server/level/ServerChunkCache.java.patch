@@ -197,7 +197,7 @@
          if (!spawnCategories.isEmpty()) {
 -            if (this.level.getWorldBorder().isWithinBounds(pos)) { // Paper - rewrite chunk system
 +            if (this.level.getWorldBorder().isWithinBounds(pos) && (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning || _pufferfish_spawnCountsReady.get())) { // Paper - rewrite chunk system // Pufferfish
-+                if (this.level.plutoConfig().useAsyncSpawningChunks) NaturalSpawner.pluto$spawnForChunk(this.level, chunk, spawnState, spawnCategories); else // Pluto - Async spawning chunks
++                if (this.level.plutoConfig().useAsyncSpawningChunks) dev.yive.pluto.async.AsyncNaturalSpawner.spawnForChunk(this.level, chunk, spawnState, spawnCategories); else // Pluto - Async spawning chunks
                  NaturalSpawner.spawnForChunk(this.level, chunk, spawnState, spawnCategories);
              }
          }
