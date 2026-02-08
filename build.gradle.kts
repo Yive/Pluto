@@ -10,7 +10,7 @@ val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
 
 paperweight {
     upstreams.register("pufferfish") {
-        repo = github("Yive", "Pufferfish")
+        repo = github("Yive", "Tetraodontidae")
         ref = providers.gradleProperty("pufferfishRef")
 
         patchFile {
