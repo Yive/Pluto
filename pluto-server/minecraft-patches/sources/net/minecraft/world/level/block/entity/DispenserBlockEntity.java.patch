@@ -2,7 +2,7 @@
 +++ b/net/minecraft/world/level/block/entity/DispenserBlockEntity.java
 @@ -68,6 +_,14 @@
  
-     public int getRandomSlot(RandomSource random) {
+     public int getRandomSlot(final RandomSource random) {
          this.unpackLootTable(null);
 +        // Pluto start - Less random dispensing
 +        if (this.level != null && this.level.plutoConfig().lessRandomDispensing) {
@@ -12,6 +12,6 @@
 +            return -1;
 +        }
 +        // Pluto end - Less random dispensing
-         int i = -1;
-         int i1 = 1;
+         int replaceSlot = -1;
+         int replaceOdds = 1;
  

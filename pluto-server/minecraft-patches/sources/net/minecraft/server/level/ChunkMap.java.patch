@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ChunkMap.java
 +++ b/net/minecraft/server/level/ChunkMap.java
-@@ -263,6 +_,7 @@
+@@ -254,6 +_,7 @@
          final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
          for (int i = 0, len = inRange.size(); i < len; i++) {
              ++(backingSet[i].mobCounts[index]);
@@ -8,7 +8,7 @@
          }
      }
  
-@@ -280,10 +_,12 @@
+@@ -271,10 +_,12 @@
          final ServerPlayer[] backingSet = inRange.getRawDataUnchecked();
          for (int i = 0, len = inRange.size(); i < len; i++) {
              ++(backingSet[i].mobBackoffCounts[idx]);
@@ -21,7 +21,7 @@
          return player.mobCounts[mobCategory.ordinal()] + player.mobBackoffCounts[mobCategory.ordinal()]; // Paper - per player mob count backoff
      }
      // Paper end - Optional per player mob spawns
-@@ -754,6 +_,7 @@
+@@ -748,6 +_,7 @@
          Objects.checkFromToIndex(0, size, raw.length);
          for (int i = 0; i < size; ++i) {
              final LevelChunk levelChunk = raw[i];
@@ -29,11 +29,11 @@
  
              if (!this.isChunkNearPlayer((ChunkMap)(Object)this, levelChunk.getPos(), levelChunk)) {
                  continue;
-@@ -1382,6 +_,7 @@
-                     flag = false;
+@@ -1384,6 +_,7 @@
+                     visibleToPlayer = false;
                  }
                  // CraftBukkit end
-+                if (flag && level.plutoConfig().disablePlayerTracking && this.entity instanceof ServerPlayer) flag = false; // Pluto - Option to disable players seeing other players.
-                 if (flag) {
++                if (visibleToPlayer && level.plutoConfig().disablePlayerTracking && this.entity instanceof ServerPlayer) visibleToPlayer = false; // Pluto - Option to disable players seeing other players.
+                 if (visibleToPlayer) {
                      if (this.seenBy.add(player.connection)) {
                          // Paper start - entity tracking events

@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/net/minecraft/world/entity/monster/EnderMan.java
-@@ -300,11 +_,15 @@
-     private boolean teleport(double x, double y, double z) {
-         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
+@@ -298,11 +_,15 @@
+     private boolean teleport(final double x, final double y, final double z) {
+         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
  
--        while (mutableBlockPos.getY() > this.level().getMinY() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
+-        while (pos.getY() > this.level().getMinY() && !this.level().getBlockState(pos).blocksMotion()) {
 +        // Pufferfish start - single chunk lookup
-+        net.minecraft.world.level.chunk.LevelChunk chunk = this.level().getChunkIfLoaded(mutableBlockPos);
++        net.minecraft.world.level.chunk.LevelChunk chunk = this.level().getChunkIfLoaded(pos);
 +        if (chunk == null) return false;
-+        while (mutableBlockPos.getY() > this.level().getMinY() && !chunk.getBlockState(mutableBlockPos).blocksMotion()) {
++        while (pos.getY() > this.level().getMinY() && !chunk.getBlockState(pos).blocksMotion()) {
 +        // Pufferfish end
-             mutableBlockPos.move(Direction.DOWN);
+             pos.move(Direction.DOWN);
          }
  
--        BlockState blockState = this.level().getBlockState(mutableBlockPos);
-+        BlockState blockState = chunk.getBlockState(mutableBlockPos); // Pufferfish
-         boolean flag = blockState.blocksMotion();
-         boolean isWater = blockState.getFluidState().is(FluidTags.WATER);
-         if (flag && !isWater) {
+-        BlockState blockState = this.level().getBlockState(pos);
++        BlockState blockState = chunk.getBlockState(pos); // Pufferfish
+         boolean couldStandOn = blockState.blocksMotion();
+         boolean isWet = blockState.getFluidState().is(FluidTags.WATER);
+         if (couldStandOn && !isWet) {

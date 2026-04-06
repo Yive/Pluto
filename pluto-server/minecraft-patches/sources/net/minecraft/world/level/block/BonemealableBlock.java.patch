@@ -1,22 +1,22 @@
 --- a/net/minecraft/world/level/block/BonemealableBlock.java
 +++ b/net/minecraft/world/level/block/BonemealableBlock.java
-@@ -26,9 +_,17 @@
-     }
- 
-     private static Optional<BlockPos> getSpreadableNeighbourPos(List<Direction> directions, LevelReader level, BlockPos pos, BlockState state) {
+@@ -28,9 +_,17 @@
+     private static Optional<BlockPos> getSpreadableNeighbourPos(
+         final List<Direction> directions, final LevelReader level, final BlockPos pos, final BlockState blockToPlace
+     ) {
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
          for (Direction direction : directions) {
--            BlockPos blockPos = pos.relative(direction);
--            if (level.isEmptyBlock(blockPos) && state.canSurvive(level, blockPos)) {
+-            BlockPos neighbourPos = pos.relative(direction);
+-            if (level.isEmptyBlock(neighbourPos) && blockToPlace.canSurvive(level, neighbourPos)) {
 +            final int x1 = x + direction.getStepX();
 +            final int y1 = y + direction.getStepY();
 +            final int z1 = z + direction.getStepZ();
-+            BlockPos blockPos;
-+            if (level.pluto$isEmptyBlock(x1, y1, z1) && state.canSurvive(level, blockPos = new BlockPos(x1, y1, z1))) {
++            BlockPos neighbourPos;
++            if (level.pluto$isEmptyBlock(x1, y1, z1) && blockToPlace.canSurvive(level, neighbourPos = new BlockPos(x1, y1, z1))) {
 +                // Pluto end - Memory allocation optimisations
-                 return Optional.of(blockPos);
+                 return Optional.of(neighbourPos);
              }
          }

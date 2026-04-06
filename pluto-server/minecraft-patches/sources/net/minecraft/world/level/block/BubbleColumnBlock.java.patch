@@ -1,29 +1,29 @@
 --- a/net/minecraft/world/level/block/BubbleColumnBlock.java
 +++ b/net/minecraft/world/level/block/BubbleColumnBlock.java
-@@ -51,7 +_,7 @@
-     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean pastEdges) {
+@@ -60,7 +_,7 @@
+     ) {
          if (!new io.papermc.paper.event.entity.EntityInsideBlockEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(level, pos)).callEvent()) { return; } // Paper - Add EntityInsideBlockEvent
-         if (pastEdges) {
--            BlockState blockState = level.getBlockState(pos.above());
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
-             boolean flag = blockState.getCollisionShape(level, pos).isEmpty() && blockState.getFluidState().isEmpty();
-             if (flag) {
+         if (isPrecise) {
+-            BlockState stateAbove = level.getBlockState(pos.above());
++            BlockState stateAbove = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+             boolean nothingAbove = stateAbove.getCollisionShape(level, pos).isEmpty() && stateAbove.getFluidState().isEmpty();
+             if (nothingAbove) {
                  entity.onAboveBubbleColumn(state.getValue(DRAG_DOWN), pos);
-@@ -63,7 +_,7 @@
+@@ -72,7 +_,7 @@
  
      @Override
-     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
--        updateColumn(level, pos, state, level.getBlockState(pos.below()));
-+        updateColumn(level, pos, state, level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())); // Pluto - Memory allocation optimisations
+     protected void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
+-        updateColumn(this, level, pos, state, level.getBlockState(pos.below()));
++        updateColumn(this, level, pos, state, level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())); // Pluto - Memory allocation optimisations
      }
  
      @Override
-@@ -167,7 +_,7 @@
+@@ -188,7 +_,7 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        BlockState blockState = level.getBlockState(pos.below());
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return blockState.is(Blocks.BUBBLE_COLUMN) || blockState.is(Blocks.MAGMA_BLOCK) || blockState.is(Blocks.SOUL_SAND);
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockState belowState = level.getBlockState(pos.below());
++        BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return belowState.is(this) || belowState.is(BlockTags.ENABLES_BUBBLE_COLUMN_PUSH_UP) || belowState.is(BlockTags.ENABLES_BUBBLE_COLUMN_DRAG_DOWN);
      }
  

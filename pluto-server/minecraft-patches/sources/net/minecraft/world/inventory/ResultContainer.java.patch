@@ -11,11 +11,11 @@
 +    }
 +    // Pluto end - Allow toggling snapshots for certain blocks
 +
-     // Don't need a transaction; the InventoryCrafting keeps track of it for us
+     // Don't need a transaction; the CraftingContainer keeps track of it for us
      public void onOpen(org.bukkit.craftbukkit.entity.CraftHumanEntity player) {}
      public void onClose(org.bukkit.craftbukkit.entity.CraftHumanEntity player) {}
 @@ -105,6 +_,8 @@
-     public boolean stillValid(Player player) {
+     public boolean stillValid(final Player player) {
          return true;
      }
 +

@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/LevelReader.java
 +++ b/net/minecraft/world/level/LevelReader.java
-@@ -98,6 +_,15 @@
-         return new BlockPos(pos.getX(), this.getHeight(heightmapType, pos.getX(), pos.getZ()), pos.getZ());
+@@ -94,6 +_,15 @@
+         return new BlockPos(pos.getX(), this.getHeight(type, pos.getX(), pos.getZ()), pos.getZ());
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -13,36 +13,36 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     default boolean isEmptyBlock(BlockPos pos) {
+     default boolean isEmptyBlock(final BlockPos pos) {
          return this.getBlockState(pos).isAir();
      }
-@@ -110,8 +_,13 @@
-             if (!this.canSeeSky(blockPos)) {
+@@ -106,8 +_,13 @@
+             if (!this.canSeeSky(scanPoint)) {
                  return false;
              } else {
--                for (BlockPos var4 = blockPos.below(); var4.getY() > pos.getY(); var4 = var4.below()) {
--                    BlockState blockState = this.getBlockState(var4);
+-                for (BlockPos var4 = scanPoint.below(); var4.getY() > pos.getY(); var4 = var4.below()) {
+-                    BlockState state = this.getBlockState(var4);
 +                // Pluto start - Memory allocation optimisations
 +                final int originY = pos.getY();
-+                final int x = blockPos.getX();
-+                final int z = blockPos.getZ();
-+                for (int var4 = blockPos.getY(); var4 > originY; var4--) {
-+                    BlockState blockState = this.pluto$getBlockState(x, var4, z);
++                final int x = scanPoint.getX();
++                final int z = scanPoint.getZ();
++                for (int var4 = scanPoint.getY(); var4 > originY; var4--) {
++                    BlockState state = this.pluto$getBlockState(x, var4, z);
 +                    // Pluto end - Memory allocation optimisations
-                     if (blockState.getLightBlock() > 0 && !blockState.liquid()) {
+                     if (state.getLightDampening() > 0 && !state.liquid()) {
                          return false;
                      }
-@@ -161,12 +_,11 @@
-         int ceil1 = Mth.ceil(aabb.maxY);
-         int floor2 = Mth.floor(aabb.minZ);
-         int ceil2 = Mth.ceil(aabb.maxZ);
--        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+@@ -157,12 +_,11 @@
+         int y1 = Mth.ceil(box.maxY);
+         int z0 = Mth.floor(box.minZ);
+         int z1 = Mth.ceil(box.maxZ);
+-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
  
-         for (int i = floor; i < ceil; i++) {
-             for (int i1 = floor1; i1 < ceil1; i1++) {
-                 for (int i2 = floor2; i2 < ceil2; i2++) {
--                    BlockState blockState = this.getBlockState(mutableBlockPos.set(i, i1, i2));
-+                    BlockState blockState = this.pluto$getBlockState(i, i1, i2);
+         for (int x = x0; x < x1; x++) {
+             for (int y = y0; y < y1; y++) {
+                 for (int z = z0; z < z1; z++) {
+-                    BlockState blockState = this.getBlockState(pos.set(x, y, z));
++                    BlockState blockState = this.pluto$getBlockState(x, y, z);
                      if (!blockState.getFluidState().isEmpty()) {
                          return true;
                      }

@@ -1,55 +1,55 @@
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-@@ -137,6 +_,21 @@
+@@ -143,6 +_,21 @@
          this.items = items;
      }
  
 +    // Pluto start - Cache isBrewable result in Brewing Stands
-+    protected net.minecraft.util.TriState isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++    protected net.minecraft.util.TriState brewableCache = net.minecraft.util.TriState.DEFAULT;
 +    @Override
 +    public void setChanged() {
 +        super.setChanged();
-+        this.isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++        this.brewableCache = net.minecraft.util.TriState.DEFAULT;
 +    }
 +
 +    @Override
 +    public void setBlockState(BlockState blockState) {
 +        super.setBlockState(blockState);
-+        this.isBrewableCache = net.minecraft.util.TriState.DEFAULT;
++        this.brewableCache = net.minecraft.util.TriState.DEFAULT;
 +    }
 +    // Pluto end - Cache isBrewable result in Brewing Stands
 +
-     public static void serverTick(Level level, BlockPos pos, BlockState state, BrewingStandBlockEntity blockEntity) {
-         ItemStack itemStack = blockEntity.items.get(4);
-         if (blockEntity.fuel <= 0 && itemStack.is(ItemTags.BREWING_FUEL)) {
-@@ -158,7 +_,15 @@
-             setChanged(level, pos, state);
+     public static void serverTick(final Level level, final BlockPos pos, final BlockState selfState, final BrewingStandBlockEntity entity) {
+         ItemStack fuel = entity.items.get(4);
+         if (entity.fuel <= 0 && fuel.is(ItemTags.BREWING_FUEL)) {
+@@ -164,7 +_,15 @@
+             setChanged(level, pos, selfState);
          }
  
--        boolean isBrewable = isBrewable(level.potionBrewing(), blockEntity.items);
+-        boolean brewable = isBrewable(level.potionBrewing(), entity.items);
 +        // Pluto start - Cache isBrewable result in Brewing Stands
-+        boolean isBrewable;
-+        if (blockEntity.isBrewableCache == net.minecraft.util.TriState.DEFAULT) {
-+            isBrewable = isBrewable(level.potionBrewing(), blockEntity.items);
-+            blockEntity.isBrewableCache = isBrewable ? net.minecraft.util.TriState.TRUE : net.minecraft.util.TriState.FALSE;
++        boolean brewable;
++        if (entity.brewableCache == net.minecraft.util.TriState.DEFAULT) {
++            brewable = isBrewable(level.potionBrewing(), entity.items);
++            entity.brewableCache = brewable ? net.minecraft.util.TriState.TRUE : net.minecraft.util.TriState.FALSE;
 +        } else {
-+            isBrewable = blockEntity.isBrewableCache == net.minecraft.util.TriState.TRUE;
++            brewable = entity.brewableCache == net.minecraft.util.TriState.TRUE;
 +        }
 +        // Pluto end - Cache isBrewable result in Brewing Stands
-         boolean flag = blockEntity.brewTime > 0;
-         ItemStack itemStack1 = blockEntity.items.get(3);
-         if (flag) {
-@@ -232,11 +_,12 @@
+         boolean isBrewing = entity.brewTime > 0;
+         ItemStack ingredient = entity.items.get(3);
+         if (isBrewing) {
+@@ -238,11 +_,12 @@
      }
  
-     private static void doBrew(Level level, BlockPos pos, NonNullList<ItemStack> items, BrewingStandBlockEntity brewingStandBlockEntity) { // CraftBukkit
-+        brewingStandBlockEntity.isBrewableCache = net.minecraft.util.TriState.DEFAULT; // Pluto - Cache isBrewable result in Brewing Stands
-         ItemStack itemStack = items.get(3);
+     private static void doBrew(final Level level, final BlockPos pos, final NonNullList<ItemStack> items, final BrewingStandBlockEntity entity) { // CraftBukkit
++        entity.brewableCache = net.minecraft.util.TriState.DEFAULT; // Pluto - Cache isBrewable result in Brewing Stands
+         ItemStack ingredient = items.get(3);
          PotionBrewing potionBrewing = level.potionBrewing();
  
          // CraftBukkit start
--        org.bukkit.inventory.InventoryHolder owner = brewingStandBlockEntity.getOwner();
-+        org.bukkit.inventory.InventoryHolder owner = brewingStandBlockEntity.getOwner(level.plutoConfig().brewingStandDoSnapshotForSelf); // Pluto - Allow toggling snapshots for certain blocks
+-        org.bukkit.inventory.InventoryHolder owner = entity.getOwner();
++        org.bukkit.inventory.InventoryHolder owner = entity.getOwner(level.plutoConfig().brewingStandDoSnapshotForSelf); // Pluto - Allow toggling snapshots for certain blocks
          java.util.List<org.bukkit.inventory.ItemStack> brewResults = new java.util.ArrayList<>(3);
-         for (int i = 0; i < 3; i++) {
-             brewResults.add(i, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(potionBrewing.mix(itemStack, items.get(i))));
+         for (int dest = 0; dest < 3; dest++) {
+             brewResults.add(dest, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(potionBrewing.mix(ingredient, items.get(dest))));

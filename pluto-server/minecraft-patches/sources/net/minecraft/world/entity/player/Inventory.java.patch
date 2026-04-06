@@ -42,20 +42,20 @@
 +        // Pluto end - Only tick inventory slots that are important
 +
          for (int i = 0; i < this.items.size(); i++) {
-             ItemStack item = this.getItem(i);
-             if (!item.isEmpty()) {
+             ItemStack itemStack = this.getItem(i);
+             if (!itemStack.isEmpty()) {
 @@ -572,8 +_,13 @@
          return true;
      }
  
 +    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
 +
-     public boolean contains(ItemStack stack) {
+     public boolean contains(final ItemStack searchStack) {
 -        for (ItemStack itemStack : this) {
 +        // Pufferfish start - don't allocate iterators
 +        for (int slot = 0; slot < this.getContainerSize(); slot++) {
 +            ItemStack itemStack = this.getItem(slot);
 +            // Pufferfish end - don't allocate iterators
-             if (!itemStack.isEmpty() && ItemStack.isSameItemSameComponents(itemStack, stack)) {
+             if (!itemStack.isEmpty() && ItemStack.isSameItemSameComponents(itemStack, searchStack)) {
                  return true;
              }

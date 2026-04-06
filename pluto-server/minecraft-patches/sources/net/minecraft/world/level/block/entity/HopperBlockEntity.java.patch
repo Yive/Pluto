@@ -13,7 +13,7 @@
      public List<org.bukkit.entity.HumanEntity> transaction = new java.util.ArrayList<>();
      private int maxStack = MAX_STACK;
 @@ -121,6 +_,10 @@
-     public void setBlockState(BlockState blockState) {
+     public void setBlockState(final BlockState blockState) {
          super.setBlockState(blockState);
          this.facing = blockState.getValue(HopperBlock.FACING);
 +        // Pluto start - Hoppers cache containers
@@ -23,45 +23,47 @@
      }
  
      @Override
-@@ -181,7 +_,9 @@
+@@ -179,9 +_,11 @@
      }
      // Paper end - Perf: Optimize Hoppers
  
 +    private boolean canAcceptItems = false; public boolean canAcceptItems() { return canAcceptItems; } // Pluto - Entities search for hoppers
-     private static boolean tryMoveItems(Level level, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier validator) {
-+        blockEntity.canAcceptItems = false; // Pluto - Entities search for hoppers
+     private static boolean tryMoveItems(
+         final Level level, final BlockPos pos, final BlockState state, final HopperBlockEntity entity, final BooleanSupplier action
+     ) {
++        entity.canAcceptItems = false; // Pluto - Entities search for hoppers
          if (level.isClientSide()) {
              return false;
          } else {
 @@ -193,6 +_,7 @@
                  }
  
-                 if (fullState != HOPPER_IS_FULL || flag) { // Paper - Perf: Optimize Hoppers
-+                    blockEntity.canAcceptItems = true; // Pluto - Entities search for hoppers
-                     flag |= validator.getAsBoolean(); // Paper - note: this is not a validator, it's what adds/sucks in items
+                 if (changed || fullState != HOPPER_IS_FULL) { // Paper - Perf: Optimize Hoppers
++                    entity.canAcceptItems = true; // Pluto - Entities search for hoppers
+                     changed |= action.getAsBoolean(); // Paper - note: this is not a validator, it's what adds/sucks in items
                  }
  
 @@ -418,7 +_,18 @@
      // Paper end - Perf: Optimize Hoppers
  
-     private static boolean ejectItems(Level level, BlockPos pos, HopperBlockEntity blockEntity) {
--        Container attachedContainer = getAttachedContainer(level, pos, blockEntity);
+     private static boolean ejectItems(final Level level, final BlockPos blockPos, final HopperBlockEntity self) {
+-        Container container = getAttachedContainer(level, blockPos, self);
 +        // Pluto start - Hoppers cache containers
-+        final Container cached = blockEntity.pushContainer.get();
-+        Container attachedContainer = null;
++        final Container cached = self.pushContainer.get();
++        Container container = null;
 +        if (cached != null) {
-+            attachedContainer = cached.stillValid() ? cached : null;
++            container = cached.stillValid() ? cached : null;
 +        }
 +
-+        if (attachedContainer == null) {
-+            attachedContainer = getAttachedContainer(level, pos, blockEntity);
-+            blockEntity.pushContainer = new java.lang.ref.WeakReference<>(attachedContainer);
++        if (container == null) {
++            container = getAttachedContainer(level, blockPos, self);
++            self.pushContainer = new java.lang.ref.WeakReference<>(container);
 +        }
 +        // Pluto end - Hoppers cache containers
-         if (attachedContainer == null) {
+         if (container == null) {
              return false;
          } else {
-@@ -528,10 +_,44 @@
+@@ -475,10 +_,44 @@
          return true;
      }
  
@@ -83,10 +85,10 @@
 +    }
 +    // Pluto end - Hoppers cache containers
 +
-     public static boolean suckInItems(Level level, Hopper hopper) {
+     public static boolean suckInItems(final Level level, final Hopper hopper) {
 -        BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
 -        BlockState blockState = level.getBlockState(blockPos);
--        Container sourceContainer = getSourceContainer(level, hopper, blockPos, blockState);
+-        Container container = getSourceContainer(level, hopper, blockPos, blockState);
 +        // Pluto start - Entities search for hoppers
 +        return suckInItems(level, hopper, null);
 +    }
@@ -104,56 +106,62 @@
 +        return suckInItems(level, hopper, sourceContainer, x, y, z, blockState);
 +    }
 +
-+    public static boolean suckInItems(Level level, Hopper hopper, @Nullable Container sourceContainer, int x, int y, int z, BlockState blockState) {
++    public static boolean suckInItems(Level level, Hopper hopper, @Nullable Container container, int x, int y, int z, BlockState blockState) {
 +        // Pluto end - Hoppers cache containers
-         if (sourceContainer != null) {
+         if (container != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
-@@ -544,7 +_,8 @@
+@@ -491,8 +_,9 @@
  
              return false;
          } else {
--            boolean flag = hopper.isGridAligned() && blockState.isCollisionShapeFullBlock(level, blockPos) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
 +            if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof net.minecraft.world.entity.vehicle.minecart.MinecartHopper)) return false; // Pluto - Entities search for hoppers | Avoid doing collision check
-+            boolean flag = hopper.isGridAligned() && (blockState == null ? blockState = level.pluto$getBlockState(x, y, z) : blockState).isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS); // Pluto - Memory allocation optimisations // Pluto - Hoppers cache containers
-             if (!flag) {
-                 for (ItemEntity itemEntity : getItemsAtAndAbove(level, hopper)) {
-                     if (addItem(hopper, itemEntity)) {
-@@ -750,7 +_,7 @@
+             boolean isBlocked = hopper.isGridAligned()
+-                && blockState.isCollisionShapeFullBlock(level, blockPos)
++                && (blockState == null ? blockState = level.pluto$getBlockState(x, y, z) : blockState).isCollisionShapeFullBlock(level, new BlockPos(x, y, z)) // Pluto - Memory allocation optimisations // Pluto - Hoppers cache containers
+                 && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
+             if (!isBlocked) {
+                 for (ItemEntity entity : getItemsAtAndAbove(level, hopper)) {
+@@ -652,7 +_,7 @@
  
-     private static @Nullable Container getSourceContainer(Level level, Hopper hopper, BlockPos pos, BlockState state) {
+     private static @Nullable Container getSourceContainer(final Level level, final Hopper hopper, final BlockPos pos, final BlockState state) {
          // Paper start
--        final Container inventory = HopperBlockEntity.getContainerAt(level, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
+-        final Container inventory = HopperBlockEntity.getContainerAt(level, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
 +        final Container inventory = HopperBlockEntity.getContainerAt(level, hopper, pos, state, hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ(), false); // Pluto - Entities search for hoppers
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -771,29 +_,35 @@
+@@ -673,34 +_,37 @@
      }
  
-     public static @Nullable Container getContainerAt(Level level, BlockPos pos) {
+     public static @Nullable Container getContainerAt(final Level level, final BlockPos pos) {
 -        return getContainerAt(level, pos, level.getBlockState(pos), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, true); // Paper - Optimize hoppers
 +        return getContainerAt(level, null, pos, level.getBlockState(pos), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, true); // Paper - Optimize hoppers // Pluto - Entities search for hoppers
      }
  
-     private static @Nullable Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z) {
+     private static @Nullable Container getContainerAt(
+         final Level level, final BlockPos pos, final BlockState state, final double x, final double y, final double z
+     ) {
          // Paper start - Perf: Optimize Hoppers
--        return HopperBlockEntity.getContainerAt(level, pos, state, x, y, z, false);
+-        return getContainerAt(level, pos, state, x, y, z, false);
 +        return HopperBlockEntity.getContainerAt(level, null, pos, state, x, y, z, false); // Pluto - Entities search for hoppers
      }
--    private static @Nullable Container getContainerAt(Level level, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) {
+-    private static @Nullable Container getContainerAt(
+-        final Level level, final BlockPos pos, final BlockState state, final double x, final double y, final double z,
+-        final boolean optimizeEntities
+-    ) {
 +    private static @Nullable Container getContainerAt(Level level, Hopper hopper, BlockPos pos, BlockState state, double x, double y, double z, final boolean optimizeEntities) { // Pluto - Entities search for hoppers
          // Paper end - Perf: Optimize Hoppers
-         Container blockContainer = getBlockContainer(level, pos, state);
-         if (blockContainer == null && (!optimizeEntities || !level.paperConfig().hopper.ignoreOccludingBlocks || !state.getBukkitMaterial().isOccluding())) { // Paper - Perf: Optimize Hoppers
--            blockContainer = getEntityContainer(level, x, y, z);
-+            blockContainer = getEntityContainer(level, hopper, x, y, z); // Pluto - Entities search for hoppers
+         Container result = getBlockContainer(level, pos, state);
+         if (result == null && (!optimizeEntities || !level.paperConfig().hopper.ignoreOccludingBlocks || !state.getBukkitMaterial().isOccluding())) { // Paper - Perf: Optimize Hoppers
+-            result = getEntityContainer(level, x, y, z);
++            result = getEntityContainer(level, hopper, x, y, z); // Pluto - Entities search for hoppers
          }
  
-         return blockContainer;
+         return result;
      }
  
-     private static @Nullable Container getBlockContainer(Level level, BlockPos pos, BlockState state) {
+     private static @Nullable Container getBlockContainer(final Level level, final BlockPos pos, final BlockState state) {
 -        if (!level.spigotConfig.hopperCanLoadChunks && !level.hasChunkAt(pos)) return null; // Spigot
 +        // Pluto start - Small hopper optimisations
 +        net.minecraft.world.level.chunk.LevelChunk chunk = null;
@@ -170,15 +178,15 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
                  container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
              }
-@@ -804,7 +_,10 @@
+@@ -711,7 +_,10 @@
          }
      }
  
--    private static @Nullable Container getEntityContainer(Level level, double x, double y, double z) {
+-    private static @Nullable Container getEntityContainer(final Level level, final double x, final double y, final double z) {
 +    // Pluto start - Entities search for hoppers
 +    private static @Nullable Container getEntityContainer(Level level, Hopper hopper, double x, double y, double z) {
 +        if (level.plutoConfig().entitiesSearchForHoppers && !(hopper instanceof  net.minecraft.world.entity.vehicle.minecart.MinecartHopper)) return null;
 +        // Pluto end - Entities search for hoppers
-         List<Entity> entities = level.getEntitiesOfClass(
+         List<Entity> entities = level.getEntitiesOfClass( // Paper - Perf: Optimize hoppers
              (Class) Container.class, new AABB(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z + 0.5), EntitySelector.CONTAINER_ENTITY_SELECTOR // Paper - Perf: Optimize hoppers
          );

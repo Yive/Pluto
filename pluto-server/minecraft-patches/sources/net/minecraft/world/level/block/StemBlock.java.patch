@@ -1,40 +1,39 @@
 --- a/net/minecraft/world/level/block/StemBlock.java
 +++ b/net/minecraft/world/level/block/StemBlock.java
-@@ -68,8 +_,8 @@
+@@ -81,8 +_,8 @@
  
      @Override
-     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void randomTick(BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
 -        if (level.getRawBrightness(pos, 0) >= 9) {
 -            float growthSpeed = CropBlock.getGrowthSpeed(this, level, pos);
 +        if (level.plutoConfig().stemIgnoreLightLevel || level.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
 +            float growthSpeed = level.plutoConfig().useStaticGrowthSpeedStems ? level.plutoConfig().staticGrowthSpeedStems : CropBlock.getGrowthSpeed(this, level, pos); // Pluto - Static growth speeds
              if (random.nextFloat() < ((this == Blocks.PUMPKIN_STEM ? level.spigotConfig.pumpkinModifier : level.spigotConfig.melonModifier) / (100.0F * (Math.floor((25.0F / growthSpeed) + 1))))) { // Spigot - SPIGOT-7159: Better modifier resolution
-                 int ageValue = state.getValue(AGE);
-                 if (ageValue < 7) {
-@@ -77,15 +_,22 @@
+                 int age = state.getValue(AGE);
+                 if (age < 7) {
+@@ -90,15 +_,21 @@
                      org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos, state, Block.UPDATE_CLIENTS); // CraftBukkit
                  } else {
-                     Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
--                    BlockPos blockPos = pos.relative(randomDirection);
--                    BlockState blockState = level.getBlockState(blockPos.below());
--                    if (level.getBlockState(blockPos).isAir() && (blockState.is(Blocks.FARMLAND) || blockState.is(BlockTags.DIRT))) {
+                     Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+-                    BlockPos relative = pos.relative(direction);
+-                    BlockState stateBelow = level.getBlockState(relative.below());
+-                    if (level.getBlockState(relative).isAir() && stateBelow.is(this.fruitSupportBlocks)) {
 +                    // Pluto start - Decrease chunk/block lookups
-+                    final int x = pos.getX() + randomDirection.getStepX();
-+                    final int z = pos.getZ() + randomDirection.getStepZ();
++                    final int x = pos.getX() + direction.getStepX();
++                    final int z = pos.getZ() + direction.getStepZ();
 +                    net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(x >> 4, z >> 4);
 +                    if (chunk == null) return;
-+                    final int y = pos.getY() + randomDirection.getStepY();
++                    final int y = pos.getY() + direction.getStepY();
 +
-+                    BlockState blockState;
-+                    if (chunk.getBlockState(x, y, z).isAir() && ((blockState = chunk.getBlockState(x, y - 1, z)).is(Blocks.FARMLAND) || blockState.is(BlockTags.DIRT))) {
++                    if (chunk.getBlockState(x, y, z).isAir() && chunk.getBlockState(x, y - 1, z).is(this.fruitSupportBlocks)) {
 +                        // Pluto end - Decrease chunk/block lookups
-                         Registry<Block> registry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
-                         Optional<Block> optional = registry.getOptional(this.fruit);
-                         Optional<Block> optional1 = registry.getOptional(this.attachedStem);
-                         if (optional.isPresent() && optional1.isPresent()) {
+                         Registry<Block> blocks = level.registryAccess().lookupOrThrow(Registries.BLOCK);
+                         Optional<Block> fruit = blocks.getOptional(this.fruit);
+                         Optional<Block> stem = blocks.getOptional(this.attachedStem);
+                         if (fruit.isPresent() && stem.isPresent()) {
                              // CraftBukkit start
--                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, blockPos, optional.get().defaultBlockState(), Block.UPDATE_ALL)) {
-+                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos.relative(randomDirection), optional.get().defaultBlockState(), Block.UPDATE_ALL)) { // Pluto - Decrease chunk/block lookups
+-                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, relative, fruit.get().defaultBlockState(), Block.UPDATE_ALL)) {
++                            if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(level, pos.relative(direction), fruit.get().defaultBlockState(), Block.UPDATE_ALL)) { // Pluto - Decrease chunk/block lookups
                                  return;
                              }
                              // CraftBukkit end

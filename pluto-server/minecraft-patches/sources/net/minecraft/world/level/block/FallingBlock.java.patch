@@ -3,9 +3,9 @@
 @@ -47,7 +_,7 @@
  
      @Override
-     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
 -        if (isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinY()) {
 +        if (isFree(level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())) && pos.getY() >= level.getMinY()) { // Pluto - Memory allocation optimisations
-             FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(level, pos, state);
-             this.falling(fallingBlockEntity);
+             FallingBlockEntity entity = FallingBlockEntity.fall(level, pos, state);
+             this.falling(entity);
          }

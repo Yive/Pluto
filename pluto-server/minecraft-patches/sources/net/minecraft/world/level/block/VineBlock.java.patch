@@ -2,28 +2,28 @@
 +++ b/net/minecraft/world/level/block/VineBlock.java
 @@ -125,7 +_,7 @@
  
-         BlockState blockState = null;
+         BlockState aboveState = null;
  
 -        for (Direction direction : Direction.Plane.HORIZONTAL) {
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             BooleanProperty propertyForFace = getPropertyForFace(direction);
-             if (state.getValue(propertyForFace)) {
-                 boolean canSupportAtFace = this.canSupportAtFace(level, pos, direction);
-@@ -215,7 +_,7 @@
+             BooleanProperty property = getPropertyForFace(direction);
+             if (state.getValue(property)) {
+                 boolean canSupport = this.canSupportAtFace(level, pos, direction);
+@@ -217,7 +_,7 @@
  
-                             BlockState blockState1 = state;
+                             BlockState aboveState = state;
  
--                            for (Direction clockWise : Direction.Plane.HORIZONTAL) {
-+                            for (Direction clockWise : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-                                 if (random.nextBoolean() || !isAcceptableNeighbour(level, blockPos.relative(clockWise), clockWise)) {
-                                     blockState1 = blockState1.setValue(getPropertyForFace(clockWise), false);
+-                            for (Direction direction : Direction.Plane.HORIZONTAL) {
++                            for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+                                 if (random.nextBoolean() || !isAcceptableNeighbour(level, abovePos.relative(direction), direction)) {
+                                     aboveState = aboveState.setValue(getPropertyForFace(direction), false);
                                  }
-@@ -246,7 +_,7 @@
+@@ -248,7 +_,7 @@
      }
  
-     private BlockState copyRandomFaces(BlockState sourceState, BlockState spreadState, RandomSource random) {
+     private BlockState copyRandomFaces(final BlockState from, BlockState to, final RandomSource random) {
 -        for (Direction direction : Direction.Plane.HORIZONTAL) {
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
              if (random.nextBoolean()) {
                  BooleanProperty propertyForFace = getPropertyForFace(direction);
-                 if (sourceState.getValue(propertyForFace)) {
+                 if (from.getValue(propertyForFace)) {

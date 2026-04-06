@@ -84,10 +84,10 @@ public class AsyncNaturalSpawner {
 
     private static BlockPos getRandomPosWithin(Level level, LevelChunk chunk) {
         final ChunkPos pos = chunk.getPos();
-        final int x = pos.getMinBlockX() + level.threadSafeRandom.nextInt(16);
-        final int z = pos.getMinBlockZ() + level.threadSafeRandom.nextInt(16);
+        final int x = pos.getMinBlockX() + level.pluto$threadSafeRandom().nextInt(16);
+        final int z = pos.getMinBlockZ() + level.pluto$threadSafeRandom().nextInt(16);
         final int topEmptyY = chunk.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) + 1;
-        final int y = Mth.randomBetweenInclusive(level.threadSafeRandom, level.getMinY(), topEmptyY);
+        final int y = Mth.randomBetweenInclusive(level.pluto$threadSafeRandom(), level.getMinY(), topEmptyY);
         return new BlockPos(x, y, z);
     }
 
@@ -123,12 +123,12 @@ public class AsyncNaturalSpawner {
             int z = start.getZ();
             MobSpawnSettings.SpawnerData currentSpawnData = null;
             SpawnGroupData groupData = null;
-            int max = Mth.ceil(level.threadSafeRandom.nextFloat() * 4.0F);
+            int max = Mth.ceil(level.pluto$threadSafeRandom().nextFloat() * 4.0F);
             int groupSize = 0;
 
             for (int ll = 0; ll < max; ll++) {
-                x += level.threadSafeRandom.nextInt(6) - level.threadSafeRandom.nextInt(6);
-                z += level.threadSafeRandom.nextInt(6) - level.threadSafeRandom.nextInt(6);
+                x += level.pluto$threadSafeRandom().nextInt(6) - level.pluto$threadSafeRandom().nextInt(6);
+                z += level.pluto$threadSafeRandom().nextInt(6) - level.pluto$threadSafeRandom().nextInt(6);
                 pos.set(x, yStart, z);
                 double xx = x + 0.5;
                 double zz = z + 0.5;
@@ -138,14 +138,14 @@ public class AsyncNaturalSpawner {
                     if (level.isLoadedAndInBounds(pos) && NaturalSpawner.isRightDistanceToPlayerAndSpawnPoint(level, chunk, pos, nearestPlayerDistanceSqr)) { // Paper - don't load chunks for mob spawn
                         if (currentSpawnData == null) {
                             Optional<MobSpawnSettings.SpawnerData> nextSpawnData = NaturalSpawner.getRandomSpawnMobAt(
-                                level, structureManager, generator, mobCategory, level.threadSafeRandom, pos
+                                level, structureManager, generator, mobCategory, level.pluto$threadSafeRandom(), pos
                             );
                             if (nextSpawnData.isEmpty()) {
                                 break;
                             }
 
                             currentSpawnData = nextSpawnData.get();
-                            max = currentSpawnData.minCount() + level.threadSafeRandom.nextInt(1 + currentSpawnData.maxCount() - currentSpawnData.minCount());
+                            max = currentSpawnData.minCount() + level.pluto$threadSafeRandom().nextInt(1 + currentSpawnData.maxCount() - currentSpawnData.minCount());
                         }
 
                         // Paper start - PreCreatureSpawnEvent
@@ -164,7 +164,7 @@ public class AsyncNaturalSpawner {
                             return;
                         }
 
-                        mob.snapTo(xx, yStart, zz, level.threadSafeRandom.nextFloat() * 360.0F, 0.0F);
+                        mob.snapTo(xx, yStart, zz, level.pluto$threadSafeRandom().nextFloat() * 360.0F, 0.0F);
                         if (NaturalSpawner.isValidPositionForMob(level, mob, nearestPlayerDistanceSqr)) {
                             final SpawnGroupData finalGroupData = groupData;
                             final CreatureSpawnEvent.SpawnReason spawnReason =
@@ -271,7 +271,7 @@ public class AsyncNaturalSpawner {
             && type.canSummon()
             && NaturalSpawner.canSpawnMobAt(level, structureManager, generator, mobCategory, currentSpawnData, pos)
             && SpawnPlacements.isSpawnPositionOk(type, level, pos)
-            && SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.NATURAL, pos, level.threadSafeRandom)
+            && SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.NATURAL, pos, level.pluto$threadSafeRandom())
             && level.noCollision(type.getSpawnAABB(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
         return success ? NaturalSpawner.PreSpawnStatus.SUCCESS : NaturalSpawner.PreSpawnStatus.FAIL;
     }

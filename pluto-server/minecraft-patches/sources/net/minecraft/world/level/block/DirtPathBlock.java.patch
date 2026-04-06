@@ -3,9 +3,9 @@
 @@ -70,7 +_,7 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        BlockState blockState = level.getBlockState(pos.above());
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return !blockState.isSolid() || blockState.getBlock() instanceof FenceGateBlock;
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockState aboveState = level.getBlockState(pos.above());
++        BlockState aboveState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return !aboveState.isSolid() || aboveState.getBlock() instanceof FenceGateBlock;
      }
  

@@ -1,14 +1,14 @@
 --- a/net/minecraft/world/entity/animal/squid/Squid.java
 +++ b/net/minecraft/world/entity/animal/squid/Squid.java
-@@ -260,9 +_,8 @@
+@@ -273,9 +_,8 @@
                      Squid.this.getX() - lastHurtByMob.getX(), Squid.this.getY() - lastHurtByMob.getY(), Squid.this.getZ() - lastHurtByMob.getZ()
                  );
                  BlockState blockState = Squid.this.level()
--                    .getBlockState(BlockPos.containing(Squid.this.getX() + vec3.x, Squid.this.getY() + vec3.y, Squid.this.getZ() + vec3.z));
+-                    .getBlockState(BlockPos.containing(Squid.this.getX() + fleeTo.x, Squid.this.getY() + fleeTo.y, Squid.this.getZ() + fleeTo.z));
 -                FluidState fluidState = Squid.this.level()
--                    .getFluidState(BlockPos.containing(Squid.this.getX() + vec3.x, Squid.this.getY() + vec3.y, Squid.this.getZ() + vec3.z));
-+                    .pluto$getBlockState(Mth.floor(Squid.this.getX() + vec3.x), Mth.floor(Squid.this.getY() + vec3.y), Mth.floor(Squid.this.getZ() + vec3.z)); // Pluto - Memory allocation optimisations
+-                    .getFluidState(BlockPos.containing(Squid.this.getX() + fleeTo.x, Squid.this.getY() + fleeTo.y, Squid.this.getZ() + fleeTo.z));
++                    .pluto$getBlockState(Mth.floor(Squid.this.getX() + fleeTo.x), Mth.floor(Squid.this.getY() + fleeTo.y), Mth.floor(Squid.this.getZ() + fleeTo.z)); // Pluto - Memory allocation optimisations
 +                FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
                  if (fluidState.is(FluidTags.WATER) || blockState.isAir()) {
-                     double len = vec3.length();
-                     if (len > 0.0) {
+                     double length = fleeTo.length();
+                     if (length > 0.0) {

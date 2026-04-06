@@ -1,17 +1,17 @@
 --- a/net/minecraft/world/level/block/LiquidBlock.java
 +++ b/net/minecraft/world/level/block/LiquidBlock.java
-@@ -196,6 +_,7 @@
+@@ -241,6 +_,7 @@
              for (Direction direction : POSSIBLE_FLOW_DIRECTIONS) {
-                 BlockPos blockPos = pos.relative(direction.getOpposite());
-                 if (level.getFluidState(blockPos).is(FluidTags.WATER)) {
+                 BlockPos neighbourPos = pos.relative(direction.getOpposite());
+                 if (level.getFluidState(neighbourPos).is(FluidTags.WATER)) {
 +                    if (level.plutoConfig().disableBlockGenerationFromFluids) return false; // Pluto - Toggle for block generation from fluids
-                     Block block = level.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
+                     Block convertToBlock = level.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
                      // CraftBukkit start
-                     if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level, pos, block.defaultBlockState(), Block.UPDATE_ALL)) {
-@@ -206,6 +_,7 @@
+                     if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level, pos, convertToBlock.defaultBlockState(), Block.UPDATE_ALL)) {
+@@ -251,6 +_,7 @@
                  }
  
-                 if (isSoulSoil && level.getBlockState(blockPos).is(Blocks.BLUE_ICE)) {
+                 if (isOverSoulSoil && level.getBlockState(neighbourPos).is(Blocks.BLUE_ICE)) {
 +                    if (level.plutoConfig().disableBlockGenerationFromFluids) return false; // Pluto - Toggle for block generation from fluids
                      // CraftBukkit start
                      if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level, pos, Blocks.BASALT.defaultBlockState(), Block.UPDATE_ALL)) {

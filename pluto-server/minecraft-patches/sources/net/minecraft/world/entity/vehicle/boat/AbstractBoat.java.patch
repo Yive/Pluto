@@ -2,7 +2,7 @@
 +++ b/net/minecraft/world/entity/vehicle/boat/AbstractBoat.java
 @@ -324,7 +_,14 @@
          if (!entities.isEmpty()) {
-             boolean flag = !this.level().isClientSide() && !(this.getControllingPassenger() instanceof Player);
+             boolean addNewPassengers = !this.level().isClientSide() && !(this.getControllingPassenger() instanceof Player);
  
 +            // Pluto start - Option to remove excess vehicles on collision
 +            int boatCount = 0;
@@ -13,5 +13,5 @@
 +                }
 +                // Pluto end - Option to remove excess vehicles on collision
                  if (!entity.hasPassenger(this)) {
-                     if (flag
+                     if (addNewPassengers
                          && this.getPassengers().size() < this.getMaxPassengers()

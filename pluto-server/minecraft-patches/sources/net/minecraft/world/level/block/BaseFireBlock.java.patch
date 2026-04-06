@@ -3,38 +3,38 @@
 @@ -43,8 +_,7 @@
      }
  
-     public static BlockState getState(BlockGetter level, BlockPos pos) {
--        BlockPos blockPos = pos.below();
--        BlockState blockState = level.getBlockState(blockPos);
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return SoulFireBlock.canSurviveOnBlock(blockState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(level, pos);
+     public static BlockState getState(final BlockGetter level, final BlockPos pos) {
+-        BlockPos below = pos.below();
+-        BlockState belowState = level.getBlockState(below);
++        BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return SoulFireBlock.canSurviveOnBlock(belowState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(level, pos);
      }
  
-@@ -164,7 +_,7 @@
+@@ -171,7 +_,7 @@
      @Override
-     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
+     protected void onPlace(final BlockState state, final Level level, final BlockPos pos, final BlockState oldState, final boolean movedByPiston, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
          if (!oldState.is(state.getBlock())) {
 -            if (inPortalDimension(level)) {
 +            if (!level.plutoConfig().disableNetherPortalGeneration && inPortalDimension(level)) { // Pluto - Toggle for nether portal generation
-                 Optional<PortalShape> optional = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
-                 if (optional.isPresent()) {
-                     optional.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
-@@ -204,11 +_,15 @@
+                 Optional<PortalShape> optionalShape = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
+                 if (optionalShape.isPresent()) {
+                     optionalShape.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
+@@ -211,11 +_,15 @@
          if (!inPortalDimension(level)) {
              return false;
          } else {
--            BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
+-            BlockPos.MutableBlockPos testPos = pos.mutable();
 +            // Pluto start - Memory allocation optimisations
 +            final int x = pos.getX();
 +            final int y = pos.getY();
 +            final int z = pos.getZ();
 +            // Pluto end - Memory allocation optimisations
-             boolean flag = false;
+             boolean hasObsidian = false;
  
--            for (Direction direction1 : Direction.values()) {
--                if (level.getBlockState(mutableBlockPos.set(pos).move(direction1)).is(Blocks.OBSIDIAN)) {
-+            for (Direction direction1 : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-+                if (level.pluto$getBlockState(x + direction1.getStepX(), y + direction1.getStepY(), z + direction1.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
-                     flag = true;
+-            for (Direction face : Direction.values()) {
+-                if (level.getBlockState(testPos.set(pos).move(face)).is(Blocks.OBSIDIAN)) {
++            for (Direction face : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++                if (level.pluto$getBlockState(x + face.getStepX(), y + face.getStepY(), z + face.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
+                     hasObsidian = true;
                      break;
                  }

@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/entity/projectile/FishingHook.java
 +++ b/net/minecraft/world/entity/projectile/FishingHook.java
 @@ -346,7 +_,7 @@
-                 double d = this.getX() + sin * this.timeUntilHooked * 0.1F;
-                 double d1 = Mth.floor(this.getY()) + 1.0F;
-                 double d2 = this.getZ() + cos * this.timeUntilHooked * 0.1F;
--                BlockState blockState = serverLevel.getBlockState(BlockPos.containing(d, d1 - 1.0, d2));
-+                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory allocation optimisations
-                 if (blockState.is(Blocks.WATER)) {
+                 double fishX = this.getX() + angleSin * this.timeUntilHooked * 0.1F;
+                 double fishY = Mth.floor(this.getY()) + 1.0F;
+                 double fishZ = this.getZ() + angleCos * this.timeUntilHooked * 0.1F;
+-                BlockState splashBlockState = serverLevel.getBlockState(BlockPos.containing(fishX, fishY - 1.0, fishZ));
++                BlockState splashBlockState = serverLevel.pluto$getBlockState(fishX, fishY - 1.0, fishZ); // Pluto - Memory allocation optimisations
+                 if (splashBlockState.is(Blocks.WATER)) {
                      if (this.random.nextFloat() < 0.15F) {
-                         serverLevel.sendParticles(ParticleTypes.BUBBLE, d, d1 - 0.1F, d2, 1, sin, 0.1, cos, 0.0);
-@@ -408,7 +_,7 @@
-                 double d = this.getX() + Mth.sin(sin) * cos * 0.1;
-                 double d1 = Mth.floor(this.getY()) + 1.0F;
-                 double d2 = this.getZ() + Mth.cos(sin) * cos * 0.1;
--                BlockState blockState = serverLevel.getBlockState(BlockPos.containing(d, d1 - 1.0, d2));
-+                BlockState blockState = serverLevel.pluto$getBlockState(d, d1 - 1.0, d2); // Pluto - Memory allocation optimisations
-                 if (blockState.is(Blocks.WATER)) {
-                     serverLevel.sendParticles(ParticleTypes.SPLASH, d, d1, d2, 2 + this.random.nextInt(2), 0.1F, 0.0, 0.1F, 0.0);
+                         serverLevel.sendParticles(ParticleTypes.BUBBLE, fishX, fishY - 0.1F, fishZ, 1, angleSin, 0.1, angleCos, 0.0);
+@@ -400,7 +_,7 @@
+                 double fishX = this.getX() + Mth.sin(angle) * dist * 0.1;
+                 double fishY = Mth.floor(this.getY()) + 1.0F;
+                 double fishZ = this.getZ() + Mth.cos(angle) * dist * 0.1;
+-                BlockState splashBlockState = serverLevel.getBlockState(BlockPos.containing(fishX, fishY - 1.0, fishZ));
++                BlockState splashBlockState = serverLevel.pluto$getBlockState(fishX, fishY - 1.0, fishZ); // Pluto - Memory allocation optimisations
+                 if (splashBlockState.is(Blocks.WATER)) {
+                     serverLevel.sendParticles(ParticleTypes.SPLASH, fishX, fishY, fishZ, 2 + this.random.nextInt(2), 0.1F, 0.0, 0.1F, 0.0);
                  }

@@ -1,35 +1,35 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -117,8 +_,10 @@
+@@ -118,8 +_,10 @@
          }
  
-         if (!this.trackedPlayers.isEmpty() && this.entity instanceof ItemFrame itemFrame /*&& this.tickCount % 10 == 0*/) { // CraftBukkit - moved tickCount below // Paper - Perf: Only tick item frames if players can see it
--            ItemStack item = itemFrame.getItem();
--            if (this.level.paperConfig().maps.itemFrameCursorUpdateInterval > 0 && this.tickCount % this.level.paperConfig().maps.itemFrameCursorUpdateInterval == 0 && item.getItem() instanceof MapItem) { // CraftBukkit - Moved this.tickCounter % 10 logic here so item frames do not enter the other blocks // Paper - Make item frame map cursor update interval configurable
+         if (!this.trackedPlayers.isEmpty() && this.entity instanceof ItemFrame frame /*&& this.tickCount % 10 == 0*/) { // CraftBukkit - moved tickCount below // Paper - Perf: Only tick item frames if players can see it
+-            ItemStack itemStack = frame.getItem();
+-            if (this.level.paperConfig().maps.itemFrameCursorUpdateInterval > 0 && this.tickCount % this.level.paperConfig().maps.itemFrameCursorUpdateInterval == 0 && itemStack.getItem() instanceof MapItem) { // CraftBukkit - Moved this.tickCounter % 10 logic here so item frames do not enter the other blocks // Paper - Make item frame map cursor update interval configurable
 +            // Pluto start - Optimise tracked item frames
-+            ItemStack item;
-+            if (this.level.paperConfig().maps.itemFrameCursorUpdateInterval > 0 && this.tickCount % this.level.paperConfig().maps.itemFrameCursorUpdateInterval == 0 && (item = itemFrame.getItem()).getItem() instanceof MapItem) { // CraftBukkit - Moved this.tickCounter % 10 logic here so item frames do not enter the other blocks // Paper - Make item frame map cursor update interval configurable
++            ItemStack itemStack;
++            if (this.level.paperConfig().maps.itemFrameCursorUpdateInterval > 0 && this.tickCount % this.level.paperConfig().maps.itemFrameCursorUpdateInterval == 0 && (itemStack = frame.getItem()).getItem() instanceof MapItem) { // CraftBukkit - Moved this.tickCounter % 10 logic here so item frames do not enter the other blocks // Paper - Make item frame map cursor update interval configurable
 +                // Pluto end - Optimise tracked item frames
-                 MapId mapId = itemFrame.cachedMapId; // Paper - Perf: Cache map ids on item frames
-                 MapItemSavedData savedData = MapItem.getSavedData(mapId, this.level);
-                 if (savedData != null) {
+                 MapId id = frame.cachedMapId; // Paper - Perf: Cache map ids on item frames
+                 MapItemSavedData data = MapItem.getSavedData(id, this.level);
+                 if (data != null) {
 @@ -181,7 +_,10 @@
                      packet = ClientboundEntityPositionSyncPacket.of(this.entity);
-                     flag3 = true;
-                     flag4 = true;
--                } else if ((!flag2 || !flag) && !(this.entity instanceof AbstractArrow)) {
+                     sentPosition = true;
+                     sentRotation = true;
+-                } else if ((!pos || !shouldSendRotation) && !(this.entity instanceof AbstractArrow)) {
 +                // Pufferfish start - Better checking for useless move packets
-+                } else if (flag2 || flag || this.entity instanceof AbstractArrow) {
-+                    if ((!flag2 || !flag) && !(this.entity instanceof AbstractArrow)) {
++                } else if (pos || shouldSendRotation || this.entity instanceof AbstractArrow) {
++                    if ((!pos || !shouldSendRotation) && !(this.entity instanceof AbstractArrow)) {
 +                    // Pufferfish end
-                     if (flag2) {
-                         packet = new ClientboundMoveEntityPacket.Pos(this.entity.getId(), (short)l, (short)l1, (short)l2, this.entity.onGround());
-                         flag3 = true;
+                     if (pos) {
+                         packet = new ClientboundMoveEntityPacket.Pos(this.entity.getId(), (short)xa, (short)ya, (short)za, this.entity.onGround());
+                         sentPosition = true;
 @@ -194,6 +_,7 @@
-                     flag3 = true;
-                     flag4 = true;
+                     sentPosition = true;
+                     sentRotation = true;
                  }
 +                } // Pufferfish - Better checking for useless move packets
  
                  if (this.entity.needsSync || this.trackDelta || this.entity instanceof LivingEntity && ((LivingEntity)this.entity).isFallFlying()) {
-                     Vec3 deltaMovement = this.entity.getDeltaMovement();
+                     Vec3 movement = this.entity.getDeltaMovement();

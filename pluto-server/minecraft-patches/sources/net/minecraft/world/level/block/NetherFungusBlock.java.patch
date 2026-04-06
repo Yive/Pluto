@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/NetherFungusBlock.java
++++ b/net/minecraft/world/level/block/NetherFungusBlock.java
+@@ -69,7 +_,7 @@
+ 
+     @Override
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+-        BlockState belowState = level.getBlockState(pos.below());
++        BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return belowState.is(this.requiredBlock) && level.isInsideBuildHeight(pos.above());
+     }
+ 

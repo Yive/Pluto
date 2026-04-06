@@ -3,32 +3,32 @@
 @@ -131,15 +_,19 @@
      }
  
-     protected BlockState getStateForPlacement(BlockGetter level, BlockPos pos) {
--        BlockPos blockPos = pos.below();
--        BlockState blockState = level.getBlockState(blockPos);
--        if (!this.canBurn(blockState) && !blockState.isFaceSturdy(level, blockPos, Direction.UP)) {
+     protected BlockState getStateForPlacement(final BlockGetter level, final BlockPos pos) {
+-        BlockPos below = pos.below();
+-        BlockState belowState = level.getBlockState(below);
+-        if (!this.canBurn(belowState) && !belowState.isFaceSturdy(level, below, Direction.UP)) {
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-+        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
-+        if (!this.canBurn(blockState) && !blockState.isFaceSturdy(level, pos.below(), Direction.UP)) {
++        BlockState belowState = level.pluto$getBlockState(x, y - 1, z);
++        if (!this.canBurn(belowState) && !belowState.isFaceSturdy(level, pos.below(), Direction.UP)) {
 +            // Pluto end - Memory allocation optimisations
-             BlockState blockState1 = this.defaultBlockState();
+             BlockState result = this.defaultBlockState();
  
 -            for (Direction direction : Direction.values()) {
 +            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                 BooleanProperty booleanProperty = PROPERTY_BY_DIRECTION.get(direction);
-                 if (booleanProperty != null) {
--                    blockState1 = blockState1.setValue(booleanProperty, this.canBurn(level.getBlockState(pos.relative(direction))));
-+                    blockState1 = blockState1.setValue(booleanProperty, this.canBurn(level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()))); // Pluto - Memory allocation optimisations
+                 BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
+                 if (property != null) {
+-                    result = result.setValue(property, this.canBurn(level.getBlockState(pos.relative(direction))));
++                    result = result.setValue(property, this.canBurn(level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()))); // Pluto - Memory allocation optimisations
                  }
              }
  
 @@ -306,8 +_,13 @@
      }
  
-     private boolean isValidFireLocation(BlockGetter level, BlockPos pos) {
+     private boolean isValidFireLocation(final BlockGetter level, final BlockPos pos) {
 -        for (Direction direction : Direction.values()) {
 -            if (this.canBurn(level.getBlockState(pos.relative(direction)))) {
 +        // Pluto start - Memory allocation optimisations
@@ -43,7 +43,7 @@
          }
 @@ -321,8 +_,13 @@
          } else {
-             int i = 0;
+             int odds = 0;
  
 -            for (Direction direction : Direction.values()) {
 -                BlockState blockState = level.getBlockState(pos.relative(direction));
@@ -54,6 +54,6 @@
 +            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
 +                BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
 +                // Pluto end - Memory allocation optimisations
-                 i = Math.max(this.getIgniteOdds(blockState), i);
+                 odds = Math.max(this.getIgniteOdds(blockState), odds);
              }
  

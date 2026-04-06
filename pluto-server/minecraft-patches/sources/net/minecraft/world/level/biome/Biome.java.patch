@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/biome/Biome.java
 +++ b/net/minecraft/world/level/biome/Biome.java
-@@ -136,7 +_,7 @@
+@@ -141,7 +_,7 @@
          } else {
-             if (level.isInsideBuildHeight(water.getY()) && level.getBrightness(LightLayer.BLOCK, water) < 10) {
-                 BlockState blockState = level.getBlockState(water);
--                FluidState fluidState = level.getFluidState(water);
+             if (level.isInsideBuildHeight(pos.getY()) && level.getBrightness(LightLayer.BLOCK, pos) < 10) {
+                 BlockState blockState = level.getBlockState(pos);
+-                FluidState fluidState = level.getFluidState(pos);
 +                FluidState fluidState = blockState.getFluidState(); // Pluto start - Decrease chunk/block lookups
-                 if (fluidState.getType() == Fluids.WATER && blockState.getBlock() instanceof LiquidBlock) {
-                     if (!mustBeAtEdge) {
+                 if (fluidState.is(Fluids.WATER) && blockState.getBlock() instanceof LiquidBlock) {
+                     if (!checkNeighbors) {
                          return true;

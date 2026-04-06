@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/RedstoneTorchBlock.java
 +++ b/net/minecraft/world/level/block/RedstoneTorchBlock.java
-@@ -48,7 +_,7 @@
-     private void notifyNeighbors(Level level, BlockPos pos, BlockState state) {
+@@ -49,7 +_,7 @@
+     private void notifyNeighbors(final Level level, final BlockPos pos, final BlockState state) {
          Orientation orientation = this.randomOrientation(level, state);
  
 -        for (Direction direction : Direction.values()) {
@@ -9,22 +9,22 @@
              level.updateNeighborsAt(pos.relative(direction), this, ExperimentalRedstoneUtils.withFront(orientation, direction));
          }
      }
-@@ -131,6 +_,18 @@
-     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
-         return side == Direction.DOWN ? state.getSignal(level, pos, side) : 0;
+@@ -132,6 +_,18 @@
+     protected int getDirectSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
+         return direction == Direction.DOWN ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
      }
 +
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
-+        return blockState.getValue(LIT) && Direction.UP != side ? 15 : 0;
++        return blockState.getValue(LIT) && Direction.UP != side ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        return side == Direction.DOWN ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
++        return side == Direction.DOWN ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
  
      @Override
-     protected boolean isSignalSource(BlockState state) {
+     protected boolean isSignalSource(final BlockState state) {

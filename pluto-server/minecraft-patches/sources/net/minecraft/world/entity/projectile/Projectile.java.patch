@@ -34,6 +34,6 @@
 +    }
 +    // Pufferfish end
 +
-     protected void setOwner(@Nullable EntityReference<Entity> owner) {
+     protected void setOwner(final @Nullable EntityReference<Entity> owner) {
          this.owner = owner;
-         this.refreshProjectileSource(false); // Paper
+     }

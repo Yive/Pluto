@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/ChestBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ChestBlockEntity.java
-@@ -208,6 +_,20 @@
+@@ -215,6 +_,20 @@
          return 0;
      }
  
@@ -18,6 +18,6 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     public static void swapContents(ChestBlockEntity chest, ChestBlockEntity otherChest) {
-         NonNullList<ItemStack> items = chest.getItems();
-         chest.setItems(otherChest.getItems());
+     public static void swapContents(final ChestBlockEntity one, final ChestBlockEntity two) {
+         NonNullList<ItemStack> items = one.getItems();
+         one.setItems(two.getItems());

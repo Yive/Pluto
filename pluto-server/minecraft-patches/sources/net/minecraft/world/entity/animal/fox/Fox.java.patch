@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/animal/fox/Fox.java
 +++ b/net/minecraft/world/entity/animal/fox/Fox.java
-@@ -743,7 +_,7 @@
-             double d4 = d2 == 0.0 ? d1 * (i1 / 6.0F) : d3 / d2;
+@@ -750,7 +_,7 @@
+             double x = slope == 0.0 ? xdiff * (i / 6.0F) : z / slope;
  
-             for (int i2 = 1; i2 < 4; i2++) {
--                if (!fox.level().getBlockState(BlockPos.containing(fox.getX() + d4, fox.getY() + i2, fox.getZ() + d3)).canBeReplaced()) {
-+                if (!fox.level().pluto$getBlockState(Mth.floor(fox.getX() + d4), Mth.floor(fox.getY() + i2), Mth.floor(fox.getZ() + d3)).canBeReplaced()) { // Pluto - Memory allocation optimisations
+             for (int j = 1; j < 4; j++) {
+-                if (!fox.level().getBlockState(BlockPos.containing(fox.getX() + x, fox.getY() + j, fox.getZ() + z)).canBeReplaced()) {
++                if (!fox.level().pluto$getBlockState(Mth.floor(fox.getX() + x), Mth.floor(fox.getY() + j), Mth.floor(fox.getZ() + z)).canBeReplaced()) { // Pluto - Memory allocation optimisations
                      return false;
                  }
              }

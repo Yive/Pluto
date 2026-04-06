@@ -2,19 +2,19 @@
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 @@ -129,7 +_,7 @@
  
-         double floorLevel = this.getFloorLevel(new BlockPos(node.x, node.y, node.z));
+         double posHeight = this.getFloorLevel(new BlockPos(pos.x, pos.y, pos.z));
  
 -        for (Direction direction : Direction.Plane.HORIZONTAL) {
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             Node node1 = this.findAcceptedNode(node.x + direction.getStepX(), node.y, node.z + direction.getStepZ(), i1, floorLevel, direction, cachedPathType1);
-             this.reusableNeighbors[direction.get2DDataValue()] = node1;
-             if (this.isNeighborValid(node1, node)) {
-@@ -137,7 +_,7 @@
+             Node node = this.findAcceptedNode(
+                 pos.x + direction.getStepX(), pos.y, pos.z + direction.getStepZ(), jumpSize, posHeight, direction, blockPathTypeCurrent
+             );
+@@ -139,7 +_,7 @@
              }
          }
  
 -        for (Direction directionx : Direction.Plane.HORIZONTAL) {
 +        for (Direction directionx : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             Direction clockWise = directionx.getClockWise();
-             if (this.isDiagonalValid(node, this.reusableNeighbors[directionx.get2DDataValue()], this.reusableNeighbors[clockWise.get2DDataValue()])) {
-                 Node node2 = this.findAcceptedNode(
+             Direction secondDirection = directionx.getClockWise();
+             if (this.isDiagonalValid(pos, this.reusableNeighbors[directionx.get2DDataValue()], this.reusableNeighbors[secondDirection.get2DDataValue()])) {
+                 Node diagonalNode = this.findAcceptedNode(

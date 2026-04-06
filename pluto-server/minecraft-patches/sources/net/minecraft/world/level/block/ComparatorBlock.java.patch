@@ -1,16 +1,16 @@
 --- a/net/minecraft/world/level/block/ComparatorBlock.java
 +++ b/net/minecraft/world/level/block/ComparatorBlock.java
-@@ -63,6 +_,13 @@
-             : super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
+@@ -64,6 +_,13 @@
+             : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getOutputSignal(BlockGetter level, int x, int y, int z, BlockState state) {
-+        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof ComparatorBlockEntity comparatorBlockEntity ? comparatorBlockEntity.getOutputSignal() : 0;
++        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof ComparatorBlockEntity comparatorBlockEntity ? comparatorBlockEntity.getOutputSignal() : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected int getOutputSignal(BlockGetter level, BlockPos pos, BlockState state) {
+     protected int getOutputSignal(final BlockGetter level, final BlockPos pos, final BlockState state) {
          BlockEntity blockEntity = level.getBlockEntity(pos);

@@ -30,6 +30,6 @@
 +    @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos);
 +    // Pluto end - Memory allocation optimisations
 +
-     BlockState getBlockState(BlockPos pos);
+     BlockState getBlockState(final BlockPos pos);
  
      // Paper start - if loaded util

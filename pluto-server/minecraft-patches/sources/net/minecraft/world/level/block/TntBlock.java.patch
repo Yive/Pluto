@@ -1,10 +1,10 @@
 --- a/net/minecraft/world/level/block/TntBlock.java
 +++ b/net/minecraft/world/level/block/TntBlock.java
-@@ -71,6 +_,7 @@
+@@ -73,6 +_,7 @@
  
      @Override
-     public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
+     public void wasExploded(final ServerLevel level, final BlockPos pos, final Explosion explosion) {
 +        if (level.plutoConfig().disableTntChainReaction) return; // Pluto - Option to disable TNT chain reactions | Might remove in future version due to gamerule
          if (level.getGameRules().get(GameRules.TNT_EXPLODES)) {
-             PrimedTnt primedTnt = new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, explosion.getIndirectSourceEntity());
-             int fuse = primedTnt.getFuse();
+             PrimedTnt primed = new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, explosion.getIndirectSourceEntity());
+             int fuse = primed.getFuse();

@@ -1,16 +1,16 @@
 --- a/net/minecraft/world/level/block/JukeboxBlock.java
 +++ b/net/minecraft/world/level/block/JukeboxBlock.java
-@@ -93,6 +_,13 @@
-         return level.getBlockEntity(pos) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? 15 : 0;
+@@ -104,6 +_,13 @@
+             : Redstone.SIGNAL_MIN;
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? 15 : 0;
++        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected boolean hasAnalogOutputSignal(BlockState state) {
+     protected boolean hasAnalogOutputSignal(final BlockState state) {
          return true;

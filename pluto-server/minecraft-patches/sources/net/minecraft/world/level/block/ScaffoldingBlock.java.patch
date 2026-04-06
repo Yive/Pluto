@@ -6,6 +6,6 @@
  
 -        for (Direction direction : Direction.Plane.HORIZONTAL) {
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             BlockState blockState1 = level.getBlockState(mutableBlockPos.setWithOffset(pos, direction));
-             if (blockState1.is(Blocks.SCAFFOLDING)) {
-                 i = Math.min(i, blockState1.getValue(DISTANCE) + 1);
+             BlockState relativeState = level.getBlockState(relativePos.setWithOffset(pos, direction));
+             if (relativeState.is(Blocks.SCAFFOLDING)) {
+                 distance = Math.min(distance, relativeState.getValue(DISTANCE) + 1);

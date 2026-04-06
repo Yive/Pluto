@@ -1,0 +1,29 @@
+--- a/net/minecraft/world/level/block/FarmlandBlock.java
++++ b/net/minecraft/world/level/block/FarmlandBlock.java
+@@ -63,7 +_,7 @@
+ 
+     @Override
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockState aboveState = level.getBlockState(pos.above());
++        BlockState aboveState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return !aboveState.isSolid() || shouldMaintainFarmland(level, pos);
+     }
+ 
+@@ -96,7 +_,7 @@
+         int moisture = state.getValue(MOISTURE);
+         if (moisture > 0 && level.paperConfig().tickRates.wetFarmland != 1 && (level.paperConfig().tickRates.wetFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % level.paperConfig().tickRates.wetFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
+         if (moisture == 0 && level.paperConfig().tickRates.dryFarmland != 1 && (level.paperConfig().tickRates.dryFarmland < 1 || (net.minecraft.server.MinecraftServer.currentTick + pos.hashCode()) % level.paperConfig().tickRates.dryFarmland != 0)) { return; } // Paper - Configurable random tick rates for blocks
+-        if (!isNearWater(level, pos) && !level.isRainingAt(pos.above())) {
++        if (!level.plutoConfig().alwaysMoistFarmland && !isNearWater(level, pos) && !level.isRainingAt(pos.above())) { // Pluto - Always moist blocks
+             if (moisture > 0) {
+                 org.bukkit.craftbukkit.event.CraftEventFactory.handleMoistureChangeEvent(level, pos, state.setValue(MOISTURE, moisture - 1), Block.UPDATE_CLIENTS); // CraftBukkit
+             } else if (!shouldMaintainFarmland(level, pos)) {
+@@ -153,7 +_,7 @@
+     }
+ 
+     private static boolean shouldMaintainFarmland(final BlockGetter level, final BlockPos pos) {
+-        return level.getBlockState(pos.above()).is(BlockTags.MAINTAINS_FARMLAND);
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).is(BlockTags.MAINTAINS_FARMLAND); // Pluto - Memory allocation optimisations
+     }
+ 
+     private static boolean isNearWater(final LevelReader level, final BlockPos pos) {

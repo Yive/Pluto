@@ -3,7 +3,7 @@
 @@ -48,10 +_,18 @@
  
      @Override
-     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
 -        if (level.isEmptyBlock(pos.above())) {
 +        // Pluto start - Decrease chunk/block lookups
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(pos);
@@ -14,37 +14,37 @@
 +        final int z = pos.getZ();
 +        if (chunk.getBlockState(x, y + 1, z).isAir()) {
 +            // Pluto end - Decrease chunk/block lookups
-             int i = 1;
+             int height = 1;
  
--            while (level.getBlockState(pos.below(i)).is(this)) {
-+            while (chunk.getBlockState(x, y - i, z).is(this)) { // Pluto - Decrease chunk/block lookups
-                 i++;
+-            while (level.getBlockState(pos.below(height)).is(this)) {
++            while (chunk.getBlockState(x, y - height, z).is(this)) { // Pluto - Decrease chunk/block lookups
+                 height++;
              }
  
 @@ -88,16 +_,21 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        BlockState blockState = level.getBlockState(pos.below());
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockState stateBelow = level.getBlockState(pos.below());
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-+        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
++        BlockState stateBelow = level.pluto$getBlockState(x, y - 1, z);
 +        // Pluto end - Memory allocation optimisations
-         if (blockState.is(this)) {
+         if (stateBelow.is(this)) {
              return true;
          } else {
-             if (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.SAND)) {
--                BlockPos blockPos = pos.below();
+             if (stateBelow.is(BlockTags.SUPPORTS_SUGAR_CANE)) {
+-                BlockPos below = pos.below();
 +                if (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
  
 -                for (Direction direction : Direction.Plane.HORIZONTAL) {
--                    BlockState blockState1 = level.getBlockState(blockPos.relative(direction));
--                    FluidState fluidState = level.getFluidState(blockPos.relative(direction));
+-                    BlockState blockState = level.getBlockState(below.relative(direction));
+-                    FluidState fluidState = level.getFluidState(below.relative(direction));
 +                for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-+                    BlockState blockState1 = level.pluto$getBlockState(x + direction.getStepX(), (y - 1) + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
-+                    FluidState fluidState = blockState1.getFluidState(); // Pluto - Decrease chunk/block lookups
-                     if (fluidState.is(FluidTags.WATER) || blockState1.is(Blocks.FROSTED_ICE)) {
++                    BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), (y - 1) + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
++                    FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
+                     if (fluidState.is(FluidTags.SUPPORTS_SUGAR_CANE_ADJACENTLY) || blockState.is(BlockTags.SUPPORTS_SUGAR_CANE_ADJACENTLY)) {
                          return true;
                      }

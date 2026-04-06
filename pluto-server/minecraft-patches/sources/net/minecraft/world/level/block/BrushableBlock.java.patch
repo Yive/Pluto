@@ -6,6 +6,6 @@
  
 -        if (FallingBlock.isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinY()) {
 +        if (FallingBlock.isFree(level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())) && pos.getY() >= level.getMinY()) { // Pluto - Memory allocation optimisations
-             FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(level, pos, state);
-             fallingBlockEntity.disableDrop();
+             FallingBlockEntity entity = FallingBlockEntity.fall(level, pos, state);
+             entity.disableDrop();
          }

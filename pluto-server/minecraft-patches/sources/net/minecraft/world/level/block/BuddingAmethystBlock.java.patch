@@ -1,23 +1,23 @@
 --- a/net/minecraft/world/level/block/BuddingAmethystBlock.java
 +++ b/net/minecraft/world/level/block/BuddingAmethystBlock.java
 @@ -27,8 +_,10 @@
-     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
          if (random.nextInt(5) == 0) {
-             Direction direction = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
--            BlockPos blockPos = pos.relative(direction);
--            BlockState blockState = level.getBlockState(blockPos);
+             Direction growDirection = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
+-            BlockPos growPos = pos.relative(growDirection);
+-            BlockState relativeState = level.getBlockState(growPos);
 +            // Pluto start - Memory allocation optimisations
-+            BlockPos blockPos;
-+            BlockState blockState = level.pluto$getBlockState(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(), pos.getZ() + direction.getStepZ());
++            BlockPos growPos;
++            BlockState relativeState = level.pluto$getBlockState(pos.getX() + growDirection.getStepX(), pos.getY() + growDirection.getStepY(), pos.getZ() + growDirection.getStepZ());
 +            // Pluto end - Memory allocation optimisations
-             Block block = null;
-             if (canClusterGrowAtState(blockState)) {
-                 block = Blocks.SMALL_AMETHYST_BUD;
+             Block nextStage = null;
+             if (canClusterGrowAtState(relativeState)) {
+                 nextStage = Blocks.SMALL_AMETHYST_BUD;
 @@ -45,6 +_,7 @@
-                     .setValue(AmethystClusterBlock.FACING, direction)
-                     .setValue(AmethystClusterBlock.WATERLOGGED, blockState.getFluidState().getType() == Fluids.WATER);
+                     .setValue(AmethystClusterBlock.FACING, growDirection)
+                     .setValue(AmethystClusterBlock.WATERLOGGED, relativeState.getFluidState().is(Fluids.WATER));
                  // Paper start - Have Amethyst throw both spread and grow events
-+                blockPos = pos.relative(direction); // Pluto - Memory allocation optimisations | Moved down
-                 if (block == Blocks.SMALL_AMETHYST_BUD) {
-                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState1, Block.UPDATE_ALL); // CraftBukkit
++                growPos = pos.relative(growDirection); // Pluto - Memory allocation optimisations | Moved down
+                 if (nextStage == Blocks.SMALL_AMETHYST_BUD) {
+                     org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, growPos, targetState, Block.UPDATE_ALL); // CraftBukkit
                  } else {

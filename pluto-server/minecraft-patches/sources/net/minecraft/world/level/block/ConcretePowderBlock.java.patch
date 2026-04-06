@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/block/ConcretePowderBlock.java
 +++ b/net/minecraft/world/level/block/ConcretePowderBlock.java
-@@ -75,7 +_,7 @@
-         boolean flag = false;
-         BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
+@@ -73,7 +_,7 @@
+         boolean touchesLiquid = false;
+         BlockPos.MutableBlockPos testPos = pos.mutable();
  
 -        for (Direction direction : Direction.values()) {
 +        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-             BlockState blockState = level.getBlockState(mutableBlockPos);
+             BlockState blockState = level.getBlockState(testPos);
              if (direction != Direction.DOWN || canSolidify(blockState)) {
-                 mutableBlockPos.setWithOffset(pos, direction);
+                 testPos.setWithOffset(pos, direction);

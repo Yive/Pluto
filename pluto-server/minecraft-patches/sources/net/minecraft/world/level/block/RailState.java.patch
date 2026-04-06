@@ -1,35 +1,35 @@
 --- a/net/minecraft/world/level/block/RailState.java
 +++ b/net/minecraft/world/level/block/RailState.java
 @@ -102,14 +_,17 @@
-         if (BaseRailBlock.isRail(blockState)) {
-             return new RailState(this.level, pos, blockState);
+         if (BaseRailBlock.isRail(testState)) {
+             return new RailState(this.level, pos, testState);
          } else {
--            BlockPos blockPos = pos.above();
--            blockState = this.level.getBlockState(blockPos);
+-            BlockPos testPos = pos.above();
+-            testState = this.level.getBlockState(testPos);
 +            // Pluto start - Memory allocation optimisations
 +            final int x = pos.getX();
 +            final int y = pos.getY();
 +            final int z = pos.getZ();
-+            blockState = this.level.pluto$getBlockState(x, y + 1, z);
-             if (BaseRailBlock.isRail(blockState)) {
--                return new RailState(this.level, blockPos, blockState);
-+                return new RailState(this.level, pos.above(), blockState);
++            testState = this.level.pluto$getBlockState(x, y + 1, z);
+             if (BaseRailBlock.isRail(testState)) {
+-                return new RailState(this.level, testPos, testState);
++                return new RailState(this.level, pos.above(), testState);
              } else {
--                blockPos = pos.below();
--                blockState = this.level.getBlockState(blockPos);
--                return BaseRailBlock.isRail(blockState) ? new RailState(this.level, blockPos, blockState) : null;
-+                blockState = this.level.pluto$getBlockState(x, y - 1, z);
-+                return BaseRailBlock.isRail(blockState) ? new RailState(this.level, pos.below(), blockState) : null;
+-                testPos = pos.below();
+-                testState = this.level.getBlockState(testPos);
+-                return BaseRailBlock.isRail(testState) ? new RailState(this.level, testPos, testState) : null;
++                testState = this.level.pluto$getBlockState(x, y - 1, z);
++                return BaseRailBlock.isRail(testState) ? new RailState(this.level, pos.below(), testState) : null;
 +                // Pluto end - Memory allocation optimisations
              }
          }
      }
 @@ -132,7 +_,7 @@
      protected int countPotentialConnections() {
-         int i = 0;
+         int count = 0;
  
 -        for (Direction direction : Direction.Plane.HORIZONTAL) {
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
              if (this.hasRail(this.pos.relative(direction))) {
-                 i++;
+                 count++;
              }

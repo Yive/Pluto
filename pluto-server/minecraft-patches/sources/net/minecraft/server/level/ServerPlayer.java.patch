@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -411,6 +_,10 @@
+@@ -432,6 +_,10 @@
      // Paper end - cancellable death event
      // Paper start - Optional per player mob spawns
      public static final int MOBCATEGORY_TOTAL_ENUMS = net.minecraft.world.entity.MobCategory.values().length;
@@ -11,7 +11,7 @@
      public final int[] mobCounts = new int[MOBCATEGORY_TOTAL_ENUMS];
      // Paper end - Optional per player mob spawns
      public final int[] mobBackoffCounts = new int[MOBCATEGORY_TOTAL_ENUMS]; // Paper - per player mob count backoff
-@@ -819,6 +_,16 @@
+@@ -842,6 +_,16 @@
                  }
              }
  
@@ -26,14 +26,14 @@
 +            } else
 +            // Pluto end - Only tick inventory slots that are important
              for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
-                 ItemStack item = this.getInventory().getItem(i);
-                 if (!item.isEmpty()) {
-@@ -1451,7 +_,7 @@
+                 ItemStack itemStack = this.getInventory().getItem(i);
+                 if (!itemStack.isEmpty()) {
+@@ -1478,7 +_,7 @@
              return Optional.empty();
          } else {
-             boolean isPossibleToRespawnInThis = block.isPossibleToRespawnInThis(blockState);
--            BlockState blockState1 = level.getBlockState(blockPos.above());
-+            BlockState blockState1 = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()); // Pluto - Memory allocation optimisations
-             boolean isPossibleToRespawnInThis1 = blockState1.getBlock().isPossibleToRespawnInThis(blockState1);
-             return isPossibleToRespawnInThis && isPossibleToRespawnInThis1
-                 ? Optional.of(new ServerPlayer.RespawnPosAngle(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.1, blockPos.getZ() + 0.5), yaw, pitch, false, false, null)) // Paper - Fix SPIGOT-5989
+             boolean freeBottom = block.isPossibleToRespawnInThis(blockState);
+-            BlockState topState = level.getBlockState(pos.above());
++            BlockState topState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+             boolean freeTop = topState.getBlock().isPossibleToRespawnInThis(topState);
+             return freeBottom && freeTop
+                 ? Optional.of(new ServerPlayer.RespawnPosAngle(new Vec3(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5), yaw, pitch, false, false, null)) // Paper - Fix SPIGOT-5989

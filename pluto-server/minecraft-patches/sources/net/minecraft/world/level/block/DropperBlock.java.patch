@@ -1,35 +1,35 @@
 --- a/net/minecraft/world/level/block/DropperBlock.java
 +++ b/net/minecraft/world/level/block/DropperBlock.java
 @@ -65,6 +_,19 @@
-                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(level, pos, item, randomSlot)) return; // Paper - Add BlockPreDispenseEvent
-                         itemStack = DISPENSE_BEHAVIOUR.dispense(blockSource, item);
+                         if (!org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockPreDispenseEvent(level, pos, itemStack, slot)) return; // Paper - Add BlockPreDispenseEvent
+                         remaining = DISPENSE_BEHAVIOUR.dispense(source, itemStack);
                      } else {
 +                        // Pluto start - Toggle inventory item move event for droppers
 +                        if (level.plutoConfig().disableDropperInventoryMoveEvent) {
-+                            itemStack = HopperBlockEntity.addItem(dispenserBlockEntity, containerAt, item.copy().split(1), direction.getOpposite());
-+                            if (itemStack.isEmpty()) {
-+                                itemStack = item.copy();
-+                                itemStack.shrink(1);
++                            remaining = HopperBlockEntity.addItem(blockEntity, into, itemStack.copyWithCount(1), direction.getOpposite());
++                            if (remaining.isEmpty()) {
++                                remaining = itemStack.copy();
++                                remaining.shrink(1);
 +                            } else {
-+                                itemStack = item.copy();
++                                remaining = itemStack.copy();
 +                            }
-+                            dispenserBlockEntity.setItem(randomSlot, itemStack);
++                            blockEntity.setItem(slot, remaining);
 +                            return;
 +                        }
 +                        // Pluto end - Toggle inventory item move event for droppers
                          // CraftBukkit start - Fire event when pushing items into other inventories
-                         org.bukkit.craftbukkit.inventory.CraftItemStack oitemstack = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1));
+                         org.bukkit.craftbukkit.inventory.CraftItemStack oitemstack = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack.copyWithCount(1));
  
 @@ -73,10 +_,10 @@
-                         if (containerAt instanceof net.minecraft.world.CompoundContainer compoundContainer) {
+                         if (into instanceof net.minecraft.world.CompoundContainer compoundContainer) {
                              destinationInventory = new org.bukkit.craftbukkit.inventory.CraftInventoryDoubleChest(compoundContainer);
                          } else {
--                            destinationInventory = containerAt.getOwner().getInventory();
-+                            destinationInventory = containerAt.getOwner(level.plutoConfig().dropperDoSnapshotForTarget).getInventory(); // Pluto - Allow toggling snapshots for certain blocks
+-                            destinationInventory = into.getOwner().getInventory();
++                            destinationInventory = into.getOwner(level.plutoConfig().dropperDoSnapshotForTarget).getInventory(); // Pluto - Allow toggling snapshots for certain blocks
                          }
  
--                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(dispenserBlockEntity.getOwner().getInventory(), oitemstack, destinationInventory, true);
-+                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(dispenserBlockEntity.getOwner(level.plutoConfig().dropperDoSnapshotForSelf).getInventory(), oitemstack, destinationInventory, true); // Pluto - Allow toggling snapshots for certain blocks
-                         level.getCraftServer().getPluginManager().callEvent(event);
-                         if (event.isCancelled()) {
+-                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(blockEntity.getOwner().getInventory(), oitemstack, destinationInventory, true);
++                        org.bukkit.event.inventory.InventoryMoveItemEvent event = new org.bukkit.event.inventory.InventoryMoveItemEvent(blockEntity.getOwner(level.plutoConfig().dropperDoSnapshotForSelf).getInventory(), oitemstack, destinationInventory, true); // Pluto - Allow toggling snapshots for certain blocks
+                         if (!event.callEvent()) {
                              return;
+                         }

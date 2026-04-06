@@ -1,7 +1,7 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/BlockStateListPopulator.java
-@@ -25,7 +_,33 @@
- public class BlockStateListPopulator extends DummyGeneratorAccess {
+@@ -29,7 +_,33 @@
+ public class BlockStateListPopulator extends DummyLevelAccessor {
  
      private final LevelAccessor level;
 -    private final Map<BlockPos, CapturedBlock> blocks = new LinkedHashMap<>();
@@ -35,7 +35,7 @@
  
      private List<CraftBlockState> snapshots;
  
-@@ -35,19 +_,19 @@
+@@ -39,19 +_,19 @@
  
      @Override
      public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos) {
@@ -58,8 +58,8 @@
          return block != null ? block.blockEntity() : this.level.getBlockEntity(pos);
      }
  
-@@ -55,7 +_,10 @@
-     public boolean setBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState state, @Block.UpdateFlags int flags, int recursionLeft) {
+@@ -59,7 +_,10 @@
+     public boolean setBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState blockState, @Block.UpdateFlags int updateFlags, int updateLimit) {
          pos = pos.immutable();
          // remove first to keep last updated order
 -        this.blocks.remove(pos);
@@ -69,17 +69,17 @@
 +        // Pluto end - Memory allocation optimisations
  
          final BlockEntity newBlockEntity;
-         if (state.getBlock() instanceof EntityBlock entityBlock) {
-@@ -71,7 +_,7 @@
+         if (blockState.getBlock() instanceof EntityBlock entityBlock) {
+@@ -75,7 +_,7 @@
              newBlockEntity = null;
          }
  
--        this.blocks.put(pos, new CapturedBlock(state, flags, newBlockEntity));
-+        this.blocks.put(posLong, new CapturedBlock(state, flags, newBlockEntity)); // Pluto - Memory allocation optimisations
+-        this.blocks.put(pos, new CapturedBlock(blockState, updateFlags, newBlockEntity));
++        this.blocks.put(posLong, new CapturedBlock(blockState, updateFlags, newBlockEntity)); // Pluto - Memory allocation optimisations
          return true;
      }
  
-@@ -92,10 +_,10 @@
+@@ -96,10 +_,10 @@
      }
  
      private void iterateSnapshots(Consumer<CraftBlockState> callback) {

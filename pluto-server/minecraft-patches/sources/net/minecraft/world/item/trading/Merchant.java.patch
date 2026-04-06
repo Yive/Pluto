@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/trading/Merchant.java
 +++ b/net/minecraft/world/item/trading/Merchant.java
-@@ -52,5 +_,7 @@
+@@ -50,5 +_,7 @@
  
      boolean stillValid(Player player);
  

@@ -4,8 +4,8 @@
                  RandomSource random = this.mob.getRandom();
                  if (getServerLevel(this.mob).getGameRules().get(GameRules.MOB_GRIEFING) && random.nextInt(reducedTickDelay(10)) == 0) {
                      this.selectedDirection = Direction.getRandom(random);
--                    BlockPos blockPos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5, this.mob.getZ()).relative(this.selectedDirection);
--                    BlockState blockState = this.mob.level().getBlockState(blockPos);
+-                    BlockPos pos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5, this.mob.getZ()).relative(this.selectedDirection);
+-                    BlockState blockState = this.mob.level().getBlockState(pos);
 +                    BlockState blockState = this.mob.level().pluto$getBlockState(net.minecraft.util.Mth.floor(this.mob.getX()) + this.selectedDirection.getStepX(), net.minecraft.util.Mth.floor(this.mob.getY() + 0.5) + this.selectedDirection.getStepY(), net.minecraft.util.Mth.floor(this.mob.getZ()) + this.selectedDirection.getStepZ()); // Pluto - Memory allocation optimisations
                      if (InfestedBlock.isCompatibleHostBlock(blockState)) {
                          this.doMerge = true;

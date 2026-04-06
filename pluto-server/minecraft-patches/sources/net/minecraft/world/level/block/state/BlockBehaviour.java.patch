@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
-@@ -369,6 +_,12 @@
+@@ -336,6 +_,12 @@
          return 0;
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return 0;
++        return Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean pastEdges) {
+     protected VoxelShape getShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext context) {
+         return Shapes.block();
      }
- 
-@@ -376,6 +_,12 @@
-         return 0;
+@@ -396,6 +_,12 @@
+         return Redstone.SIGNAL_MIN;
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -26,7 +26,7 @@
      public final Optional<ResourceKey<LootTable>> getLootTable() {
          return this.drops;
      }
-@@ -741,6 +_,12 @@
+@@ -760,6 +_,12 @@
              return this.getBlock().getSignal(this.asState(), level, pos, direction);
          }
  
@@ -39,8 +39,8 @@
          public boolean hasAnalogOutputSignal() {
              return this.getBlock().hasAnalogOutputSignal(this.asState());
          }
-@@ -760,6 +_,12 @@
-         public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
+@@ -779,6 +_,12 @@
+         public int getDirectSignal(final BlockGetter level, final BlockPos pos, final Direction direction) {
              return this.getBlock().getDirectSignal(this.asState(), level, pos, direction);
          }
 +

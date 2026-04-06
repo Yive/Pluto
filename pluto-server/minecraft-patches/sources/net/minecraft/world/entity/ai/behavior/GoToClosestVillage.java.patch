@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/ai/behavior/GoToClosestVillage.java
 +++ b/net/minecraft/world/entity/ai/behavior/GoToClosestVillage.java
-@@ -24,7 +_,7 @@
-                     for (int i1 = 0; i1 < 5; i1++) {
-                         Vec3 pos = LandRandomPos.getPos(villager, 15, 7, pos1 -> -poiManager.sectionsToVillage(SectionPos.of(pos1)));
-                         if (pos != null) {
--                            int i2 = poiManager.sectionsToVillage(SectionPos.of(BlockPos.containing(pos)));
-+                            int i2 = poiManager.sectionsToVillage(SectionPos.of(net.minecraft.util.Mth.floor(pos.x) >> 4, net.minecraft.util.Mth.floor(pos.y) >> 4, net.minecraft.util.Mth.floor(pos.z) >> 4)); // Pluto - Memory allocation optimisations
-                             if (i2 < i) {
-                                 vec3 = pos;
-                                 break;
+@@ -23,7 +_,7 @@
+                 for (int j = 0; j < 5; j++) {
+                     Vec3 landPos = LandRandomPos.getPos(body, 15, 7, p -> -poiManager.sectionsToVillage(SectionPos.of(p)));
+                     if (landPos != null) {
+-                        int landPosSectionsToVillage = poiManager.sectionsToVillage(SectionPos.of(BlockPos.containing(landPos)));
++                        int landPosSectionsToVillage = poiManager.sectionsToVillage(SectionPos.of(net.minecraft.util.Mth.floor(landPos.x) >> 4, net.minecraft.util.Mth.floor(landPos.y) >> 4, net.minecraft.util.Mth.floor(landPos.z) >> 4)); // Pluto - Memory allocation optimisations
+                         if (landPosSectionsToVillage < sectionsToVillage) {
+                             targetPos = landPos;
+                             break;

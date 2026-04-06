@@ -1,15 +1,15 @@
 --- a/net/minecraft/world/entity/animal/golem/CopperGolem.java
 +++ b/net/minecraft/world/entity/animal/golem/CopperGolem.java
-@@ -180,10 +_,12 @@
+@@ -179,10 +_,12 @@
          this.setWeatherState(input.read("weather_state", WeatheringCopper.WeatherState.CODEC).orElse(WeatheringCopper.WeatherState.UNAFFECTED));
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities
      @Override
-     protected void customServerAiStep(ServerLevel level) {
-         ProfilerFiller profilerFiller = Profiler.get();
-         profilerFiller.push("copperGolemBrain");
+     protected void customServerAiStep(final ServerLevel level) {
+         ProfilerFiller profiler = Profiler.get();
+         profiler.push("copperGolemBrain");
 +        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
          this.getBrain().tick(level, this);
-         profilerFiller.pop();
-         profilerFiller.push("copperGolemActivityUpdate");
+         profiler.pop();
+         profiler.push("copperGolemActivityUpdate");

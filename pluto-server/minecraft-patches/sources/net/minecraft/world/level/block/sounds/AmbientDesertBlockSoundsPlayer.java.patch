@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/block/sounds/AmbientDesertBlockSoundsPlayer.java
 +++ b/net/minecraft/world/level/block/sounds/AmbientDesertBlockSoundsPlayer.java
 @@ -58,7 +_,7 @@
-         int i1 = 0;
-         BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
+         int sidesChecked = 0;
+         BlockPos.MutableBlockPos mutablePos = pos.mutable();
  
--        for (Direction direction : Direction.Plane.HORIZONTAL) {
-+        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             mutableBlockPos.set(pos).move(direction, 8);
-             if (columnContainsTriggeringBlock(level, mutableBlockPos) && i++ >= 3) {
+-        for (Direction dir : Direction.Plane.HORIZONTAL) {
++        for (Direction dir : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             mutablePos.set(pos).move(dir, 8);
+             if (columnContainsTriggeringBlock(level, mutablePos) && matchingBlocksFound++ >= 3) {
                  return true;

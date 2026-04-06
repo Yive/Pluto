@@ -1,15 +1,15 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -84,6 +_,8 @@
+@@ -85,6 +_,8 @@
          public String getType() {
              return "<null>";
          }
 +
-+        @Override public long getChunkPos() { return ChunkPos.ZERO.toLong(); } // Pluto - Optimise block entity ticking
++        @Override public long getChunkPos() { return ChunkPos.ZERO.longKey(); } // Pluto - Optimise block entity ticking
      };
      private final Map<BlockPos, LevelChunk.RebindableTickingBlockEntityWrapper> tickersInLevel = Maps.newHashMap();
      public boolean loaded;
-@@ -99,6 +_,18 @@
+@@ -100,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end
  
@@ -28,7 +28,7 @@
      // Paper start
      boolean loadedTicketLevel;
      // Paper end
-@@ -161,6 +_,8 @@
+@@ -162,6 +_,8 @@
              }
          }
  
@@ -37,7 +37,7 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -471,6 +_,48 @@
+@@ -467,6 +_,48 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
  
@@ -83,10 +83,10 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     public @Nullable BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
+     public @Nullable BlockEntity getBlockEntity(final BlockPos pos, final LevelChunk.EntityCreationType creationType) {
          // CraftBukkit start
          BlockEntity blockEntity = this.level.capturedTileEntities.get(pos);
-@@ -527,6 +_,30 @@
+@@ -523,6 +_,30 @@
              );
      }
  
@@ -101,8 +101,8 @@
 +
 +        this.pluto$currentTick = net.minecraft.server.MinecraftServer.currentTick;
 +        this.pluto$wholeChunkIsTickable = this.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
-+            && this.level.getWorldBorder().isChunkInBounds(this.locX, this.locZ)
-+            && this.level.areEntitiesLoaded(this.chunkPos.longKey);
++            && this.level.getWorldBorder().isWithinBounds(pos)
++            && this.level.areEntitiesLoaded(this.chunkPos.longKey());
 +        return this.pluto$wholeChunkIsTickable || pluto$optimisedIsTicking(pos); // Fallback if the whole chunk isn't ticking.
 +    }
 +
@@ -110,35 +110,37 @@
 +        // Check the chunk status before the world border
 +        return this.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
 +            && this.level.getWorldBorder().isWithinBounds(pos)
-+            && this.level.areEntitiesLoaded(this.chunkPos.longKey);
++            && this.level.areEntitiesLoaded(this.chunkPos.longKey());
 +    }
 +    // Pluto end - Optimise block entity ticking
 +
      @Override
-     public void setBlockEntity(BlockEntity blockEntity) {
-         BlockPos blockPos = blockEntity.getBlockPos();
-@@ -940,17 +_,19 @@
+     public void setBlockEntity(final BlockEntity blockEntity) {
+         BlockPos pos = blockEntity.getBlockPos();
+@@ -934,19 +_,21 @@
          private final T blockEntity;
          private final BlockEntityTicker<T> ticker;
          private boolean loggedInvalidBlockState;
 +        private final long chunkKey; @Override public long getChunkPos() { return chunkKey; } // Pluto - Optimise block entity ticking
  
-         BoundTickingBlockEntity(final T blockEntity, final BlockEntityTicker<T> ticker) {
+         private BoundTickingBlockEntity(final T blockEntity, final BlockEntityTicker<T> ticker) {
+             Objects.requireNonNull(LevelChunk.this);
+             super();
              this.blockEntity = blockEntity;
              this.ticker = ticker;
-+            this.chunkKey = ChunkPos.asLong(blockEntity.getBlockPos()); // Pluto - Optimise block entity ticking
++            this.chunkKey = ChunkPos.pack(blockEntity.getBlockPos()); // Pluto - Optimise block entity ticking
          }
  
          @Override
          public void tick() {
              if (!this.blockEntity.isRemoved() && this.blockEntity.hasLevel()) {
-                 BlockPos blockPos = this.blockEntity.getBlockPos();
--                if (LevelChunk.this.isTicking(blockPos)) {
-+                if (LevelChunk.this.pluto$isTicking(blockPos)) { // Pluto - Optimise block entity ticking
+                 BlockPos pos = this.blockEntity.getBlockPos();
+-                if (LevelChunk.this.isTicking(pos)) {
++                if (LevelChunk.this.pluto$isTicking(pos)) { // Pluto - Optimise block entity ticking
                      try {
-                         ProfilerFiller profilerFiller = Profiler.get();
-                         profilerFiller.push(this::getType);
-@@ -1048,6 +_,8 @@
+                         ProfilerFiller profiler = Profiler.get();
+                         profiler.push(this::getType);
+@@ -1044,6 +_,8 @@
          public String toString() {
              return this.ticker + " <wrapped>";
          }

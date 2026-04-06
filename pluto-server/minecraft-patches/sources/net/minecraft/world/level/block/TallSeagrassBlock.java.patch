@@ -1,23 +1,23 @@
 --- a/net/minecraft/world/level/block/TallSeagrassBlock.java
 +++ b/net/minecraft/world/level/block/TallSeagrassBlock.java
-@@ -54,7 +_,10 @@
-     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-         BlockState blockState = super.getStateForPlacement(context);
-         if (blockState != null) {
+@@ -55,7 +_,10 @@
+     public @Nullable BlockState getStateForPlacement(final BlockPlaceContext context) {
+         BlockState state = super.getStateForPlacement(context);
+         if (state != null) {
 -            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos().above());
 +            // Pluto start - Memory allocation optimisations
 +            final BlockPos clickedPos = context.getClickedPos();
 +            FluidState fluidState = context.getLevel().pluto$getFluidState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ());
 +            // Pluto end - Memory allocation optimisations
-             if (fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8) {
-                 return blockState;
+             if (fluidState.is(FluidTags.WATER) && fluidState.isFull()) {
+                 return state;
              }
-@@ -66,7 +_,7 @@
+@@ -67,7 +_,7 @@
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
          if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
--            BlockState blockState = level.getBlockState(pos.below());
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-             return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
+-            BlockState belowState = level.getBlockState(pos.below());
++            BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+             return belowState.is(this) && belowState.getValue(HALF) == DoubleBlockHalf.LOWER;
          } else {
              FluidState fluidState = level.getFluidState(pos);

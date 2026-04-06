@@ -1,30 +1,30 @@
 --- a/net/minecraft/world/level/block/FrostedIceBlock.java
 +++ b/net/minecraft/world/level/block/FrostedIceBlock.java
 @@ -49,7 +_,7 @@
-             if (i > 11 - state.getValue(AGE) - state.getLightBlock() && this.slightlyMelt(state, level, pos)) {
-                 BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+             if (brightness > 11 - state.getValue(AGE) - state.getLightDampening() && this.slightlyMelt(state, level, pos)) {
+                 BlockPos.MutableBlockPos neighborPos = new BlockPos.MutableBlockPos();
  
 -                for (Direction direction : Direction.values()) {
 +            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                     mutableBlockPos.setWithOffset(pos, direction);
-                     BlockState blockState = level.getBlockState(mutableBlockPos);
-                     if (blockState.is(this) && !this.slightlyMelt(blockState, level, mutableBlockPos)) {
-@@ -86,11 +_,14 @@
+                     neighborPos.setWithOffset(pos, direction);
+                     BlockState neighbour = level.getBlockState(neighborPos);
+                     if (neighbour.is(this) && !this.slightlyMelt(neighbour, level, neighborPos)) {
+@@ -88,11 +_,14 @@
  
-     private boolean fewerNeigboursThan(BlockGetter level, BlockPos pos, int neighborsRequired) {
-         int i = 0;
--        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+     private boolean fewerNeigboursThan(final BlockGetter level, final BlockPos pos, final int limit) {
+         int result = 0;
+-        BlockPos.MutableBlockPos neighborPos = new BlockPos.MutableBlockPos();
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
  
 -        for (Direction direction : Direction.values()) {
--            mutableBlockPos.setWithOffset(pos, direction);
--            if (level.getBlockState(mutableBlockPos).is(this)) {
+-            neighborPos.setWithOffset(pos, direction);
+-            if (level.getBlockState(neighborPos).is(this)) {
 +        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
 +            if (level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()).is(this)) {
 +                // Pluto end - Memory allocation optimisations
-                 if (++i >= neighborsRequired) {
+                 if (++result >= limit) {
                      return false;
                  }

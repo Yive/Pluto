@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/boat/AbstractChestBoat.java
 +++ b/net/minecraft/world/entity/vehicle/boat/AbstractChestBoat.java
-@@ -38,6 +_,34 @@
+@@ -39,6 +_,34 @@
          super(type, level, dropItem);
      }
  

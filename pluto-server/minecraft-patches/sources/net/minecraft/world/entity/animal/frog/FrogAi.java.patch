@@ -1,24 +1,24 @@
 --- a/net/minecraft/world/entity/animal/frog/FrogAi.java
 +++ b/net/minecraft/world/entity/animal/frog/FrogAi.java
-@@ -213,14 +_,16 @@
+@@ -211,14 +_,16 @@
  
-     private static <E extends Mob> boolean isAcceptableLandingSpot(E mob, BlockPos pos) {
-         Level level = mob.level();
--        BlockPos blockPos = pos.below();
--        if (level.getFluidState(pos).isEmpty() && level.getFluidState(blockPos).isEmpty() && level.getFluidState(pos.above()).isEmpty()) {
--            BlockState blockState = level.getBlockState(pos);
--            BlockState blockState1 = level.getBlockState(blockPos);
+     private static <E extends Mob> boolean isAcceptableLandingSpot(final E body, final BlockPos targetPos) {
+         Level level = body.level();
+-        BlockPos below = targetPos.below();
+-        if (level.getFluidState(targetPos).isEmpty() && level.getFluidState(below).isEmpty() && level.getFluidState(targetPos.above()).isEmpty()) {
+-            BlockState bs = level.getBlockState(targetPos);
+-            BlockState bsBelow = level.getBlockState(below);
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);
-+        BlockState blockState = chunk.getBlockState(pos); // Moved up
-+        BlockState blockState1; // Moved up
-+        if (blockState.getFluidState().isEmpty() && (blockState1 = chunk.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())).getFluidState().isEmpty() && chunk.pluto$getFluidState(pos.getX(), pos.getY() + 1, pos.getZ()).isEmpty()) { // Pluto - Memory allocation optimisations
++        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(targetPos);
++        BlockState bs = chunk.getBlockState(targetPos); // Moved up
++        BlockState bsBelow; // Moved up
++        if (bs.getFluidState().isEmpty() && (bsBelow = chunk.getBlockState(targetPos.getX(), targetPos.getY() - 1, targetPos.getZ())).getFluidState().isEmpty() && chunk.pluto$getFluidState(targetPos.getX(), targetPos.getY() + 1, targetPos.getZ()).isEmpty()) { // Pluto - Memory allocation optimisations
 +            // Pluto end - Decrease chunk/block lookups
-             if (!blockState.is(BlockTags.FROG_PREFER_JUMP_TO) && !blockState1.is(BlockTags.FROG_PREFER_JUMP_TO)) {
-                 PathfindingContext pathfindingContext = new PathfindingContext(mob.level(), mob);
-                 PathType pathTypeStatic = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, pos.mutable());
--                PathType pathTypeStatic1 = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, blockPos.mutable());
-+                PathType pathTypeStatic1 = WalkNodeEvaluator.getPathTypeStatic(pathfindingContext, pos.below().mutable()); // Pluto - Memory allocation optimisations
-                 return pathTypeStatic == PathType.TRAPDOOR
-                     || blockState.isAir() && pathTypeStatic1 == PathType.TRAPDOOR
-                     || LongJumpToRandomPos.defaultAcceptableLandingSpot(mob, pos);
+             if (!bs.is(BlockTags.FROG_PREFER_JUMP_TO) && !bsBelow.is(BlockTags.FROG_PREFER_JUMP_TO)) {
+                 PathfindingContext context = new PathfindingContext(body.level(), body);
+                 PathType pathType = WalkNodeEvaluator.getPathTypeStatic(context, targetPos.mutable());
+-                PathType pathTypeBelow = WalkNodeEvaluator.getPathTypeStatic(context, below.mutable());
++                PathType pathTypeBelow = WalkNodeEvaluator.getPathTypeStatic(context, targetPos.below().mutable()); // Pluto - Memory allocation optimisations
+                 return pathType == PathType.TRAPDOOR
+                     || bs.isAir() && pathTypeBelow == PathType.TRAPDOOR
+                     || LongJumpToRandomPos.defaultAcceptableLandingSpot(body, targetPos);

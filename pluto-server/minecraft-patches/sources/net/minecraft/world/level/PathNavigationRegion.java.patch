@@ -55,5 +55,5 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     public BlockState getBlockState(BlockPos pos) {
+     public BlockState getBlockState(final BlockPos pos) {
          if (this.isOutsideBuildHeight(pos)) {

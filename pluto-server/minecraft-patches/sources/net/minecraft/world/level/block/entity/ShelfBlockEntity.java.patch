@@ -6,6 +6,6 @@
  
 +    @Override public boolean stillValid() { return Container.stillValidBlockEntity(this); } // Pluto - Hoppers cache containers
 +
-     public ItemStack swapItemNoUpdate(int slot, ItemStack stack) {
-         ItemStack itemStack = this.removeItemNoUpdate(slot);
-         this.setItemNoUpdate(slot, stack);
+     public ItemStack swapItemNoUpdate(final int slot, final ItemStack heldItemStack) {
+         ItemStack retrievedItem = this.removeItemNoUpdate(slot);
+         this.setItemNoUpdate(slot, heldItemStack);

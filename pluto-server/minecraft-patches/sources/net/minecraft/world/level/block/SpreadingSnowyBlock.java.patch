@@ -1,0 +1,82 @@
+--- a/net/minecraft/world/level/block/SpreadingSnowyBlock.java
++++ b/net/minecraft/world/level/block/SpreadingSnowyBlock.java
+@@ -28,12 +_,11 @@
+ 
+     private static boolean canStayAlive(final BlockState state, final LevelReader level, final BlockPos pos) {
+         // Paper start - Perf: optimize dirt and snow spreading
+-        return canStayAlive(level.getChunk(pos), state, pos);
++        return canStayAlive(level.getChunk(pos), state, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
+     }
+-    private static boolean canStayAlive(final net.minecraft.world.level.chunk.ChunkAccess chunk, final BlockState state, final BlockPos pos) {
++    private static boolean canStayAlive(final net.minecraft.world.level.chunk.ChunkAccess chunk, final BlockState state, final int x, final int y, final int z) { // Pluto - Memory allocation optimisations
+         // Paper end - Perf: optimize dirt and snow spreading
+-        BlockPos above = pos.above();
+-        BlockState aboveState = chunk.getBlockState(above); // Paper - Perf: optimize dirt and snow spreading
++        BlockState aboveState = chunk.getBlockState(x, y + 1, z); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory allocation optimisations
+         if (aboveState.is(Blocks.SNOW) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
+             return true;
+         } else if (aboveState.getFluidState().isFull()) {
+@@ -46,13 +_,12 @@
+ 
+     private static boolean canPropagate(final BlockState state, final LevelReader level, final BlockPos pos) {
+         // Paper start - Perf: optimize dirt and snow spreading
+-        return canPropagate(level.getChunk(pos), state, pos);
++        return canPropagate(level.getChunk(pos), state, pos.getX(), pos.getY(), pos.getZ()); // Pluto - Memory allocation optimisations
+     }
+ 
+-    private static boolean canPropagate(final net.minecraft.world.level.chunk.ChunkAccess chunk, final BlockState state, final BlockPos pos) {
++    private static boolean canPropagate(final net.minecraft.world.level.chunk.ChunkAccess chunk, final BlockState state, final int x, final int y, final int z) { // Pluto - Memory allocation optimisations
+         // Paper end - Perf: optimize dirt and snow spreading
+-        BlockPos above = pos.above();
+-        return canStayAlive(chunk, state, pos) && !chunk.getFluidState(above).is(FluidTags.WATER); // Paper - Perf: optimize dirt and snow spreading
++        return canStayAlive(chunk, state, x, y, z) && !chunk.pluto$getFluidState(x, y + 1, z).is(FluidTags.WATER); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory allocation optimisations
+     }
+ 
+     @Override
+@@ -67,7 +_,7 @@
+                 return;
+             }
+ 
+-            if (!canStayAlive(cachedChunk, state, pos)) {
++            if (!canStayAlive(cachedChunk, state, pos.getX(), pos.getY(), pos.getZ())) { // Pluto - Memory allocation optimisations
+                 // Paper end - Perf: optimize dirt and snow spreading
+                 // CraftBukkit start
+                 if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(level, pos, baseBlock.get().defaultBlockState()).isCancelled()) {
+@@ -79,21 +_,31 @@
+                 if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
+                     BlockState defaultBlockState = this.defaultBlockState();
+ 
++                    // Pluto start - Memory allocation optimisations
++                    final int originX = pos.getX();
++                    final int originY = pos.getY();
++                    final int originZ = pos.getZ();
+                     for (int i = 0; i < 4; i++) {
+-                        BlockPos testPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
++                        final int x = originX + (random.nextInt(3) - 1);
++                        final int y = originY + (random.nextInt(5) - 3);
++                        final int z = originZ + (random.nextInt(3) - 1);
+                         // Paper start - Perf: optimize dirt and snow spreading
+-                        if (pos.getX() == testPos.getX() && pos.getY() == testPos.getY() && pos.getZ() == testPos.getZ()) {
++                        if (originX == x && originY == y && originZ == z) {
++                            // Pluto end - Memory allocation optimisations
+                             continue;
+                         }
+ 
+                         final net.minecraft.world.level.chunk.ChunkAccess access;
+-                        if (cachedChunk.locX == testPos.getX() >> 4 && cachedChunk.locZ == testPos.getZ() >> 4) {
++                        if (cachedChunk.locX == x >> 4 && cachedChunk.locZ == z >> 4) { // Pluto - Memory allocation optimisations
+                             access = cachedChunk;
+                         } else {
+-                            access = level.getChunkAt(testPos);
++                            access = level.getChunkIfLoaded(x >> 4, z >> 4); // Pluto - Memory allocation optimisations
+                         }
+-                        if (access.getBlockState(testPos).is(baseBlock.get()) && SpreadingSnowyBlock.canPropagate(access, defaultBlockState, testPos)) {
+-                            org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, testPos, defaultBlockState.setValue(SNOWY, isSnowySetting(access.getBlockState(testPos.above()))), Block.UPDATE_ALL); // CraftBukkit
++                        if (access == null) continue; // Pluto - Don't load chunks to spread grass | Apparently this can happen.
++                        // Pluto start - Memory allocation optimisations
++                        if (access.getBlockState(x, y, z).is(baseBlock.get()) && SpreadingSnowyBlock.canPropagate(access, defaultBlockState, x, y, z)) {
++                            org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, new BlockPos(x, y, z), defaultBlockState.setValue(SNOWY, isSnowySetting(access.getBlockState(x, y + 1, z))), Block.UPDATE_ALL); // CraftBukkit
++                            // Pluto end - Memory allocation optimisations
+                             // Paper end - Perf: optimize dirt and snow spreading
+                         }
+                     }

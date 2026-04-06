@@ -1,26 +1,26 @@
 --- a/net/minecraft/world/level/block/grower/TreeGrower.java
 +++ b/net/minecraft/world/level/block/grower/TreeGrower.java
-@@ -183,14 +_,39 @@
+@@ -185,14 +_,39 @@
  
-     private static boolean isTwoByTwoSapling(BlockState state, BlockGetter level, BlockPos pos, int xOffset, int yOffset) {
+     private static boolean isTwoByTwoSapling(final BlockState state, final BlockGetter level, final BlockPos pos, final int ox, final int oz) {
          Block block = state.getBlock();
--        return level.getBlockState(pos.offset(xOffset, 0, yOffset)).is(block)
--            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset)).is(block)
--            && level.getBlockState(pos.offset(xOffset, 0, yOffset + 1)).is(block)
--            && level.getBlockState(pos.offset(xOffset + 1, 0, yOffset + 1)).is(block);
-+        // Pluto start - Memory allocation optimisations | I feel like mojang made a typo with yOffset.
+-        return level.getBlockState(pos.offset(ox, 0, oz)).is(block)
+-            && level.getBlockState(pos.offset(ox + 1, 0, oz)).is(block)
+-            && level.getBlockState(pos.offset(ox, 0, oz + 1)).is(block)
+-            && level.getBlockState(pos.offset(ox + 1, 0, oz + 1)).is(block);
++        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
-+        return level.pluto$getBlockState(x + xOffset, y, z + yOffset).is(block)
-+            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset).is(block)
-+            && level.pluto$getBlockState(x + xOffset, y, z + yOffset + 1).is(block)
-+            && level.pluto$getBlockState(x + xOffset + 1, y, z + yOffset + 1).is(block);
++        return level.pluto$getBlockState(x + ox, y, z + oz).is(block)
++            && level.pluto$getBlockState(x + ox + 1, y, z + oz).is(block)
++            && level.pluto$getBlockState(x + ox, y, z + oz + 1).is(block)
++            && level.pluto$getBlockState(x + ox + 1, y, z + oz + 1).is(block);
 +        // Pluto end - Memory allocation optimisations
      }
  
-     private boolean hasFlowers(LevelAccessor level, BlockPos pos) {
--        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(pos.below().north(2).west(2), pos.above().south(2).east(2))) {
+     private boolean hasFlowers(final LevelAccessor level, final BlockPos pos) {
+-        for (BlockPos p : BlockPos.MutableBlockPos.betweenClosed(pos.below().north(2).west(2), pos.above().south(2).east(2))) {
 +        // Pluto start - Memory allocation optimisations | 6 allocations -> 2 allocations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
@@ -40,8 +40,8 @@
 +        final int maxY = Math.max(y1, y2);
 +        final int maxZ = Math.max(z1, z2);
 +
-+        for (BlockPos blockPos : BlockPos.MutableBlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
++        for (BlockPos p : BlockPos.MutableBlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
 +            // Pluto end - Memory allocation optimisations
-             if (level.getBlockState(blockPos).is(BlockTags.FLOWERS)) {
+             if (level.getBlockState(p).is(BlockTags.FLOWERS)) {
                  return true;
              }

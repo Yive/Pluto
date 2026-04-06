@@ -1,29 +1,29 @@
 --- a/net/minecraft/world/level/block/SeaPickleBlock.java
 +++ b/net/minecraft/world/level/block/SeaPickleBlock.java
 @@ -50,7 +_,7 @@
-         if (blockState.is(this)) {
-             return blockState.setValue(PICKLES, Math.min(4, blockState.getValue(PICKLES) + 1));
+         if (state.is(this)) {
+             return state.setValue(PICKLES, Math.min(4, state.getValue(PICKLES) + 1));
          } else {
--            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-+            FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
-             boolean flag = fluidState.getType() == Fluids.WATER;
-             return super.getStateForPlacement(context).setValue(WATERLOGGED, flag);
+-            FluidState replacedFluidState = context.getLevel().getFluidState(context.getClickedPos());
++            FluidState replacedFluidState = state.getFluidState(); // Pluto - Decrease chunk/block lookups
+             boolean isWaterSource = replacedFluidState.is(Fluids.WATER);
+             return super.getStateForPlacement(context).setValue(WATERLOGGED, isWaterSource);
          }
 @@ -121,7 +_,7 @@
  
      @Override
-     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
 -        return !isDead(state) && level.getBlockState(pos.below()).is(BlockTags.CORAL_BLOCKS);
 +        return !isDead(state) && level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.CORAL_BLOCKS); // Pluto - Memory allocation optimisations
      }
  
      @Override
 @@ -145,7 +_,7 @@
-                 for (int i9 = i8 - 2; i9 < i8; i9++) {
-                     BlockPos blockPos = new BlockPos(i4 + i6, i9, pos.getZ() - i5 + i7);
-                     if (!blockPos.equals(pos) && random.nextInt(6) == 0 && level.getBlockState(blockPos).is(Blocks.WATER)) {
--                        BlockState blockState = level.getBlockState(blockPos.below());
-+                        BlockState blockState = level.pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()); // Pluto - Memory allocation optimisations
-                         if (blockState.is(BlockTags.CORAL_BLOCKS)) {
-                             level.setBlock(blockPos, Blocks.SEA_PICKLE.defaultBlockState().setValue(PICKLES, random.nextInt(4) + 1), Block.UPDATE_ALL);
+                 for (int startY = endY - 2; startY < endY; startY++) {
+                     BlockPos position = new BlockPos(xStart + x, startY, pos.getZ() - zOffSet + z);
+                     if (!position.equals(pos) && random.nextInt(6) == 0 && level.getBlockState(position).is(Blocks.WATER)) {
+-                        BlockState belowState = level.getBlockState(position.below());
++                        BlockState belowState = level.pluto$getBlockState(position.getX(), position.getY() - 1, position.getZ()); // Pluto - Memory allocation optimisations
+                         if (belowState.is(BlockTags.CORAL_BLOCKS)) {
+                             level.setBlock(position, Blocks.SEA_PICKLE.defaultBlockState().setValue(PICKLES, random.nextInt(4) + 1), Block.UPDATE_ALL);
                          }

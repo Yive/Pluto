@@ -1,21 +1,21 @@
 --- a/net/minecraft/world/level/block/LeverBlock.java
 +++ b/net/minecraft/world/level/block/LeverBlock.java
-@@ -141,6 +_,18 @@
-         return state.getValue(POWERED) && getConnectedDirection(state) == side ? 15 : 0;
+@@ -146,6 +_,18 @@
+         return state.getValue(POWERED) && getConnectedDirection(state) == direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return blockState.getValue(POWERED) ? 15 : 0;
++        return blockState.getValue(POWERED) ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        return blockState.getValue(POWERED) && getConnectedDirection(blockState) == side ? 15 : 0;
++        return blockState.getValue(POWERED) && getConnectedDirection(blockState) == side ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected boolean isSignalSource(BlockState state) {
+     protected boolean isSignalSource(final BlockState state) {
          return true;

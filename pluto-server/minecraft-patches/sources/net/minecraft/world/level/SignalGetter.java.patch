@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/SignalGetter.java
 +++ b/net/minecraft/world/level/SignalGetter.java
-@@ -10,33 +_,57 @@
+@@ -11,33 +_,57 @@
  public interface SignalGetter extends BlockGetter {
      Direction[] DIRECTIONS = Direction.values();
  
@@ -23,44 +23,44 @@
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     default int getDirectSignal(BlockPos pos, Direction direction) {
+     default int getDirectSignal(final BlockPos pos, final Direction direction) {
          return this.getBlockState(pos).getDirectSignal(this, pos, direction);
      }
  
-     default int getDirectSignalTo(BlockPos pos) {
+     default int getDirectSignalTo(final BlockPos pos) {
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        // Pluto end - Memory allocation optimisations
-         int i = 0;
--        i = Math.max(i, this.getDirectSignal(pos.below(), Direction.DOWN));
-+        i = Math.max(i, this.pluto$getDirectSignal(x, y - 1, z, Direction.DOWN)); // Pluto - Memory allocation optimisations
-         if (i >= 15) {
-             return i;
+         int result = 0;
+-        result = Math.max(result, this.getDirectSignal(pos.below(), Direction.DOWN));
++        result = Math.max(result, this.pluto$getDirectSignal(x, y - 1, z, Direction.DOWN)); // Pluto - Memory allocation optimisations
+         if (result >= Redstone.SIGNAL_MAX) {
+             return result;
          } else {
--            i = Math.max(i, this.getDirectSignal(pos.above(), Direction.UP));
-+            i = Math.max(i, this.pluto$getDirectSignal(x, y + 1, z, Direction.UP)); // Pluto - Memory allocation optimisations
-             if (i >= 15) {
-                 return i;
+-            result = Math.max(result, this.getDirectSignal(pos.above(), Direction.UP));
++            result = Math.max(result, this.pluto$getDirectSignal(x, y + 1, z, Direction.UP)); // Pluto - Memory allocation optimisations
+             if (result >= Redstone.SIGNAL_MAX) {
+                 return result;
              } else {
--                i = Math.max(i, this.getDirectSignal(pos.north(), Direction.NORTH));
-+                i = Math.max(i, this.pluto$getDirectSignal(x, y, z - 1, Direction.NORTH)); // Pluto - Memory allocation optimisations
-                 if (i >= 15) {
-                     return i;
+-                result = Math.max(result, this.getDirectSignal(pos.north(), Direction.NORTH));
++                result = Math.max(result, this.pluto$getDirectSignal(x, y, z - 1, Direction.NORTH)); // Pluto - Memory allocation optimisations
+                 if (result >= Redstone.SIGNAL_MAX) {
+                     return result;
                  } else {
--                    i = Math.max(i, this.getDirectSignal(pos.south(), Direction.SOUTH));
-+                    i = Math.max(i, this.pluto$getDirectSignal(x, y, z + 1, Direction.SOUTH)); // Pluto - Memory allocation optimisations
-                     if (i >= 15) {
-                         return i;
+-                    result = Math.max(result, this.getDirectSignal(pos.south(), Direction.SOUTH));
++                    result = Math.max(result, this.pluto$getDirectSignal(x, y, z + 1, Direction.SOUTH)); // Pluto - Memory allocation optimisations
+                     if (result >= Redstone.SIGNAL_MAX) {
+                         return result;
                      } else {
--                        i = Math.max(i, this.getDirectSignal(pos.west(), Direction.WEST));
-+                        i = Math.max(i, this.pluto$getDirectSignal(x - 1, y, z, Direction.WEST)); // Pluto - Memory allocation optimisations
-                         if (i >= 15) {
-                             return i;
+-                        result = Math.max(result, this.getDirectSignal(pos.west(), Direction.WEST));
++                        result = Math.max(result, this.pluto$getDirectSignal(x - 1, y, z, Direction.WEST)); // Pluto - Memory allocation optimisations
+                         if (result >= Redstone.SIGNAL_MAX) {
+                             return result;
                          } else {
--                            i = Math.max(i, this.getDirectSignal(pos.east(), Direction.EAST));
-+                            i = Math.max(i, this.pluto$getDirectSignal(x + 1, y, z, Direction.EAST)); // Pluto - Memory allocation optimisations
-                             return i >= 15 ? i : i;
+-                            result = Math.max(result, this.getDirectSignal(pos.east(), Direction.EAST));
++                            result = Math.max(result, this.pluto$getDirectSignal(x + 1, y, z, Direction.EAST)); // Pluto - Memory allocation optimisations
+                             return result >= Redstone.SIGNAL_MAX ? result : result;
                          }
                      }

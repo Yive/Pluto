@@ -1,18 +1,18 @@
 --- a/net/minecraft/world/entity/monster/Strider.java
 +++ b/net/minecraft/world/entity/monster/Strider.java
-@@ -321,7 +_,7 @@
+@@ -326,7 +_,7 @@
          if (this.isInLava()) {
-             CollisionContext collisionContext = CollisionContext.of(this);
-             if (collisionContext.isAbove(LiquidBlock.SHAPE_STABLE, this.blockPosition(), true)
+             CollisionContext context = CollisionContext.of(this);
+             if (context.isAbove(this.getLiquidCollisionShape(), this.blockPosition(), true)
 -                && !this.level().getFluidState(this.blockPosition().above()).is(FluidTags.LAVA)) {
 +                && !this.level().pluto$getFluidState(this.blockPosition().getX(), this.blockPosition().getY() + 1, this.blockPosition().getZ()).is(FluidTags.LAVA)) { // Pluto - Memory allocation optimisations
                  this.setOnGround(true);
              } else {
                  this.setDeltaMovement(this.getDeltaMovement().scale(0.5).add(0.0, 0.05, 0.0));
-@@ -495,7 +_,10 @@
+@@ -507,7 +_,10 @@
  
          @Override
-         protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+         protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
 -            return level.getBlockState(pos).is(Blocks.LAVA) && level.getBlockState(pos.above()).isPathfindable(PathComputationType.LAND);
 +            // Pluto start - Decrease chunk/block lookups
 +            net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);

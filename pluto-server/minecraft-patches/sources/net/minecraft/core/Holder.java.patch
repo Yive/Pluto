@@ -1,15 +1,15 @@
 --- a/net/minecraft/core/Holder.java
 +++ b/net/minecraft/core/Holder.java
-@@ -29,6 +_,8 @@
+@@ -33,6 +_,8 @@
  
      Stream<TagKey<T>> tags();
  
 +    Collection<TagKey<T>> pluto$tags(); // Pluto - Streamless Tags
 +
-     Either<ResourceKey<T>, T> unwrap();
+     DataComponentMap components();
  
-     Optional<ResourceKey<T>> unwrapKey();
-@@ -105,6 +_,8 @@
+     Either<ResourceKey<T>, T> unwrap();
+@@ -120,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return Stream.of();
          }
@@ -18,7 +18,7 @@
      }
  
      public static enum Kind {
-@@ -234,6 +_,8 @@
+@@ -259,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return this.boundTags().stream();
          }
@@ -26,4 +26,4 @@
 +        @Override public Collection<net.minecraft.tags.TagKey<T>> pluto$tags() { return this.boundTags(); } // Pluto - Streamless tags
  
          @Override
-         public String toString() {
+         public DataComponentMap components() {

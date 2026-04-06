@@ -1,59 +1,59 @@
 --- a/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
-@@ -165,13 +_,21 @@
+@@ -169,13 +_,21 @@
          int x = pos.getX();
          int y = pos.getY();
          int z = pos.getZ();
--        BlockPos blockPos;
+-        BlockPos checkPos;
 +        // Pluto start - Memory allocation optimisations
 +        int x1;
 +        int y1;
 +        int z1;
-         if (blockEntity.lastCheckY < y) {
--            blockPos = pos;
+         if (entity.lastCheckY < y) {
+-            checkPos = pos;
 +            x1 = x;
 +            y1 = y;
 +            z1 = z;
-             blockEntity.checkingBeamSections = Lists.newArrayList();
-             blockEntity.lastCheckY = pos.getY() - 1;
+             entity.checkingBeamSections = Lists.newArrayList();
+             entity.lastCheckY = pos.getY() - 1;
          } else {
--            blockPos = new BlockPos(x, blockEntity.lastCheckY + 1, z);
+-            checkPos = new BlockPos(x, entity.lastCheckY + 1, z);
 +            x1 = x;
-+            y1 = blockEntity.lastCheckY + 1;
++            y1 = entity.lastCheckY + 1;
 +            z1 = z;
 +            // Pluto end - Memory allocation optimisations
          }
  
-         BeaconBeamOwner.Section section = blockEntity.checkingBeamSections.isEmpty()
-@@ -179,8 +_,11 @@
-             : blockEntity.checkingBeamSections.get(blockEntity.checkingBeamSections.size() - 1);
-         int height = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+         BeaconBeamOwner.Section lastBeamSection = entity.checkingBeamSections.isEmpty()
+@@ -183,8 +_,11 @@
+             : entity.checkingBeamSections.get(entity.checkingBeamSections.size() - 1);
+         int lastSetBlock = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
  
--        for (int i = 0; i < 10 && blockPos.getY() <= height; i++) {
--            BlockState blockState = level.getBlockState(blockPos);
+-        for (int i = 0; i < 10 && checkPos.getY() <= lastSetBlock; i++) {
+-            BlockState state = level.getBlockState(checkPos);
 +        // Pluto start - Memory allocation optimisations
 +        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunk(x1 >> 4, z1 >> 4);
-+        for (int i = 0; i < 10 && y1 <= height; i++) {
-+            BlockState blockState = chunk.getBlockStateFinal(x1, y1, z1);
++        for (int i = 0; i < 10 && y1 <= lastSetBlock; i++) {
++            BlockState state = chunk.getBlockStateFinal(x1, y1, z1);
 +            // Pluto end - Memory allocation optimisations
-             if (blockState.getBlock() instanceof BeaconBeamBlock beaconBeamBlock) {
-                 int textureDiffuseColor = beaconBeamBlock.getColor().getTextureDiffuseColor();
-                 if (blockEntity.checkingBeamSections.size() <= 1) {
-@@ -204,7 +_,7 @@
-                 section.increaseHeight();
+             if (state.getBlock() instanceof BeaconBeamBlock beaconBeamBlock) {
+                 int color = beaconBeamBlock.getColor().getTextureDiffuseColor();
+                 if (entity.checkingBeamSections.size() <= 1) {
+@@ -208,7 +_,7 @@
+                 lastBeamSection.increaseHeight();
              }
  
--            blockPos = blockPos.above();
+-            checkPos = checkPos.above();
 +            y1++; // Pluto - Memory allocation optimisations
-             blockEntity.lastCheckY++;
+             entity.lastCheckY++;
          }
  
-@@ -261,7 +_,7 @@
+@@ -265,7 +_,7 @@
  
-             for (int i3 = x - i1; i3 <= x + i1 && flag; i3++) {
-                 for (int i4 = z - i1; i4 <= z + i1; i4++) {
--                    if (!level.getBlockState(new BlockPos(i3, i2, i4)).is(BlockTags.BEACON_BASE_BLOCKS)) {
-+                    if (!level.pluto$getBlockState(i3, i2, i4).is(BlockTags.BEACON_BASE_BLOCKS)) { // Pluto - Memory allocation optimisations
-                         flag = false;
+             for (int lx = x - step; lx <= x + step && isOk; lx++) {
+                 for (int lz = z - step; lz <= z + step; lz++) {
+-                    if (!level.getBlockState(new BlockPos(lx, ly, lz)).is(BlockTags.BEACON_BASE_BLOCKS)) {
++                    if (!level.pluto$getBlockState(lx, ly, lz).is(BlockTags.BEACON_BASE_BLOCKS)) { // Pluto - Memory allocation optimisations
+                         isOk = false;
                          break;
                      }

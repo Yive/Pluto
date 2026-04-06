@@ -3,19 +3,19 @@
 @@ -97,11 +_,16 @@
      private int getSurfaceY() {
          if (this.mob.isInWater() && this.canFloat()) {
-             int blockY = this.mob.getBlockY();
--            BlockState blockState = this.level.getBlockState(BlockPos.containing(this.mob.getX(), blockY, this.mob.getZ()));
+             int surface = this.mob.getBlockY();
+-            BlockState state = this.level.getBlockState(BlockPos.containing(this.mob.getX(), surface, this.mob.getZ()));
 +            // Pluto start - Decrease chunk/block lookups
 +            final int x = Mth.floor(this.mob.getX());
 +            final int z = Mth.floor(this.mob.getZ());
 +            LevelChunk chunk = this.level.getChunk(x >> 4, z >> 4);
-+            BlockState blockState = chunk.getBlockStateFinal(x, blockY, z);
++            BlockState state = chunk.getBlockStateFinal(x, surface, z);
 +            // Pluto end - Decrease chunk/block lookups
-             int i = 0;
+             int steps = 0;
  
-             while (blockState.is(Blocks.WATER)) {
--                blockState = this.level.getBlockState(BlockPos.containing(this.mob.getX(), ++blockY, this.mob.getZ()));
-+                blockState = chunk.getBlockStateFinal(x, ++blockY, z); // Pluto - Decrease chunk/block lookups
-                 if (++i > 16) {
+             while (state.is(Blocks.WATER)) {
+-                state = this.level.getBlockState(BlockPos.containing(this.mob.getX(), ++surface, this.mob.getZ()));
++                state = chunk.getBlockStateFinal(x, ++surface, z); // Pluto - Decrease chunk/block lookups
+                 if (++steps > 16) {
                      return this.mob.getBlockY();
                  }

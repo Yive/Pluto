@@ -1,33 +1,33 @@
 --- a/net/minecraft/world/level/block/DoublePlantBlock.java
 +++ b/net/minecraft/world/level/block/DoublePlantBlock.java
 @@ -64,7 +_,7 @@
-     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-         BlockPos clickedPos = context.getClickedPos();
+     public @Nullable BlockState getStateForPlacement(final BlockPlaceContext context) {
+         BlockPos pos = context.getClickedPos();
          Level level = context.getLevel();
--        return clickedPos.getY() < level.getMaxY() && level.getBlockState(clickedPos.above()).canBeReplaced(context)
-+        return clickedPos.getY() < level.getMaxY() && level.pluto$getBlockState(clickedPos.getX(), clickedPos.getY() + 1, clickedPos.getZ()).canBeReplaced(context) // Pluto - Memory allocation optimisations
-             ? super.getStateForPlacement(context)
-             : null;
+-        return pos.getY() < level.getMaxY() && level.getBlockState(pos.above()).canBeReplaced(context) ? super.getStateForPlacement(context) : null;
++        return pos.getY() < level.getMaxY() && level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).canBeReplaced(context) ? super.getStateForPlacement(context) : null; // Pluto - Memory allocation optimisations
      }
-@@ -80,7 +_,7 @@
+ 
+     @Override
+@@ -78,7 +_,7 @@
          if (state.getValue(HALF) != DoubleBlockHalf.UPPER) {
              return super.canSurvive(state, level, pos);
          } else {
--            BlockState blockState = level.getBlockState(pos.below());
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-             return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
+-            BlockState belowState = level.getBlockState(pos.below());
++            BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+             return belowState.is(this) && belowState.getValue(HALF) == DoubleBlockHalf.LOWER;
          }
      }
-@@ -121,10 +_,10 @@
+@@ -127,10 +_,10 @@
          // CraftBukkit end
-         DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
-         if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
--            BlockPos blockPos = pos.below();
--            BlockState blockState = level.getBlockState(blockPos);
-+            BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-             if (blockState.is(state.getBlock()) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                 BlockState blockState1 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
-+                BlockPos blockPos = pos.below(); // Pluto - Memory allocation optimisations
-                 level.setBlock(blockPos, blockState1, Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
-                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(blockState));
+         DoubleBlockHalf part = state.getValue(HALF);
+         if (part == DoubleBlockHalf.UPPER) {
+-            BlockPos bottomPos = pos.below();
+-            BlockState bottomState = level.getBlockState(bottomPos);
++            BlockState bottomState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+             if (bottomState.is(state.getBlock()) && bottomState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                 BlockState blockState = bottomState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
++                BlockPos bottomPos = pos.below(); // Pluto - Memory allocation optimisations
+                 level.setBlock(bottomPos, blockState, Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, bottomPos, Block.getId(bottomState));
              }

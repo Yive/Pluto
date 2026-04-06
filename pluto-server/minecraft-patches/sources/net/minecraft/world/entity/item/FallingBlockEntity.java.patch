@@ -1,17 +1,17 @@
 --- a/net/minecraft/world/entity/item/FallingBlockEntity.java
 +++ b/net/minecraft/world/entity/item/FallingBlockEntity.java
-@@ -213,6 +_,21 @@
+@@ -212,6 +_,21 @@
                                      return;
                                  }
                                  // CraftBukkit end
 +
 +                                // Pluto start - Prevent x-ray exploits when players are inside certain blocks
 +                                if (this.level().plutoConfig().preventInsideBlockXrayExploit) {
-+                                    org.bukkit.Material material = this.level().pluto$getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()).getBukkitMaterial(); // Pluto - Memory allocation optimisations
++                                    org.bukkit.Material material = this.level().pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).getBukkitMaterial(); // Pluto - Memory allocation optimisations
 +                                    if (material == org.bukkit.Material.COMPOSTER || material.toString().contains("CAULDRON")) { // Yes I know this is terrible
 +                                        this.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DESPAWN);
 +                                        if (this.dropItem && serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
-+                                            this.callOnBrokenAfterFall(block, blockPos);
++                                            this.callOnBrokenAfterFall(block, pos);
 +                                            this.spawnAtLocation(serverLevel, block);
 +                                        }
 +                                        return;
@@ -19,6 +19,6 @@
 +                                }
 +                                // Pluto end - Prevent x-ray exploits when players are inside certain blocks
 +
-                                 if (this.level().setBlock(blockPos, this.blockState, Block.UPDATE_ALL)) {
+                                 if (this.level().setBlock(pos, this.blockState, Block.UPDATE_ALL)) {
                                      serverLevel.getChunkSource()
                                          .chunkMap

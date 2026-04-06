@@ -1,14 +1,14 @@
 --- a/net/minecraft/world/level/block/PoweredBlock.java
 +++ b/net/minecraft/world/level/block/PoweredBlock.java
-@@ -28,4 +_,11 @@
-     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
-         return 15;
+@@ -29,4 +_,11 @@
+     protected int getSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
+         return Redstone.SIGNAL_MAX;
      }
 +
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return 15;
++        return Redstone.SIGNAL_MAX;
 +    }
 +    // Pluto end - Memory allocation optimisations
  }

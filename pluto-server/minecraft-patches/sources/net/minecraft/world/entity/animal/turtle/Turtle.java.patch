@@ -1,18 +1,18 @@
 --- a/net/minecraft/world/entity/animal/turtle/Turtle.java
 +++ b/net/minecraft/world/entity/animal/turtle/Turtle.java
 @@ -383,7 +_,7 @@
-                     posTowards = DefaultRandomPos.getPosTowards(this.turtle, 8, 7, vec3, (float) (Math.PI / 2));
+                     nextPos = DefaultRandomPos.getPosTowards(this.turtle, 8, 7, homePosVec, (float) (Math.PI / 2));
                  }
  
--                if (posTowards != null && !flag && !this.turtle.level().getBlockState(BlockPos.containing(posTowards)).is(Blocks.WATER)) {
-+                if (posTowards != null && !flag && !this.turtle.level().pluto$getBlockState(posTowards.asBlockPosLong()).is(Blocks.WATER)) { // Pluto - Memory allocation optimisations
-                     posTowards = DefaultRandomPos.getPosTowards(this.turtle, 16, 5, vec3, (float) (Math.PI / 2));
+-                if (nextPos != null && !closeToHome && !this.turtle.level().getBlockState(BlockPos.containing(nextPos)).is(Blocks.WATER)) {
++                if (nextPos != null && !closeToHome && !this.turtle.level().pluto$getBlockState(nextPos.asBlockPosLong()).is(Blocks.WATER)) { // Pluto - Memory allocation optimisations
+                     nextPos = DefaultRandomPos.getPosTowards(this.turtle, 16, 5, homePosVec, (float) (Math.PI / 2));
                  }
  
 @@ -481,7 +_,7 @@
  
          @Override
-         protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+         protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
 -            return level.isEmptyBlock(pos.above()) && TurtleEggBlock.isSand(level, pos);
 +            return level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && TurtleEggBlock.isSand(level, pos); // Pluto - Memory allocation optimisations
          }

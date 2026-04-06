@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/level/block/TrappedChestBlock.java
 +++ b/net/minecraft/world/level/block/TrappedChestBlock.java
-@@ -52,4 +_,16 @@
-     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
-         return side == Direction.UP ? state.getSignal(level, pos, side) : 0;
+@@ -53,4 +_,16 @@
+     protected int getDirectSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
+         return direction == Direction.UP ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
      }
 +
 +    // Pluto start - Memory allocation optimisations
@@ -13,7 +13,7 @@
 +
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        return side == Direction.UP ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : 0;
++        return side == Direction.UP ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
  }

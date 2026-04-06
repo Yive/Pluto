@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/animal/rabbit/Rabbit.java
 +++ b/net/minecraft/world/entity/animal/rabbit/Rabbit.java
-@@ -611,7 +_,7 @@
-         protected boolean isValidTarget(LevelReader level, BlockPos pos) {
-             BlockState blockState = level.getBlockState(pos);
-             if (blockState.is(Blocks.FARMLAND) && this.wantsToRaid && !this.canRaid) {
--                blockState = level.getBlockState(pos.above());
-+                blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
-                 if (blockState.getBlock() instanceof CarrotBlock && ((CarrotBlock)blockState.getBlock()).isMaxAge(blockState)) {
+@@ -659,7 +_,7 @@
+         protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
+             BlockState state = level.getBlockState(pos);
+             if (state.is(BlockTags.SUPPORTS_CROPS) && this.wantsToRaid && !this.canRaid) {
+-                state = level.getBlockState(pos.above());
++                state = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+                 if (state.getBlock() instanceof CarrotBlock carrotBlock && carrotBlock.isMaxAge(state)) {
                      this.canRaid = true;
                      return true;

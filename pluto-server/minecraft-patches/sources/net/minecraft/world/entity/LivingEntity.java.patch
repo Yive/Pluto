@@ -1,44 +1,24 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -440,7 +_,7 @@
-         profilerFiller.push("livingEntityBaseTick");
-         if (this.isAlive() && this.level() instanceof ServerLevel serverLevel1) {
-             boolean flag = this instanceof Player;
+@@ -434,7 +_,7 @@
+         profiler.push("livingEntityBaseTick");
+         if (this.isAlive() && this.level() instanceof ServerLevel level) {
+             boolean isPlayer = this instanceof Player;
 -            if (this.isInWall()) {
 +            if (shouldCheckForSuffocation() && this.isInWall()) { // Pufferfish - optimize suffocation
-                 this.hurtServer(serverLevel1, this.damageSources().inWall(), 1.0F);
-             } else if (flag && !serverLevel1.getWorldBorder().isWithinBounds(this.getBoundingBox())) {
-                 double d = serverLevel1.getWorldBorder().getDistanceToBorder(this) + serverLevel1.getWorldBorder().getSafeZone();
-@@ -453,7 +_,7 @@
+                 this.hurtServer(level, this.damageSources().inWall(), 1.0F);
+             } else if (isPlayer && !level.getWorldBorder().isWithinBounds(this.getBoundingBox())) {
+                 double dist = level.getWorldBorder().getDistanceToBorder(this) + level.getWorldBorder().getSafeZone();
+@@ -447,7 +_,7 @@
              }
  
              if (this.isEyeInFluid(FluidTags.WATER)
--                && !serverLevel1.getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
-+                && !serverLevel1.pluto$getBlockState(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ())).is(Blocks.BUBBLE_COLUMN)) { // Pluto - Memory allocation optimisations
-                 boolean flag1 = !this.canBreatheUnderwater()
+-                && !level.getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
++                && !level.pluto$getBlockState(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ())).is(Blocks.BUBBLE_COLUMN)) { // Pluto - Memory allocation optimisations
+                 boolean canDrownInWater = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
-                     && (!flag || !((Player)this).getAbilities().invulnerable);
-@@ -2173,6 +_,19 @@
-         return this.lastClimbablePos;
-     }
- 
-+    // Pufferfish start
-+    private boolean cachedOnClimable = false;
-+    private BlockPos lastClimbingPosition = null;
-+
-+    public boolean onClimbableCached() {
-+        if (!this.blockPosition().equals(this.lastClimbingPosition)) {
-+            this.cachedOnClimable = this.onClimbable();
-+            this.lastClimbingPosition = this.blockPosition();
-+        }
-+        return this.cachedOnClimable;
-+    }
-+    // Pufferfish end
-+
-     public boolean onClimbable() {
-         if (this.isSpectator()) {
-             return false;
-@@ -2910,6 +_,11 @@
+                     && (!isPlayer || !((Player)this).getAbilities().invulnerable);
+@@ -2961,6 +_,11 @@
          }
      }
  
@@ -50,36 +30,36 @@
      public float getSoundVolume() {
          return 1.0F;
      }
-@@ -3061,15 +_,17 @@
+@@ -3116,15 +_,17 @@
      }
  
-     private void travelInAir(Vec3 travelVector) {
--        BlockPos blockPosBelowThatAffectsMyMovement = this.getBlockPosBelowThatAffectsMyMovement();
--        float f = this.onGround() ? this.level().getBlockState(blockPosBelowThatAffectsMyMovement).getBlock().getFriction() : 1.0F;
+     private void travelInAir(final Vec3 input) {
+-        BlockPos posBelow = this.getBlockPosBelowThatAffectsMyMovement();
+-        float blockFriction = this.onGround() ? this.level().getBlockState(posBelow).getBlock().getFriction() : 1.0F;
 +        // Pluto start - Memory allocation optimisations
 +        long blockPosBelowThatAffectsMyMovement = this.pluto$getBlockPosBelowThatAffectsMyMovement();
-+        float f = this.onGround() ? this.level().pluto$getBlockState(blockPosBelowThatAffectsMyMovement).getBlock().getFriction() : 1.0F;
++        float blockFriction = this.onGround() ? this.level().pluto$getBlockState(blockPosBelowThatAffectsMyMovement).getBlock().getFriction() : 1.0F;
 +        // Pluto end - Memory allocation optimisations
-         float f1 = f * 0.91F;
-         Vec3 vec3 = this.handleRelativeFrictionAndCalculateMovement(travelVector, f);
-         double d = vec3.y;
-         MobEffectInstance effect = this.getEffect(MobEffects.LEVITATION);
-         if (effect != null) {
-             d += (0.05 * (effect.getAmplifier() + 1) - vec3.y) * 0.2;
--        } else if (!this.level().isClientSide() || this.level().hasChunkAt(blockPosBelowThatAffectsMyMovement)) {
+         float friction = blockFriction * 0.91F;
+         Vec3 movement = this.handleRelativeFrictionAndCalculateMovement(input, blockFriction);
+         double movementY = movement.y;
+         MobEffectInstance levitationEffect = this.getEffect(MobEffects.LEVITATION);
+         if (levitationEffect != null) {
+             movementY += (0.05 * (levitationEffect.getAmplifier() + 1) - movement.y) * 0.2;
+-        } else if (!this.level().isClientSide() || this.level().hasChunkAt(posBelow)) {
 +        } else if (!this.level().isClientSide() || this.level().hasChunkAt(BlockPos.getX(blockPosBelowThatAffectsMyMovement) >> 4, BlockPos.getZ(blockPosBelowThatAffectsMyMovement) >> 4)) { // Pluto - Memory allocation optimisations
-             d -= this.getEffectiveGravity();
+             movementY -= this.getEffectiveGravity();
          } else if (this.getY() > this.level().getMinY()) {
-             d = -0.1;
-@@ -3738,6 +_,7 @@
-             this.checkAutoSpinAttack(boundingBox, this.getBoundingBox());
+             movementY = -0.1;
+@@ -3803,6 +_,7 @@
+             this.checkAutoSpinAttack(beforeTravelBox, this.getBoundingBox());
          }
  
 +        if (this.level().plutoConfig().entityPushingModulo > 0 && (this.level().plutoConfig().entityPushingModulo == 1 || this.tickCount % this.level().plutoConfig().entityPushingModulo == 0)) // Pluto - Configuration for entity pushing frequency
          this.pushEntities();
-         profilerFiller.pop();
+         profiler.pop();
          // Paper start - Add EntityMoveEvent
-@@ -3831,6 +_,7 @@
+@@ -3893,6 +_,7 @@
              return;
          }
          // Paper end - don't run getEntities if we're not going to use its result
@@ -87,51 +67,51 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4435,19 +_,27 @@
-         double z1 = this.getZ();
-         double d = y;
-         boolean flag = false;
--        BlockPos blockPos = BlockPos.containing(x, y, z);
+@@ -4504,19 +_,27 @@
+         double zo = this.getZ();
+         double y = yy;
+         boolean ok = false;
+-        BlockPos pos = BlockPos.containing(xx, yy, zz);
          Level level = this.level();
--        if (level.hasChunkAt(blockPos)) {
+-        if (level.hasChunkAt(pos)) {
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(Mth.floor(x) >> 4, Mth.floor(z) >> 4);
++        net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkIfLoaded(Mth.floor(xo) >> 4, Mth.floor(zo) >> 4);
 +        if (chunk != null) {
 +            // Pluto start - Memory allocation optimisations
-+            final int x2 = Mth.floor(x);
++            final int x2 = Mth.floor(xo);
 +            int y2 = Mth.floor(y);
-+            final int z2 = Mth.floor(z);
++            final int z2 = Mth.floor(zo);
 +            // Pluto end - Memory allocation optimisations
 +            // Pluto end - Decrease chunk/block lookups
-             boolean flag1 = false;
+             boolean landed = false;
  
--            while (!flag1 && blockPos.getY() > level.getMinY()) {
--                BlockPos blockPos1 = blockPos.below();
--                BlockState blockState = level.getBlockState(blockPos1);
+-            while (!landed && pos.getY() > level.getMinY()) {
+-                BlockPos below = pos.below();
+-                BlockState state = level.getBlockState(below);
 +            // Pluto start - Memory allocation optimisations
-+            while (!flag1 && y2 > level.getMinY()) {
-+                BlockState blockState = chunk.getBlockState(x2, y2 - 1, z2); // Pluto - Decrease chunk/block lookups
++            while (!landed && y2 > level.getMinY()) {
++                BlockState state = chunk.getBlockState(x2, y2 - 1, z2); // Pluto - Decrease chunk/block lookups
 +                // Pluto end - Memory allocation optimisations
-                 if (blockState.blocksMotion()) {
-                     flag1 = true;
+                 if (state.blocksMotion()) {
+                     landed = true;
                  } else {
-                     d--;
--                    blockPos = blockPos1;
+                     y--;
+-                    pos = below;
 +                    y2--; // Pluto - Memory allocation optimisations
                  }
              }
  
-@@ -4589,8 +_,7 @@
-                 Direction direction = blockState.getValue(BedBlock.FACING);
-                 this.level().setBlock(blockPos, blockState.setValue(BedBlock.OCCUPIED, false), Block.UPDATE_ALL);
-                 Vec3 vec31 = BedBlock.findStandUpPosition(this.getType(), this.level(), blockPos, direction, this.getYRot()).orElseGet(() -> {
--                    BlockPos blockPos1 = blockPos.above();
--                    return new Vec3(blockPos1.getX() + 0.5, blockPos1.getY() + 0.1, blockPos1.getZ() + 0.5);
-+                    return new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 1.1, blockPos.getZ() + 0.5); // Pluto - Memory allocation optimisations
+@@ -4658,8 +_,7 @@
+                 Direction facing = state.getValue(BedBlock.FACING);
+                 this.level().setBlock(bedPosition, state.setValue(BedBlock.OCCUPIED, false), Block.UPDATE_ALL);
+                 Vec3 standUp = BedBlock.findStandUpPosition(this.getType(), this.level(), bedPosition, facing, this.getYRot()).orElseGet(() -> {
+-                    BlockPos above = bedPosition.above();
+-                    return new Vec3(above.getX() + 0.5, above.getY() + 0.1, above.getZ() + 0.5);
++                    return new Vec3(bedPosition.getX() + 0.5, bedPosition.getY() + 1.1, bedPosition.getZ() + 0.5); // Pluto - Memory allocation optimisations
                  });
-                 Vec3 vec32 = Vec3.atBottomCenterOf(blockPos).subtract(vec31).normalize();
-                 float f = (float)Mth.wrapDegrees(Mth.atan2(vec32.z, vec32.x) * 180.0F / (float)Math.PI - 90.0);
-@@ -4614,6 +_,19 @@
+                 Vec3 lookDirection = Vec3.atBottomCenterOf(bedPosition).subtract(standUp).normalize();
+                 float yaw = (float)Mth.wrapDegrees(Mth.atan2(lookDirection.z, lookDirection.x) * 180.0F / (float)Math.PI - 90.0);
+@@ -4683,6 +_,19 @@
      public boolean isInWall() {
          return !this.isSleeping() && super.isInWall();
      }
@@ -149,5 +129,5 @@
 +    }
 +    // Pufferfish end
  
-     public ItemStack getProjectile(ItemStack weaponStack) {
+     public ItemStack getProjectile(final ItemStack heldWeapon) {
          return ItemStack.EMPTY;

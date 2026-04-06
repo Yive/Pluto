@@ -3,7 +3,7 @@
 @@ -40,7 +_,7 @@
  
      @Override
-     public boolean isStableDestination(BlockPos pos) {
+     public boolean isStableDestination(final BlockPos pos) {
 -        return !this.level.getBlockState(pos.below()).isAir();
 +        return !this.level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).isAir(); // Pluto - Memory allocation optimisations
      }

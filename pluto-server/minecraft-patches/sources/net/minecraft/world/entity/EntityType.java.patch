@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1227,6 +_,8 @@
+@@ -1225,6 +_,8 @@
      private final float spawnDimensionsScale;
      private final FeatureFlagSet requiredFeatures;
      private final boolean allowedInPeaceful;
 +    public boolean dabEnabled = false; // Pufferfish
 +    public int spawnerTTL = -1; // Pluto - TTL setting for entities from spawners
  
-     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType.Builder<T> builder) {
-         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key));
+     private static <T extends Entity> EntityType<T> register(final ResourceKey<EntityType<?>> id, final EntityType.Builder<T> builder) {
+         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));

@@ -1,27 +1,27 @@
 --- a/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -223,10 +_,12 @@
+@@ -205,10 +_,12 @@
          return 0.4F;
      }
  
 +    private int behaviorTick = 0; // Pufferfish
      @Override
-     protected void customServerAiStep(ServerLevel level) {
-         ProfilerFiller profilerFiller = Profiler.get();
-         profilerFiller.push("allayBrain");
+     protected void customServerAiStep(final ServerLevel level) {
+         ProfilerFiller profiler = Profiler.get();
+         profiler.push("allayBrain");
 +        if (this.behaviorTick++ % this.activatedPriority == 0) // Pufferfish
          this.getBrain().tick(level, this);
-         profilerFiller.pop();
-         profilerFiller.push("allayActivityUpdate");
-@@ -395,6 +_,7 @@
+         profiler.pop();
+         profiler.push("allayActivityUpdate");
+@@ -377,6 +_,7 @@
      @Override
-     public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> listenerConsumer) {
+     public void updateDynamicGameEventListener(final BiConsumer<DynamicGameEventListener<?>, ServerLevel> action) {
          if (this.level() instanceof ServerLevel serverLevel) {
 +            if (serverLevel.plutoConfig().disableAllayGameEventListening) return; // Pluto - Allay Configuration
-             listenerConsumer.accept(this.dynamicVibrationListener, serverLevel);
-             listenerConsumer.accept(this.dynamicJukeboxListener, serverLevel);
+             action.accept(this.dynamicVibrationListener, serverLevel);
+             action.accept(this.dynamicJukeboxListener, serverLevel);
          }
-@@ -501,7 +_,7 @@
+@@ -483,7 +_,7 @@
      }
  
      public boolean canDuplicate() {
@@ -29,4 +29,4 @@
 +        return !this.level().plutoConfig().disableAllayDuplication && this.entityData.get(Allay.DATA_CAN_DUPLICATE); // Pluto - Allay configuration
      }
  
-     private void removeInteractionItem(Player player, ItemStack stack) {
+     private void removeInteractionItem(final Player player, final ItemStack interactionItem) {

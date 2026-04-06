@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/WorldGenRegion.java
 +++ b/net/minecraft/server/level/WorldGenRegion.java
-@@ -202,6 +_,50 @@
+@@ -198,6 +_,50 @@
      }
      // Paper end
  
@@ -49,5 +49,5 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     public BlockState getBlockState(BlockPos pos) {
+     public BlockState getBlockState(final BlockPos pos) {
          return this.getChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ())).getBlockState(pos);

@@ -1,27 +1,27 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
-@@ -342,7 +_,7 @@
+@@ -343,7 +_,7 @@
      }
  
-     protected @Nullable Direction findAttachableSurface(BlockPos pos) {
+     protected @Nullable Direction findAttachableSurface(final BlockPos target) {
 -        for (Direction direction : Direction.values()) {
 +        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-             if (this.canStayAt(pos, direction)) {
+             if (this.canStayAt(target, direction)) {
                  return direction;
              }
-@@ -376,6 +_,7 @@
+@@ -377,6 +_,7 @@
      }
  
      protected boolean teleportSomewhere() {
 +        if (this.level().plutoConfig().disableShulkerTeleporting) return false; // Pluto - Shulker configuration
          if (!this.isNoAi() && this.isAlive()) {
-             BlockPos blockPos = this.blockPosition();
+             BlockPos current = this.blockPosition();
  
-@@ -455,6 +_,7 @@
-         Vec3 vec3 = this.position();
-         AABB boundingBox = this.getBoundingBox();
+@@ -456,6 +_,7 @@
+         Vec3 oldPosition = this.position();
+         AABB oldAabb = this.getBoundingBox();
          if (!this.isClosed() && this.teleportSomewhere()) {
 +            if (this.level().plutoConfig().disableShulkerSplitting) return; // Pluto - Shulker configuration
-             int size = this.level().getEntities(EntityType.SHULKER, boundingBox.inflate(8.0), Entity::isAlive).size();
-             float f = (size - 1) / 5.0F;
-             if (!(this.level().random.nextFloat() < f)) {
+             int shulkerCount = this.level().getEntities(EntityType.SHULKER, oldAabb.inflate(8.0), Entity::isAlive).size();
+             float failureChance = (shulkerCount - 1) / 5.0F;
+             if (!(this.level().getRandom().nextFloat() < failureChance)) {

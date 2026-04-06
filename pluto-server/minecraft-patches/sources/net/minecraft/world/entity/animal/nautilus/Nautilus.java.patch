@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/entity/animal/nautilus/Nautilus.java
++++ b/net/minecraft/world/entity/animal/nautilus/Nautilus.java
+@@ -49,10 +_,12 @@
+         return baby;
+     }
+ 
++    private int behaviourTick = 0; // Pluto - Add DAB to more entities
+     @Override
+     protected void customServerAiStep(final ServerLevel level) {
+         ProfilerFiller profiler = Profiler.get();
+         profiler.push("nautilusBrain");
++        if (this.behaviourTick++ % this.activatedPriority == 0) // Pluto - Add DAB to more entities
+         this.getBrain().tick(level, this);
+         profiler.pop();
+         profiler.push("nautilusActivityUpdate");

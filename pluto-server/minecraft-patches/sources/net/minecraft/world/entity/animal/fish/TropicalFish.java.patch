@@ -2,7 +2,7 @@
 +++ b/net/minecraft/world/entity/animal/fish/TropicalFish.java
 @@ -261,8 +_,10 @@
      public static boolean checkTropicalFishSpawnRules(
-         EntityType<TropicalFish> entityType, LevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
+         final EntityType<TropicalFish> type, final LevelAccessor level, final EntitySpawnReason spawnReason, final BlockPos pos, final RandomSource random
      ) {
 -        return level.getFluidState(pos.below()).is(FluidTags.WATER)
 -            && level.getBlockState(pos.above()).is(Blocks.WATER)
@@ -12,4 +12,4 @@
 +            // Pluto end - Memory allocation optimisations
              && (
                  level.getBiome(pos).is(BiomeTags.ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT)
-                     || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, level, spawnReason, pos, random)
+                     || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, spawnReason, pos, random)

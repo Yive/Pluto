@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/CropBlock.java
 +++ b/net/minecraft/world/level/block/CropBlock.java
-@@ -76,10 +_,10 @@
+@@ -77,10 +_,10 @@
  
      @Override
-     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
 -        if (level.getRawBrightness(pos, 0) >= 9) {
 +        if (level.plutoConfig().cropIgnoreLightLevel || level.getRawBrightness(pos, 0) >= 9) { // Pluto - Toggle for light lookups on certain flora
              int age = this.getAge(state);
@@ -13,11 +13,11 @@
                  // Spigot start
                  int modifier = 100;
                  if (this == Blocks.BEETROOTS) {
-@@ -115,12 +_,17 @@
+@@ -116,12 +_,17 @@
  
-     protected static float getGrowthSpeed(Block block, BlockGetter level, BlockPos pos) {
-         float f = 1.0F;
--        BlockPos blockPos = pos.below();
+     protected static float getGrowthSpeed(final Block type, final BlockGetter level, final BlockPos pos) {
+         float speed = 1.0F;
+-        BlockPos below = pos.below();
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
@@ -25,52 +25,52 @@
 +        final int z = pos.getZ();
 +        // Pluto end - Memory allocation optimisations
  
-         for (int i = -1; i <= 1; i++) {
-             for (int i1 = -1; i1 <= 1; i1++) {
-                 float f1 = 0.0F;
--                BlockState blockState = level.getBlockState(blockPos.offset(i, 0, i1));
-+                BlockState blockState = level.pluto$getBlockState(x + i, yBelow, z + i1); // Pluto - Memory allocation optimisations
-                 if (blockState.is(Blocks.FARMLAND)) {
-                     f1 = 1.0F;
-                     if (blockState.getValue(FarmBlock.MOISTURE) > 0) {
-@@ -136,19 +_,23 @@
+         for (int xx = -1; xx <= 1; xx++) {
+             for (int zz = -1; zz <= 1; zz++) {
+                 float blockSpeed = 0.0F;
+-                BlockState blockState = level.getBlockState(below.offset(xx, 0, zz));
++                BlockState blockState = level.pluto$getBlockState(x + xx, yBelow, z + zz); // Pluto - Memory allocation optimisations
+                 if (blockState.is(BlockTags.GROWS_CROPS)) {
+                     blockSpeed = 1.0F;
+                     if (blockState.getValueOrElse(FarmlandBlock.MOISTURE, 0) > 0) {
+@@ -137,19 +_,23 @@
              }
          }
  
--        BlockPos blockPos1 = pos.north();
--        BlockPos blockPos2 = pos.south();
--        BlockPos blockPos3 = pos.west();
--        BlockPos blockPos4 = pos.east();
--        boolean flag = level.getBlockState(blockPos3).is(block) || level.getBlockState(blockPos4).is(block);
--        boolean flag1 = level.getBlockState(blockPos1).is(block) || level.getBlockState(blockPos2).is(block);
+-        BlockPos north = pos.north();
+-        BlockPos south = pos.south();
+-        BlockPos west = pos.west();
+-        BlockPos east = pos.east();
+-        boolean horizontal = level.getBlockState(west).is(type) || level.getBlockState(east).is(type);
+-        boolean vertical = level.getBlockState(north).is(type) || level.getBlockState(south).is(type);
 +        // Pluto start - Memory allocation optimisations
 +        final int zNorth = z - 1;
 +        final int zSouth = z + 1;
 +        final int xWest = x - 1;
 +        final int xEast = x + 1;
-+        boolean flag = level.pluto$getBlockState(xWest, y, z).is(block) || level.pluto$getBlockState(xEast, y, z).is(block);
-+        boolean flag1 = level.pluto$getBlockState(x, y, zNorth).is(block) || level.pluto$getBlockState(x, y, zSouth).is(block);
++        boolean horizontal = level.pluto$getBlockState(xWest, y, z).is(type) || level.pluto$getBlockState(xEast, y, z).is(type);
++        boolean vertical = level.pluto$getBlockState(x, y, zNorth).is(type) || level.pluto$getBlockState(x, y, zSouth).is(type);
 +        // Pluto end - Memory allocation optimisations
-         if (flag && flag1) {
-             f /= 2.0F;
+         if (horizontal && vertical) {
+             speed /= 2.0F;
          } else {
--            boolean flag2 = level.getBlockState(blockPos3.north()).is(block)
--                || level.getBlockState(blockPos4.north()).is(block)
--                || level.getBlockState(blockPos4.south()).is(block)
--                || level.getBlockState(blockPos3.south()).is(block);
+-            boolean diagonal = level.getBlockState(west.north()).is(type)
+-                || level.getBlockState(east.north()).is(type)
+-                || level.getBlockState(east.south()).is(type)
+-                || level.getBlockState(west.south()).is(type);
 +            // Pluto start - Memory allocation optimisations
-+            boolean flag2 = level.pluto$getBlockState(xWest, y, z - 1).is(block)
-+                || level.pluto$getBlockState(xEast, y, z - 1).is(block)
-+                || level.pluto$getBlockState(xEast, y, z + 1).is(block)
-+                || level.pluto$getBlockState(xWest, y, z + 1).is(block);
++            boolean diagonal = level.pluto$getBlockState(xWest, y, z - 1).is(type)
++                || level.pluto$getBlockState(xEast, y, z - 1).is(type)
++                || level.pluto$getBlockState(xEast, y, z + 1).is(type)
++                || level.pluto$getBlockState(xWest, y, z + 1).is(type);
 +            // Pluto end - Memory allocation optimisations
-             if (flag2) {
-                 f /= 2.0F;
+             if (diagonal) {
+                 speed /= 2.0F;
              }
-@@ -163,7 +_,7 @@
+@@ -164,7 +_,7 @@
      }
  
-     protected static boolean hasSufficientLight(LevelReader level, BlockPos pos) {
+     protected static boolean hasSufficientLight(final LevelReader level, final BlockPos pos) {
 -        return level.getRawBrightness(pos, 0) >= 8;
 +        return (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().cropIgnoreLightLevel) || level.getRawBrightness(pos, 0) >= 8; // Pluto - Toggle for light lookups on certain flora
      }

@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/entity/monster/Ghast.java
 +++ b/net/minecraft/world/entity/monster/Ghast.java
-@@ -305,7 +_,7 @@
-                 } else if (blockState.is(BlockTags.HAPPY_GHAST_AVOIDS)) {
+@@ -312,7 +_,7 @@
+                 } else if (state.is(BlockTags.HAPPY_GHAST_AVOIDS)) {
                      return false;
                  } else {
 -                    FluidState fluidState = level.getFluidState(pos);
-+                    FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
-                     if (!fluidState.isEmpty() && (!flag || this.ghast.collidedWithFluid(fluidState, pos, from, to))) {
++                    FluidState fluidState = state.getFluidState(); // Pluto - Decrease chunk/block lookups
+                     if (!fluidState.isEmpty() && (!preciseBlockCollisions || this.ghast.collidedWithFluid(fluidState, pos, start, end))) {
                          if (fluidState.is(FluidTags.WATER)) {
-                             return isInLava;
-@@ -462,7 +_,7 @@
-                 if (!level.getBlockState(blockPos).isAir()) {
+                             return canPathThroughWater;
+@@ -469,7 +_,7 @@
+                 if (!level.getBlockState(pos).isAir()) {
                      return false;
                  } else {
--                    for (Direction direction : Direction.values()) {
-+                    for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+-                    for (Direction dir : Direction.values()) {
++                    for (Direction dir : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
                          for (int i = 1; i < distanceToBlocks; i++) {
-                             BlockPos blockPos1 = blockPos.relative(direction, i);
-                             if (!level.getBlockState(blockPos1).isAir()) {
+                             BlockPos offset = pos.relative(dir, i);
+                             if (!level.getBlockState(offset).isAir()) {

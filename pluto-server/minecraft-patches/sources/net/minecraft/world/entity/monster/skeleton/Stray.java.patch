@@ -2,9 +2,9 @@
 +++ b/net/minecraft/world/entity/monster/skeleton/Stray.java
 @@ -26,14 +_,20 @@
      public static boolean checkStraySpawnRules(
-         EntityType<Stray> entityType, ServerLevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
+         final EntityType<Stray> type, final ServerLevelAccessor level, final EntitySpawnReason spawnReason, final BlockPos pos, final RandomSource random
      ) {
--        BlockPos blockPos = pos;
+-        BlockPos checkSkyPos = pos;
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        int y = pos.getY();
@@ -13,13 +13,13 @@
 +        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(pos);
  
          do {
--            blockPos = blockPos.above();
--        } while (level.getBlockState(blockPos).is(Blocks.POWDER_SNOW));
+-            checkSkyPos = checkSkyPos.above();
+-        } while (level.getBlockState(checkSkyPos).is(Blocks.POWDER_SNOW));
 +            y++;
 +        } while (chunk.getBlockState(x, y, z).is(Blocks.POWDER_SNOW));
  
-         return Monster.checkMonsterSpawnRules(entityType, level, spawnReason, pos, random)
--            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(blockPos.below()));
+         return Monster.checkMonsterSpawnRules(type, level, spawnReason, pos, random)
+-            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(checkSkyPos.below()));
 +            && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(new BlockPos(x, y - 1, z)));
 +        // Pluto end - Memory allocation optimisations
      }

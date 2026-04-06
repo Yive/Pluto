@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/block/LilyPadBlock.java
++++ b/net/minecraft/world/level/block/LilyPadBlock.java
+@@ -58,8 +_,12 @@
+ 
+     @Override
+     protected boolean mayPlaceOn(final BlockState state, final BlockGetter level, final BlockPos pos) {
+-        FluidState fluidState = level.getFluidState(pos);
+-        FluidState fluidAbove = level.getFluidState(pos.above());
+-        return (fluidState.is(FluidTags.SUPPORTS_LILY_PAD) || state.is(BlockTags.SUPPORTS_LILY_PAD)) && fluidAbove.is(Fluids.EMPTY);
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        FluidState fluidState = level.pluto$getFluidState(x, y, z);
++        return (fluidState.is(FluidTags.SUPPORTS_LILY_PAD) || state.is(BlockTags.SUPPORTS_LILY_PAD)) && level.pluto$getFluidState(x, y + 1, z).is(Fluids.EMPTY);
++        // Pluto end - Memory allocation optimisations
+     }
+ }

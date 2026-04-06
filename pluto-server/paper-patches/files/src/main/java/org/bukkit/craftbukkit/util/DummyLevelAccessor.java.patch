@@ -1,18 +1,18 @@
---- a/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
-+++ b/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
-@@ -209,6 +_,48 @@
+--- a/src/main/java/org/bukkit/craftbukkit/util/DummyLevelAccessor.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/DummyLevelAccessor.java
+@@ -203,6 +_,48 @@
          throw new UnsupportedOperationException("Not supported yet.");
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
-+        throw new UnsupportedOperationException("Not supported yet.");
++        return Blocks.AIR.defaultBlockState();
 +    }
 +
 +    @Override
 +    public BlockState pluto$getBlockState(long packedPos) {
-+        throw new UnsupportedOperationException("Not supported yet.");
++        return Blocks.AIR.defaultBlockState();
 +    }
 +
 +    @Override
@@ -27,12 +27,12 @@
 +
 +    @Override
 +    public FluidState pluto$getFluidState(int x, int y, int z) {
-+        throw new UnsupportedOperationException("Not supported yet.");
++        return Fluids.EMPTY.defaultFluidState();
 +    }
 +
 +    @Override
 +    public FluidState pluto$getFluidState(long packedPos) {
-+        throw new UnsupportedOperationException("Not supported yet.");
++        return Fluids.EMPTY.defaultFluidState();
 +    }
 +
 +    @Override

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/LecternBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/LecternBlockEntity.java
-@@ -76,6 +_,13 @@
+@@ -82,6 +_,13 @@
              return LecternBlockEntity.this.getOwner();
          }
  
@@ -14,12 +14,12 @@
          public LecternBlockEntity getLectern() {
              return LecternBlockEntity.this;
          }
-@@ -148,6 +_,8 @@
-         public boolean stillValid(Player player) {
+@@ -153,6 +_,8 @@
+         public boolean stillValid(final Player player) {
              return Container.stillValidBlockEntity(LecternBlockEntity.this, player) && LecternBlockEntity.this.hasBook();
          }
 +
 +        @Override public boolean stillValid() { return !LecternBlockEntity.this.isRemoved(); } // Pluto - Hoppers cache containers
  
          @Override
-         public boolean canPlaceItem(int slot, ItemStack stack) {
+         public boolean canPlaceItem(final int slot, final ItemStack itemStack) {

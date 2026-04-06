@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/SculkSensorBlock.java
 +++ b/net/minecraft/world/level/block/SculkSensorBlock.java
-@@ -195,6 +_,18 @@
-         return direction == Direction.UP ? state.getSignal(level, pos, direction) : 0;
+@@ -196,6 +_,18 @@
+         return direction == Direction.UP ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -12,20 +12,20 @@
 +
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return direction == Direction.UP ? state.pluto$getSignal(level, x, y, z, direction) : 0;
++        return direction == Direction.UP ? state.pluto$getSignal(level, x, y, z, direction) : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     public static SculkSensorPhase getPhase(BlockState state) {
+     public static SculkSensorPhase getPhase(final BlockState state) {
          return state.getValue(PHASE);
      }
-@@ -253,10 +_,18 @@
+@@ -261,10 +_,18 @@
      }
  
-     public static void tryResonateVibration(@Nullable Entity entity, Level level, BlockPos pos, int frequency) {
+     public static void tryResonateVibration(final @Nullable Entity sourceEntity, final Level level, final BlockPos pos, final int vibrationFrequency) {
 -        for (Direction direction : Direction.values()) {
--            BlockPos blockPos = pos.relative(direction);
--            BlockState blockState = level.getBlockState(blockPos);
+-            BlockPos relativePos = pos.relative(direction);
+-            BlockState blockState = level.getBlockState(relativePos);
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
@@ -36,8 +36,8 @@
 +            final int z1 = z + direction.getStepZ();
 +            BlockState blockState = level.pluto$getBlockState(x1, y1, z1);
              if (blockState.is(BlockTags.VIBRATION_RESONATORS)) {
-+                BlockPos blockPos = new BlockPos(x1, y1, z1);
++                BlockPos relativePos = new BlockPos(x1, y1, z1);
 +                // Pluto end - Memory allocation optimisations
-                 level.gameEvent(VibrationSystem.getResonanceEventByFrequency(frequency), blockPos, GameEvent.Context.of(entity, blockState));
-                 float f = RESONANCE_PITCH_BEND[frequency];
-                 level.playSound(null, blockPos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 1.0F, f);
+                 level.gameEvent(VibrationSystem.getResonanceEventByFrequency(vibrationFrequency), relativePos, GameEvent.Context.of(sourceEntity, blockState));
+                 float pitch = RESONANCE_PITCH_BEND[vibrationFrequency];
+                 level.playSound(null, relativePos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 1.0F, pitch);

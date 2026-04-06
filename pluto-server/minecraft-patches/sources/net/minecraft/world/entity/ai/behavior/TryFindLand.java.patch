@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/ai/behavior/TryFindLand.java
 +++ b/net/minecraft/world/entity/ai/behavior/TryFindLand.java
-@@ -41,7 +_,7 @@
-                                     BlockState blockState = level.getBlockState(blockPos1);
-                                     BlockState blockState1 = level.getBlockState(mutableBlockPos.setWithOffset(blockPos1, Direction.DOWN));
-                                     if (!blockState.is(Blocks.WATER)
--                                        && level.getFluidState(blockPos1).isEmpty()
-+                                        && blockState.getFluidState().isEmpty() // Pluto - Decrease chunk/block lookups
-                                         && blockState.getCollisionShape(level, blockPos1, collisionContext).isEmpty()
-                                         && blockState1.isFaceSturdy(level, mutableBlockPos, Direction.UP)) {
-                                         BlockPos blockPos2 = blockPos1.immutable();
+@@ -37,7 +_,7 @@
+                                     BlockState state = level.getBlockState(pos);
+                                     BlockState belowState = level.getBlockState(belowPos.setWithOffset(pos, Direction.DOWN));
+                                     if (!state.is(Blocks.WATER)
+-                                        && level.getFluidState(pos).isEmpty()
++                                        && state.getFluidState().isEmpty() // Pluto - Decrease chunk/block lookups
+                                         && state.getCollisionShape(level, pos, context).isEmpty()
+                                         && belowState.isFaceSturdy(level, belowPos, Direction.UP)) {
+                                         BlockPos targetPos = pos.immutable();

@@ -1,21 +1,21 @@
 --- a/net/minecraft/world/level/block/LightningRodBlock.java
 +++ b/net/minecraft/world/level/block/LightningRodBlock.java
-@@ -81,6 +_,18 @@
-         return state.getValue(POWERED) && state.getValue(FACING) == direction ? 15 : 0;
+@@ -82,6 +_,18 @@
+         return state.getValue(POWERED) && state.getValue(FACING) == direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
      }
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return state.getValue(POWERED) ? 15 : 0;
++        return state.getValue(POWERED) ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +
 +    @Override
 +    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return state.getValue(POWERED) && state.getValue(FACING) == direction ? 15 : 0;
++        return state.getValue(POWERED) && state.getValue(FACING) == direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
-     public void onLightningStrike(BlockState state, Level level, BlockPos pos) {
+     public void onLightningStrike(final BlockState state, final Level level, final BlockPos pos) {
          // CraftBukkit start
          boolean powered = state.getValue(LightningRodBlock.POWERED);

@@ -1,16 +1,16 @@
 --- a/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
-@@ -89,9 +_,11 @@
-                     Vec3 vec3 = Vec3.atCenterOf(pos);
-                     float f = 0.2F + 0.8F * (100 - creakingHeart.emitter) / 100.0F;
-                     Vec3 vec31 = vec3.subtract(creakingHeart.emitterTarget).scale(f).add(creakingHeart.emitterTarget);
--                    BlockPos blockPos = BlockPos.containing(vec31);
+@@ -90,9 +_,11 @@
+                     Vec3 heartPosition = Vec3.atCenterOf(pos);
+                     float progress = 0.2F + 0.8F * (100 - entity.emitter) / 100.0F;
+                     Vec3 soundLocation = heartPosition.subtract(entity.emitterTarget).scale(progress).add(entity.emitterTarget);
+-                    BlockPos soundPos = BlockPos.containing(soundLocation);
 +                    // Pluto start - Memory allocation optimisations
-+                    long blockPos = vec31.asBlockPosLong();
-                     float f1 = creakingHeart.emitter / 2.0F / 100.0F + 0.5F;
--                    serverLevel.playSound(null, blockPos, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, f1, 1.0F);
-+                    serverLevel.playSound(null, BlockPos.getX(blockPos) + 0.5, BlockPos.getY(blockPos) + 0.5, BlockPos.getZ(blockPos) + 0.5, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, f1, 1.0F);
++                    long soundPos = soundLocation.asBlockPosLong();
+                     float volume = entity.emitter / 2.0F / 100.0F + 0.5F;
+-                    serverLevel.playSound(null, soundPos, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, volume, 1.0F);
++                    serverLevel.playSound(null, BlockPos.getX(soundPos) + 0.5, BlockPos.getY(soundPos) + 0.5, BlockPos.getZ(soundPos) + 0.5, SoundEvents.CREAKING_HEART_HURT, SoundSource.BLOCKS, volume, 1.0F);
 +                    // Pluto end - Memory allocation optimisations
                  }
  
-                 creakingHeart.emitter--;
+                 entity.emitter--;

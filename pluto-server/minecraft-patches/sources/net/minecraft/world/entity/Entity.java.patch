@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -373,6 +_,8 @@
+@@ -387,6 +_,8 @@
      public long activatedTick = Integer.MIN_VALUE;
      public boolean isTemporarilyActive;
      public long activatedImmunityTick = Integer.MIN_VALUE;
@@ -9,7 +9,7 @@
  
      public void inactiveTick() {
      }
-@@ -838,6 +_,14 @@
+@@ -857,6 +_,14 @@
              return;
          }
          // Paper end - entity despawn time limit
@@ -24,7 +24,7 @@
          this.baseTick();
      }
  
-@@ -865,7 +_,7 @@
+@@ -884,7 +_,7 @@
          }
  
          if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - Moved up to postTick
@@ -33,60 +33,60 @@
              this.spawnSprintParticle();
          }
  
-@@ -1196,10 +_,13 @@
+@@ -1215,10 +_,13 @@
                  this.minorHorizontalCollision = false;
              }
  
--            BlockPos onPosLegacy = this.getOnPosLegacy();
--            BlockState blockState = this.level().getBlockState(onPosLegacy);
+-            BlockPos effectPos = this.getOnPosLegacy();
+-            BlockState effectState = this.level().getBlockState(effectPos);
 +            // Pluto start - Memory allocation optimisations
-+            long onPosLegacyLong = this.pluto$getOnPosLegacy();
-+            BlockPos onPosLegacy = null;
-+            BlockState blockState = this.level().pluto$getBlockState(onPosLegacyLong);
++            long effectPosLong = this.pluto$getOnPosLegacy();
++            BlockPos effectPos = null;
++            BlockState effectState = this.level().pluto$getBlockState(effectPosLong);
              if (this.isLocalInstanceAuthoritative()) {
--                this.checkFallDamage(vec3.y, this.onGround(), blockState, onPosLegacy);
-+                this.checkFallDamage(vec3.y, this.onGround(), blockState, onPosLegacy = BlockPos.of(onPosLegacyLong));
+-                this.checkFallDamage(movement.y, this.onGround(), effectState, effectPos);
++                this.checkFallDamage(movement.y, this.onGround(), effectState, effectPos = BlockPos.of(effectPosLong));
 +                // Pluto end - Memory allocation optimisations
              }
  
              if (this.isRemoved()) {
-@@ -1241,7 +_,7 @@
+@@ -1260,7 +_,7 @@
                  if (!this.level().isClientSide() || this.isLocalInstanceAuthoritative()) {
-                     Entity.MovementEmission movementEmission = this.getMovementEmission();
-                     if (movementEmission.emitsAnything() && !this.isPassenger()) {
--                        this.applyMovementEmissionAndPlaySound(movementEmission, vec3, onPosLegacy, blockState);
-+                        this.applyMovementEmissionAndPlaySound(movementEmission, vec3, onPosLegacy == null ? BlockPos.of(onPosLegacyLong) : onPosLegacy, blockState); // Pluto - Memory allocation optimisations
+                     Entity.MovementEmission emission = this.getMovementEmission();
+                     if (emission.emitsAnything() && !this.isPassenger()) {
+-                        this.applyMovementEmissionAndPlaySound(emission, movement, effectPos, effectState);
++                        this.applyMovementEmissionAndPlaySound(emission, movement, effectPos == null ? BlockPos.of(effectPosLong) : effectPos, effectState); // Pluto - Memory allocation optimisations
                      }
                  }
  
-@@ -1263,12 +_,16 @@
-         float f = 0.6F;
-         float f1 = (float)(movement.length() * 0.6F);
-         float f2 = (float)(movement.horizontalDistance() * 0.6F);
--        BlockPos onPos = this.getOnPos();
--        BlockState blockState = this.level().getBlockState(onPos);
+@@ -1284,12 +_,16 @@
+         float moveDistScale = 0.6F;
+         float movedDistance = (float)(clippedMovement.length() * 0.6F);
+         float horizontalMovedDistance = (float)(clippedMovement.horizontalDistance() * 0.6F);
+-        BlockPos supportingPos = this.getOnPos();
+-        BlockState supportingState = this.level().getBlockState(supportingPos);
 +        // Pluto start - Memory allocation optimisations
 +        long onPosLong = this.pluto$getOnPos();
-+        BlockPos onPos;
-+        BlockState blockState = this.level().pluto$getBlockState(onPosLong);
++        BlockPos supportingPos;
++        BlockState supportingState = this.level().pluto$getBlockState(onPosLong);
 +        // Pluto end - Memory allocation optimisations
-         boolean isStateClimbable = this.isStateClimbable(blockState);
-         this.moveDist += isStateClimbable ? f1 : f2;
-         this.flyDist += f1;
-         if (this.moveDist > this.nextStep && !blockState.isAir()) {
-+            onPos = BlockPos.of(onPosLong); // Pluto - Memory allocation optimisations | Moved down
-             boolean flag = onPos.equals(pos);
-             boolean flag1 = this.vibrationAndSoundEffectsFromBlock(pos, state, movementEmission.emitsSounds(), flag, movement);
-             if (!flag) {
-@@ -1345,6 +_,7 @@
-             boolean isOnFire = this.isOnFire();
-             boolean isFreezing = this.isFreezing();
-             int remainingFireTicks = this.getRemainingFireTicks();
+         boolean climbing = this.isStateClimbable(supportingState);
+         this.moveDist += climbing ? movedDistance : horizontalMovedDistance;
+         this.flyDist += movedDistance;
+         if (this.moveDist > this.nextStep && !supportingState.isAir()) {
++            supportingPos = BlockPos.of(onPosLong); // Pluto - Memory allocation optimisations | Moved down
+             boolean onlyEffectStateEmittions = supportingPos.equals(effectPos);
+             boolean producedSideEffects = this.vibrationAndSoundEffectsFromBlock(
+                 effectPos, effectState, emission.emitsSounds(), onlyEffectStateEmittions, clippedMovement
+@@ -1372,6 +_,7 @@
+             boolean wasOnFire = this.isOnFire();
+             boolean wasFreezing = this.isFreezing();
+             int previousRemainingFireTicks = this.getRemainingFireTicks();
 +            if (this.level().plutoConfig().entityInsideBlockCheck > 0 && (this.level().plutoConfig().entityInsideBlockCheck == 1 || this.tickCount % this.level().plutoConfig().entityInsideBlockCheck == 0)) // Pluto - Configuration for entity inside block check frequency
              this.checkInsideBlocks(movements, this.insideEffectCollector);
              this.insideEffectCollector.applyAndClear(this);
              if (this.isInRain()) {
-@@ -1422,7 +_,7 @@
+@@ -1451,7 +_,7 @@
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
              this.onFlap();
@@ -95,22 +95,22 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1442,12 +_,12 @@
+@@ -1471,12 +_,12 @@
      }
  
-     protected BlockPos getOnPos(float yOffset) {
+     protected BlockPos getOnPos(final float offset) {
 -        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) != null) { // Paper - ensure no loads
 +        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) instanceof net.minecraft.world.level.chunk.ChunkAccess chunk) { // Paper - ensure no loads // Pluto - Decrease chunk/block lookups
-             BlockPos blockPos = this.mainSupportingBlockPos.get();
-             if (!(yOffset > 1.0E-5F)) {
-                 return blockPos;
+             BlockPos getOnPos = this.mainSupportingBlockPos.get();
+             if (!(offset > 1.0E-5F)) {
+                 return getOnPos;
              } else {
--                BlockState blockState = this.level().getBlockState(blockPos);
-+                BlockState blockState = chunk.getBlockState(blockPos); // Pluto - Decrease chunk/block lookups
-                 return (!(yOffset <= 0.5) || !blockState.is(BlockTags.FENCES))
-                         && !blockState.is(BlockTags.WALLS)
-                         && !(blockState.getBlock() instanceof FenceGateBlock)
-@@ -1462,9 +_,48 @@
+-                BlockState belowState = this.level().getBlockState(getOnPos);
++                BlockState belowState = chunk.getBlockState(getOnPos); // Pluto - Decrease chunk/block lookups
+                 return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
+                         && !belowState.is(BlockTags.WALLS)
+                         && !(belowState.getBlock() instanceof FenceGateBlock)
+@@ -1491,9 +_,48 @@
          }
      }
  
@@ -154,36 +154,36 @@
 +    // Pluto end - Memory allocation optimisations
 +
      protected float getBlockJumpFactor() {
-         float jumpFactor = this.level().getBlockState(this.blockPosition()).getBlock().getJumpFactor();
--        float jumpFactor1 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor();
-+        float jumpFactor1 = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor(); // Pluto - Memory allocation optimisations
-         return jumpFactor == 1.0 ? jumpFactor1 : jumpFactor;
+         float jumpFactorHere = this.level().getBlockState(this.blockPosition()).getBlock().getJumpFactor();
+-        float jumpFactorBelow = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor();
++        float jumpFactorBelow = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getJumpFactor(); // Pluto - Memory allocation optimisations
+         return jumpFactorHere == 1.0 ? jumpFactorBelow : jumpFactorHere;
      }
  
-@@ -1472,7 +_,7 @@
-         BlockState blockState = this.level().getBlockState(this.blockPosition());
-         float speedFactor = blockState.getBlock().getSpeedFactor();
-         if (!blockState.is(Blocks.WATER) && !blockState.is(Blocks.BUBBLE_COLUMN)) {
--            return speedFactor == 1.0 ? this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor() : speedFactor;
-+            return speedFactor == 1.0 ? this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor() : speedFactor; // Pluto - Memory allocation optimisations
+@@ -1502,7 +_,7 @@
+         float speedFactorHere = state.getBlock().getSpeedFactor();
+         if (!state.is(Blocks.WATER) && !state.is(Blocks.BUBBLE_COLUMN)) {
+             return speedFactorHere == 1.0
+-                ? this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor()
++                ? this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getSpeedFactor() // Pluto - Memory allocation optimisations
+                 : speedFactorHere;
          } else {
-             return speedFactor;
-         }
-@@ -1832,9 +_,10 @@
+             return speedFactorHere;
+@@ -1877,9 +_,10 @@
      }
  
-     protected BlockPos getPrimaryStepSoundBlockPos(BlockPos pos) {
--        BlockPos blockPos = pos.above();
--        BlockState blockState = this.level().getBlockState(blockPos);
--        return !blockState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !blockState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? pos : blockPos;
+     protected BlockPos getPrimaryStepSoundBlockPos(final BlockPos affectingPos) {
+-        BlockPos abovePos = affectingPos.above();
+-        BlockState aboveState = this.level().getBlockState(abovePos);
+-        return !aboveState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !aboveState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? affectingPos : abovePos;
 +        // Pluto start - Memory allocation optimisations
-+        BlockState blockState = this.level().pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ());
-+        return !blockState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !blockState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? pos : pos.above();
++        BlockState blockState = this.level().pluto$getBlockState(affectingPos.getX(), affectingPos.getY() + 1, affectingPos.getZ());
++        return !blockState.is(BlockTags.INSIDE_STEP_SOUND_BLOCKS) && !blockState.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS) ? affectingPos : affectingPos.above();
 +        // Pluto end - Memory allocation optimisations
      }
  
-     protected void playCombinationStepSounds(BlockState primaryState, BlockState secondaryState) {
-@@ -1984,10 +_,24 @@
+     protected void playCombinationStepSounds(final BlockState primaryStepSound, final BlockState secondaryStepSound) {
+@@ -2029,9 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -201,39 +201,15 @@
 +            this.lastRainCheckResult = false;
 +            return false;
 +        }
-         BlockPos blockPos = this.blockPosition();
--        return this.level().isRainingAt(blockPos)
--            || this.level().isRainingAt(BlockPos.containing(blockPos.getX(), this.getBoundingBox().maxY, blockPos.getZ()));
-+        this.lastRainCheckResult = this.level().isRainingAt(blockPos) || this.level().isRainingAt(BlockPos.containing(blockPos.getX(), this.getBoundingBox().maxY, blockPos.getZ()));
+         BlockPos pos = this.blockPosition();
+-        return this.level().isRainingAt(pos) || this.level().isRainingAt(BlockPos.containing(pos.getX(), this.getBoundingBox().maxY, pos.getZ()));
++        this.lastRainCheckResult = this.level().isRainingAt(pos) || this.level().isRainingAt(BlockPos.containing(pos.getX(), this.getBoundingBox().maxY, pos.getZ()));
 +        return this.lastRainCheckResult;
 +        // Pluto end - Optimise rain check
      }
  
      public boolean isInWaterOrRain() {
-@@ -2034,6 +_,13 @@
-         this.fluidHeight.clear();
-         this.updateInWaterStateAndDoWaterCurrentPushing();
-         double d = this.level.environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 0.007 : 0.0023333333333333335;
-+
-+        // Pluto start - Optimise entity fluid pushing
-+        if (level.plutoConfig().useFluidPushingOptimisation) {
-+            return this.isInWater() || this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
-+        }
-+        // Pluto end - Optimise entity fluid pushing
-+
-         boolean flag = this.updateFluidHeightAndDoFluidPushing(FluidTags.LAVA, d);
-         return this.isInWater() || flag;
-     }
-@@ -2067,7 +_,7 @@
-             FluidState fluidState = this.level().getFluidState(blockPos);
-             double d = blockPos.getY() + fluidState.getHeight(this.level(), blockPos);
-             if (d > eyeY) {
--                fluidState.getTags().forEach(this.fluidOnEyes::add);
-+                this.fluidOnEyes.addAll(fluidState.pluto$tags()); // Pluto - Streamless tags
-             }
-         }
-     }
-@@ -2113,11 +_,11 @@
+@@ -2135,11 +_,11 @@
  
      @Deprecated
      protected BlockState getBlockStateOnLegacy() {
@@ -247,39 +223,39 @@
      }
  
      public boolean canSpawnSprintParticle() {
-@@ -2125,19 +_,25 @@
+@@ -2147,19 +_,25 @@
      }
  
      protected void spawnSprintParticle() {
--        BlockPos onPosLegacy = this.getOnPosLegacy();
--        BlockState blockState = this.level().getBlockState(onPosLegacy);
+-        BlockPos pos = this.getOnPosLegacy();
+-        BlockState blockState = this.level().getBlockState(pos);
 +        // Pluto start - Memory allocation optimisations
-+        long onPosLegacy = this.pluto$getOnPosLegacy();
-+        BlockState blockState = this.level().pluto$getBlockState(onPosLegacy);
++        long posLong = this.pluto$getOnPosLegacy();
++        BlockState blockState = this.level().pluto$getBlockState(posLong);
 +        // Pluto end - Memory allocation optimisations
          if (blockState.getRenderShape() != RenderShape.INVISIBLE) {
-             Vec3 deltaMovement = this.getDeltaMovement();
-             BlockPos blockPos = this.blockPosition();
-             double d = this.getX() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
-             double d1 = this.getZ() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
--            if (blockPos.getX() != onPosLegacy.getX()) {
--                d = Mth.clamp(d, (double)onPosLegacy.getX(), onPosLegacy.getX() + 1.0);
+             Vec3 movement = this.getDeltaMovement();
+             BlockPos entityPosition = this.blockPosition();
+             double x = this.getX() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
+             double z = this.getZ() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
+-            if (entityPosition.getX() != pos.getX()) {
+-                x = Mth.clamp(x, (double)pos.getX(), pos.getX() + 1.0);
 +            // Pluto start - Memory allocation optimisations
-+            final int x = BlockPos.getX(onPosLegacy);
-+            if (blockPos.getX() != x) {
-+                d = Mth.clamp(d, (double)x, x + 1.0);
++            final int x1 = BlockPos.getX(posLong);
++            if (entityPosition.getX() != x1) {
++                x = Mth.clamp(x, x1, x1 + 1.0);
              }
  
--            if (blockPos.getZ() != onPosLegacy.getZ()) {
--                d1 = Mth.clamp(d1, (double)onPosLegacy.getZ(), onPosLegacy.getZ() + 1.0);
-+            final int z = BlockPos.getZ(onPosLegacy);
-+            if (blockPos.getZ() != z) {
-+                d1 = Mth.clamp(d1, (double)z, z + 1.0);
+-            if (entityPosition.getZ() != pos.getZ()) {
+-                z = Mth.clamp(z, (double)pos.getZ(), pos.getZ() + 1.0);
++            final int z1 = BlockPos.getZ(posLong);
++            if (entityPosition.getZ() != z1) {
++                z = Mth.clamp(z, z1, z1 + 1.0);
 +                // Pluto end - Memory allocation optimisations
              }
  
              this.level()
-@@ -5419,6 +_,42 @@
+@@ -5374,6 +_,42 @@
              return this.save;
          }
      }

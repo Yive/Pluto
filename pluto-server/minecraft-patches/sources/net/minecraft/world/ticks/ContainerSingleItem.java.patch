@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/ticks/ContainerSingleItem.java
 +++ b/net/minecraft/world/ticks/ContainerSingleItem.java
 @@ -62,5 +_,7 @@
-         default boolean stillValid(Player player) {
+         default boolean stillValid(final Player player) {
              return Container.stillValidBlockEntity(this.getContainerBlockEntity(), player);
          }
 +

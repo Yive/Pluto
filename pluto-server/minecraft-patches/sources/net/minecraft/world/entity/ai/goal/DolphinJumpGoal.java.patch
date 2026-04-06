@@ -2,13 +2,13 @@
 +++ b/net/minecraft/world/entity/ai/goal/DolphinJumpGoal.java
 @@ -42,7 +_,10 @@
  
-     private boolean waterIsClear(BlockPos pos, int dx, int dz, int scale) {
-         BlockPos blockPos = pos.offset(dx * scale, 0, dz * scale);
--        return this.dolphin.level().getFluidState(blockPos).is(FluidTags.WATER) && !this.dolphin.level().getBlockState(blockPos).blocksMotion();
+     private boolean waterIsClear(final BlockPos dolphinPos, final int stepX, final int stepZ, final int currentStep) {
+         BlockPos nextPos = dolphinPos.offset(stepX * currentStep, 0, stepZ * currentStep);
+-        return this.dolphin.level().getFluidState(nextPos).is(FluidTags.WATER) && !this.dolphin.level().getBlockState(nextPos).blocksMotion();
 +        // Pluto start - Decrease chunk/block lookups
-+        net.minecraft.world.level.block.state.BlockState state = this.dolphin.level().getBlockState(blockPos);
++        net.minecraft.world.level.block.state.BlockState state = this.dolphin.level().getBlockState(nextPos);
 +        return state.getFluidState().is(FluidTags.WATER) && !state.blocksMotion();
 +        // Pluto end - Decrease chunk/block lookups
      }
  
-     private boolean surfaceIsClear(BlockPos pos, int dx, int dz, int scale) {
+     private boolean surfaceIsClear(final BlockPos dolphinPos, final int stepX, final int stepZ, final int currentStep) {

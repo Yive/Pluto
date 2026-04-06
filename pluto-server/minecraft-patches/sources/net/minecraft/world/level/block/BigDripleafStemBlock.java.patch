@@ -3,20 +3,29 @@
 @@ -58,10 +_,15 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        BlockPos blockPos = pos.below();
--        BlockState blockState = level.getBlockState(blockPos);
--        BlockState blockState1 = level.getBlockState(pos.above());
--        return (blockState.is(this) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && (blockState1.is(this) || blockState1.is(Blocks.BIG_DRIPLEAF));
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockPos belowPos = pos.below();
+-        BlockState belowState = level.getBlockState(belowPos);
+-        BlockState aboveState = level.getBlockState(pos.above());
+-        return (belowState.is(this) || belowState.is(BlockTags.SUPPORTS_BIG_DRIPLEAF)) && (aboveState.is(this) || aboveState.is(Blocks.BIG_DRIPLEAF));
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +
-+        BlockState blockState = level.pluto$getBlockState(x, y - 1, z);
-+        BlockState blockState1;
-+        return (blockState.is(this) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && ((blockState1 = level.pluto$getBlockState(x, y + 1, z)).is(this) || blockState1.is(Blocks.BIG_DRIPLEAF));
++        BlockState belowState = level.pluto$getBlockState(x, y - 1, z);
++        BlockState aboveState;
++        return (belowState.is(this) || belowState.is(BlockTags.SUPPORTS_BIG_DRIPLEAF)) && ((aboveState = level.pluto$getBlockState(x, y + 1, z)).is(this) || aboveState.is(Blocks.BIG_DRIPLEAF));
 +        // Pluto end - Memory allocation optimisations
      }
  
-     protected static boolean place(LevelAccessor level, BlockPos pos, FluidState fluidState, Direction direction) {
+     protected static boolean place(final LevelAccessor level, final BlockPos pos, final FluidState fluidState, final Direction facing) {
+@@ -104,7 +_,7 @@
+     @Override
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+         Optional<BlockPos> headPos = BlockUtil.getTopConnectedBlock(level, pos, state.getBlock(), Direction.UP, Blocks.BIG_DRIPLEAF);
+-        return headPos.filter(blockPos -> BigDripleafBlock.canPlaceAt(level, blockPos.above())).isPresent();
++        return headPos.filter(blockPos -> BigDripleafBlock.canPlaceAt(level, blockPos.getX(), blockPos.getY() + 1, blockPos.getZ())).isPresent(); // Pluto - Memory allocation optimisations
+     }
+ 
+     @Override

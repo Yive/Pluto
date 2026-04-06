@@ -3,10 +3,10 @@
 @@ -30,8 +_,7 @@
      }
  
-     private static boolean canBeNylium(BlockState state, LevelReader level, BlockPos pos) {
--        BlockPos blockPos = pos.above();
--        BlockState blockState = level.getBlockState(blockPos);
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         int lightBlockInto = LightEngine.getLightBlockInto(state, blockState, Direction.UP, blockState.getLightBlock());
+     private static boolean canBeNylium(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockPos above = pos.above();
+-        BlockState aboveState = level.getBlockState(above);
++        BlockState aboveState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         int lightBlockInto = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightDampening());
          return lightBlockInto < 15;
      }

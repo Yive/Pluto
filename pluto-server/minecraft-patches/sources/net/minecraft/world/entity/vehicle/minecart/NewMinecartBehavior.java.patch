@@ -1,17 +1,17 @@
 --- a/net/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior.java
 +++ b/net/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior.java
-@@ -438,7 +_,7 @@
+@@ -441,7 +_,7 @@
                  }
  
-                 this.minecart.move(MoverType.SELF, vec36.subtract(vec3));
--                BlockState blockState = this.level().getBlockState(BlockPos.containing(vec36));
-+                BlockState blockState = this.level().pluto$getBlockState(vec36.x, vec36.y, vec36.z); // Pluto - Memory allocation optimisations
-                 if (flag) {
-                     if (BaseRailBlock.isRail(blockState)) {
-                         RailShape railShape1 = blockState.getValue(((BaseRailBlock)blockState.getBlock()).getShapeProperty());
-@@ -519,7 +_,14 @@
+                 this.minecart.move(MoverType.SELF, newPosition.subtract(oldPosition));
+-                BlockState newBlockState = this.level().getBlockState(BlockPos.containing(newPosition));
++                BlockState newBlockState = this.level().pluto$getBlockState(newPosition.x, newPosition.y, newPosition.z); // Pluto - Memory allocation optimisations
+                 if (inHill) {
+                     if (BaseRailBlock.isRail(newBlockState)) {
+                         RailShape newRailShape = newBlockState.getValue(((BaseRailBlock)newBlockState.getBlock()).getShapeProperty());
+@@ -522,7 +_,14 @@
          if (this.minecart.isRideable() && !this.minecart.isVehicle()) {
-             List<Entity> entities = this.level().getEntities(this.minecart, box, EntitySelector.pushableBy(this.minecart));
+             List<Entity> entities = this.level().getEntities(this.minecart, hitbox, EntitySelector.pushableBy(this.minecart));
              if (!entities.isEmpty()) {
 +                // Pluto start - Option to remove excess vehicles on collision
 +                int minecartCount = 0;
@@ -24,13 +24,13 @@
                      if (!(entity instanceof Player)
                          && !(entity instanceof IronGolem)
                          && !(entity instanceof AbstractMinecart)
-@@ -546,10 +_,17 @@
+@@ -549,10 +_,17 @@
  
-     public boolean pushEntities(AABB box) {
-         boolean flag = false;
+     public boolean pushEntities(final AABB hitbox) {
+         boolean pushed = false;
 +        int minecartCount = 0; // Pluto - Option to remove excess vehicles on collision
          if (this.minecart.isRideable()) {
-             List<Entity> entities = this.level().getEntities(this.minecart, box, EntitySelector.pushableBy(this.minecart));
+             List<Entity> entities = this.level().getEntities(this.minecart, hitbox, EntitySelector.pushableBy(this.minecart));
              if (!entities.isEmpty()) {
                  for (Entity entity : entities) {
 +                    // Pluto start - Option to remove excess vehicles on collision
@@ -42,16 +42,16 @@
                      if (entity instanceof Player
                          || entity instanceof IronGolem
                          || entity instanceof AbstractMinecart
-@@ -573,6 +_,12 @@
+@@ -576,6 +_,12 @@
              }
          } else {
-             for (Entity entity1 : this.level().getEntities(this.minecart, box)) {
+             for (Entity entityx : this.level().getEntities(this.minecart, hitbox)) {
 +                // Pluto start - Option to remove excess vehicles on collision
-+                if (entity1 instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
-+                    entity1.discard();
++                if (entityx instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                    entityx.discard();
 +                    continue;
 +                }
 +                // Pluto end - Option to remove excess vehicles on collision
-                 if (!this.minecart.hasPassenger(entity1) && entity1.isPushable() && entity1 instanceof AbstractMinecart) {
+                 if (!this.minecart.hasPassenger(entityx) && entityx.isPushable() && entityx instanceof AbstractMinecart) {
                      // CraftBukkit start
                      org.bukkit.event.vehicle.VehicleEntityCollisionEvent collisionEvent = new org.bukkit.event.vehicle.VehicleEntityCollisionEvent(

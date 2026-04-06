@@ -6,18 +6,18 @@
      private final AttributeSupplier supplier;
 +    private final java.util.function.Function<Holder<Attribute>, AttributeInstance> createInstance; // Pufferfish
  
-     public AttributeMap(AttributeSupplier supplier) {
+     public AttributeMap(final AttributeSupplier supplier) {
          this.supplier = supplier;
 +        this.createInstance = holder -> this.supplier.createInstance(this::onAttributeModified, holder); // Pufferfish
      }
  
-     private void onAttributeModified(AttributeInstance instance) {
+     private void onAttributeModified(final AttributeInstance attributeInstance) {
 @@ -43,7 +_,7 @@
      }
  
-     public @Nullable AttributeInstance getInstance(Holder<Attribute> attribute) {
--        return this.attributes.computeIfAbsent(attribute, holder -> this.supplier.createInstance(this::onAttributeModified, (Holder<Attribute>)holder));
+     public @Nullable AttributeInstance getInstance(final Holder<Attribute> attribute) {
+-        return this.attributes.computeIfAbsent(attribute, key -> this.supplier.createInstance(this::onAttributeModified, (Holder<Attribute>)key));
 +        return this.attributes.computeIfAbsent(attribute, this.createInstance); // Pufferfish - cache lambda, as for some reason java allocates it anyways
      }
  
-     public boolean hasAttribute(Holder<Attribute> attribute) {
+     public boolean hasAttribute(final Holder<Attribute> attribute) {

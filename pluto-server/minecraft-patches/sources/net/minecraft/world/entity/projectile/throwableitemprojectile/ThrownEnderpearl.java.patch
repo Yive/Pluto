@@ -1,19 +1,19 @@
 --- a/net/minecraft/world/entity/projectile/throwableitemprojectile/ThrownEnderpearl.java
 +++ b/net/minecraft/world/entity/projectile/throwableitemprojectile/ThrownEnderpearl.java
-@@ -181,11 +_,13 @@
+@@ -186,11 +_,13 @@
              }
  
              if (this.isAlive()) {
--                BlockPos blockPos = BlockPos.containing(this.position());
-+                long blockPos = this.position().asBlockPosLong(); // Pluto - Memory allocation optimisations
+-                BlockPos currentPos = BlockPos.containing(this.position());
++                long currentPos = this.position().asBlockPosLong(); // Pluto - Memory allocation optimisations
                  if ((
                          --this.ticketTimer <= 0L
--                            || var7 != SectionPos.blockToSectionCoord(blockPos.getX())
--                            || sectionPosZ != SectionPos.blockToSectionCoord(blockPos.getZ())
+-                            || var7 != SectionPos.blockToSectionCoord(currentPos.getX())
+-                            || previousChunkZ != SectionPos.blockToSectionCoord(currentPos.getZ())
 +                            // Pluto start - Memory allocation optimisations
-+                            || var7 != SectionPos.blockToSectionCoord(BlockPos.getX(blockPos))
-+                            || sectionPosZ != SectionPos.blockToSectionCoord(BlockPos.getZ(blockPos))
++                            || var7 != SectionPos.blockToSectionCoord(BlockPos.getX(currentPos))
++                            || previousChunkZ != SectionPos.blockToSectionCoord(BlockPos.getZ(currentPos))
 +                            // Pluto end - Memory allocation optimisations
                      )
-                     && entity instanceof ServerPlayer serverPlayer1) {
-                     this.ticketTimer = serverPlayer1.registerAndUpdateEnderPearlTicket(this);
+                     && owner instanceof ServerPlayer serverPlayer) {
+                     this.ticketTimer = serverPlayer.registerAndUpdateEnderPearlTicket(this);

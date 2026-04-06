@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerChunkCache.java
 +++ b/net/minecraft/server/level/ServerChunkCache.java
-@@ -183,6 +_,8 @@
+@@ -182,6 +_,8 @@
      }
      // Paper end - chunk tick iteration optimisations
  
@@ -8,18 +8,18 @@
 +    public final java.util.concurrent.atomic.AtomicBoolean _pufferfish_spawnCountsReady = new java.util.concurrent.atomic.AtomicBoolean(false); // Pufferfish - optimize countmobs
  
      public ServerChunkCache(
-         ServerLevel level,
-@@ -510,6 +_,47 @@
+         final ServerLevel level,
+@@ -517,6 +_,47 @@
  
-             this.broadcastChangedChunks(profilerFiller);
-             profilerFiller.pop();
+             this.broadcastChangedChunks(profiler);
+             profiler.pop();
 +
 +            // Pufferfish start - optimize mob spawning
 +            if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning && !this.level.plutoConfig().useAsyncSpawningChunks) { // Pluto - Async Spawning Chunks
 +                // Pluto start - Swap for loops around for per player mob spawns
 +                for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
 +                    // Paper start - per player mob spawning backoff
-+                    for (ServerPlayer player : this.level.players) {
++                    for (ServerPlayer player : this.level.players()) {
 +                        // Pluto end - Swap for loops around for per player mob spawns
 +                        player.mobCounts[ii] = 0;
 +                        if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
@@ -57,61 +57,63 @@
          }
      }
  
-@@ -527,32 +_,40 @@
+@@ -534,32 +_,40 @@
          profiler.pop();
      }
  
 +    public final java.util.concurrent.atomic.AtomicBoolean pluto$stillSpawningEntities = new java.util.concurrent.atomic.AtomicBoolean(false); // Pluto - Async Spawning Chunks
-     private void tickChunks(ProfilerFiller profiler, long timeInhabited) {
+     private void tickChunks(final ProfilerFiller profiler, final long timeDiff) {
          profiler.push("naturalSpawnCount");
-         int naturalSpawnChunkCount = this.distanceManager.getNaturalSpawnChunkCount();
+         int chunkCount = this.distanceManager.getNaturalSpawnChunkCount();
          // Paper start - Optional per player mob spawns
-         NaturalSpawner.SpawnState spawnState;
+         NaturalSpawner.SpawnState spawnCookie;
          if ((this.spawnFriendlies || this.spawnEnemies) && this.level.paperConfig().entities.spawning.perPlayerMobSpawns) { // don't count mobs when animals and monsters are disabled
 +            if (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) { // Pufferfish - moved down when async processing
              // re-set mob counts
--            for (ServerPlayer player : this.level.players) {
+-            for (ServerPlayer player : this.level.players()) {
 +            // Pluto start - Swap for loops around for per player mob spawns
 +            for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
                  // Paper start - per player mob spawning backoff
--                for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
-+                for (ServerPlayer player : this.level.players) {
+-                for (int j = 0; j < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; j++) {
+-                    player.mobCounts[j] = 0;
++                for (ServerPlayer player : this.level.players()) {
 +                    // Pluto end - Swap for loops around for per player mob spawns
-                     player.mobCounts[ii] = 0;
++                    player.mobCounts[ii] = 0;
 +                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobCountsAsync.put(ii, 0); // Pluto - Async Spawning Chunks
  
--                    int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+-                    int newBackoff = player.mobBackoffCounts[j] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
 +                    int newBackoff = this.level.plutoConfig().useAsyncSpawningChunks ? player.mobBackoffCountsAsync.getOrDefault(ii, 0) - 1 : player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm? // Pluto - Async Spawning Chunks
                      if (newBackoff < 0) {
                          newBackoff = 0;
                      }
-                     player.mobBackoffCounts[ii] = newBackoff;
+-                    player.mobBackoffCounts[j] = newBackoff;
++                    player.mobBackoffCounts[ii] = newBackoff;
 +                    if (this.level.plutoConfig().useAsyncSpawningChunks) player.mobBackoffCountsAsync.put(ii, newBackoff); // Pluto - Async Spawning Chunks
                  }
                  // Paper end - per player mob spawning backoff
              }
--            spawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
-+            lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true); } // Pufferfish - async mob spawning
+-            spawnCookie = NaturalSpawner.createState(chunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
++            lastSpawnState = NaturalSpawner.createState(chunkCount, this.level.getAllEntities(), this::getFullChunk, null, true); } // Pufferfish - async mob spawning
          } else {
--            spawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
+-            spawnCookie = NaturalSpawner.createState(chunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
 +            // Pufferfish start - async mob spawning
-+            lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
++            lastSpawnState = NaturalSpawner.createState(chunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
 +            _pufferfish_spawnCountsReady.set(true);
 +            // Pufferfish end
          }
          // Paper end - Optional per player mob spawns
--        this.lastSpawnState = spawnState;
-         boolean flag = this.level.getGameRules().get(GameRules.SPAWN_MOBS) && !this.level.players().isEmpty(); // CraftBukkit
-         int i = this.level.getGameRules().get(GameRules.RANDOM_TICK_SPEED);
-         List<MobCategory> filteredSpawningCategories;
-@@ -566,11 +_,71 @@
+-        this.lastSpawnState = spawnCookie;
+         boolean doMobSpawning = this.level.getGameRules().get(GameRules.SPAWN_MOBS) && !this.level.players().isEmpty(); // CraftBukkit
+         int tickSpeed = this.level.getGameRules().get(GameRules.RANDOM_TICK_SPEED);
+         List<MobCategory> spawningCategories;
+@@ -573,11 +_,72 @@
              }
              // Paper end - PlayerNaturallySpawnCreaturesEvent
-             boolean flag1 = this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) != 0L && this.level.getGameTime() % this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) == 0L; // CraftBukkit
--            filteredSpawningCategories = NaturalSpawner.getFilteredSpawningCategories(spawnState, this.spawnFriendlies, this.spawnEnemies, flag1, this.level); // CraftBukkit
-+            filteredSpawningCategories = NaturalSpawner.getFilteredSpawningCategories(lastSpawnState, this.spawnFriendlies, this.spawnEnemies, flag1, this.level); // CraftBukkit // Pufferfish
+             boolean spawnPersistent = this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) != 0L && this.level.getGameTime() % this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) == 0L; // CraftBukkit
+-            spawningCategories = NaturalSpawner.getFilteredSpawningCategories(spawnCookie, this.spawnFriendlies, this.spawnEnemies, spawnPersistent, this.level); // CraftBukkit
++            spawningCategories = NaturalSpawner.getFilteredSpawningCategories(lastSpawnState, this.spawnFriendlies, this.spawnEnemies, spawnPersistent, this.level); // CraftBukkit // Pufferfish
          } else {
-             filteredSpawningCategories = List.of();
+             spawningCategories = List.of();
          }
  
 +        // Pluto start - Async spawning chunks
@@ -120,14 +122,14 @@
 +            if (this.pluto$stillSpawningEntities.get()) break spawningChunks;
 +
 +            this.pluto$stillSpawningEntities.set(true);
-+            final long next = this.level.random.nextLong(); // Considering this is unsafe, we should do this on the main thread.
++            final long next = this.level.getRandom().nextLong(); // Considering this is unsafe, we should do this on the main thread.
 +
 +            this.level.plutoSpawningChunksExecutor().submit(() -> {
-+                List<LevelChunk> list = new ObjectArrayList<>();
++                List<LevelChunk> spawningChunk = new ObjectArrayList<>();
 +
 +                if (gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning) {
 +                    for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
-+                        for (ServerPlayer player : this.level.players) {
++                        for (ServerPlayer player : this.level.players()) {
 +                            // Due to being async, the player might no longer be in this world or server.
 +                            if (player == null) continue;
 +                            player.mobCountsAsync.put(ii, 0);
@@ -156,48 +158,49 @@
 +                }
 +
 +                try {
-+                    this.chunkMap.collectSpawningChunks(list);
++                    this.chunkMap.collectSpawningChunks(spawningChunk);
 +                    this.shuffleRandom.setSeed(next); // This random is only used for spawning chunks.
 +
 +                    if (!this.level.paperConfig().entities.spawning.perPlayerMobSpawns)
-+                        Util.shuffle(list, this.shuffleRandom); // Paper - Optional per player mob spawns; do not need this when per-player is enabled
++                        Util.shuffle(spawningChunk, this.shuffleRandom); // Paper - Optional per player mob spawns; do not need this when per-player is enabled
 +
-+                    for (LevelChunk levelChunk : list) {
++                    for (LevelChunk levelChunk : spawningChunk) {
 +                        // This shouldn't happen, but just to be safe.
 +                        if (lastSpawnState == null) continue;
-+                        this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, lastSpawnState); // Pufferfish
++                        this.tickSpawningChunk(levelChunk, timeDiff, spawningCategories,
++                            lastSpawnState); // Pufferfish
 +                    }
 +                } finally {
-+                    list.clear();
++                    spawningChunk.clear();
 +                    level.chunkSource.pluto$stillSpawningEntities.set(false);
 +                }
 +            });
 +        } else {
 +        // Pluto end - Async spawning chunks
-         List<LevelChunk> list = this.spawningChunks;
+         List<LevelChunk> spawningChunks = this.spawningChunks;
  
          try {
-@@ -584,11 +_,12 @@
+@@ -591,11 +_,12 @@
              profiler.popPush("tickSpawningChunks");
  
-             for (LevelChunk levelChunk : list) {
--                this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, spawnState);
-+                this.tickSpawningChunk(levelChunk, timeInhabited, filteredSpawningCategories, lastSpawnState); // Pufferfish
+             for (LevelChunk chunk : spawningChunks) {
+-                this.tickSpawningChunk(chunk, timeDiff, spawningCategories, spawnCookie);
++                this.tickSpawningChunk(chunk, timeDiff, spawningCategories, lastSpawnState); // Pufferfish
              }
          } finally {
-             list.clear();
+             spawningChunks.clear();
          }
 +        } // Pluto - Async spawning chunks
  
          profiler.popPush("tickTickingChunks");
          this.iterateTickingChunksFaster(); // Paper - chunk tick iteration optimizations
-@@ -608,7 +_,8 @@
+@@ -617,7 +_,8 @@
          }
  
-         if (!spawnCategories.isEmpty()) {
--            if (this.level.getWorldBorder().isWithinBounds(pos)) { // Paper - rewrite chunk system
-+            if (this.level.getWorldBorder().isWithinBounds(pos) && (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning || _pufferfish_spawnCountsReady.get())) { // Paper - rewrite chunk system // Pufferfish
-+                if (this.level.plutoConfig().useAsyncSpawningChunks) dev.yive.pluto.async.AsyncNaturalSpawner.spawnForChunk(this.level, chunk, spawnState, spawnCategories); else // Pluto - Async spawning chunks
-                 NaturalSpawner.spawnForChunk(this.level, chunk, spawnState, spawnCategories);
+         if (!spawningCategories.isEmpty()) {
+-            if (this.level.getWorldBorder().isWithinBounds(chunkPos)) { // Paper - rewrite chunk system
++            if (this.level.getWorldBorder().isWithinBounds(chunkPos) && (!gg.pufferfish.pufferfish.PufferfishConfig.enableAsyncMobSpawning || _pufferfish_spawnCountsReady.get())) { // Paper - rewrite chunk system // Pufferfish
++                if (this.level.plutoConfig().useAsyncSpawningChunks) dev.yive.pluto.async.AsyncNaturalSpawner.spawnForChunk(this.level, chunk, spawnCookie, spawningCategories); else // Pluto - Async spawning chunks
+                 NaturalSpawner.spawnForChunk(this.level, chunk, spawnCookie, spawningCategories);
              }
          }

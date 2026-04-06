@@ -12,5 +12,5 @@
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected boolean isSignalSource(BlockState state) {
+     protected boolean isSignalSource(final BlockState state) {
          return true;

@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/block/entity/ChiseledBookShelfBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ChiseledBookShelfBlockEntity.java
 @@ -123,6 +_,8 @@
-         return itemStack;
+         return retrievedItem;
      }
  
 +    @Override public boolean stillValid() { return !isRemoved(); } // Pluto - Hoppers cache containers
 +
      @Override
-     public void setItem(int slot, ItemStack stack) {
-         if (this.acceptsItemType(stack)) {
+     public void setItem(final int slot, final ItemStack itemStack) {
+         if (this.acceptsItemType(itemStack)) {

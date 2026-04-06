@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/redstone/DefaultRedstoneWireEvaluator.java
 +++ b/net/minecraft/world/level/redstone/DefaultRedstoneWireEvaluator.java
-@@ -35,7 +_,7 @@
-             Set<BlockPos> set = Sets.newHashSet();
-             set.add(pos);
+@@ -37,7 +_,7 @@
+             Set<BlockPos> toUpdate = Sets.newHashSet();
+             toUpdate.add(pos);
  
 -            for (Direction direction : Direction.values()) {
 +            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                 set.add(pos.relative(direction));
+                 toUpdate.add(pos.relative(direction));
              }
  

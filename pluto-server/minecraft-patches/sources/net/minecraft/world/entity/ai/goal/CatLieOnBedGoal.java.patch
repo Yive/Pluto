@@ -3,7 +3,7 @@
 @@ -52,6 +_,6 @@
  
      @Override
-     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+     protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
 -        return level.isEmptyBlock(pos.above()) && level.getBlockState(pos).is(BlockTags.BEDS);
 +        return level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && level.getBlockState(pos).is(BlockTags.BEDS); // Pluto - Memory allocation optimisations
      }

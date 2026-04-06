@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
 +++ b/net/minecraft/world/entity/ai/behavior/BehaviorUtils.java
-@@ -152,7 +_,7 @@
-         Vec3 pos = DefaultRandomPos.getPos(pathfinder, radius, verticalDistance);
-         int i = 0;
+@@ -167,7 +_,7 @@
+         Vec3 targetPos = DefaultRandomPos.getPos(body, maxHorizontalDistance, maxVerticalDistance);
+         int count = 0;
  
--        while (pos != null && !pathfinder.level().getBlockState(BlockPos.containing(pos)).isPathfindable(PathComputationType.WATER) && i++ < 10) {
-+        while (pos != null && !pathfinder.level().pluto$getBlockState(pos.asBlockPosLong()).isPathfindable(PathComputationType.WATER) && i++ < 10) { // Pluto - Memory allocation optimisations
-             pos = DefaultRandomPos.getPos(pathfinder, radius, verticalDistance);
+-        while (targetPos != null && !body.level().getBlockState(BlockPos.containing(targetPos)).isPathfindable(PathComputationType.WATER) && count++ < 10) {
++        while (targetPos != null && !body.level().pluto$getBlockState(targetPos.asBlockPosLong()).isPathfindable(PathComputationType.WATER) && count++ < 10) { // Pluto - Memory allocation optimisations
+             targetPos = DefaultRandomPos.getPos(body, maxHorizontalDistance, maxVerticalDistance);
          }
  

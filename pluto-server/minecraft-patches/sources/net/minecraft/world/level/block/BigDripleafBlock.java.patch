@@ -1,30 +1,60 @@
 --- a/net/minecraft/world/level/block/BigDripleafBlock.java
 +++ b/net/minecraft/world/level/block/BigDripleafBlock.java
-@@ -136,8 +_,7 @@
- 
-     @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        BlockPos blockPos = pos.below();
--        BlockState blockState = level.getBlockState(blockPos);
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return blockState.is(this) || blockState.is(Blocks.BIG_DRIPLEAF_STEM) || blockState.is(BlockTags.BIG_DRIPLEAF_PLACEABLE);
+@@ -120,6 +_,16 @@
+         return level.isInsideBuildHeight(pos) && canReplace(state);
      }
  
-@@ -167,7 +_,7 @@
++    // Pluto start - Memory allocation optimisations
++    protected static boolean canPlaceAt(final LevelReader level, final int x, final int y, final int z) {
++        return canGrowInto(level, x, y, z);
++    }
++
++    protected static boolean canGrowInto(final LevelReader level, final int x, final int y, final int z) {
++        return level.isInsideBuildHeight(y) && canReplace(level.pluto$getBlockState(x, y, z));
++    }
++    // Pluto end - Memory allocation optimisations
++
+     protected static boolean place(final LevelAccessor level, final BlockPos pos, final FluidState fluidState, final Direction facing) {
+         BlockState newState = Blocks.BIG_DRIPLEAF.defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, facing);
+         return level.setBlock(pos, newState, Block.UPDATE_ALL);
+@@ -137,8 +_,7 @@
  
      @Override
-     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
--        BlockState blockState = level.getBlockState(pos.above());
-+        BlockState blockState = level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
-         return canReplace(blockState);
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        BlockPos belowPos = pos.below();
+-        BlockState belowState = level.getBlockState(belowPos);
++        BlockState belowState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()); // Pluto - Memory allocation optimisations
+         return belowState.is(this) || belowState.is(Blocks.BIG_DRIPLEAF_STEM) || belowState.is(BlockTags.SUPPORTS_BIG_DRIPLEAF);
      }
  
-@@ -292,7 +_,7 @@
+@@ -168,7 +_,7 @@
  
      @Override
-     public BlockState getStateForPlacement(BlockPlaceContext context) {
--        BlockState blockState = context.getLevel().getBlockState(context.getClickedPos().below());
-+        BlockState blockState = context.getLevel().pluto$getBlockState(context.getClickedPos().getX(), context.getClickedPos().getY() - 1, context.getClickedPos().getZ()); // Pluto - Memory allocation optimisations
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+-        return canGrowInto(level, pos.above());
++        return canGrowInto(level, pos.getX(), pos.getY() + 1, pos.getZ()); // Pluto - Memory allocation optimisations
+     }
+ 
+     @Override
+@@ -178,10 +_,10 @@
+ 
+     @Override
+     public void performBonemeal(final ServerLevel level, final RandomSource random, final BlockPos pos, final BlockState state) {
+-        BlockPos abovePos = pos.above();
+-        if (canPlaceAt(level, abovePos)) {
++        if (canPlaceAt(level, pos.getX(), pos.getY() + 1, pos.getZ())) { // Pluto - Memory allocation optimisations
+             Direction facing = state.getValue(FACING);
+             BigDripleafStemBlock.place(level, pos, state.getFluidState(), facing);
++            BlockPos abovePos = pos.above(); // Pluto - Memory allocation optimisations
+             place(level, abovePos, level.getBlockState(abovePos).getFluidState(), facing);
+         }
+     }
+@@ -300,7 +_,7 @@
+ 
+     @Override
+     public BlockState getStateForPlacement(final BlockPlaceContext context) {
+-        BlockState belowState = context.getLevel().getBlockState(context.getClickedPos().below());
++        BlockState belowState = context.getLevel().pluto$getBlockState(context.getClickedPos().getX(), context.getClickedPos().getY() - 1, context.getClickedPos().getZ()); // Pluto - Memory allocation optimisations
          FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-         boolean flag = blockState.is(Blocks.BIG_DRIPLEAF) || blockState.is(Blocks.BIG_DRIPLEAF_STEM);
+         boolean belowIsDripleafPart = belowState.is(Blocks.BIG_DRIPLEAF) || belowState.is(Blocks.BIG_DRIPLEAF_STEM);
          return this.defaultBlockState()

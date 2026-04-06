@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/BannerBlock.java
 +++ b/net/minecraft/world/level/block/BannerBlock.java
-@@ -43,7 +_,7 @@
+@@ -40,7 +_,7 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
 -        return level.getBlockState(pos.below()).isSolid();
 +        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).isSolid(); // Pluto - Memory allocation optimisations
      }

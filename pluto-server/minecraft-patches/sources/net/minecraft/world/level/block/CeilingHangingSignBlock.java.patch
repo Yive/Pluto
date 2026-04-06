@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/CeilingHangingSignBlock.java
 +++ b/net/minecraft/world/level/block/CeilingHangingSignBlock.java
-@@ -82,7 +_,10 @@
+@@ -89,7 +_,10 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
 -        return level.getBlockState(pos.above()).isFaceSturdy(level, pos.above(), Direction.DOWN, SupportType.CENTER);
 +        // Pluto start - Memory allocation optimisations
 +        BlockPos above = pos.above();

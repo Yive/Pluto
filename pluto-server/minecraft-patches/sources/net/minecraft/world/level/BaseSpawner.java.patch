@@ -6,7 +6,7 @@
      private int tickDelay = 0; // Paper - Configurable mob spawner tick rate
 +    public boolean wasApiUsed = false; // Pluto - Options for spawner settings | Just so that we don't overwrite custom spawners... hopefully
  
-     public void setEntityId(EntityType<?> type, @Nullable Level level, RandomSource random, BlockPos pos) {
+     public void setEntityId(final EntityType<?> type, final @Nullable Level level, final RandomSource random, final BlockPos pos) {
          this.getOrCreateNextSpawnData(level, random, pos).getEntityToSpawn().putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
 @@ -89,7 +_,19 @@
          tickDelay = level.paperConfig().tickRates.mobSpawner;
@@ -33,21 +33,21 @@
                                      pos.getZ() + (random.nextDouble() - random.nextDouble()) * this.spawnRange + 0.5
                                  )
                              );
--                        if (level.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) {
-+                        if (!level.plutoConfig().spawnerCheckForBlockCollision || level.noCollision(optional.get().getSpawnAABB(vec3.x, vec3.y, vec3.z))) { // Pluto - Options for spawner settings
-                             BlockPos blockPos = BlockPos.containing(vec3);
+-                        if (level.noCollision(entityType.get().getSpawnAABB(spawnPos.x, spawnPos.y, spawnPos.z))) {
++                        if (!level.plutoConfig().spawnerCheckForBlockCollision || level.noCollision(entityType.get().getSpawnAABB(spawnPos.x, spawnPos.y, spawnPos.z))) { // Pluto - Options for spawner settings
+                             BlockPos spawnBlockPos = BlockPos.containing(spawnPos);
                              if (nextSpawnData.getCustomSpawnRules().isPresent()) {
-                                 if (!optional.get().getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL) {
+                                 if (!entityType.get().getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL) {
 @@ -157,7 +_,7 @@
                                  return;
                              }
  
--                            int size = level.getEntities(
-+                            int size = !level.plutoConfig().spawnerCheckForNearbyEntities ? 0 : level.getEntities( // Pluto - Options for spawner settings
+-                            int nearBy = level.getEntities(
++                            int nearBy = !level.plutoConfig().spawnerCheckForNearbyEntities ? 0 : level.getEntities( // Pluto - Options for spawner settings
                                      EntityTypeTest.forExactClass(entity.getClass()),
                                      new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(this.spawnRange),
                                      EntitySelector.NO_SPECTATORS
-@@ -180,6 +_,15 @@
+@@ -181,6 +_,15 @@
                                      ((Mob)entity).finalizeSpawn(level, level.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null);
                                  }
  
@@ -63,22 +63,22 @@
                                  nextSpawnData.getEquipment().ifPresent(mob::equip);
                                  // Spigot start
                                  if (mob.level().spigotConfig.nerfSpawnerMobs) {
-@@ -201,6 +_,7 @@
+@@ -202,6 +_,7 @@
                                  return;
                              }
  
 +                            if (level.plutoConfig().spawnerDisableParticles) continue; // Pluto - Options for spawner settings
                              level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
-                             level.gameEvent(entity, GameEvent.ENTITY_PLACE, blockPos);
+                             level.gameEvent(entity, GameEvent.ENTITY_PLACE, spawnBlockPos);
                              if (entity instanceof Mob) {
-@@ -247,9 +_,11 @@
+@@ -248,9 +_,11 @@
          this.requiredPlayerRange = input.getIntOr("RequiredPlayerRange", 16);
          this.spawnRange = input.getIntOr("SpawnRange", 4);
          this.displayEntity = null;
 +        this.wasApiUsed = input.getBooleanOr("Pluto.WasApiUsed", false); // Pluto - Options for spawner settings
      }
  
-     public void save(ValueOutput output) {
+     public void save(final ValueOutput output) {
 +        output.putBoolean("Pluto.WasApiUsed", this.wasApiUsed); // Pluto - Options for spawner settings
          // Paper start
          if (this.spawnDelay > Short.MAX_VALUE) {

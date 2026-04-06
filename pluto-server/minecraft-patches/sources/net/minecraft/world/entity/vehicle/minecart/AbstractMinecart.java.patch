@@ -1,15 +1,15 @@
 --- a/net/minecraft/world/entity/vehicle/minecart/AbstractMinecart.java
 +++ b/net/minecraft/world/entity/vehicle/minecart/AbstractMinecart.java
-@@ -330,10 +_,10 @@
-         int floor2 = Mth.floor(this.getZ());
+@@ -341,10 +_,10 @@
+         int zt = Mth.floor(this.getZ());
          if (useExperimentalMovement(this.level())) {
-             double d = this.getY() - 0.1 - 1.0E-5F;
--            if (this.level().getBlockState(BlockPos.containing(floor, d, floor2)).is(BlockTags.RAILS)) {
-+            if (this.level().pluto$getBlockState(floor, d, floor2).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
-                 floor1 = Mth.floor(d);
+             double y = this.getY() - 0.1 - 1.0E-5F;
+-            if (this.level().getBlockState(BlockPos.containing(xt, y, zt)).is(BlockTags.RAILS)) {
++            if (this.level().pluto$getBlockState(xt, y, zt).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
+                 yt = Mth.floor(y);
              }
--        } else if (this.level().getBlockState(new BlockPos(floor, floor1 - 1, floor2)).is(BlockTags.RAILS)) {
-+        } else if (this.level().pluto$getBlockState(floor, floor1 - 1, floor2).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
-             floor1--;
+-        } else if (this.level().getBlockState(new BlockPos(xt, yt - 1, zt)).is(BlockTags.RAILS)) {
++        } else if (this.level().pluto$getBlockState(xt, yt - 1, zt).is(BlockTags.RAILS)) { // Pluto - Memory allocation optimisations
+             yt--;
          }
  

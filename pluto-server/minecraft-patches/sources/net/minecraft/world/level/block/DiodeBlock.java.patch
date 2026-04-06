@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/level/block/DiodeBlock.java
 +++ b/net/minecraft/world/level/block/DiodeBlock.java
-@@ -81,6 +_,26 @@
-         return state.getSignal(level, pos, side);
+@@ -82,6 +_,26 @@
+         return state.getSignal(level, pos, direction);
      }
  
 +    // Pluto start - Memory allocation optimisations
@@ -13,21 +13,21 @@
 +    @Override
 +    protected int pluto$getSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
 +        if (!blockState.getValue(POWERED)) {
-+            return 0;
++            return Redstone.SIGNAL_MIN;
 +        } else {
-+            return blockState.getValue(FACING) == side ? this.pluto$getOutputSignal(blockAccess, x, y, z, blockState) : 0;
++            return blockState.getValue(FACING) == side ? this.pluto$getOutputSignal(blockAccess, x, y, z, blockState) : Redstone.SIGNAL_MIN;
 +        }
 +    }
 +
 +    protected int pluto$getOutputSignal(BlockGetter level, int x, int y, int z, BlockState state) {
-+        return 15;
++        return Redstone.SIGNAL_MAX;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
      @Override
-     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
+     protected int getSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
          if (!state.getValue(POWERED)) {
-@@ -99,7 +_,7 @@
+@@ -102,7 +_,7 @@
              dropResources(state, level, pos, blockEntity);
              level.removeBlock(pos, false);
  
@@ -36,25 +36,25 @@
                  level.updateNeighborsAt(pos.relative(direction), this);
              }
          }
-@@ -148,8 +_,10 @@
+@@ -151,8 +_,10 @@
          Direction counterClockWise = direction.getCounterClockWise();
-         boolean flag = this.sideInputDiodesOnly();
+         boolean sideInputDiodesOnly = this.sideInputDiodesOnly();
          return Math.max(
--            level.getControlInputSignal(pos.relative(clockWise), clockWise, flag),
--            level.getControlInputSignal(pos.relative(counterClockWise), counterClockWise, flag)
+-            level.getControlInputSignal(pos.relative(clockWise), clockWise, sideInputDiodesOnly),
+-            level.getControlInputSignal(pos.relative(counterClockWise), counterClockWise, sideInputDiodesOnly)
 +            // Pluto start - Memory allocation optimisations
-+            level.pluto$getControlInputSignal(pos.getX() + clockWise.getStepX(), pos.getY() + clockWise.getStepY(), pos.getZ() + clockWise.getStepZ(), clockWise, flag),
-+            level.pluto$getControlInputSignal(pos.getX() + counterClockWise.getStepX(), pos.getY() + counterClockWise.getStepY(), pos.getZ() + counterClockWise.getStepZ(), counterClockWise, flag)
++            level.pluto$getControlInputSignal(pos.getX() + clockWise.getStepX(), pos.getY() + clockWise.getStepY(), pos.getZ() + clockWise.getStepZ(), clockWise, sideInputDiodesOnly),
++            level.pluto$getControlInputSignal(pos.getX() + counterClockWise.getStepX(), pos.getY() + counterClockWise.getStepY(), pos.getZ() + counterClockWise.getStepZ(), counterClockWise, sideInputDiodesOnly)
 +            // Pluto end - Memory allocation optimisations
          );
      }
  
-@@ -204,7 +_,7 @@
+@@ -207,7 +_,7 @@
  
-     public boolean shouldPrioritize(BlockGetter level, BlockPos pos, BlockState state) {
-         Direction opposite = state.getValue(FACING).getOpposite();
--        BlockState blockState = level.getBlockState(pos.relative(opposite));
-+        BlockState blockState = level.pluto$getBlockState(pos.getX() + opposite.getStepX(), pos.getY() + opposite.getStepY(), pos.getZ() + opposite.getStepZ()); // Pluto - Memory allocation optimisations
-         return isDiode(blockState) && blockState.getValue(FACING) != opposite;
+     public boolean shouldPrioritize(final BlockGetter level, final BlockPos pos, final BlockState state) {
+         Direction direction = state.getValue(FACING).getOpposite();
+-        BlockState oppositeState = level.getBlockState(pos.relative(direction));
++        BlockState oppositeState = level.pluto$getBlockState(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(), pos.getZ() + direction.getStepZ()); // Pluto - Memory allocation optimisations
+         return isDiode(oppositeState) && oppositeState.getValue(FACING) != direction;
      }
  

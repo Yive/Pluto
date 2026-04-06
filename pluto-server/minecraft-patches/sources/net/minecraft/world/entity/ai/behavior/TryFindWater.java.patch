@@ -1,20 +1,20 @@
 --- a/net/minecraft/world/entity/ai/behavior/TryFindWater.java
 +++ b/net/minecraft/world/entity/ai/behavior/TryFindWater.java
-@@ -32,10 +_,14 @@
+@@ -28,10 +_,14 @@
  
-                         for (BlockPos blockPos3 : BlockPos.withinManhattan(blockPos2, range, range, range)) {
-                             if (blockPos3.getX() != blockPos2.getX() || blockPos3.getZ() != blockPos2.getZ()) {
--                                BlockState blockState = mob.level().getBlockState(blockPos3.above());
--                                BlockState blockState1 = mob.level().getBlockState(blockPos3);
+                         for (BlockPos pos : BlockPos.withinManhattan(bodyBlockPos, range, range, range)) {
+                             if (pos.getX() != bodyBlockPos.getX() || pos.getZ() != bodyBlockPos.getZ()) {
+-                                BlockState aboveState = body.level().getBlockState(pos.above());
+-                                BlockState state = body.level().getBlockState(pos);
 +                                // Pluto start - Decrease chunk/block lookups
-+                                net.minecraft.world.level.chunk.LevelChunk chunk = mob.level().getChunkIfLoaded(blockPos3);
++                                net.minecraft.world.level.chunk.LevelChunk chunk = body.level().getChunkIfLoaded(pos);
 +                                if (chunk == null) continue;
 +
-+                                BlockState blockState1 = chunk.getBlockState(blockPos3);
++                                BlockState state = chunk.getBlockState(pos);
 +                                // Pluto end - Decrease chunk/block lookups
-                                 if (blockState1.is(Blocks.WATER)) {
--                                    if (blockState.isAir()) {
-+                                    if (chunk.getBlockState(blockPos3.getX(), blockPos3.getY() + 1, blockPos3.getZ()).isAir()) { // Pluto - Decrease chunk/block lookups
-                                         blockPos = blockPos3.immutable();
+                                 if (state.is(Blocks.WATER)) {
+-                                    if (aboveState.isAir()) {
++                                    if (chunk.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir()) { // Pluto - Decrease chunk/block lookups
+                                         bestPos = pos.immutable();
                                          break;
                                      }

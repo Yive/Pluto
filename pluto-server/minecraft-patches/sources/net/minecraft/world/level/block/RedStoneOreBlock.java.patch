@@ -1,12 +1,12 @@
 --- a/net/minecraft/world/level/block/RedStoneOreBlock.java
 +++ b/net/minecraft/world/level/block/RedStoneOreBlock.java
-@@ -134,9 +_,13 @@
-         double d = 0.5625;
-         RandomSource randomSource = level.random;
+@@ -139,9 +_,13 @@
+         double offset = 0.5625;
+         RandomSource random = level.getRandom();
  
 -        for (Direction direction : Direction.values()) {
--            BlockPos blockPos = pos.relative(direction);
--            if (!level.getBlockState(blockPos).isSolidRender()) {
+-            BlockPos relative = pos.relative(direction);
+-            if (!level.getBlockState(relative).isSolidRender()) {
 +        // Pluto start - Memory allocation optimisations
 +        final int x = pos.getX();
 +        final int y = pos.getY();
@@ -15,5 +15,5 @@
 +            if (!level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()).isSolidRender()) {
 +                // Pluto end - Memory allocation optimisations
                  Direction.Axis axis = direction.getAxis();
-                 double d1 = axis == Direction.Axis.X ? 0.5 + 0.5625 * direction.getStepX() : randomSource.nextFloat();
-                 double d2 = axis == Direction.Axis.Y ? 0.5 + 0.5625 * direction.getStepY() : randomSource.nextFloat();
+                 double dx = axis == Direction.Axis.X ? 0.5 + 0.5625 * direction.getStepX() : random.nextFloat();
+                 double dy = axis == Direction.Axis.Y ? 0.5 + 0.5625 * direction.getStepY() : random.nextFloat();

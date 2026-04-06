@@ -3,7 +3,7 @@
 @@ -38,14 +_,14 @@
  
      @Override
-     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
 -        if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.isEmptyBlock(pos.above()) && level.getRawBrightness(pos.above(), 0) >= 9) { // Spigot - SPIGOT-7159: Better modifier resolution
 +        if (random.nextFloat() < (level.spigotConfig.bambooModifier / (100.0F * 3)) && level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && (level.plutoConfig().bambooSaplingIgnoreLightLevel || level.getRawBrightness(pos.above(), 0) >= 9)) { // Spigot - SPIGOT-7159: Better modifier resolution // Pluto - Toggle for light lookups on certain flora // Pluto - Memory allocation optimisations
              this.growBamboo(level, pos);
@@ -11,18 +11,18 @@
      }
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
--        return level.getBlockState(pos.below()).is(BlockTags.BAMBOO_PLANTABLE_ON);
-+        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.BAMBOO_PLANTABLE_ON); // Pluto - Memory allocation optimisations
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
+-        return level.getBlockState(pos.below()).is(BlockTags.SUPPORTS_BAMBOO);
++        return level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()).is(BlockTags.SUPPORTS_BAMBOO); // Pluto - Memory allocation optimisations
      }
  
      @Override
 @@ -75,7 +_,7 @@
  
      @Override
-     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
--        return level.getBlockState(pos.above()).isAir();
-+        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir(); // Pluto - Memory allocation optimisations
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+-        return level.getBlockState(pos.above()).isAir() && level.isInsideBuildHeight(pos.above());
++        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir() && level.isInsideBuildHeight(pos.getY() + 1); // Pluto - Memory allocation optimisations
      }
  
      @Override
