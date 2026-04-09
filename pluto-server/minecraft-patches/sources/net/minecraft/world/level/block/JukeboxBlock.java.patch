@@ -6,7 +6,7 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
 +        return level.getBlockEntity(new BlockPos(x, y, z)) instanceof JukeboxBlockEntity jukeboxBlockEntity && jukeboxBlockEntity.getSongPlayer().isPlaying() ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations

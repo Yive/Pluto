@@ -5,7 +5,7 @@
      }
  
 +    // Pluto start - Memory allocation optimisations
-+    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
 +        return Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
@@ -18,8 +18,8 @@
      }
  
 +    // Pluto start - Memory allocation optimisations
-+    protected int pluto$getDirectSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return 0;
++    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        return Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
@@ -31,7 +31,7 @@
          }
  
 +        // Pluto start - Memory allocation optimisations
-+        public int pluto$getSignal(BlockGetter level, int x, int y, int z, Direction direction) {
++        public int pluto$getSignal(final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
 +            return this.getBlock().pluto$getSignal(this.asState(), level, x, y, z, direction);
 +        }
 +        // Pluto end - Memory allocation optimisations
@@ -45,7 +45,7 @@
          }
 +
 +        // Pluto start - Memory allocation optimisations
-+        public int pluto$getDirectSignal(BlockGetter level, int x, int y, int z, Direction direction) {
++        public int pluto$getDirectSignal(final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
 +            return this.getBlock().pluto$getDirectSignal(this.asState(), level, x, y, z, direction);
 +        }
 +        // Pluto end - Memory allocation optimisations

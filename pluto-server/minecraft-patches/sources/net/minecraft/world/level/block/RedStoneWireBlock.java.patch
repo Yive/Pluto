@@ -97,52 +97,52 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        return !this.shouldSignal ? 0 : blockState.pluto$getSignal(blockAccess, x, y, z, side);
++    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        return !this.shouldSignal ? 0 : state.pluto$getSignal(level, x, y, z, direction);
 +    }
 +
 +    @Override
-+    protected int pluto$getSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        if (this.shouldSignal && side != Direction.DOWN) {
-+            int powerValue = blockState.getValue(POWER);
-+            if (powerValue == 0) {
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        if (this.shouldSignal && direction != Direction.DOWN) {
++            int power = state.getValue(POWER);
++            if (power == Redstone.SIGNAL_MIN) {
 +                return Redstone.SIGNAL_MIN;
 +            } else {
-+                return side != Direction.UP
-+                        && !this.pluto$getConnectionState(blockAccess, blockState, x, y, z).getValue(PROPERTY_BY_DIRECTION.get(side.getOpposite())).isConnected()
-+                        ? Redstone.SIGNAL_MIN
-+                        : powerValue;
++                return direction != Direction.UP
++                        && !this.pluto$getConnectionState(level, state, x, y, z).getValue(PROPERTY_BY_DIRECTION.get(direction.getOpposite())).isConnected()
++                    ? Redstone.SIGNAL_MIN
++                    : power;
 +            }
 +        } else {
-+            return 0;
++            return Redstone.SIGNAL_MIN;
 +        }
 +    }
 +
-+    private BlockState pluto$getConnectionState(BlockGetter level, BlockState state, int x, int y, int z) {
-+        boolean isDot = isDot(state);
++    private BlockState pluto$getConnectionState(final BlockGetter level, BlockState state, int x, int y, int z) {
++        boolean wasDot = isDot(state);
 +        state = this.pluto$getMissingConnections(level, this.defaultBlockState().setValue(POWER, state.getValue(POWER)), x, y, z);
-+        if (isDot && isDot(state)) {
++        if (wasDot && isDot(state)) {
 +            return state;
 +        } else {
-+            boolean isConnected = state.getValue(NORTH).isConnected();
-+            boolean isConnected1 = state.getValue(SOUTH).isConnected();
-+            boolean isConnected2 = state.getValue(EAST).isConnected();
-+            boolean isConnected3 = state.getValue(WEST).isConnected();
-+            boolean flag = !isConnected && !isConnected1;
-+            boolean flag1 = !isConnected2 && !isConnected3;
-+            if (!isConnected3 && flag) {
++            boolean north = state.getValue(NORTH).isConnected();
++            boolean south = state.getValue(SOUTH).isConnected();
++            boolean east = state.getValue(EAST).isConnected();
++            boolean west = state.getValue(WEST).isConnected();
++            boolean northSouthEmpty = !north && !south;
++            boolean eastWestEmpty = !east && !west;
++            if (!west && northSouthEmpty) {
 +                state = state.setValue(WEST, RedstoneSide.SIDE);
 +            }
 +
-+            if (!isConnected2 && flag) {
++            if (!east && northSouthEmpty) {
 +                state = state.setValue(EAST, RedstoneSide.SIDE);
 +            }
 +
-+            if (!isConnected && flag1) {
++            if (!north && eastWestEmpty) {
 +                state = state.setValue(NORTH, RedstoneSide.SIDE);
 +            }
 +
-+            if (!isConnected1 && flag1) {
++            if (!south && eastWestEmpty) {
 +                state = state.setValue(SOUTH, RedstoneSide.SIDE);
 +            }
 +
@@ -150,14 +150,14 @@
 +        }
 +    }
 +
-+    private BlockState pluto$getMissingConnections(BlockGetter level, BlockState state, int x, int y, int z) {
++    private BlockState pluto$getMissingConnections(final BlockGetter level, BlockState state, int x, int y, int z) {
 +        BlockPos pos = new BlockPos(x, y, z); // TODO: Look into replacing this by using integers.
-+        boolean flag = !level.pluto$getBlockState(x, y + 1, z).isRedstoneConductor(level, pos);
++        boolean canConnectUp = !level.pluto$getBlockState(x, y + 1, z).isRedstoneConductor(level, pos);
 +
 +        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
 +            if (!state.getValue(PROPERTY_BY_DIRECTION.get(direction)).isConnected()) {
-+                RedstoneSide connectingSide = this.getConnectingSide(level, pos, direction, flag);
-+                state = state.setValue(PROPERTY_BY_DIRECTION.get(direction), connectingSide);
++                RedstoneSide sideConnection = this.getConnectingSide(level, pos, direction, canConnectUp);
++                state = state.setValue(PROPERTY_BY_DIRECTION.get(direction), sideConnection);
 +            }
 +        }
 +

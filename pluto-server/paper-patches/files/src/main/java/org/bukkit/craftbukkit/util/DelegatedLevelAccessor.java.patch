@@ -6,62 +6,62 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    public int pluto$getDirectSignal(int x, int y, int z, Direction direction) {
++    public int pluto$getDirectSignal(final int x, final int y, final int z, final Direction direction) {
 +        return this.delegate.pluto$getDirectSignal(x, y, z, direction);
 +    }
 +
 +    @Override
-+    public int pluto$getControlInputSignal(int x, int y, int z, Direction direction, boolean diodesOnly) {
++    public int pluto$getControlInputSignal(final int x, final int y, final int z, final Direction direction, final boolean diodesOnly) {
 +        return this.delegate.pluto$getControlInputSignal(x, y, z, direction, diodesOnly);
 +    }
 +
 +    @Override
-+    public boolean pluto$isEmptyBlock(long packedPos) {
++    public boolean pluto$isEmptyBlock(final long packedPos) {
 +        return this.delegate.pluto$isEmptyBlock(packedPos);
 +    }
 +
 +    @Override
-+    public boolean pluto$isEmptyBlock(int x, int y, int z) {
++    public boolean pluto$isEmptyBlock(final int x, final int y, final int z) {
 +        return this.delegate.pluto$isEmptyBlock(x, y, z);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockState(int x, int y, int z) {
++    public BlockState pluto$getBlockState(final int x, final int y, final int z) {
 +        return this.delegate.pluto$getBlockState(x, y, z);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockState(long packedPos) {
++    public BlockState pluto$getBlockState(final long packedPos) {
 +        return this.delegate.pluto$getBlockState(packedPos);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockStateIfLoaded(int x, int y, int z) {
++    public BlockState pluto$getBlockStateIfLoaded(final int x, final int y, final int z) {
 +        return this.delegate.pluto$getBlockStateIfLoaded(x, y, z);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockStateIfLoaded(long packedPos) {
++    public BlockState pluto$getBlockStateIfLoaded(final long packedPos) {
 +        return this.delegate.pluto$getBlockStateIfLoaded(packedPos);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(int x, int y, int z) {
++    public FluidState pluto$getFluidState(final int x, final int y, final int z) {
 +        return this.delegate.pluto$getFluidState(x, y, z);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(long packedPos) {
++    public FluidState pluto$getFluidState(final long packedPos) {
 +        return this.delegate.pluto$getFluidState(packedPos);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
++    public FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
 +        return this.delegate.pluto$getFluidStateIfLoaded(x, y, z);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
++    public FluidState pluto$getFluidStateIfLoaded(final long packedPos) {
 +        return this.delegate.pluto$getFluidStateIfLoaded(packedPos);
 +    }
 +    // Pluto end - Memory allocation optimisations

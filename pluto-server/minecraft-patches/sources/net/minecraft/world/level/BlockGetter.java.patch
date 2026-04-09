@@ -8,26 +8,26 @@
 +    default BlockState pluto$getBlockState(double x, double y, double z) {
 +        return pluto$getBlockState(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
-+    BlockState pluto$getBlockState(int x, int y, int z);
-+    BlockState pluto$getBlockState(long packedPos);
++    BlockState pluto$getBlockState(final int x, final int y, final int z);
++    BlockState pluto$getBlockState(final long packedPos);
 +
-+    default @Nullable BlockState pluto$getBlockStateIfLoaded(double x, double y, double z) {
++    default @Nullable BlockState pluto$getBlockStateIfLoaded(final double x, final double y, final double z) {
 +        return pluto$getBlockStateIfLoaded(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
-+    @Nullable BlockState pluto$getBlockStateIfLoaded(int x, int y, int z);
-+    @Nullable BlockState pluto$getBlockStateIfLoaded(long packedPos);
++    @Nullable BlockState pluto$getBlockStateIfLoaded(final int x, final int y, final int z);
++    @Nullable BlockState pluto$getBlockStateIfLoaded(final long packedPos);
 +
-+    default FluidState pluto$getFluidState(double x, double y, double z) {
++    default FluidState pluto$getFluidState(final double x, final double y, final double z) {
 +        return pluto$getFluidState(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
-+    FluidState pluto$getFluidState(int x, int y, int z);
-+    FluidState pluto$getFluidState(long packedPos);
++    FluidState pluto$getFluidState(final int x, final int y, final int z);
++    FluidState pluto$getFluidState(final long packedPos);
 +
-+    default @Nullable FluidState pluto$getFluidStateIfLoaded(double x, double y, double z) {
++    default @Nullable FluidState pluto$getFluidStateIfLoaded(final double x, final double y, final double z) {
 +        return pluto$getFluidStateIfLoaded(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 +    }
-+    @Nullable FluidState pluto$getFluidStateIfLoaded(int x, int y, int z);
-+    @Nullable FluidState pluto$getFluidStateIfLoaded(long packedPos);
++    @Nullable FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z);
++    @Nullable FluidState pluto$getFluidStateIfLoaded(final long packedPos);
 +    // Pluto end - Memory allocation optimisations
 +
      BlockState getBlockState(final BlockPos pos);

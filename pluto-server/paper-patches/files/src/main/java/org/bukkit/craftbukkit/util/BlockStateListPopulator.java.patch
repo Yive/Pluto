@@ -9,27 +9,27 @@
 +    private final it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<CapturedBlock> blocks = new it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<>();
 +
 +    @Override
-+    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(int x, int y, int z) {
-+        CapturedBlock state = this.blocks.get(BlockPos.asLong(x, y, z));
-+        return (state != null) ? state.state() : this.level.pluto$getBlockState(x, y, z);
++    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(final int x, final int y, final int z) {
++        CapturedBlock block = this.blocks.get(BlockPos.asLong(x, y, z));
++        return (block != null) ? block.state() : this.level.pluto$getBlockState(x, y, z);
 +    }
 +
 +    @Override
-+    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(long packedPos) {
-+        CapturedBlock state = this.blocks.get(packedPos);
-+        return (state != null) ? state.state() : this.level.pluto$getBlockState(packedPos);
++    public net.minecraft.world.level.block.state.BlockState pluto$getBlockState(final long packedPos) {
++        CapturedBlock block = this.blocks.get(packedPos);
++        return (block != null) ? block.state() : this.level.pluto$getBlockState(packedPos);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(int x, int y, int z) {
-+        CapturedBlock state = this.blocks.get(BlockPos.asLong(x, y, z));
-+        return (state != null) ? state.state().getFluidState() : this.level.pluto$getFluidState(x, y, z);
++    public FluidState pluto$getFluidState(final int x, final int y, final int z) {
++        CapturedBlock block = this.blocks.get(BlockPos.asLong(x, y, z));
++        return (block != null) ? block.state().getFluidState() : this.level.pluto$getFluidState(x, y, z);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(long packedPos) {
-+        CapturedBlock state = this.blocks.get(packedPos);
-+        return (state != null) ? state.state().getFluidState() : this.level.pluto$getFluidState(packedPos);
++    public FluidState pluto$getFluidState(final long packedPos) {
++        CapturedBlock block = this.blocks.get(packedPos);
++        return (block != null) ? block.state().getFluidState() : this.level.pluto$getFluidState(packedPos);
 +    }
 +    // Pluto end - Memory allocation optimisations
  

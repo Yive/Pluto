@@ -35,31 +35,31 @@
      // Paper end - allow changing despawnInPeaceful
  
 +    // Pluto start - Avoid looping over all players in a world per entity for despawns
-+    private @Nullable Entity pluto$getNearestPlayer(Entity entity, double maxDistance, @Nullable Predicate<Entity> predicate) {
++    private @Nullable Entity pluto$getNearestPlayer(final Entity entity, final double range, final @Nullable Predicate<Entity> predicate) {
 +        // Fallback if this entity is somehow not from a server level or if the world has a small amount of players.
-+        if (this.level().players().size() <= 10 || !(this.level() instanceof ServerLevel serverLevel)) return this.level().findNearbyPlayer(entity, maxDistance, predicate);
++        if (this.level().players().size() <= 10 || !(this.level() instanceof ServerLevel serverLevel)) return this.level().findNearbyPlayer(entity, range, predicate);
 +
 +        // Copied from EntityGetter#findNearbyPlayer(double, double, double, double, Predicate), but using moonrise's nearby players.
 +        double x = entity.getX();
 +        double y = entity.getY();
 +        double z = entity.getZ();
-+        double d = -1.0;
-+        Player player = null;
++        double best = -1.0;
++        Player result = null;
 +
 +        final ca.spottedleaf.moonrise.common.list.ReferenceList<net.minecraft.server.level.ServerPlayer> players = serverLevel.moonrise$getNearbyPlayers().getPlayers(entity.blockPosition(), ca.spottedleaf.moonrise.common.misc.NearbyPlayers.NearbyMapType.TICK_VIEW_DISTANCE);
 +        if (players == null) return null;
 +
-+        for (final net.minecraft.server.level.ServerPlayer player1 : players) {
-+            if (predicate == null || predicate.test(player1)) {
-+                double d1 = player1.distanceToSqr(x, y, z);
-+                if ((maxDistance < 0.0 || d1 < maxDistance * maxDistance) && (d == -1.0 || d1 < d)) {
-+                    d = d1;
-+                    player = player1;
++        for (final net.minecraft.server.level.ServerPlayer player : players) {
++            if (predicate == null || predicate.test(player)) {
++                double dist = player.distanceToSqr(x, y, z);
++                if ((range < 0.0 || dist < range * range) && (best == -1.0 || dist < best)) {
++                    best = dist;
++                    result = player;
 +                }
 +            }
 +        }
 +
-+        return player;
++        return result;
 +    }
 +    // Pluto end - Avoid looping over all players in a world per entity for despawns
 +

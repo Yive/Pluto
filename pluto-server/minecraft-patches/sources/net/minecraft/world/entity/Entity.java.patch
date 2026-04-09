@@ -110,7 +110,7 @@
                  return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
                          && !belowState.is(BlockTags.WALLS)
                          && !(belowState.getBlock() instanceof FenceGateBlock)
-@@ -1491,9 +_,48 @@
+@@ -1491,9 +_,45 @@
          }
      }
  
@@ -128,28 +128,25 @@
 +        return this.pluto$getOnPos((float) DELTA_AFFECTED_BY_BLOCKS_BELOW_0_5);
 +    }
 +
-+    protected long pluto$getOnPos(float offset) {
-+        supportingPosPresent:
-+        if (this.mainSupportingBlockPos.isPresent()) {
-+            final BlockPos getOnPos = this.mainSupportingBlockPos.get();
-+            final net.minecraft.world.level.chunk.ChunkAccess chunk = this.level().getChunkIfLoadedImmediately(getOnPos); // Paper - ensure no loads
-+            if (chunk == null) {
-+                break supportingPosPresent;
-+            }
-+
-+            if (!(offset > Mth.EPSILON)) {
++    protected long pluto$getOnPos(final float offset) {
++        if (this.mainSupportingBlockPos.isPresent() && this.level().getChunkIfLoadedImmediately(this.mainSupportingBlockPos.get()) instanceof net.minecraft.world.level.chunk.ChunkAccess chunk) { // Paper - ensure no loads // Pluto - Decrease chunk/block lookups
++            BlockPos getOnPos = this.mainSupportingBlockPos.get();
++            if (!(offset > 1.0E-5F)) {
 +                return getOnPos.asLong();
++            } else {
++                BlockState belowState = chunk.getBlockState(getOnPos); // Pluto - Decrease chunk/block lookups
++                return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
++                    && !belowState.is(BlockTags.WALLS)
++                    && !(belowState.getBlock() instanceof FenceGateBlock)
++                    ? BlockPos.asLong(getOnPos.getX(), Mth.floor(this.position.y - offset), getOnPos.getZ())
++                    : getOnPos.asLong();
 +            }
-+
-+            final BlockState belowState = chunk.getBlockState(getOnPos);
-+            return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
-+                && !belowState.is(BlockTags.WALLS)
-+                && !(belowState.getBlock() instanceof FenceGateBlock)
-+                ? BlockPos.asLong(getOnPos.getX(), Mth.floor(this.position.y - offset), getOnPos.getZ())
-+                : getOnPos.asLong();
++        } else {
++            int xTruncated = Mth.floor(this.position.x);
++            int yTruncatedBelow = Mth.floor(this.position.y - offset);
++            int zTruncated = Mth.floor(this.position.z);
++            return BlockPos.asLong(xTruncated, yTruncatedBelow, zTruncated);
 +        }
-+
-+        return BlockPos.asLong(Mth.floor(this.position.x), Mth.floor(this.position.y - offset), Mth.floor(this.position.z));
 +    }
 +    // Pluto end - Memory allocation optimisations
 +

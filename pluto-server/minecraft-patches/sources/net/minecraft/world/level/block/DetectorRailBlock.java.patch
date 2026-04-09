@@ -6,16 +6,16 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    protected int pluto$getSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction direction) {
-+        return blockState.getValue(POWERED) ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        return state.getValue(POWERED) ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +    }
 +
 +    @Override
-+    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter level, int x, int y, int z, Direction side) {
-+        if (!blockState.getValue(POWERED)) {
++    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        if (!state.getValue(POWERED)) {
 +            return Redstone.SIGNAL_MIN;
 +        } else {
-+            return side == Direction.UP ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
++            return direction == Direction.UP ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
 +        }
 +    }
 +    // Pluto end - Memory allocation optimisations

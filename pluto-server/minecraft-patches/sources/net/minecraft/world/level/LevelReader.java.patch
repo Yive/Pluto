@@ -5,10 +5,10 @@
      }
  
 +    // Pluto start - Memory allocation optimisations
-+    default boolean pluto$isEmptyBlock(int x, int y, int z) {
++    default boolean pluto$isEmptyBlock(final int x, final int y, final int z) {
 +        return this.pluto$getBlockState(x, y, z).isAir();
 +    }
-+    default boolean pluto$isEmptyBlock(long packedPos) {
++    default boolean pluto$isEmptyBlock(final long packedPos) {
 +        return this.pluto$getBlockState(packedPos).isAir();
 +    }
 +    // Pluto end - Memory allocation optimisations

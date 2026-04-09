@@ -5,9 +5,9 @@
      }
  
 +    // Pluto start - Memory allocation optimisations
-+    public static int pluto$getOpenCount(BlockGetter level, int x, int y, int z) {
-+        BlockState blockState = level.pluto$getBlockState(x, y, z);
-+        if (blockState.hasBlockEntity()) {
++    public static int pluto$getOpenCount(final BlockGetter level, final int x, final int y, final int z) {
++        BlockState state = level.pluto$getBlockState(x, y, z);
++        if (state.hasBlockEntity()) {
 +            BlockEntity blockEntity = level.getBlockEntity(new BlockPos(x, y, z));
 +            if (blockEntity instanceof ChestBlockEntity) {
 +                return ((ChestBlockEntity)blockEntity).openersCounter.getOpenerCount();

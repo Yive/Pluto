@@ -6,7 +6,7 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    protected int pluto$getSignal(BlockState state, BlockGetter level, int x, int y, int z, Direction direction) {
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
 +        if (state.getValue(MODE) != TestBlockMode.START) {
 +            return Redstone.SIGNAL_MIN;
 +        } else if (level.getBlockEntity(new BlockPos(x, y, z)) instanceof TestBlockEntity testBlockEntity) {

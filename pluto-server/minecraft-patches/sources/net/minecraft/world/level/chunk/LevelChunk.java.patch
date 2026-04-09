@@ -43,42 +43,42 @@
  
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    public BlockState pluto$getBlockState(int x, int y, int z) {
++    public BlockState pluto$getBlockState(final int x, final int y, final int z) {
 +        return getBlockStateFinal(x, y, z);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockState(long packedPos) {
++    public BlockState pluto$getBlockState(final long packedPos) {
 +        return getBlockStateFinal(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockStateIfLoaded(int x, int y, int z) {
++    public BlockState pluto$getBlockStateIfLoaded(final int x, final int y, final int z) {
 +        return getBlockStateFinal(x, y, z);
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockStateIfLoaded(long packedPos) {
++    public BlockState pluto$getBlockStateIfLoaded(final long packedPos) {
 +        return getBlockStateFinal(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(int x, int y, int z) {
++    public FluidState pluto$getFluidState(final int x, final int y, final int z) {
 +        return getFluidState(x, y, z);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidState(long packedPos) {
++    public FluidState pluto$getFluidState(final long packedPos) {
 +        return getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(int x, int y, int z) {
++    public FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
 +        return getFluidState(x, y, z);
 +    }
 +
 +    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
++    public FluidState pluto$getFluidStateIfLoaded(final long packedPos) {
 +        return getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +    // Pluto end - Memory allocation optimisations
@@ -93,7 +93,7 @@
 +    // Pluto start - Optimise block entity ticking
 +    int pluto$currentTick = -1;
 +    boolean pluto$wholeChunkIsTickable = false;
-+    boolean pluto$isTicking(BlockPos pos) {
++    boolean pluto$isTicking(final BlockPos pos) {
 +        if (!this.level.plutoConfig().useOptimisedBlockEntityTicking) return this.isTicking(pos);
 +
 +        if (pluto$currentTick == net.minecraft.server.MinecraftServer.currentTick)
@@ -106,7 +106,7 @@
 +        return this.pluto$wholeChunkIsTickable || pluto$optimisedIsTicking(pos); // Fallback if the whole chunk isn't ticking.
 +    }
 +
-+    boolean pluto$optimisedIsTicking(BlockPos pos) {
++    boolean pluto$optimisedIsTicking(final BlockPos pos) {
 +        // Check the chunk status before the world border
 +        return this.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
 +            && this.level.getWorldBorder().isWithinBounds(pos)

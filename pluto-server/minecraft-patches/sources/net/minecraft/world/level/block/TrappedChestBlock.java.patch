@@ -7,13 +7,13 @@
 +
 +    // Pluto start - Memory allocation optimisations
 +    @Override
-+    protected int pluto$getSignal(BlockState state, BlockGetter blockAccess, int x, int y, int z, Direction direction) {
-+        return Mth.clamp(ChestBlockEntity.pluto$getOpenCount(blockAccess, x, y, z), 0, 15);
++    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        return Mth.clamp(ChestBlockEntity.pluto$getOpenCount(level, x, y, z), 0, 15);
 +    }
 +
 +    @Override
-+    protected int pluto$getDirectSignal(BlockState blockState, BlockGetter blockAccess, int x, int y, int z, Direction side) {
-+        return side == Direction.UP ? blockState.pluto$getSignal(blockAccess, x, y, z, side) : Redstone.SIGNAL_MIN;
++    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
++        return direction == Direction.UP ? state.pluto$getSignal(level, x, y, z, direction) : Redstone.SIGNAL_MIN;
 +    }
 +    // Pluto end - Memory allocation optimisations
  }

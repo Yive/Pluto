@@ -5,20 +5,20 @@
      Direction[] DIRECTIONS = Direction.values();
  
 +    // Pluto start - Memory allocation optimisations
-+    default int pluto$getDirectSignal(int x, int y, int z, Direction direction) {
++    default int pluto$getDirectSignal(final int x, final int y, final int z, final Direction direction) {
 +        return this.pluto$getBlockState(x, y, z).pluto$getDirectSignal(this, x, y, z, direction);
 +    }
 +
-+    default int pluto$getControlInputSignal(int x, int y, int z, Direction direction, boolean diodesOnly) {
++    default int pluto$getControlInputSignal(final int x, final int y, final int z, final Direction direction, final boolean diodesOnly) {
 +        BlockState blockState = this.pluto$getBlockState(x, y, z);
 +        if (diodesOnly) {
-+            return DiodeBlock.isDiode(blockState) ? this.pluto$getDirectSignal(x, y, z, direction) : 0;
++            return DiodeBlock.isDiode(blockState) ? this.pluto$getDirectSignal(x, y, z, direction) : Redstone.SIGNAL_MIN;
 +        } else if (blockState.is(Blocks.REDSTONE_BLOCK)) {
-+            return 15;
++            return Redstone.SIGNAL_MAX;
 +        } else if (blockState.is(Blocks.REDSTONE_WIRE)) {
 +            return blockState.getValue(RedStoneWireBlock.POWER);
 +        } else {
-+            return blockState.isSignalSource() ? this.pluto$getDirectSignal(x, y, z, direction) : 0;
++            return blockState.isSignalSource() ? this.pluto$getDirectSignal(x, y, z, direction) : Redstone.SIGNAL_MIN;
 +        }
 +    }
 +    // Pluto end - Memory allocation optimisations
