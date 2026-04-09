@@ -27,6 +27,14 @@
      @Override
      protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
          if (!state.getValue(POWERED)) {
+@@ -92,6 +_,7 @@
+ 
+     @Override
+     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston) {
++        if (!level.getBlockState(pos).is(this)) return; // Paper
+         if (state.canSurvive(level, pos)) {
+             this.checkTickOnNeighbor(level, pos, state);
+         } else {
 @@ -99,7 +_,7 @@
              dropResources(state, level, pos, blockEntity);
              level.removeBlock(pos, false);
