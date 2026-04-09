@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/level/block/DiodeBlock.java
++++ b/net/minecraft/world/level/block/DiodeBlock.java
+@@ -92,6 +_,7 @@
+ 
+     @Override
+     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston) {
++        if (!level.getBlockState(pos).is(this)) return; // Paper
+         if (state.canSurvive(level, pos)) {
+             this.checkTickOnNeighbor(level, pos, state);
+         } else {
