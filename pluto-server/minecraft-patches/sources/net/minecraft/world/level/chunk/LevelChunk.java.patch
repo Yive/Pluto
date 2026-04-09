@@ -1,9 +1,23 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -480,6 +_,48 @@
+@@ -432,6 +_,12 @@
+                         state.onPlace(this.level, pos, blockState, flag1);
+                     }
+ 
++                    // Paper start - Some blocks may break here
++                    if (!section.getBlockState(i, i1, i2).is(block)) {
++                        return null;
++                    }
++                    // Paper end - Some blocks may break here
++
+                     if (state.hasBlockEntity()) {
+                         BlockEntity blockEntity = this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+                         if (blockEntity != null && !blockEntity.isValidBlockState(state)) {
+@@ -479,6 +_,48 @@
+     public BlockEntity getBlockEntity(BlockPos pos) {
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
- 
++
 +    // Pluto start - Memory allocation optimisations
 +    @Override
 +    public BlockState pluto$getBlockState(int x, int y, int z) {
@@ -45,7 +59,6 @@
 +        return getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +    // Pluto end - Memory allocation optimisations
-+
+ 
      @Nullable
      public BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
-         // CraftBukkit start
