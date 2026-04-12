@@ -36,7 +36,7 @@ Maven:
     <dependency>
         <groupId>dev.yive.pluto</groupId>
         <artifactId>pluto-api</artifactId>
-        <version>[26.1.2.build,)</version>
+        <version>[26.1.1.build,)</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
