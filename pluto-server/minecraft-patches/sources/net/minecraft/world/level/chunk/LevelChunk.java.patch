@@ -37,19 +37,6 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -427,6 +_,12 @@
-                         state.onPlace(this.level, pos, blockState, flag1);
-                     }
- 
-+                    // Paper start - Some blocks may break here
-+                    if (!section.getBlockState(i, i1, i2).is(block)) {
-+                        return null;
-+                    }
-+                    // Paper end - Some blocks may break here
-+
-                     if (state.hasBlockEntity()) {
-                         BlockEntity blockEntity = this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
-                         if (blockEntity != null && !blockEntity.isValidBlockState(state)) {
 @@ -475,6 +_,48 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
