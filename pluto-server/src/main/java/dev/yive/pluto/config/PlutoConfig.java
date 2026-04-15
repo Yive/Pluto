@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.logging.Level;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,7 +21,7 @@ public class PlutoConfig {
             "Downloads: https://ci.yive.dev/job/Pluto/",
             ""
     );
-    public static final int CURRENT_CONFIG_VERSION = 2;
+    public static final int CURRENT_CONFIG_VERSION = 3;
 
     private static final Object[] EMPTY = new Object[0];
 
@@ -124,12 +125,14 @@ public class PlutoConfig {
 
     public static final class WorldConfig {
 
-        public final String worldName;
+        private final String legacyWorldName;
+        private final String worldName;
         public ConfigurationSection config;
         ConfigurationSection worldDefaults;
 
-        public WorldConfig(final String worldName) {
-            this.worldName = worldName;
+        public WorldConfig(final String legacyWorldName, final Key worldKey) {
+            this.legacyWorldName = legacyWorldName;
+            this.worldName = worldKey.asString();
             this.init();
         }
 
@@ -137,6 +140,16 @@ public class PlutoConfig {
             this.worldDefaults = PlutoConfig.config.getConfigurationSection("world-settings.default");
             if (this.worldDefaults == null) {
                 this.worldDefaults = PlutoConfig.config.createSection("world-settings.default");
+            }
+
+            if (PlutoConfig.configVersion <= 2) {
+                String worldSectionPath = "world-settings.".concat(this.legacyWorldName);
+                ConfigurationSection section = PlutoConfig.config.getConfigurationSection(worldSectionPath);
+                if (section != null) {
+                    PlutoConfig.config.set(worldSectionPath, null);
+                    PlutoConfig.config.set("world-settings.".concat(this.worldName), section);
+                    Bukkit.getLogger().info("NOTE: Migrated Pluto world config %s -> %s".formatted(this.legacyWorldName, this.worldName));
+                }
             }
 
             String worldSectionPath = "world-settings.".concat(this.worldName);
