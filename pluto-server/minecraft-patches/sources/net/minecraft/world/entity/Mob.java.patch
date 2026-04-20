@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -211,14 +_,16 @@
+@@ -211,15 +_,17 @@
          return this.lookControl;
      }
  
@@ -9,6 +9,7 @@
      @Override
      public void inactiveTick() {
          super.inactiveTick();
+         if (!this.aware) return; // Paper - Do not tick AI for inactive unaware mobs
 -        if (this.goalSelector.inactiveTick()) {
 +        boolean isThrottled = gg.pufferfish.pufferfish.PufferfishConfig.throttleInactiveGoalSelectorTick && _pufferfish_inactiveTickDisableCounter++ % 20 != 0; // Pufferfish - throttle inactive goal selector ticking
 +        if (!this.level().plutoConfig().disableGoalSelector && this.goalSelector.inactiveTick(this.activatedPriority, true) && !isThrottled) { // Pufferfish - pass activated priroity // Pufferfish - throttle inactive goal selector ticking // Pluto - Option to disable entity target/goal selectors
@@ -19,7 +20,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -586,9 +_,8 @@
+@@ -587,9 +_,8 @@
      public boolean isSunBurnTick() {
          if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
              float br = this.getLightLevelDependentMagicValue();
@@ -30,7 +31,7 @@
                  return true;
              }
          }
-@@ -758,12 +_,41 @@
+@@ -759,12 +_,41 @@
      }
      // Paper end - allow changing despawnInPeaceful
  
@@ -73,7 +74,7 @@
              if (player != null) {
                  // Paper start - Configurable despawn distances
                  final io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DespawnRangePair despawnRangePair = this.level().paperConfig().entities.spawning.despawnRanges.get(this.getType().getCategory());
-@@ -811,16 +_,20 @@
+@@ -812,16 +_,20 @@
          int idBasedTickCount = this.tickCount + this.getId();
          if (idBasedTickCount % 2 != 0 && this.tickCount > 1) {
              profiler.push("targetSelector");
@@ -94,7 +95,7 @@
              this.goalSelector.tick();
              profiler.pop();
          }
-@@ -983,6 +_,8 @@
+@@ -984,6 +_,8 @@
                  return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
              }
  
@@ -103,7 +104,7 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -1019,6 +_,13 @@
+@@ -1020,6 +_,13 @@
                  }
                  return null;
              }

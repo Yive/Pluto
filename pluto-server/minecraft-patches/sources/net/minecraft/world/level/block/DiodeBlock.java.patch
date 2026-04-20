@@ -27,7 +27,7 @@
      @Override
      protected int getSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
          if (!state.getValue(POWERED)) {
-@@ -102,7 +_,7 @@
+@@ -103,7 +_,7 @@
              dropResources(state, level, pos, blockEntity);
              level.removeBlock(pos, false);
  
@@ -36,7 +36,7 @@
                  level.updateNeighborsAt(pos.relative(direction), this);
              }
          }
-@@ -151,8 +_,10 @@
+@@ -152,8 +_,10 @@
          Direction counterClockWise = direction.getCounterClockWise();
          boolean sideInputDiodesOnly = this.sideInputDiodesOnly();
          return Math.max(
@@ -49,7 +49,7 @@
          );
      }
  
-@@ -207,7 +_,7 @@
+@@ -208,7 +_,7 @@
  
      public boolean shouldPrioritize(final BlockGetter level, final BlockPos pos, final BlockState state) {
          Direction direction = state.getValue(FACING).getOpposite();

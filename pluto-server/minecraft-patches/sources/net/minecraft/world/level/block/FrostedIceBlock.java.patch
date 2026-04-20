@@ -9,7 +9,7 @@
                      neighborPos.setWithOffset(pos, direction);
                      BlockState neighbour = level.getBlockState(neighborPos);
                      if (neighbour.is(this) && !this.slightlyMelt(neighbour, level, neighborPos)) {
-@@ -88,11 +_,14 @@
+@@ -93,11 +_,14 @@
  
      private boolean fewerNeigboursThan(final BlockGetter level, final BlockPos pos, final int limit) {
          int result = 0;
