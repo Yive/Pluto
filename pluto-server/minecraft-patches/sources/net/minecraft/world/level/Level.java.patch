@@ -101,7 +101,7 @@
 +        this.plutoConfig = new dev.yive.pluto.config.PlutoConfig.WorldConfig(bukkitName, CraftNamespacedKey.fromMinecraft(dimension.identifier())); // Pluto - Config
 +        this.pluto$spawningChunksExecutor = java.util.concurrent.Executors.newSingleThreadExecutor(new com.google.common.util.concurrent.ThreadFactoryBuilder().setNameFormat(bukkitName + " - Spawning Chunks Executor").build()); // Pluto - Async spawning chunks
          this.generator = generator;
-         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
+         this.world = new CraftWorld((ServerLevel) this, dimension.identifier(), biomeProvider, environment);
  
 @@ -986,7 +_,7 @@
      public final BlockState getBlockStateIfLoaded(BlockPos pos) {
