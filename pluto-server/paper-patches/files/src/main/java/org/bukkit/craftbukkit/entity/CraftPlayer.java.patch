@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2071,7 +_,7 @@
+@@ -2058,7 +_,7 @@
  
      @Override
      public boolean canSee(org.bukkit.entity.Entity entity) {
