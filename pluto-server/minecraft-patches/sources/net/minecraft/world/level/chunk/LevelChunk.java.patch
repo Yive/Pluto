@@ -117,7 +117,7 @@
      @Override
      public void setBlockEntity(final BlockEntity blockEntity) {
          BlockPos pos = blockEntity.getBlockPos();
-@@ -934,19 +_,21 @@
+@@ -935,19 +_,21 @@
          private final T blockEntity;
          private final BlockEntityTicker<T> ticker;
          private boolean loggedInvalidBlockState;
@@ -140,7 +140,7 @@
                      try {
                          ProfilerFiller profiler = Profiler.get();
                          profiler.push(this::getType);
-@@ -1044,6 +_,8 @@
+@@ -1045,6 +_,8 @@
          public String toString() {
              return this.ticker + " <wrapped>";
          }
