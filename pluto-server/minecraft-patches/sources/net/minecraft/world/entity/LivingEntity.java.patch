@@ -18,7 +18,7 @@
                  boolean canDrownInWater = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
                      && (!isPlayer || !((Player)this).getAbilities().invulnerable);
-@@ -2961,6 +_,11 @@
+@@ -2948,6 +_,11 @@
          }
      }
  
@@ -30,7 +30,7 @@
      public float getSoundVolume() {
          return 1.0F;
      }
-@@ -3116,15 +_,17 @@
+@@ -3103,15 +_,17 @@
      }
  
      private void travelInAir(final Vec3 input) {
@@ -51,7 +51,7 @@
              movementY -= this.getEffectiveGravity();
          } else if (this.getY() > this.level().getMinY()) {
              movementY = -0.1;
-@@ -3803,6 +_,7 @@
+@@ -3795,6 +_,7 @@
              this.checkAutoSpinAttack(beforeTravelBox, this.getBoundingBox());
          }
  
@@ -59,7 +59,7 @@
          this.pushEntities();
          profiler.pop();
          // Paper start - Add EntityMoveEvent
-@@ -3893,6 +_,7 @@
+@@ -3885,6 +_,7 @@
              return;
          }
          // Paper end - don't run getEntities if we're not going to use its result
@@ -67,7 +67,7 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4504,19 +_,27 @@
+@@ -4496,19 +_,27 @@
          double zo = this.getZ();
          double y = yy;
          boolean ok = false;
@@ -101,7 +101,7 @@
                  }
              }
  
-@@ -4658,8 +_,7 @@
+@@ -4650,8 +_,7 @@
                  Direction facing = state.getValue(BedBlock.FACING);
                  this.level().setBlock(bedPosition, state.setValue(BedBlock.OCCUPIED, false), Block.UPDATE_ALL);
                  Vec3 standUp = BedBlock.findStandUpPosition(this.getType(), this.level(), bedPosition, facing, this.getYRot()).orElseGet(() -> {
@@ -111,7 +111,7 @@
                  });
                  Vec3 lookDirection = Vec3.atBottomCenterOf(bedPosition).subtract(standUp).normalize();
                  float yaw = (float)Mth.wrapDegrees(Mth.atan2(lookDirection.z, lookDirection.x) * 180.0F / (float)Math.PI - 90.0);
-@@ -4683,6 +_,19 @@
+@@ -4675,6 +_,19 @@
      public boolean isInWall() {
          return !this.isSleeping() && super.isInWall();
      }

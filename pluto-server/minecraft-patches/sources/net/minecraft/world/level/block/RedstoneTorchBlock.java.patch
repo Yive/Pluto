@@ -9,7 +9,7 @@
              level.updateNeighborsAt(pos.relative(direction), this, ExperimentalRedstoneUtils.withFront(orientation, direction));
          }
      }
-@@ -132,6 +_,18 @@
+@@ -119,6 +_,18 @@
      protected int getDirectSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
          return direction == Direction.DOWN ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
      }

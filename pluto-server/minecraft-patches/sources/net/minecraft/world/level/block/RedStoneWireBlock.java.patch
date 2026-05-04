@@ -50,7 +50,7 @@
              ? RedstoneSide.NONE
              : RedstoneSide.SIDE;
      }
-@@ -348,7 +_,7 @@
+@@ -344,7 +_,7 @@
          if (level.getBlockState(pos).is(this)) {
              level.updateNeighborsAt(pos, this);
  
@@ -59,7 +59,7 @@
                  level.updateNeighborsAt(pos.relative(direction), this);
              }
          }
-@@ -365,7 +_,7 @@
+@@ -361,7 +_,7 @@
              }
              // Paper end - optimize redstone
  
@@ -68,7 +68,7 @@
                  level.updateNeighborsAt(pos.relative(direction), this);
              }
  
-@@ -376,7 +_,7 @@
+@@ -372,7 +_,7 @@
      @Override
      protected void affectNeighborsAfterRemoval(final BlockState state, final ServerLevel level, final BlockPos pos, final boolean movedByPiston) {
          if (!movedByPiston) {
@@ -77,7 +77,7 @@
                  level.updateNeighborsAt(pos.relative(direction), this);
              }
  
-@@ -392,11 +_,11 @@
+@@ -388,11 +_,11 @@
      }
  
      private void updateNeighborsOfNeighboringWires(final Level level, final BlockPos pos) {
@@ -91,7 +91,7 @@
              BlockPos target = pos.relative(direction);
              if (level.getBlockState(target).isRedstoneConductor(level, target)) {
                  this.checkCornerChangeAt(level, target.above());
-@@ -437,6 +_,76 @@
+@@ -433,6 +_,76 @@
          return !this.shouldSignal ? Redstone.SIGNAL_MIN : state.getSignal(level, pos, direction);
      }
  
@@ -168,7 +168,7 @@
      @Override
      protected int getSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
          if (this.shouldSignal && direction != Direction.DOWN) {
-@@ -503,7 +_,7 @@
+@@ -499,7 +_,7 @@
      public void animateTick(final BlockState state, final Level level, final BlockPos pos, final RandomSource random) {
          int power = state.getValue(POWER);
          if (power != 0) {
@@ -177,7 +177,7 @@
                  RedstoneSide connection = state.getValue(PROPERTY_BY_DIRECTION.get(horizontal));
                  switch (connection) {
                      case UP:
-@@ -584,7 +_,7 @@
+@@ -580,7 +_,7 @@
      private void updatesOnShapeChange(final Level level, final BlockPos pos, final BlockState oldState, final BlockState newState) {
          Orientation orientation = ExperimentalRedstoneUtils.initialOrientation(level, null, Direction.UP);
  

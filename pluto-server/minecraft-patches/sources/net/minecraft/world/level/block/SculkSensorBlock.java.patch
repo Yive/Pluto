@@ -19,7 +19,7 @@
      public static SculkSensorPhase getPhase(final BlockState state) {
          return state.getValue(PHASE);
      }
-@@ -261,10 +_,18 @@
+@@ -256,10 +_,18 @@
      }
  
      public static void tryResonateVibration(final @Nullable Entity sourceEntity, final Level level, final BlockPos pos, final int vibrationFrequency) {

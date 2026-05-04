@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/TargetBlock.java
 +++ b/net/minecraft/world/level/block/TargetBlock.java
-@@ -117,6 +_,13 @@
+@@ -127,6 +_,13 @@
          return state.getValue(OUTPUT_POWER);
      }
  

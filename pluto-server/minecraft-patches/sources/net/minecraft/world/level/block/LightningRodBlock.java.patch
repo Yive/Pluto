@@ -17,5 +17,5 @@
 +    // Pluto end - Memory allocation optimisations
 +
      public void onLightningStrike(final BlockState state, final Level level, final BlockPos pos) {
-         // CraftBukkit start
-         boolean powered = state.getValue(LightningRodBlock.POWERED);
+         // Paper start - Call BlockRedstoneEvent
+         if (!state.getValue(POWERED)) {

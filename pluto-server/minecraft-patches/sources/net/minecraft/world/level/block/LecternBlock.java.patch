@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LecternBlock.java
 +++ b/net/minecraft/world/level/block/LecternBlock.java
-@@ -225,6 +_,18 @@
+@@ -222,6 +_,18 @@
          return direction == Direction.UP && state.getValue(POWERED) ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
      }
  
