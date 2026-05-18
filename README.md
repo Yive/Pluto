@@ -21,7 +21,7 @@
 You can download pre-compiled paperclip jars [here](https://ci.yive.dev/job/Pluto/)
 
 ## API
-You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/26.1.2).
+You can find the javadocs [here](https://repo.yive.dev/javadoc/snapshots/dev/yive/pluto/pluto-api/26.1.2-R0.1-SNAPSHOT).
 
 Maven:
 ```xml
@@ -36,7 +36,7 @@ Maven:
     <dependency>
         <groupId>dev.yive.pluto</groupId>
         <artifactId>pluto-api</artifactId>
-        <version>26.1.2</version>
+        <version>26.1.2-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'dev.yive.pluto:pluto-api:26.1.2'
+    compileOnly 'dev.yive.pluto:pluto-api:26.1.2-R0.1-SNAPSHOT'
 }
 ```
 Paperweight + Gradle KTS:
@@ -60,7 +60,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.devBundle("dev.yive.pluto", "26.1.2")
+    paperweight.devBundle("dev.yive.pluto", "26.1.2-R0.1-SNAPSHOT")
 }
 ```
 
