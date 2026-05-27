@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/fox/Fox.java
 +++ b/net/minecraft/world/entity/animal/fox/Fox.java
-@@ -750,7 +_,7 @@
+@@ -749,7 +_,7 @@
              double x = slope == 0.0 ? xdiff * (i / 6.0F) : z / slope;
  
              for (int j = 1; j < 4; j++) {

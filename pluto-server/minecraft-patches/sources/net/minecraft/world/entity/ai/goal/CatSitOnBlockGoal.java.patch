@@ -7,5 +7,5 @@
 -        if (!level.isEmptyBlock(pos.above())) {
 +        if (!level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ())) { // Pluto - Memory allocation optimisations
              return false;
-         } else {
-             BlockState blockState = level.getBlockState(pos);
+         }
+ 

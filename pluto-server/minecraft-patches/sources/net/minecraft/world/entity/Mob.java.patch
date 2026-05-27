@@ -20,7 +20,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -587,9 +_,8 @@
+@@ -593,9 +_,8 @@
      public boolean isSunBurnTick() {
          if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
              float br = this.getLightLevelDependentMagicValue();
@@ -31,7 +31,7 @@
                  return true;
              }
          }
-@@ -759,12 +_,41 @@
+@@ -764,12 +_,41 @@
      }
      // Paper end - allow changing despawnInPeaceful
  
@@ -74,7 +74,7 @@
              if (player != null) {
                  // Paper start - Configurable despawn distances
                  final io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DespawnRangePair despawnRangePair = this.level().paperConfig().entities.spawning.despawnRanges.get(this.getType().getCategory());
-@@ -812,16 +_,20 @@
+@@ -817,16 +_,20 @@
          int idBasedTickCount = this.tickCount + this.getId();
          if (idBasedTickCount % 2 != 0 && this.tickCount > 1) {
              profiler.push("targetSelector");
@@ -95,7 +95,7 @@
              this.goalSelector.tick();
              profiler.pop();
          }
-@@ -984,6 +_,8 @@
+@@ -985,6 +_,8 @@
                  return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
              }
  
@@ -104,7 +104,7 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -1020,6 +_,13 @@
+@@ -1021,6 +_,13 @@
                  }
                  return null;
              }

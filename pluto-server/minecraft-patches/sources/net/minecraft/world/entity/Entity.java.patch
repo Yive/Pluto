@@ -95,7 +95,7 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1471,12 +_,12 @@
+@@ -1471,13 +_,13 @@
      }
  
      protected BlockPos getOnPos(final float offset) {
@@ -104,12 +104,13 @@
              BlockPos getOnPos = this.mainSupportingBlockPos.get();
              if (!(offset > 1.0E-5F)) {
                  return getOnPos;
-             } else {
--                BlockState belowState = this.level().getBlockState(getOnPos);
-+                BlockState belowState = chunk.getBlockState(getOnPos); // Pluto - Decrease chunk/block lookups
-                 return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
-                         && !belowState.is(BlockTags.WALLS)
-                         && !(belowState.getBlock() instanceof FenceGateBlock)
+             }
+ 
+-            BlockState belowState = this.level().getBlockState(getOnPos);
++            BlockState belowState = chunk.getBlockState(getOnPos); // Pluto - Decrease chunk/block lookups
+             return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
+                     && !belowState.is(BlockTags.WALLS)
+                     && !(belowState.getBlock() instanceof FenceGateBlock)
 @@ -1491,9 +_,45 @@
          }
      }
@@ -166,7 +167,7 @@
                  : speedFactorHere;
          } else {
              return speedFactorHere;
-@@ -1877,9 +_,10 @@
+@@ -1879,9 +_,10 @@
      }
  
      protected BlockPos getPrimaryStepSoundBlockPos(final BlockPos affectingPos) {
@@ -180,7 +181,7 @@
      }
  
      protected void playCombinationStepSounds(final BlockState primaryStepSound, final BlockState secondaryStepSound) {
-@@ -2029,9 +_,24 @@
+@@ -2031,9 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -206,7 +207,7 @@
      }
  
      public boolean isInWaterOrRain() {
-@@ -2135,11 +_,11 @@
+@@ -2137,11 +_,11 @@
  
      @Deprecated
      protected BlockState getBlockStateOnLegacy() {
@@ -220,7 +221,7 @@
      }
  
      public boolean canSpawnSprintParticle() {
-@@ -2147,19 +_,25 @@
+@@ -2149,19 +_,25 @@
      }
  
      protected void spawnSprintParticle() {
@@ -236,7 +237,7 @@
              double x = this.getX() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
              double z = this.getZ() + (this.random.nextDouble() - 0.5) * this.dimensions.width();
 -            if (entityPosition.getX() != pos.getX()) {
--                x = Mth.clamp(x, (double)pos.getX(), pos.getX() + 1.0);
+-                x = Mth.clamp(x, pos.getX(), pos.getX() + 1.0);
 +            // Pluto start - Memory allocation optimisations
 +            final int x1 = BlockPos.getX(posLong);
 +            if (entityPosition.getX() != x1) {
@@ -244,7 +245,7 @@
              }
  
 -            if (entityPosition.getZ() != pos.getZ()) {
--                z = Mth.clamp(z, (double)pos.getZ(), pos.getZ() + 1.0);
+-                z = Mth.clamp(z, pos.getZ(), pos.getZ() + 1.0);
 +            final int z1 = BlockPos.getZ(posLong);
 +            if (entityPosition.getZ() != z1) {
 +                z = Mth.clamp(z, z1, z1 + 1.0);
@@ -252,7 +253,7 @@
              }
  
              this.level()
-@@ -5373,6 +_,42 @@
+@@ -5375,6 +_,42 @@
              return this.save;
          }
      }

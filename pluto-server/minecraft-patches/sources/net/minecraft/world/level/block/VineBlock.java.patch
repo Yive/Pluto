@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/VineBlock.java
 +++ b/net/minecraft/world/level/block/VineBlock.java
-@@ -125,7 +_,7 @@
+@@ -127,7 +_,7 @@
  
          BlockState aboveState = null;
  
@@ -9,7 +9,7 @@
              BooleanProperty property = getPropertyForFace(direction);
              if (state.getValue(property)) {
                  boolean canSupport = this.canSupportAtFace(level, pos, direction);
-@@ -217,7 +_,7 @@
+@@ -219,7 +_,7 @@
  
                              BlockState aboveState = state;
  
@@ -18,7 +18,7 @@
                                  if (random.nextBoolean() || !isAcceptableNeighbour(level, abovePos.relative(direction), direction)) {
                                      aboveState = aboveState.setValue(getPropertyForFace(direction), false);
                                  }
-@@ -248,7 +_,7 @@
+@@ -250,7 +_,7 @@
      }
  
      private BlockState copyRandomFaces(final BlockState from, BlockState to, final RandomSource random) {

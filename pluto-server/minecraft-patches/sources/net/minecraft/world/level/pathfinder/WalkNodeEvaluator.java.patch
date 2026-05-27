@@ -13,8 +13,8 @@
              }
          }
  
--        for (Direction directionx : Direction.Plane.HORIZONTAL) {
-+        for (Direction directionx : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-             Direction secondDirection = directionx.getClockWise();
-             if (this.isDiagonalValid(pos, this.reusableNeighbors[directionx.get2DDataValue()], this.reusableNeighbors[secondDirection.get2DDataValue()])) {
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             Direction secondDirection = direction.getClockWise();
+             if (this.isDiagonalValid(pos, this.reusableNeighbors[direction.get2DDataValue()], this.reusableNeighbors[secondDirection.get2DDataValue()])) {
                  Node diagonalNode = this.findAcceptedNode(

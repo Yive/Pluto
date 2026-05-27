@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/ai/behavior/PrepareRamNearestTarget.java
 +++ b/net/minecraft/world/entity/ai/behavior/PrepareRamNearestTarget.java
-@@ -144,7 +_,7 @@
-             List<BlockPos> possibleRamPositions = Lists.newArrayList();
-             BlockPos.MutableBlockPos walkablePosFurthestAwayFromTarget = targetPos.mutable();
+@@ -145,7 +_,7 @@
+         List<BlockPos> possibleRamPositions = Lists.newArrayList();
+         BlockPos.MutableBlockPos walkablePosFurthestAwayFromTarget = targetPos.mutable();
  
--            for (Direction direction : Direction.Plane.HORIZONTAL) {
-+            for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-                 walkablePosFurthestAwayFromTarget.set(targetPos);
+-        for (Direction direction : Direction.Plane.HORIZONTAL) {
++        for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+             walkablePosFurthestAwayFromTarget.set(targetPos);
  
-                 for (int distance = 0; distance < this.maxRamDistance; distance++) {
+             for (int distance = 0; distance < this.maxRamDistance; distance++) {

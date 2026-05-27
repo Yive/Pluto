@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/net/minecraft/world/level/material/FlowingFluid.java
-@@ -100,7 +_,7 @@
+@@ -99,7 +_,7 @@
          double flowZ = 0.0;
          BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
  
@@ -9,7 +9,7 @@
              blockPos.setWithOffset(pos, direction);
              FluidState neighbourFluid = level.getFluidState(blockPos);
              if (this.affectsFlow(neighbourFluid)) {
-@@ -108,8 +_,7 @@
+@@ -107,8 +_,7 @@
                  float distance = 0.0F;
                  if (neighborHeight == 0.0F) {
                      if (!level.getBlockState(blockPos).blocksMotion()) {
@@ -19,16 +19,16 @@
                          if (this.affectsFlow(belowNeighborState)) {
                              neighborHeight = belowNeighborState.getOwnHeight();
                              if (neighborHeight > 0.0F) {
-@@ -130,7 +_,7 @@
+@@ -129,7 +_,7 @@
  
          Vec3 flow = new Vec3(flowX, 0.0, flowZ);
          if (fluidState.getValue(FALLING)) {
--            for (Direction directionx : Direction.Plane.HORIZONTAL) {
-+            for (Direction directionx : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-                 blockPos.setWithOffset(pos, directionx);
-                 if (this.isSolidFace(level, blockPos, directionx) || this.isSolidFace(level, blockPos.above(), directionx)) {
+-            for (Direction direction : Direction.Plane.HORIZONTAL) {
++            for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
+                 blockPos.setWithOffset(pos, direction);
+                 if (this.isSolidFace(level, blockPos, direction) || this.isSolidFace(level, blockPos.above(), direction)) {
                      flow = flow.normalize().add(0.0, -6.0, 0.0);
-@@ -148,7 +_,7 @@
+@@ -147,7 +_,7 @@
  
      protected boolean isSolidFace(final BlockGetter level, final BlockPos pos, final Direction direction) {
          BlockState state = level.getBlockState(pos);
@@ -37,7 +37,7 @@
          return !fluidState.getType().isSame(this)
              && (direction == Direction.UP || !(state.getBlock() instanceof IceBlock) && state.isFaceSturdy(level, pos, direction));
      }
-@@ -221,7 +_,7 @@
+@@ -220,7 +_,7 @@
          int neighbourSources = 0;
          BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
  
@@ -46,7 +46,7 @@
              BlockPos relativePos = mutablePos.setWithOffset(pos, direction);
              BlockState blockState = level.getBlockStateIfLoaded(relativePos); // Paper - Prevent chunk loading from fluid flowing
              if (blockState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -343,7 +_,7 @@
+@@ -342,7 +_,7 @@
      ) {
          int lowest = 1000;
  
@@ -55,7 +55,7 @@
              if (direction != from) {
                  BlockPos testPos = pos.relative(direction);
                  BlockState testState = context.getBlockStateIfLoaded(testPos); // Paper - Prevent chunk loading from fluid flowing
-@@ -411,9 +_,13 @@
+@@ -410,9 +_,13 @@
      private int sourceNeighborCount(final LevelReader level, final BlockPos pos) {
          int count = 0;
  
@@ -72,7 +72,7 @@
              if (this.isSourceBlockOfThisType(testFluidState)) {
                  count++;
              }
-@@ -427,7 +_,7 @@
+@@ -426,7 +_,7 @@
          Map<Direction, FluidState> result = Maps.newEnumMap(Direction.class);
          FlowingFluid.SpreadContext context = null;
  
@@ -81,7 +81,7 @@
              BlockPos testPos = pos.relative(direction);
              BlockState testState = level.getBlockStateIfLoaded(testPos); // Paper - Prevent chunk loading from fluid flowing
              if (testState == null) continue; // Paper - Prevent chunk loading from fluid flowing
-@@ -532,7 +_,7 @@
+@@ -531,7 +_,7 @@
      }
  
      private static boolean hasSameAbove(final FluidState fluidState, final BlockGetter level, final BlockPos pos) {

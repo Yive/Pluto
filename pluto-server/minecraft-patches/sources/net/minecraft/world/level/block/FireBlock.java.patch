@@ -41,19 +41,19 @@
                  return true;
              }
          }
-@@ -321,8 +_,13 @@
-         } else {
-             int odds = 0;
+@@ -322,8 +_,13 @@
  
--            for (Direction direction : Direction.values()) {
--                BlockState blockState = level.getBlockState(pos.relative(direction));
-+            // Pluto start - Memory allocation optimisations
-+            final int x = pos.getX();
-+            final int y = pos.getY();
-+            final int z = pos.getZ();
-+            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-+                BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
-+                // Pluto end - Memory allocation optimisations
-                 odds = Math.max(this.getIgniteOdds(blockState), odds);
-             }
+         int odds = 0;
+ 
+-        for (Direction direction : Direction.values()) {
+-            BlockState blockState = level.getBlockState(pos.relative(direction));
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
++            // Pluto end - Memory allocation optimisations
+             odds = Math.max(this.getIgniteOdds(blockState), odds);
+         }
  

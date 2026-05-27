@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/equine/AbstractHorse.java
 +++ b/net/minecraft/world/entity/animal/equine/AbstractHorse.java
-@@ -344,7 +_,7 @@
+@@ -343,7 +_,7 @@
      @Override
      protected void playStepSound(final BlockPos pos, final BlockState blockState) {
          if (!blockState.liquid()) {

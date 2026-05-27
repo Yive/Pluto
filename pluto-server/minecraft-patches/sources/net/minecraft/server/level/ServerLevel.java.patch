@@ -60,11 +60,11 @@
 +                                    // Pufferfish start - copied from this.guardEntityTick
 +                                    try {
 +                                        this.tickNonPassenger(entity);
-+                                    } catch (Throwable var6) {
++                                    } catch (Throwable t) {
 +                                        // Paper start - Prevent block entity and entity crashes
 +                                        final String msg = String.format("Entity threw exception at %s:%s,%s,%s", io.papermc.paper.util.MCUtil.getLevelName(entity.level()), entity.getX(), entity.getY(), entity.getZ());
-+                                        MinecraftServer.LOGGER.error(msg, var6);
-+                                        getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, var6))); // Paper - ServerExceptionEvent
++                                        MinecraftServer.LOGGER.error(msg, t);
++                                        getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, t))); // Paper - ServerExceptionEvent
 +                                        entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD);
 +                                        // Paper end - Prevent block entity and entity crashes
 +                                    }
@@ -124,4 +124,4 @@
 +        // Pluto end - Async Spawning Chunks
          if (lightningRodTarget.isPresent()) {
              return lightningRodTarget.get();
-         } else {
+         }

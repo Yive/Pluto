@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/squid/Squid.java
 +++ b/net/minecraft/world/entity/animal/squid/Squid.java
-@@ -273,9 +_,8 @@
+@@ -268,9 +_,8 @@
                      Squid.this.getX() - lastHurtByMob.getX(), Squid.this.getY() - lastHurtByMob.getY(), Squid.this.getZ() - lastHurtByMob.getZ()
                  );
                  BlockState blockState = Squid.this.level()

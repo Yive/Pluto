@@ -131,32 +131,32 @@
              }
              blockstate.setBlock(blockState);
              blockstate.setFlags(updateFlags);
-@@ -1077,12 +_,12 @@
-             boolean captured = false;
-             if (this.captureBlockStates) {
-                 final CraftBlockState snapshot;
--                if (!this.capturedBlockStates.containsKey(pos)) {
-+                if (!this.capturedBlockStates.containsKey(posLong)) { // Pluto - Memory allocation optimisations
-                     snapshot = (CraftBlockState) org.bukkit.craftbukkit.block.CraftBlock.at(this, pos).getState(); // Paper - use CB getState to get a suitable snapshot
--                    this.capturedBlockStates.put(pos.immutable(), snapshot);
-+                    this.capturedBlockStates.put(posLong, snapshot); // Pluto - Memory allocation optimisations
-                     captured = true;
-                 } else {
--                    snapshot = this.capturedBlockStates.get(pos);
-+                    snapshot = this.capturedBlockStates.get(posLong); // Pluto - Memory allocation optimisations
-                 }
-                 snapshot.setFlags(updateFlags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
+@@ -1080,12 +_,12 @@
+         boolean captured = false;
+         if (this.captureBlockStates) {
+             final CraftBlockState snapshot;
+-            if (!this.capturedBlockStates.containsKey(pos)) {
++            if (!this.capturedBlockStates.containsKey(posLong)) { // Pluto - Memory allocation optimisations
+                 snapshot = (CraftBlockState) org.bukkit.craftbukkit.block.CraftBlock.at(this, pos).getState(); // Paper - use CB getState to get a suitable snapshot
+-                this.capturedBlockStates.put(pos.immutable(), snapshot);
++                this.capturedBlockStates.put(posLong, snapshot); // Pluto - Memory allocation optimisations
+                 captured = true;
+             } else {
+-                snapshot = this.capturedBlockStates.get(pos);
++                snapshot = this.capturedBlockStates.get(posLong); // Pluto - Memory allocation optimisations
              }
-@@ -1092,7 +_,7 @@
-             if (oldState == null) {
-                 // CraftBukkit start - remove blockstate if failed (or the same)
-                 if (this.captureBlockStates && captured) {
--                    this.capturedBlockStates.remove(pos);
-+                    this.capturedBlockStates.remove(posLong); // Pluto - Memory allocation optimisations
-                 }
-                 // CraftBukkit end
-                 return false;
-@@ -1302,11 +_,89 @@
+             snapshot.setFlags(updateFlags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
+         }
+@@ -1095,7 +_,7 @@
+         if (oldState == null) {
+             // CraftBukkit start - remove blockstate if failed (or the same)
+             if (this.captureBlockStates && captured) {
+-                this.capturedBlockStates.remove(pos);
++                this.capturedBlockStates.remove(posLong); // Pluto - Memory allocation optimisations
+             }
+             // CraftBukkit end
+             return false;
+@@ -1301,11 +_,89 @@
          return this.getChunkSource().getLightEngine();
      }
  
@@ -247,7 +247,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1497,9 +_,10 @@
+@@ -1496,9 +_,10 @@
          for (int tickerIndex = 0; tickerIndex < this.blockEntityTickers.size(); tickerIndex++) {
              final TickingBlockEntity ticker = this.blockEntityTickers.get(tickerIndex);
          // Paper end - Fix MC-117075 use removeAll
@@ -259,22 +259,22 @@
                  ticker.tick();
                  // Paper start - rewrite chunk system
                  if ((++tickedEntities & 7) == 0) {
-@@ -1516,12 +_,12 @@
+@@ -1515,12 +_,12 @@
      public <T extends Entity> void guardEntityTick(final Consumer<T> tick, final T entity) {
          try {
              tick.accept(entity);
--        } catch (Throwable var6) {
-+        } catch (Throwable var6) { // Pufferfish - diff on change ServerLevel.tick
+-        } catch (Throwable t) {
++        } catch (Throwable t) { // Pufferfish - diff on change ServerLevel.tick
              // Paper start - Prevent block entity and entity crashes
              final String msg = String.format("Entity threw exception at %s:%s,%s,%s", io.papermc.paper.util.MCUtil.getLevelName(entity.level()), entity.getX(), entity.getY(), entity.getZ());
-             MinecraftServer.LOGGER.error(msg, var6);
-             getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, var6))); // Paper - ServerExceptionEvent
+             MinecraftServer.LOGGER.error(msg, t);
+             getCraftServer().getPluginManager().callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerInternalException(msg, t))); // Paper - ServerExceptionEvent
 -            entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD);
 +            entity.discard(org.bukkit.event.entity.EntityRemoveEvent.Cause.DISCARD); // Pufferfish - diff on change ServerLevel.tick
              // Paper end - Prevent block entity and entity crashes
          }
          this.moonrise$midTickTasks(); // Paper - rewrite chunk system
-@@ -1922,8 +_,11 @@
+@@ -1921,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(final BlockPos pos) {
@@ -288,7 +288,7 @@
          }
      }
  
-@@ -2046,17 +_,21 @@
+@@ -2049,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(final BlockPos pos, final Block changedBlock) {

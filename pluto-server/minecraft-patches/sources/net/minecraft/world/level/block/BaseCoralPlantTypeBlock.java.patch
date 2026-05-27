@@ -1,18 +1,18 @@
 --- a/net/minecraft/world/level/block/BaseCoralPlantTypeBlock.java
 +++ b/net/minecraft/world/level/block/BaseCoralPlantTypeBlock.java
-@@ -44,8 +_,13 @@
-         if (state.getValue(WATERLOGGED)) {
+@@ -45,8 +_,13 @@
              return true;
-         } else {
--            for (Direction direction : Direction.values()) {
--                if (level.getFluidState(blockPos.relative(direction)).is(FluidTags.WATER)) {
-+            // Pluto start - Memory allocation optimisations
-+            final int x = blockPos.getX();
-+            final int y = blockPos.getY();
-+            final int z = blockPos.getZ();
-+            // Pluto end - Memory allocation optimisations
-+            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-+                if (level.pluto$getFluidState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()).is(FluidTags.WATER)) { // Pluto - Memory allocation optimisations
-                     return true;
-                 }
+         }
+ 
+-        for (Direction direction : Direction.values()) {
+-            if (level.getFluidState(blockPos.relative(direction)).is(FluidTags.WATER)) {
++        // Pluto start - Memory allocation optimisations
++        final int x = blockPos.getX();
++        final int y = blockPos.getY();
++        final int z = blockPos.getZ();
++        // Pluto end - Memory allocation optimisations
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            if (level.pluto$getFluidState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()).is(FluidTags.WATER)) { // Pluto - Memory allocation optimisations
+                 return true;
              }
+         }

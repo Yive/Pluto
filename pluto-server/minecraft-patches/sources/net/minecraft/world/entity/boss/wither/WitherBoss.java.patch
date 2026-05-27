@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/boss/wither/WitherBoss.java
 +++ b/net/minecraft/world/entity/boss/wither/WitherBoss.java
-@@ -90,6 +_,13 @@
+@@ -89,6 +_,13 @@
          this.xpReward = 50;
      }
  

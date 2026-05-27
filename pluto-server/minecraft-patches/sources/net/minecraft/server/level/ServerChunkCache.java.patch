@@ -1,15 +1,15 @@
 --- a/net/minecraft/server/level/ServerChunkCache.java
 +++ b/net/minecraft/server/level/ServerChunkCache.java
-@@ -182,6 +_,8 @@
+@@ -181,6 +_,8 @@
+         }
      }
      // Paper end - chunk tick iteration optimisations
- 
 +    public boolean firstRunSpawnCounts = true; // Pufferfish
 +    public final java.util.concurrent.atomic.AtomicBoolean _pufferfish_spawnCountsReady = new java.util.concurrent.atomic.AtomicBoolean(false); // Pufferfish - optimize countmobs
  
      public ServerChunkCache(
          final ServerLevel level,
-@@ -517,6 +_,47 @@
+@@ -515,6 +_,47 @@
  
              this.broadcastChangedChunks(profiler);
              profiler.pop();
@@ -57,7 +57,7 @@
          }
      }
  
-@@ -534,32 +_,40 @@
+@@ -532,32 +_,40 @@
          profiler.pop();
      }
  
@@ -106,7 +106,7 @@
          boolean doMobSpawning = this.level.getGameRules().get(GameRules.SPAWN_MOBS) && !this.level.players().isEmpty(); // CraftBukkit
          int tickSpeed = this.level.getGameRules().get(GameRules.RANDOM_TICK_SPEED);
          List<MobCategory> spawningCategories;
-@@ -573,11 +_,72 @@
+@@ -571,11 +_,72 @@
              }
              // Paper end - PlayerNaturallySpawnCreaturesEvent
              boolean spawnPersistent = this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) != 0L && this.level.getGameTime() % this.level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) == 0L; // CraftBukkit
@@ -180,7 +180,7 @@
          List<LevelChunk> spawningChunks = this.spawningChunks;
  
          try {
-@@ -591,11 +_,12 @@
+@@ -589,11 +_,12 @@
              profiler.popPush("tickSpawningChunks");
  
              for (LevelChunk chunk : spawningChunks) {
@@ -194,7 +194,7 @@
  
          profiler.popPush("tickTickingChunks");
          this.iterateTickingChunksFaster(); // Paper - chunk tick iteration optimizations
-@@ -617,7 +_,8 @@
+@@ -615,7 +_,8 @@
          }
  
          if (!spawningCategories.isEmpty()) {

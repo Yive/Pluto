@@ -19,22 +19,22 @@
                  Optional<PortalShape> optionalShape = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
                  if (optionalShape.isPresent()) {
                      optionalShape.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
-@@ -211,11 +_,15 @@
-         if (!inPortalDimension(level)) {
+@@ -212,11 +_,15 @@
              return false;
-         } else {
--            BlockPos.MutableBlockPos testPos = pos.mutable();
-+            // Pluto start - Memory allocation optimisations
-+            final int x = pos.getX();
-+            final int y = pos.getY();
-+            final int z = pos.getZ();
-+            // Pluto end - Memory allocation optimisations
-             boolean hasObsidian = false;
+         }
  
--            for (Direction face : Direction.values()) {
--                if (level.getBlockState(testPos.set(pos).move(face)).is(Blocks.OBSIDIAN)) {
-+            for (Direction face : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-+                if (level.pluto$getBlockState(x + face.getStepX(), y + face.getStepY(), z + face.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
-                     hasObsidian = true;
-                     break;
-                 }
+-        BlockPos.MutableBlockPos testPos = pos.mutable();
++        // Pluto start - Memory allocation optimisations
++        final int x = pos.getX();
++        final int y = pos.getY();
++        final int z = pos.getZ();
++        // Pluto end - Memory allocation optimisations
+         boolean hasObsidian = false;
+ 
+-        for (Direction face : Direction.values()) {
+-            if (level.getBlockState(testPos.set(pos).move(face)).is(Blocks.OBSIDIAN)) {
++        for (Direction face : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
++            if (level.pluto$getBlockState(x + face.getStepX(), y + face.getStepY(), z + face.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
+                 hasObsidian = true;
+                 break;
+             }

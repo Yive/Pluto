@@ -15,8 +15,8 @@
 +        BlockState aboveState = chunk.getBlockState(x, y + 1, z); // Paper - Perf: optimize dirt and snow spreading // Pluto - Memory allocation optimisations
          if (aboveState.is(Blocks.SNOW) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
              return true;
-         } else if (aboveState.getFluidState().isFull()) {
-@@ -46,13 +_,12 @@
+         }
+@@ -48,13 +_,12 @@
  
      private static boolean canPropagate(final BlockState state, final LevelReader level, final BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
@@ -33,7 +33,7 @@
      }
  
      @Override
-@@ -67,7 +_,7 @@
+@@ -69,7 +_,7 @@
                  return;
              }
  
@@ -42,7 +42,7 @@
                  // Paper end - Perf: optimize dirt and snow spreading
                  // CraftBukkit start
                  if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(level, pos, baseBlock.get().defaultBlockState()).isCancelled()) {
-@@ -79,21 +_,31 @@
+@@ -81,21 +_,31 @@
                  if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
                      BlockState defaultBlockState = this.defaultBlockState();
  

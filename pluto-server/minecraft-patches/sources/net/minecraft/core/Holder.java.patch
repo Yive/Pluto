@@ -17,7 +17,7 @@
 +        @Override public Collection<net.minecraft.tags.TagKey<T>> pluto$tags() { return java.util.Set.of(); } // Pluto - Streamless Tags
      }
  
-     public static enum Kind {
+     enum Kind {
 @@ -259,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return this.boundTags().stream();

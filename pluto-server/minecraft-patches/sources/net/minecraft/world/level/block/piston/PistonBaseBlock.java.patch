@@ -9,12 +9,12 @@
              if (direction != pushDirection && level.hasSignal(pos.relative(direction), direction)) {
                  return true;
              }
-@@ -137,7 +_,7 @@
-         } else {
-             BlockPos above = pos.above();
+@@ -138,7 +_,7 @@
  
--            for (Direction directionx : Direction.values()) {
-+            for (Direction directionx : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                 if (directionx != Direction.DOWN && level.hasSignal(above.relative(directionx), directionx)) {
-                     return true;
-                 }
+         BlockPos above = pos.above();
+ 
+-        for (Direction direction : Direction.values()) {
++        for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+             if (direction != Direction.DOWN && level.hasSignal(above.relative(direction), direction)) {
+                 return true;
+             }

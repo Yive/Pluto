@@ -18,17 +18,17 @@
      }
  
      private static boolean isLower(final BlockState state) {
-@@ -197,9 +_,10 @@
-         if (isLower(state)) {
+@@ -198,9 +_,10 @@
              return new PitcherCropBlock.PosAndState(pos, state);
-         } else {
--            BlockPos lowerPos = pos.below();
--            BlockState lowerState = level.getBlockState(lowerPos);
--            return isLower(lowerState) ? new PitcherCropBlock.PosAndState(lowerPos, lowerState) : null;
-+            // Pluto start - Memory allocation optimisations
-+            BlockState lowerState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ());
-+            return isLower(lowerState) ? new PitcherCropBlock.PosAndState(pos.below(), lowerState) : null;
-+            // Pluto end - Memory allocation optimisations
          }
+ 
+-        BlockPos lowerPos = pos.below();
+-        BlockState lowerState = level.getBlockState(lowerPos);
+-        return isLower(lowerState) ? new PitcherCropBlock.PosAndState(lowerPos, lowerState) : null;
++        // Pluto start - Memory allocation optimisations
++        BlockState lowerState = level.pluto$getBlockState(pos.getX(), pos.getY() - 1, pos.getZ());
++        return isLower(lowerState) ? new PitcherCropBlock.PosAndState(pos.below(), lowerState) : null;
++        // Pluto end - Memory allocation optimisations
      }
  
+     @Override

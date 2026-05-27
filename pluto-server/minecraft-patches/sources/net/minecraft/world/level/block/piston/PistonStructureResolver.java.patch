@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/piston/PistonStructureResolver.java
 +++ b/net/minecraft/world/level/block/piston/PistonStructureResolver.java
-@@ -167,7 +_,7 @@
+@@ -175,7 +_,7 @@
      private boolean addBranchingBlocks(final BlockPos fromPos) {
          BlockState fromState = this.level.getBlockState(fromPos);
  

@@ -21,7 +21,7 @@
                  height++;
              }
  
-@@ -88,16 +_,21 @@
+@@ -88,17 +_,22 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
@@ -34,17 +34,18 @@
 +        // Pluto end - Memory allocation optimisations
          if (stateBelow.is(this)) {
              return true;
-         } else {
-             if (stateBelow.is(BlockTags.SUPPORTS_SUGAR_CANE)) {
--                BlockPos below = pos.below();
-+                if (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
+         }
  
--                for (Direction direction : Direction.Plane.HORIZONTAL) {
--                    BlockState blockState = level.getBlockState(below.relative(direction));
--                    FluidState fluidState = level.getFluidState(below.relative(direction));
-+                for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-+                    BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), (y - 1) + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
-+                    FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
-                     if (fluidState.is(FluidTags.SUPPORTS_SUGAR_CANE_ADJACENTLY) || blockState.is(BlockTags.SUPPORTS_SUGAR_CANE_ADJACENTLY)) {
-                         return true;
-                     }
+         if (stateBelow.is(BlockTags.SUPPORTS_SUGAR_CANE)) {
+-            BlockPos below = pos.below();
++            if (level instanceof ServerLevel serverLevel && serverLevel.plutoConfig().alwaysMoistSugarCane) return true; // Pluto - Always moist blocks
+ 
+-            for (Direction direction : Direction.Plane.HORIZONTAL) {
+-                BlockState blockState = level.getBlockState(below.relative(direction));
+-                FluidState fluidState = level.getFluidState(below.relative(direction));
++            for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
++                BlockState blockState = level.pluto$getBlockState(x + direction.getStepX(), (y - 1) + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
++                FluidState fluidState = blockState.getFluidState(); // Pluto - Decrease chunk/block lookups
+                 if (fluidState.is(FluidTags.SUPPORTS_SUGAR_CANE_ADJACENTLY) || blockState.is(BlockTags.SUPPORTS_SUGAR_CANE_ADJACENTLY)) {
+                     return true;
+                 }

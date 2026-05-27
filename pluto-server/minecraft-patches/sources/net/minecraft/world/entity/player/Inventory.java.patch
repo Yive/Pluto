@@ -14,7 +14,7 @@
      @Override
      public int getMaxStackSize() {
          return this.maxStack;
-@@ -344,6 +_,29 @@
+@@ -346,6 +_,29 @@
      }
  
      public void tick() {
@@ -44,7 +44,7 @@
          for (int i = 0; i < this.items.size(); i++) {
              ItemStack itemStack = this.getItem(i);
              if (!itemStack.isEmpty()) {
-@@ -572,8 +_,13 @@
+@@ -574,8 +_,13 @@
          return true;
      }
  

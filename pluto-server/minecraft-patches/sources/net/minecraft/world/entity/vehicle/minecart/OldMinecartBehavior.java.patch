@@ -21,13 +21,13 @@
 @@ -397,6 +_,12 @@
              }
          } else {
-             for (Entity entityx : this.level().getEntities(this.minecart, hitbox)) {
+             for (Entity entity : this.level().getEntities(this.minecart, hitbox)) {
 +                // Pluto start - Option to remove excess vehicles on collision
-+                if (entityx instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
-+                    entityx.discard();
++                if (entity instanceof AbstractMinecart && this.level().plutoConfig().removeExcessMinecarts && minecartCount++ >= this.level().plutoConfig().excessMinecartsLimit) {
++                    entity.discard();
 +                    continue;
 +                }
 +                // Pluto end - Option to remove excess vehicles on collision
-                 if (!this.minecart.hasPassenger(entityx) && entityx.isPushable() && entityx instanceof AbstractMinecart) {
+                 if (!this.minecart.hasPassenger(entity) && entity.isPushable() && entity instanceof AbstractMinecart) {
                      // CraftBukkit start
                      org.bukkit.event.vehicle.VehicleEntityCollisionEvent collisionEvent = new org.bukkit.event.vehicle.VehicleEntityCollisionEvent(

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/Container.java
 +++ b/net/minecraft/world/Container.java
-@@ -42,6 +_,14 @@
+@@ -41,6 +_,14 @@
  
      boolean stillValid(Player player);
  
@@ -15,7 +15,7 @@
      default void startOpen(final ContainerUser containerUser) {
      }
  
-@@ -156,6 +_,8 @@
+@@ -151,6 +_,8 @@
      java.util.List<org.bukkit.entity.HumanEntity> getViewers();
  
      org.bukkit.inventory.@Nullable InventoryHolder getOwner();

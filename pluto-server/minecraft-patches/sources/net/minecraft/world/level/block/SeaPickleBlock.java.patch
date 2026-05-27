@@ -1,14 +1,14 @@
 --- a/net/minecraft/world/level/block/SeaPickleBlock.java
 +++ b/net/minecraft/world/level/block/SeaPickleBlock.java
-@@ -50,7 +_,7 @@
-         if (state.is(this)) {
+@@ -51,7 +_,7 @@
              return state.setValue(PICKLES, Math.min(4, state.getValue(PICKLES) + 1));
-         } else {
--            FluidState replacedFluidState = context.getLevel().getFluidState(context.getClickedPos());
-+            FluidState replacedFluidState = state.getFluidState(); // Pluto - Decrease chunk/block lookups
-             boolean isWaterSource = replacedFluidState.is(Fluids.WATER);
-             return super.getStateForPlacement(context).setValue(WATERLOGGED, isWaterSource);
          }
+ 
+-        FluidState replacedFluidState = context.getLevel().getFluidState(context.getClickedPos());
++        FluidState replacedFluidState = state.getFluidState(); // Pluto - Decrease chunk/block lookups
+         boolean isWaterSource = replacedFluidState.is(Fluids.WATER);
+         return super.getStateForPlacement(context).setValue(WATERLOGGED, isWaterSource);
+     }
 @@ -121,7 +_,7 @@
  
      @Override

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/behavior/HarvestFarmland.java
 +++ b/net/minecraft/world/entity/ai/behavior/HarvestFarmland.java
-@@ -78,10 +_,14 @@
+@@ -80,10 +_,14 @@
      }
  
      private boolean validPos(final BlockPos blockPos, final ServerLevel level) {
@@ -18,7 +18,7 @@
      }
  
      @Override
-@@ -104,16 +_,20 @@
+@@ -106,16 +_,20 @@
      protected void tick(final ServerLevel level, final Villager body, final long timestamp) {
          if (this.aboveFarmlandPos == null || this.aboveFarmlandPos.closerToCenterThan(body.position(), 1.0)) {
              if (this.aboveFarmlandPos != null && timestamp > this.nextOkStartTime) {

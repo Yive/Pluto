@@ -13,7 +13,7 @@
          this.getBrain().tick(level, this);
          profiler.pop();
          profiler.push("allayActivityUpdate");
-@@ -377,6 +_,7 @@
+@@ -381,6 +_,7 @@
      @Override
      public void updateDynamicGameEventListener(final BiConsumer<DynamicGameEventListener<?>, ServerLevel> action) {
          if (this.level() instanceof ServerLevel serverLevel) {
@@ -21,7 +21,7 @@
              action.accept(this.dynamicVibrationListener, serverLevel);
              action.accept(this.dynamicJukeboxListener, serverLevel);
          }
-@@ -483,7 +_,7 @@
+@@ -487,7 +_,7 @@
      }
  
      public boolean canDuplicate() {

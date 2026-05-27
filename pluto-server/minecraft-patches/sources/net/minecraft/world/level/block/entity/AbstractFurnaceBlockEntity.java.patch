@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -205,7 +_,7 @@
+@@ -200,7 +_,7 @@
                  if (recipe != null) {
                      int maxStackSize = entity.getMaxStackSize();
                      ItemStack burnResult = recipe.value().assemble(input);
@@ -9,7 +9,7 @@
                          // CraftBukkit start
                          org.bukkit.event.inventory.FurnaceBurnEvent furnaceBurnEvent = new org.bukkit.event.inventory.FurnaceBurnEvent(
                              org.bukkit.craftbukkit.block.CraftBlock.at(level, pos),
-@@ -245,7 +_,7 @@
+@@ -240,7 +_,7 @@
                              if (entity.cookingTimer >= entity.cookingTotalTime) { // Paper - cook speed multiplier API
                                  entity.cookingTimer = 0;
                                  entity.cookingTotalTime = getTotalCookTime(level, entity, entity.recipeType, entity.cookSpeedMultiplier); // Paper - cook speed multiplier API
@@ -18,7 +18,7 @@
                                  entity.setRecipeUsed(recipe);
                                  } // Paper
                                  changed = true;
-@@ -284,20 +_,47 @@
+@@ -279,22 +_,49 @@
          }
      }
  
@@ -46,19 +46,21 @@
          if (resultItemStack.isEmpty()) {
 +            furnace.canBurnCache = net.minecraft.util.TriState.TRUE; // Pluto - Cache canBurn result in Furnaces
              return true;
-         } else if (!ItemStack.isSameItemSameComponents(resultItemStack, burnResult)) {
+         }
+ 
+         if (!ItemStack.isSameItemSameComponents(resultItemStack, burnResult)) {
 +            furnace.canBurnCache = net.minecraft.util.TriState.FALSE; // Pluto - Cache canBurn result in Furnaces
              return false;
-         } else {
-             int resultCount = resultItemStack.getCount() + burnResult.count();
-             int maxResultCount = Math.min(maxStackSize, burnResult.getMaxStackSize());
--            return resultCount <= maxResultCount;
-+            // Pluto start - Cache canBurn result in Furnaces
-+            boolean result = resultCount <= maxResultCount;
-+            furnace.canBurnCache = net.minecraft.util.TriState.from(result);
-+            return result;
-+            // Pluto end - Cache canBurn result in Furnaces
          }
+ 
+         int resultCount = resultItemStack.getCount() + burnResult.count();
+         int maxResultCount = Math.min(maxStackSize, burnResult.getMaxStackSize());
+-        return resultCount <= maxResultCount;
++        // Pluto start - Cache canBurn result in Furnaces
++        boolean result = resultCount <= maxResultCount;
++        furnace.canBurnCache = net.minecraft.util.TriState.from(result);
++        return result;
++        // Pluto end - Cache canBurn result in Furnaces
      }
  
 -    private static boolean burn(final NonNullList<ItemStack> items, final ItemStack inputItemStack, ItemStack result, RecipeHolder<? extends AbstractCookingRecipe> recipe, final net.minecraft.world.level.Level level, final BlockPos blockPos) { // CraftBukkit

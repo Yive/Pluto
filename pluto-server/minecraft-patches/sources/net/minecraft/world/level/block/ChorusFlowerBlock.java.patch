@@ -78,7 +78,7 @@
                  return false;
              }
          }
-@@ -173,15 +_,20 @@
+@@ -173,7 +_,12 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
@@ -92,16 +92,17 @@
          if (!belowState.is(this.plant) && !belowState.is(BlockTags.SUPPORTS_CHORUS_FLOWER)) {
              if (!belowState.isAir()) {
                  return false;
-             } else {
-                 boolean oneNeighbor = false;
+@@ -181,8 +_,8 @@
  
--                for (Direction direction : Direction.Plane.HORIZONTAL) {
--                    BlockState neighbor = level.getBlockState(pos.relative(direction));
-+                for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
-+                    BlockState neighbor = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
-                     if (neighbor.is(this.plant)) {
-                         if (oneNeighbor) {
-                             return false;
+             boolean oneNeighbor = false;
+ 
+-            for (Direction direction : Direction.Plane.HORIZONTAL) {
+-                BlockState neighbor = level.getBlockState(pos.relative(direction));
++            for (Direction direction : Direction.Plane.HORIZONTAL.faces) { // Pluto - Expose Direction$Plane's faces
++                BlockState neighbor = level.pluto$getBlockState(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()); // Pluto - Memory allocation optimisations
+                 if (neighbor.is(this.plant)) {
+                     if (oneNeighbor) {
+                         return false;
 @@ -219,12 +_,17 @@
              height++;
          }

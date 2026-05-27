@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/axolotl/Axolotl.java
 +++ b/net/minecraft/world/entity/animal/axolotl/Axolotl.java
-@@ -362,10 +_,12 @@
+@@ -361,10 +_,12 @@
          return true;
      }
  
