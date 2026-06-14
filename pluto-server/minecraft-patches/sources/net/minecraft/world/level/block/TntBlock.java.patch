@@ -7,4 +7,4 @@
 +        if (level.plutoConfig().disableTntChainReaction) return; // Pluto - Option to disable TNT chain reactions | Might remove in future version due to gamerule
          if (level.getGameRules().get(GameRules.TNT_EXPLODES)) {
              PrimedTnt primed = new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, explosion.getIndirectSourceEntity());
-             int fuse = primed.getFuse();
+             primed.setFuse(PrimedTnt.getRandomShortFuse(primed.getFuse(), level.getRandom()));

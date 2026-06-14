@@ -1,25 +1,6 @@
 --- a/net/minecraft/world/level/block/SculkSensorBlock.java
 +++ b/net/minecraft/world/level/block/SculkSensorBlock.java
-@@ -196,6 +_,18 @@
-         return direction == Direction.UP ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
-     }
- 
-+    // Pluto start - Memory allocation optimisations
-+    @Override
-+    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        return state.getValue(POWER);
-+    }
-+
-+    @Override
-+    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        return direction == Direction.UP ? state.pluto$getSignal(level, x, y, z, direction) : Redstone.SIGNAL_MIN;
-+    }
-+    // Pluto end - Memory allocation optimisations
-+
-     public static SculkSensorPhase getPhase(final BlockState state) {
-         return state.getValue(PHASE);
-     }
-@@ -256,10 +_,18 @@
+@@ -257,10 +_,18 @@
      }
  
      public static void tryResonateVibration(final @Nullable Entity sourceEntity, final Level level, final BlockPos pos, final int vibrationFrequency) {

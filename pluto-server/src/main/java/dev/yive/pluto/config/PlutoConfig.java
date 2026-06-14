@@ -840,8 +840,8 @@ public class PlutoConfig {
 
         private void spawnerTTL() {
             // Set a few default ones to create the section
-            net.minecraft.world.entity.EntityType.ZOMBIE.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.ZOMBIE).getPath().toLowerCase(java.util.Locale.ROOT), -1);
-            net.minecraft.world.entity.EntityType.SNOW_GOLEM.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityType.SNOW_GOLEM).getPath().toLowerCase(java.util.Locale.ROOT), -1);
+            net.minecraft.world.entity.EntityTypes.ZOMBIE.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityTypes.ZOMBIE).getPath().toLowerCase(java.util.Locale.ROOT), -1);
+            net.minecraft.world.entity.EntityTypes.SNOW_GOLEM.spawnerTTL = getInt("blocks.spawner.ttl." + net.minecraft.world.entity.EntityType.getKey(net.minecraft.world.entity.EntityTypes.SNOW_GOLEM).getPath().toLowerCase(java.util.Locale.ROOT), -1);
             setComments("blocks.spawner.ttl",
                     List.of(
                             "This section will make entities spawned from spawners have a time to live rate in ticks.",

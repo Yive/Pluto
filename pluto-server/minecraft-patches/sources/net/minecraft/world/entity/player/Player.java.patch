@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -492,6 +_,7 @@
+@@ -493,6 +_,7 @@
          this.updateSwingTime();
          this.yHeadRot = this.getYRot();
          this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
@@ -8,7 +8,7 @@
          if (this.getHealth() > 0.0F && !this.isSpectator()) {
              AABB pickupArea;
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -1249,7 +_,9 @@
+@@ -1261,7 +_,9 @@
          if (this.level() instanceof ServerLevel serverLevel) {
              float var12 = 1.0F + (float)this.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * baseDamage;
  
@@ -18,7 +18,7 @@
                  if (nearby != this
                      && nearby != entity
                      && !this.isAlliedTo(nearby)
-@@ -1503,7 +_,7 @@
+@@ -1518,7 +_,7 @@
                  double multiplier = lookAngleY < -0.2 ? 0.085 : 0.06;
                  if (lookAngleY <= 0.0
                      || this.jumping

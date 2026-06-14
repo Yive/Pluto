@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/animal/sniffer/Sniffer.java
 +++ b/net/minecraft/world/entity/animal/sniffer/Sniffer.java
-@@ -463,10 +_,12 @@
-         return (Brain<Sniffer>) super.getBrain();
+@@ -464,10 +_,12 @@
+         return (Brain<Sniffer>)super.getBrain();
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities

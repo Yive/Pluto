@@ -1,6 +1,6 @@
 --- a/io/papermc/paper/entity/activation/ActivationRange.java
 +++ b/io/papermc/paper/entity/activation/ActivationRange.java
-@@ -114,6 +_,24 @@
+@@ -115,6 +_,24 @@
              || entity instanceof ThrownTrident;
      }
  
@@ -25,7 +25,7 @@
      /**
       * Find what entities are in range of the players in the world and set
       * active if in range.
-@@ -149,13 +_,15 @@
+@@ -150,13 +_,15 @@
  
              final int worldHeight = world.getHeight();
              ActivationRange.maxBB = player.getBoundingBox().inflate(maxRange, worldHeight, maxRange);
@@ -48,7 +48,7 @@
  
              final List<Entity> entities = world.getEntities((Entity) null, ActivationRange.maxBB, e -> true);
              final boolean tickMarkers = world.paperConfig().entities.markers.tick;
-@@ -165,6 +_,24 @@
+@@ -166,6 +_,24 @@
                  }
  
                  ActivationRange.activateEntity(entity);
@@ -73,7 +73,7 @@
              }
          }
      }
-@@ -174,13 +_,13 @@
+@@ -175,13 +_,13 @@
       *
       * @param entity
       */

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior.java
 +++ b/net/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior.java
-@@ -443,7 +_,7 @@
+@@ -445,7 +_,7 @@
          }
  
          this.minecart.move(MoverType.SELF, newPosition.subtract(oldPosition));
@@ -9,7 +9,7 @@
          if (inHill) {
              if (BaseRailBlock.isRail(newBlockState)) {
                  RailShape newRailShape = newBlockState.getValue(((BaseRailBlock)newBlockState.getBlock()).getShapeProperty());
-@@ -522,7 +_,14 @@
+@@ -524,7 +_,14 @@
          if (this.minecart.isRideable() && !this.minecart.isVehicle()) {
              List<Entity> entities = this.level().getEntities(this.minecart, hitbox, EntitySelector.pushableBy(this.minecart));
              if (!entities.isEmpty()) {
@@ -24,7 +24,7 @@
                      if (!(entity instanceof Player)
                          && !(entity instanceof IronGolem)
                          && !(entity instanceof AbstractMinecart)
-@@ -549,10 +_,17 @@
+@@ -551,10 +_,17 @@
  
      public boolean pushEntities(final AABB hitbox) {
          boolean pushed = false;
@@ -42,7 +42,7 @@
                      if (entity instanceof Player
                          || entity instanceof IronGolem
                          || entity instanceof AbstractMinecart
-@@ -576,6 +_,12 @@
+@@ -578,6 +_,12 @@
              }
          } else {
              for (Entity entity : this.level().getEntities(this.minecart, hitbox)) {

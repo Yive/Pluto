@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
-@@ -128,6 +_,7 @@
+@@ -129,6 +_,7 @@
      @Override
      public void inactiveTick() {
          super.inactiveTick();
@@ -8,7 +8,7 @@
          if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
              this.pickupDelay--;
          }
-@@ -147,12 +_,19 @@
+@@ -148,12 +_,19 @@
      }
      // Paper end - EAR 2
  
@@ -28,16 +28,16 @@
              if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                  this.pickupDelay--;
              }
-@@ -189,7 +_,7 @@
-                     friction = 1F;
+@@ -191,7 +_,7 @@
+                     groundFriction = 1F;
                  } else if (this.onGround()) {
-                     // Paper end - Friction API
--                    friction = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F;
-+                    friction = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F; // Pluto - Memory allocation optimisations
+                 // Paper end - Friction API
+-                    groundFriction *= this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction();
++                    groundFriction *= this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction(); // Pluto - Memory allocation optimisations
                  }
  
-                 this.setDeltaMovement(this.getDeltaMovement().multiply(friction, 0.98, friction));
-@@ -201,11 +_,11 @@
+                 this.setDeltaMovement(this.getDeltaMovement().multiply(groundFriction, airDrag, groundFriction));
+@@ -203,11 +_,11 @@
                  }
              }
  
@@ -47,14 +47,14 @@
 -            int rate = moved ? 2 : 40;
 -            if (this.tickCount % rate == 0 && !this.level().isClientSide() && this.isMergable()) {
 +            // Pluto start - Configuration for item merging
-+            boolean flag = this.xo != this.getX() || this.yo != this.getY() || this.zo != this.getZ(); // Flooring makes the movement check inconsistent
-+            int i = flag ? this.level().plutoConfig().itemMergeMovingInterval : this.level().plutoConfig().itemMergeStaticInterval;
-+            if ((!flag || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % i == 0 && !this.level().isClientSide() && this.isMergable()) {
++            boolean moved = this.xo != this.getX() || this.yo != this.getY() || this.zo != this.getZ(); // Flooring makes the movement check inconsistent
++            int rate = moved ? this.level().plutoConfig().itemMergeMovingInterval : this.level().plutoConfig().itemMergeStaticInterval;
++            if ((!moved || !this.level().plutoConfig().disableItemMergeCheckWhileMoving) && this.tickCount % rate == 0 && !this.level().isClientSide() && this.isMergable()) {
 +            // Pluto end - Configuration for item merging
                  this.mergeWithNeighbours();
              }
  
-@@ -238,6 +_,13 @@
+@@ -240,6 +_,13 @@
          return this.getOnPos(0.999999F);
      }
  
@@ -68,7 +68,7 @@
      private void setUnderwaterMovement() {
          this.setFluidMovement(0.99F);
      }
-@@ -254,8 +_,11 @@
+@@ -256,8 +_,11 @@
      private void mergeWithNeighbours() {
          if (this.isMergable()) {
              double radius = this.level().spigotConfig.itemMerge; // Spigot

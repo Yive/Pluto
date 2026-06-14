@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CreakingHeartBlock.java
 +++ b/net/minecraft/world/level/block/CreakingHeartBlock.java
-@@ -115,8 +_,13 @@
+@@ -116,8 +_,13 @@
      public static boolean hasRequiredLogs(final BlockState state, final LevelReader level, final BlockPos pos) {
          Direction.Axis axis = state.getValue(AXIS);
  
@@ -15,7 +15,7 @@
              if (!neigbour.is(BlockTags.PALE_OAK_LOGS) || neigbour.getValue(AXIS) != axis) {
                  return false;
              }
-@@ -126,9 +_,13 @@
+@@ -127,9 +_,13 @@
      }
  
      private static boolean isSurroundedByLogs(final LevelAccessor level, final BlockPos pos) {

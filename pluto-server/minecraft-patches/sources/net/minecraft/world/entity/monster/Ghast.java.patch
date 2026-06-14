@@ -1,15 +1,15 @@
 --- a/net/minecraft/world/entity/monster/Ghast.java
 +++ b/net/minecraft/world/entity/monster/Ghast.java
-@@ -316,7 +_,7 @@
+@@ -314,7 +_,7 @@
                  return false;
              }
  
 -            FluidState fluidState = level.getFluidState(pos);
 +            FluidState fluidState = state.getFluidState(); // Pluto - Decrease chunk/block lookups
-             if (!fluidState.isEmpty() && (!preciseBlockCollisions || this.ghast.collidedWithFluid(fluidState, pos, start, end))) {
+             if (!fluidState.isEmpty() && (!preciseBlockCollisions || this.mob.collidedWithFluid(fluidState, pos, start, end))) {
                  if (fluidState.is(FluidTags.WATER)) {
                      return canPathThroughWater;
-@@ -473,7 +_,7 @@
+@@ -471,7 +_,7 @@
                  return false;
              }
  

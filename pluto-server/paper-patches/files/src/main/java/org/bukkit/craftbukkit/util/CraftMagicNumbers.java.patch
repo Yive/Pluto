@@ -1,25 +1,16 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -489,7 +_,7 @@
- 
-     @Override
-     public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
--        return new com.destroystokyo.paper.PaperVersionFetcher();
-+        return new dev.yive.pluto.PlutoVersionFetcher(); // Pluto - Use Pluto's version fetcher.
+@@ -585,6 +_,13 @@
+         return nmsEntity;
      }
  
-     @Override
-@@ -783,6 +_,13 @@
-         Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
-         return compound;
-     }
-+
 +    // Pluto start - Add method to obtain current entity id
 +    @Override
 +    public int currentEntityId() {
-+        return net.minecraft.world.entity.Entity.currentEntityId();
++        return net.minecraft.server.level.ServerLevel.currentEntityId();
 +    }
 +    // Pluto end - Add method to obtain current entity id
- 
++
      @Override
-     public int nextEntityId() {
+     public int nextEntityId(final World world) {
+         return ((CraftWorld) world).getHandle().getNextEntityId();

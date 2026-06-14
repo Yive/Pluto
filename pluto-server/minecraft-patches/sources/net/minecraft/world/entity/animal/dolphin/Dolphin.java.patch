@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/dolphin/Dolphin.java
 +++ b/net/minecraft/world/entity/animal/dolphin/Dolphin.java
-@@ -446,8 +_,10 @@
+@@ -455,8 +_,10 @@
                      }
  
                      if (nextPos != null) {

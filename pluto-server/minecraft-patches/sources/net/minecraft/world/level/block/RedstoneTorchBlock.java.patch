@@ -9,22 +9,3 @@
              level.updateNeighborsAt(pos.relative(direction), this, ExperimentalRedstoneUtils.withFront(orientation, direction));
          }
      }
-@@ -119,6 +_,18 @@
-     protected int getDirectSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
-         return direction == Direction.DOWN ? state.getSignal(level, pos, direction) : Redstone.SIGNAL_MIN;
-     }
-+
-+    // Pluto start - Memory allocation optimisations
-+    @Override
-+    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        return state.getValue(LIT) && Direction.UP != direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_MIN;
-+    }
-+
-+    @Override
-+    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        return direction == Direction.DOWN ? state.pluto$getSignal(level, x, y, z, direction) : Redstone.SIGNAL_MIN;
-+    }
-+    // Pluto end - Memory allocation optimisations
- 
-     @Override
-     protected boolean isSignalSource(final BlockState state) {

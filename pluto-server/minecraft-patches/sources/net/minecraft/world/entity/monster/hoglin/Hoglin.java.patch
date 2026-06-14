@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/monster/hoglin/Hoglin.java
 +++ b/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-@@ -132,10 +_,12 @@
-         return (Brain<Hoglin>) super.getBrain();
+@@ -140,10 +_,12 @@
+         return (Brain<Hoglin>)super.getBrain();
      }
  
 +    private int behaviorTick; // Pufferfish

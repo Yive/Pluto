@@ -1,6 +1,6 @@
 --- a/net/minecraft/core/cauldron/CauldronInteractions.java
 +++ b/net/minecraft/core/cauldron/CauldronInteractions.java
-@@ -403,7 +_,7 @@
+@@ -373,7 +_,7 @@
      }
  
      private static boolean isUnderWater(final Level level, final BlockPos pos) {

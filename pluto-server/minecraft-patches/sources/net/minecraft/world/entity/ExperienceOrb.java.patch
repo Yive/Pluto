@@ -2,14 +2,14 @@
 +++ b/net/minecraft/world/entity/ExperienceOrb.java
 @@ -180,7 +_,7 @@
              this.applyEffectsFromBlocks();
-             float friction = 0.98F;
+             float friction = this.getAirDrag();
              if (this.onGround()) {
--                friction = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F;
-+                friction = this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F; // Pluto - Memory allocation optimisations
+-                friction *= this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction();
++                friction *= this.level().pluto$getBlockState(this.pluto$getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction(); // Pluto - Memory allocation optimisations
              }
  
              this.setDeltaMovement(this.getDeltaMovement().scale(friction));
-@@ -239,6 +_,13 @@
+@@ -244,6 +_,13 @@
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
          return this.getOnPos(0.999999F);
      }

@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/monster/creaking/Creaking.java
 +++ b/net/minecraft/world/entity/monster/creaking/Creaking.java
 @@ -204,10 +_,12 @@
-         return (Brain<Creaking>) super.getBrain();
+         return (Brain<Creaking>)super.getBrain();
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities

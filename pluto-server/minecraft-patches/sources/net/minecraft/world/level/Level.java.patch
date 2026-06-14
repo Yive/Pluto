@@ -1,15 +1,15 @@
 --- a/net/minecraft/world/level/Level.java
 +++ b/net/minecraft/world/level/Level.java
-@@ -151,7 +_,7 @@
+@@ -152,7 +_,7 @@
  
      public boolean captureBlockStates = false;
      public boolean captureTreeGeneration = false;
 -    public Map<BlockPos, org.bukkit.craftbukkit.block.CraftBlockState> capturedBlockStates = new java.util.LinkedHashMap<>(); // Paper
 +    public Map<Long, org.bukkit.craftbukkit.block.CraftBlockState> capturedBlockStates = new it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap<>(); // Paper // Pluto - Memory allocation optimisations
-     public Map<BlockPos, BlockEntity> capturedTileEntities = new java.util.LinkedHashMap<>(); // Paper - Retain block place order when capturing blockstates
+     public Map<BlockPos, BlockEntity> capturedBlockEntities = new java.util.LinkedHashMap<>(); // Paper - Retain block place order when capturing blockstates
      @Nullable
      public List<net.minecraft.world.entity.item.ItemEntity> captureDrops;
-@@ -171,6 +_,13 @@
+@@ -172,6 +_,13 @@
      }
      // Paper end - add paper world config
  
@@ -23,7 +23,7 @@
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
      public final Map<ServerExplosion.CacheKey, Float> explosionDensityCache = new java.util.HashMap<>(); // Paper - Optimize explosions
      public java.util.ArrayDeque<net.minecraft.world.level.block.RedstoneTorchBlock.Toggle> redstoneUpdateInfos; // Paper - Faster redstone torch rapid clock removal; Move from Map in BlockRedstoneTorch to here
-@@ -611,7 +_,7 @@
+@@ -612,7 +_,7 @@
  
          final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
          final ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.LazyEntityCollisionContext collisionShape = new ca.spottedleaf.moonrise.patches.collisions.CollisionUtil.LazyEntityCollisionContext(entity);
@@ -32,7 +32,7 @@
          double selectedDistance = Double.MAX_VALUE;
          final Vec3 entityPos = entity.position();
  
-@@ -685,7 +_,7 @@
+@@ -686,7 +_,7 @@
                                  }
  
                                  final double distance = mutablePos.distToCenterSqr(entityPos);
@@ -41,7 +41,7 @@
                                      continue;
                                  }
  
-@@ -707,24 +_,38 @@
+@@ -708,24 +_,38 @@
                                      }
  
                                      // avoid VoxelShape#move by shifting the entity collision shape instead
@@ -85,7 +85,7 @@
                                      selectedDistance = distance;
                                      continue;
                                  }
-@@ -735,7 +_,7 @@
+@@ -736,7 +_,7 @@
              }
          }
  
@@ -94,7 +94,7 @@
      }
      // Paper end - optimise collisions
      // Paper start - getblock optimisations - cache world height/sections
-@@ -852,6 +_,8 @@
+@@ -853,6 +_,8 @@
          final org.bukkit.NamespacedKey worldKey = CraftNamespacedKey.fromMinecraft(dimension.identifier()); // Paper
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(bukkitName, worldKey); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
@@ -103,7 +103,7 @@
          this.generator = generator;
          this.world = new CraftWorld((ServerLevel) this, worldKey, biomeProvider, environment);
  
-@@ -987,7 +_,7 @@
+@@ -992,7 +_,7 @@
      public final BlockState getBlockStateIfLoaded(BlockPos pos) {
          // CraftBukkit start - tree generation
          if (this.captureTreeGeneration) {
@@ -112,9 +112,9 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1051,15 +_,16 @@
+@@ -1056,15 +_,16 @@
      @Override
-     public boolean setBlock(final BlockPos pos, final BlockState blockState, @Block.UpdateFlags final int updateFlags, final int updateLimit) {
+     public boolean setBlock(final BlockPos pos, final BlockState blockState, final @Block.UpdateFlags int updateFlags, final int updateLimit) {
          // CraftBukkit start - tree generation
 +        long posLong = pos.asLong(); // Pluto - Memory allocation optimisations
          if (this.captureTreeGeneration) {
@@ -131,7 +131,7 @@
              }
              blockstate.setBlock(blockState);
              blockstate.setFlags(updateFlags);
-@@ -1080,12 +_,12 @@
+@@ -1085,12 +_,12 @@
          boolean captured = false;
          if (this.captureBlockStates) {
              final CraftBlockState snapshot;
@@ -147,7 +147,7 @@
              }
              snapshot.setFlags(updateFlags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
          }
-@@ -1095,7 +_,7 @@
+@@ -1100,7 +_,7 @@
          if (oldState == null) {
              // CraftBukkit start - remove blockstate if failed (or the same)
              if (this.captureBlockStates && captured) {
@@ -156,7 +156,7 @@
              }
              // CraftBukkit end
              return false;
-@@ -1301,11 +_,89 @@
+@@ -1307,11 +_,89 @@
          return this.getChunkSource().getLightEngine();
      }
  
@@ -247,7 +247,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1496,9 +_,10 @@
+@@ -1502,9 +_,10 @@
          for (int tickerIndex = 0; tickerIndex < this.blockEntityTickers.size(); tickerIndex++) {
              final TickingBlockEntity ticker = this.blockEntityTickers.get(tickerIndex);
          // Paper end - Fix MC-117075 use removeAll
@@ -259,7 +259,7 @@
                  ticker.tick();
                  // Paper start - rewrite chunk system
                  if ((++tickedEntities & 7) == 0) {
-@@ -1515,12 +_,12 @@
+@@ -1521,12 +_,12 @@
      public <T extends Entity> void guardEntityTick(final Consumer<T> tick, final T entity) {
          try {
              tick.accept(entity);
@@ -274,7 +274,7 @@
              // Paper end - Prevent block entity and entity crashes
          }
          this.moonrise$midTickTasks(); // Paper - rewrite chunk system
-@@ -1921,8 +_,11 @@
+@@ -1927,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(final BlockPos pos) {
@@ -288,7 +288,7 @@
          }
      }
  
-@@ -2049,17 +_,21 @@
+@@ -2055,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(final BlockPos pos, final Block changedBlock) {

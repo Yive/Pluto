@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/animal/nautilus/ZombieNautilus.java
 +++ b/net/minecraft/world/entity/animal/nautilus/ZombieNautilus.java
 @@ -72,10 +_,12 @@
-         return (Brain<ZombieNautilus>) super.getBrain();
+         return (Brain<ZombieNautilus>)super.getBrain();
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities

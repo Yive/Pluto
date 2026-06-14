@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/breeze/Breeze.java
 +++ b/net/minecraft/world/entity/monster/breeze/Breeze.java
-@@ -229,10 +_,12 @@
+@@ -230,10 +_,12 @@
          return target.closerThan(ourPosition, 4.0, 10.0);
      }
  

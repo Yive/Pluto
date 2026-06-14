@@ -131,7 +131,7 @@
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -673,36 +_,39 @@
+@@ -673,34 +_,37 @@
      }
  
      public static @Nullable Container getContainerAt(final Level level, final BlockPos pos) {
@@ -171,16 +171,14 @@
 +        }
 +        // Pluto end - Small hopper optimisations
          Block block = state.getBlock();
-         if (block instanceof WorldlyContainerHolder) {
-             return ((WorldlyContainerHolder)block).getContainer(state, level, pos);
-         }
- 
--        if (state.hasBlockEntity() && level.getBlockEntity(pos) instanceof Container container) {
-+        if (state.hasBlockEntity() && (chunk == null ? level.getBlockEntity(pos) : chunk.getBlockEntity(pos, net.minecraft.world.level.chunk.LevelChunk.EntityCreationType.IMMEDIATE)) instanceof Container container) { // Pluto - Small hopper optimisations
-             if (container instanceof ChestBlockEntity && block instanceof ChestBlock) {
-                 container = ChestBlock.getContainer((ChestBlock)block, state, level, pos, true);
+         if (block instanceof WorldlyContainerHolder worldlyContainerHolder) {
+             return worldlyContainerHolder.getContainer(state, level, pos);
+-        } else if (state.hasBlockEntity() && level.getBlockEntity(pos) instanceof Container container) {
++        } else if (state.hasBlockEntity() && (chunk == null ? level.getBlockEntity(pos) : chunk.getBlockEntity(pos, net.minecraft.world.level.chunk.LevelChunk.EntityCreationType.IMMEDIATE)) instanceof Container container) { // Pluto - Small hopper optimisations
+             if (container instanceof ChestBlockEntity && block instanceof ChestBlock chestBlock) {
+                 container = ChestBlock.getContainer(chestBlock, state, level, pos, true);
              }
-@@ -713,7 +_,10 @@
+@@ -711,7 +_,10 @@
          }
      }
  

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
-@@ -342,7 +_,7 @@
+@@ -354,7 +_,7 @@
      }
  
      protected @Nullable Direction findAttachableSurface(final BlockPos target) {
@@ -9,7 +9,7 @@
              if (this.canStayAt(target, direction)) {
                  return direction;
              }
-@@ -376,6 +_,7 @@
+@@ -388,6 +_,7 @@
      }
  
      protected boolean teleportSomewhere() {
@@ -17,11 +17,11 @@
          if (!this.isNoAi() && this.isAlive()) {
              BlockPos current = this.blockPosition();
  
-@@ -455,6 +_,7 @@
+@@ -467,6 +_,7 @@
          Vec3 oldPosition = this.position();
          AABB oldAabb = this.getBoundingBox();
          if (!this.isClosed() && this.teleportSomewhere()) {
 +            if (this.level().plutoConfig().disableShulkerSplitting) return; // Pluto - Shulker configuration
-             int shulkerCount = this.level().getEntities(EntityType.SHULKER, oldAabb.inflate(8.0), Entity::isAlive).size();
+             int shulkerCount = this.level().getEntities(EntityTypes.SHULKER, oldAabb.inflate(8.0), Entity::isAlive).size();
              float failureChance = (shulkerCount - 1) / 5.0F;
              if (!(this.level().getRandom().nextFloat() < failureChance)) {

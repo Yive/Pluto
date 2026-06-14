@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/goal/BreathAirGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/BreathAirGoal.java
-@@ -74,6 +_,6 @@
+@@ -66,6 +_,6 @@
  
      private boolean givesAir(final LevelReader level, final BlockPos pos) {
          BlockState state = level.getBlockState(pos);

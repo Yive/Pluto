@@ -12,8 +12,8 @@
 +        BlockState state = chunk.getBlockState(blockPos);
          Block block = state.getBlock();
 -        Block blockBelow = level.getBlockState(blockPos.below()).getBlock();
--        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(state) || state.isAir() && blockBelow instanceof FarmlandBlock;
-+        return block instanceof CropBlock && ((CropBlock)block).isMaxAge(state) || state.isAir() && chunk.getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()).getBlock() instanceof FarmlandBlock;
+-        return block instanceof CropBlock cropBlock && cropBlock.isMaxAge(state) || state.isAir() && blockBelow instanceof FarmlandBlock;
++        return block instanceof CropBlock cropBlock && cropBlock.isMaxAge(state) || state.isAir() && chunk.getBlockState(blockPos.getX(), blockPos.getY() - 1, blockPos.getZ()).getBlock() instanceof FarmlandBlock;
 +        // Pluto end - Decrease chunk/block lookups
      }
  
@@ -31,7 +31,7 @@
                  Block block = blockState.getBlock();
 -                Block blockBelow = level.getBlockState(this.aboveFarmlandPos.below()).getBlock();
 +                // Pluto end - Decrease chunk/block lookups
-                 if (block instanceof CropBlock && ((CropBlock)block).isMaxAge(blockState)) {
+                 if (block instanceof CropBlock cropBlock && cropBlock.isMaxAge(blockState)) {
                      if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(body, this.aboveFarmlandPos, blockState.getFluidState().createLegacyBlock())) { // CraftBukkit // Paper - fix wrong block state
                      level.destroyBlock(this.aboveFarmlandPos, true, body);
                      } // CraftBukkit

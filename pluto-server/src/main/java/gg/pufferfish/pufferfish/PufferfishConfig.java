@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -220,12 +221,16 @@ public class PufferfishConfig {
                 "If you want further away entities to tick more often, try 9.");
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-            entityType.dabEnabled = true; // reset all, before setting the ones to true
+            entityType.dabEnabled = true; // reset all, before setting the ones to false
         }
         getStringList("dab.blacklisted-entities", "activation-range.blacklisted-entities", Collections.emptyList(), "A list of entities to ignore for activation")
-                .forEach(name -> EntityType.byString(name).ifPresentOrElse(entityType -> {
-                    entityType.dabEnabled = false;
-                }, () -> MinecraftServer.LOGGER.warn("Unknown entity \"" + name + "\"")));
+                .forEach(name ->
+                    BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.tryParse(name))
+                        .ifPresentOrElse(
+                            entityType -> entityType.dabEnabled = false,
+                            () -> MinecraftServer.LOGGER.warn("Unknown entity \"{}\"", name)
+                        )
+                );
 
         setComment("dab", "Optimizes entity brains when", "they're far away from the player");
     }

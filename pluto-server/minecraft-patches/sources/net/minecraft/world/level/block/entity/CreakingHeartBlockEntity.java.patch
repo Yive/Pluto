@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/CreakingHeartBlockEntity.java
-@@ -90,9 +_,11 @@
+@@ -91,9 +_,11 @@
                      Vec3 heartPosition = Vec3.atCenterOf(pos);
                      float progress = 0.2F + 0.8F * (100 - entity.emitter) / 100.0F;
                      Vec3 soundLocation = heartPosition.subtract(entity.emitterTarget).scale(progress).add(entity.emitterTarget);

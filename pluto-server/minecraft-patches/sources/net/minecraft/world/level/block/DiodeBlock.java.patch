@@ -1,55 +1,15 @@
 --- a/net/minecraft/world/level/block/DiodeBlock.java
 +++ b/net/minecraft/world/level/block/DiodeBlock.java
-@@ -82,6 +_,26 @@
-         return state.getSignal(level, pos, direction);
-     }
+@@ -89,7 +_,7 @@
+                 dropResources(state, level, pos, blockEntity);
+                 level.removeBlock(pos, false);
  
-+    // Pluto start - Memory allocation optimisations
-+    @Override
-+    protected int pluto$getDirectSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        return state.pluto$getSignal(level, x, y, z, direction);
-+    }
-+
-+    @Override
-+    protected int pluto$getSignal(final BlockState state, final BlockGetter level, final int x, final int y, final int z, final Direction direction) {
-+        if (!state.getValue(POWERED)) {
-+            return Redstone.SIGNAL_MIN;
-+        } else {
-+            return state.getValue(FACING) == direction ? this.pluto$getOutputSignal(level, x, y, z, state) : Redstone.SIGNAL_MIN;
-+        }
-+    }
-+
-+    protected int pluto$getOutputSignal(final BlockGetter level, final int x, final int y, final int z, final BlockState state) {
-+        return Redstone.SIGNAL_MAX;
-+    }
-+    // Pluto end - Memory allocation optimisations
-+
-     @Override
-     protected int getSignal(final BlockState state, final BlockGetter level, final BlockPos pos, final Direction direction) {
-         if (!state.getValue(POWERED)) {
-@@ -103,7 +_,7 @@
-             dropResources(state, level, pos, blockEntity);
-             level.removeBlock(pos, false);
- 
--            for (Direction direction : Direction.values()) {
-+            for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-                 level.updateNeighborsAt(pos.relative(direction), this);
+-                for (Direction direction : Direction.values()) {
++                for (Direction direction : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
+                     level.updateNeighborsAt(pos.relative(direction), this);
+                 }
              }
-         }
-@@ -152,8 +_,10 @@
-         Direction counterClockWise = direction.getCounterClockWise();
-         boolean sideInputDiodesOnly = this.sideInputDiodesOnly();
-         return Math.max(
--            level.getControlInputSignal(pos.relative(clockWise), clockWise, sideInputDiodesOnly),
--            level.getControlInputSignal(pos.relative(counterClockWise), counterClockWise, sideInputDiodesOnly)
-+            // Pluto start - Memory allocation optimisations
-+            level.pluto$getControlInputSignal(pos.getX() + clockWise.getStepX(), pos.getY() + clockWise.getStepY(), pos.getZ() + clockWise.getStepZ(), clockWise, sideInputDiodesOnly),
-+            level.pluto$getControlInputSignal(pos.getX() + counterClockWise.getStepX(), pos.getY() + counterClockWise.getStepY(), pos.getZ() + counterClockWise.getStepZ(), counterClockWise, sideInputDiodesOnly)
-+            // Pluto end - Memory allocation optimisations
-         );
-     }
- 
-@@ -208,7 +_,7 @@
+@@ -210,7 +_,7 @@
  
      public boolean shouldPrioritize(final BlockGetter level, final BlockPos pos, final BlockState state) {
          Direction direction = state.getValue(FACING).getOpposite();

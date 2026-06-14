@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/animal/nautilus/Nautilus.java
 +++ b/net/minecraft/world/entity/animal/nautilus/Nautilus.java
-@@ -49,10 +_,12 @@
-         return baby;
+@@ -63,10 +_,12 @@
+         return this.isBaby() ? BABY_DIMENSIONS : super.getDefaultDimensions(pose);
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities

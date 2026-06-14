@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/WorldGenRegion.java
 +++ b/net/minecraft/server/level/WorldGenRegion.java
-@@ -198,6 +_,50 @@
+@@ -205,6 +_,50 @@
      }
      // Paper end
  
@@ -50,4 +50,4 @@
 +
      @Override
      public BlockState getBlockState(final BlockPos pos) {
-         return this.getChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ())).getBlockState(pos);
+         int chunkX = SectionPos.blockToSectionCoord(pos.getX());

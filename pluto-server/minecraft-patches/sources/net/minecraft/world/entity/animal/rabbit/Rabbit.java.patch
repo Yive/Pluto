@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/rabbit/Rabbit.java
 +++ b/net/minecraft/world/entity/animal/rabbit/Rabbit.java
-@@ -659,7 +_,7 @@
+@@ -658,7 +_,7 @@
          protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
              BlockState state = level.getBlockState(pos);
              if (state.is(BlockTags.SUPPORTS_CROPS) && this.wantsToRaid && !this.canRaid) {

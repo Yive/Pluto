@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/animal/camel/Camel.java
 +++ b/net/minecraft/world/entity/animal/camel/Camel.java
-@@ -161,11 +_,13 @@
-         return pose == Pose.SITTING ? SITTING_DIMENSIONS.scale(this.getAgeScale()) : super.getDefaultDimensions(pose);
+@@ -168,11 +_,13 @@
+             : (this.isBaby() ? BABY_STANDING_DIMENSIONS : super.getDefaultDimensions(pose));
      }
  
 +    private int behaviourTick = 0; // Pluto - Add DAB to more entities

@@ -13,7 +13,7 @@
                  MapId id = frame.cachedMapId; // Paper - Perf: Cache map ids on item frames
                  MapItemSavedData data = MapItem.getSavedData(id, this.level);
                  if (data != null) {
-@@ -181,7 +_,10 @@
+@@ -186,7 +_,10 @@
                      packet = ClientboundEntityPositionSyncPacket.of(this.entity);
                      sentPosition = true;
                      sentRotation = true;
@@ -25,11 +25,11 @@
                      if (pos) {
                          packet = new ClientboundMoveEntityPacket.Pos(this.entity.getId(), (short)xa, (short)ya, (short)za, this.entity.onGround());
                          sentPosition = true;
-@@ -194,6 +_,7 @@
+@@ -199,6 +_,7 @@
                      sentPosition = true;
                      sentRotation = true;
                  }
 +                } // Pufferfish - Better checking for useless move packets
  
-                 if (this.entity.needsSync || this.trackDelta || this.entity instanceof LivingEntity && ((LivingEntity)this.entity).isFallFlying()) {
+                 if (this.entity.needsSync || this.trackDelta || this.entity instanceof LivingEntity livingEntity && livingEntity.isFallFlying()) {
                      Vec3 movement = this.entity.getDeltaMovement();

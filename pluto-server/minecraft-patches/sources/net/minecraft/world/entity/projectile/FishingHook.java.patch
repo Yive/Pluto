@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/FishingHook.java
 +++ b/net/minecraft/world/entity/projectile/FishingHook.java
-@@ -346,7 +_,7 @@
+@@ -347,7 +_,7 @@
                  double fishX = this.getX() + angleSin * this.timeUntilHooked * 0.1F;
                  double fishY = Mth.floor(this.getY()) + 1.0F;
                  double fishZ = this.getZ() + angleCos * this.timeUntilHooked * 0.1F;
@@ -9,7 +9,7 @@
                  if (splashBlockState.is(Blocks.WATER)) {
                      if (this.random.nextFloat() < 0.15F) {
                          serverLevel.sendParticles(ParticleTypes.BUBBLE, fishX, fishY - 0.1F, fishZ, 1, angleSin, 0.1, angleCos, 0.0);
-@@ -400,7 +_,7 @@
+@@ -401,7 +_,7 @@
                  double fishX = this.getX() + Mth.sin(angle) * dist * 0.1;
                  double fishY = Mth.floor(this.getY()) + 1.0F;
                  double fishZ = this.getZ() + Mth.cos(angle) * dist * 0.1;

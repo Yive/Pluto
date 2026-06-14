@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/animal/goat/Goat.java
 +++ b/net/minecraft/world/entity/animal/goat/Goat.java
-@@ -166,10 +_,12 @@
-         return (Brain<Goat>) super.getBrain();
+@@ -172,10 +_,12 @@
+         return (Brain<Goat>)super.getBrain();
      }
  
 +    private int behaviorTick = 0; // Pufferfish

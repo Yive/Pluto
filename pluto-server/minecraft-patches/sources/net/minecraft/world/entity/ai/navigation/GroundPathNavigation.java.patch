@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
 +++ b/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
-@@ -97,11 +_,16 @@
+@@ -96,11 +_,16 @@
      private int getSurfaceY() {
          if (this.mob.isInWater() && this.canFloat()) {
              int surface = this.mob.getBlockY();
