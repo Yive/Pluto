@@ -1,0 +1,5 @@
+--- a/src/main/resources/META-INF/services/io.papermc.paper.InternalAPIBridge
++++ b/src/main/resources/META-INF/services/io.papermc.paper.InternalAPIBridge
+@@ -1,1 +_,1 @@
+-io.papermc.paper.PaperServerInternalAPIBridge
++dev.yive.pluto.PlutoServerInternalAPIBridge
