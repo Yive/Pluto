@@ -11,7 +11,7 @@
      public final int[] mobCounts = new int[MOBCATEGORY_TOTAL_ENUMS];
      // Paper end - Optional per player mob spawns
      public final int[] mobBackoffCounts = new int[MOBCATEGORY_TOTAL_ENUMS]; // Paper - per player mob count backoff
-@@ -831,6 +_,16 @@
+@@ -822,6 +_,16 @@
                  }
              }
  
@@ -28,7 +28,7 @@
              for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
                  ItemStack itemStack = this.getInventory().getItem(i);
                  if (!itemStack.isEmpty()) {
-@@ -1473,7 +_,7 @@
+@@ -1464,7 +_,7 @@
              }
  
              boolean freeBottom = block.isPossibleToRespawnInThis(blockState);

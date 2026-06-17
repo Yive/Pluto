@@ -8,7 +8,7 @@
 +        @Override public long getChunkPos() { return ChunkPos.ZERO.longKey(); } // Pluto - Optimise block entity ticking
      };
      private final Map<BlockPos, LevelChunk.RebindableTickingBlockEntityWrapper> tickersInLevel = Maps.newHashMap();
-     public boolean loaded;
+     private boolean loaded;
 @@ -99,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end

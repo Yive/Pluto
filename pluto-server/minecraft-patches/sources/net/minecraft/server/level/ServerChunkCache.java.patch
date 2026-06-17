@@ -172,7 +172,7 @@
 +                    }
 +                } finally {
 +                    spawningChunk.clear();
-+                    level.chunkSource.pluto$stillSpawningEntities.set(false);
++                    level.getChunkSource().pluto$stillSpawningEntities.set(false);
 +                }
 +            });
 +        } else {
