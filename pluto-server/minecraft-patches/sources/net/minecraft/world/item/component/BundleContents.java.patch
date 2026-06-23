@@ -1,0 +1,24 @@
+--- a/net/minecraft/world/item/component/BundleContents.java
++++ b/net/minecraft/world/item/component/BundleContents.java
+@@ -21,10 +_,10 @@
+ public final class BundleContents implements TooltipComponent {
+     public static final BundleContents EMPTY = new BundleContents(List.of());
+     public static final Codec<BundleContents> CODEC = ItemStack.CODEC
+-        .listOf()
++        .sizeLimitedListOf(256) // Paper - limit size
+         .flatXmap(BundleContents::checkAndCreate, bundleContents -> DataResult.success(bundleContents.items));
+     public static final StreamCodec<RegistryFriendlyByteBuf, BundleContents> STREAM_CODEC = ItemStack.STREAM_CODEC
+-        .apply(ByteBufCodecs.list())
++        .apply(ByteBufCodecs.list(256)) // Paper - limit size
+         .apply(ByteBufCodecs::increaseDepth) // Paper - Track codec depth
+         .map(BundleContents::new, contents -> contents.items);
+     private static final Fraction BUNDLE_IN_BUNDLE_WEIGHT = Fraction.getFraction(1, 16);
+@@ -35,7 +_,7 @@
+     final int selectedItem;
+ 
+     BundleContents(List<ItemStack> items, Fraction weight, int selectedItem) {
+-        this.items = items;
++        this.items = items.size() > 256 ? items.subList(0, 256) : items; // Paper - limit size
+         this.weight = weight;
+         this.selectedItem = selectedItem;
+     }
