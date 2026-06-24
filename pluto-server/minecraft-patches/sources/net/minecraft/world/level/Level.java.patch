@@ -112,7 +112,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1056,15 +_,16 @@
+@@ -1055,15 +_,16 @@
      @Override
      public boolean setBlock(final BlockPos pos, final BlockState blockState, final @Block.UpdateFlags int updateFlags, final int updateLimit) {
          // CraftBukkit start - tree generation
@@ -131,7 +131,7 @@
              }
              blockstate.setBlock(blockState);
              blockstate.setFlags(updateFlags);
-@@ -1085,12 +_,12 @@
+@@ -1084,12 +_,12 @@
          boolean captured = false;
          if (this.captureBlockStates) {
              final CraftBlockState snapshot;
@@ -147,7 +147,7 @@
              }
              snapshot.setFlags(updateFlags); // Paper - always set the flag of the most recent call to mitigate issues with multiple update at the same pos with different flags
          }
-@@ -1100,7 +_,7 @@
+@@ -1099,7 +_,7 @@
          if (oldState == null) {
              // CraftBukkit start - remove blockstate if failed (or the same)
              if (this.captureBlockStates && captured) {
@@ -156,7 +156,7 @@
              }
              // CraftBukkit end
              return false;
-@@ -1307,11 +_,89 @@
+@@ -1306,11 +_,89 @@
          return this.getChunkSource().getLightEngine();
      }
  
@@ -247,7 +247,7 @@
              if (previous != null) {
                  return previous.getHandle();
              }
-@@ -1502,9 +_,10 @@
+@@ -1501,9 +_,10 @@
          for (int tickerIndex = 0; tickerIndex < this.blockEntityTickers.size(); tickerIndex++) {
              final TickingBlockEntity ticker = this.blockEntityTickers.get(tickerIndex);
          // Paper end - Fix MC-117075 use removeAll
@@ -259,7 +259,7 @@
                  ticker.tick();
                  // Paper start - rewrite chunk system
                  if ((++tickedEntities & 7) == 0) {
-@@ -1521,12 +_,12 @@
+@@ -1520,12 +_,12 @@
      public <T extends Entity> void guardEntityTick(final Consumer<T> tick, final T entity) {
          try {
              tick.accept(entity);
@@ -274,7 +274,7 @@
              // Paper end - Prevent block entity and entity crashes
          }
          this.moonrise$midTickTasks(); // Paper - rewrite chunk system
-@@ -1927,8 +_,11 @@
+@@ -1926,8 +_,11 @@
      public abstract Collection<EnderDragonPart> dragonParts();
  
      public void blockEntityChanged(final BlockPos pos) {
@@ -288,7 +288,7 @@
          }
      }
  
-@@ -2055,17 +_,21 @@
+@@ -2054,17 +_,21 @@
      public abstract Scoreboard getScoreboard();
  
      public void updateNeighbourForOutputSignal(final BlockPos pos, final Block changedBlock) {

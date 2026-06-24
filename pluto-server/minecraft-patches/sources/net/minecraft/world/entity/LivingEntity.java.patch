@@ -18,7 +18,7 @@
                  boolean canDrownInWater = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
                      && (!isPlayer || !((Player)this).getAbilities().invulnerable);
-@@ -2938,6 +_,11 @@
+@@ -2937,6 +_,11 @@
          }
      }
  
@@ -30,7 +30,7 @@
      public float getSoundVolume() {
          return 1.0F;
      }
-@@ -3094,10 +_,10 @@
+@@ -3093,10 +_,10 @@
      }
  
      private void travelInAir(final Vec3 input) {
@@ -43,7 +43,7 @@
              )
              : 1.0F;
          Vec3 movement = this.handleRelativeFrictionAndCalculateMovement(input, blockFriction);
-@@ -3105,7 +_,7 @@
+@@ -3104,7 +_,7 @@
          MobEffectInstance levitationEffect = this.getEffect(MobEffects.LEVITATION);
          if (levitationEffect != null) {
              movementY += (0.05 * (levitationEffect.getAmplifier() + 1) - movement.y) * 0.2;
@@ -52,7 +52,7 @@
              movementY -= this.getEffectiveGravity();
          } else if (this.getY() > this.level().getMinY()) {
              movementY = -0.1;
-@@ -3811,6 +_,7 @@
+@@ -3810,6 +_,7 @@
              this.checkAutoSpinAttack(beforeTravelBox, this.getBoundingBox());
          }
  
@@ -60,7 +60,7 @@
          this.pushEntities();
          profiler.pop();
          // Paper start - Add EntityMoveEvent
-@@ -3901,6 +_,7 @@
+@@ -3900,6 +_,7 @@
              return;
          }
          // Paper end - don't run getEntities if we're not going to use its result
@@ -68,7 +68,7 @@
          List<Entity> pushableEntities = this.level().getPushableEntities(this, this.getBoundingBox());
          if (!pushableEntities.isEmpty()) {
              if (this.level() instanceof ServerLevel serverLevel) {
-@@ -4511,19 +_,27 @@
+@@ -4510,19 +_,27 @@
          double zo = this.getZ();
          double y = yy;
          boolean ok = false;
@@ -102,7 +102,7 @@
                  }
              }
  
-@@ -4665,8 +_,7 @@
+@@ -4664,8 +_,7 @@
                  Direction facing = state.getValue(BedBlock.FACING);
                  this.level().setBlock(bedPosition, state.setValue(BedBlock.OCCUPIED, false), Block.UPDATE_ALL);
                  Vec3 standUp = BedBlock.findStandUpPosition(this.getType(), this.level(), bedPosition, facing, this.getYRot()).orElseGet(() -> {
@@ -112,7 +112,7 @@
                  });
                  Vec3 lookDirection = Vec3.atBottomCenterOf(bedPosition).subtract(standUp).normalize();
                  float yaw = (float)Mth.wrapDegrees(Mth.atan2(lookDirection.z, lookDirection.x) * 180.0F / (float)Math.PI - 90.0);
-@@ -4690,6 +_,19 @@
+@@ -4689,6 +_,19 @@
      public boolean isInWall() {
          return !this.isSleeping() && super.isInWall();
      }
