@@ -6,10 +6,10 @@
                      ItemStack burnResult = recipe.value().assemble(input);
 -                    if (!burnResult.isEmpty() && canBurn(entity.items, maxStackSize, burnResult)) {
 +                    if (!burnResult.isEmpty() && canBurn(entity.items, maxStackSize, burnResult, entity)) { // Pluto - Cache canBurn result in Furnaces
-                         // CraftBukkit start
-                         org.bukkit.event.inventory.FurnaceBurnEvent furnaceBurnEvent = new org.bukkit.event.inventory.FurnaceBurnEvent(
-                             org.bukkit.craftbukkit.block.CraftBlock.at(level, pos),
-@@ -240,7 +_,7 @@
+                         if (!isLit) {
+                             int newLitTime = entity.getBurnDuration(level.fuelValues(), fuel);
+                             // CraftBukkit start
+@@ -241,7 +_,7 @@
                              if (entity.cookingTimer >= entity.cookingTotalTime) { // Paper - cook speed multiplier API
                                  entity.cookingTimer = 0;
                                  entity.cookingTotalTime = getTotalCookTime(level, entity, entity.recipeType, entity.cookSpeedMultiplier); // Paper - cook speed multiplier API
@@ -18,7 +18,7 @@
                                  entity.setRecipeUsed(recipe);
                                  } // Paper
                                  changed = true;
-@@ -279,22 +_,49 @@
+@@ -280,22 +_,49 @@
          }
      }
  
