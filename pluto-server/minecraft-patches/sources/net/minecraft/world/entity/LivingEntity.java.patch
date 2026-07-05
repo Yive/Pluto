@@ -18,18 +18,6 @@
                  boolean canDrownInWater = !this.canBreatheUnderwater()
                      && !MobEffectUtil.hasWaterBreathing(this)
                      && (!isPlayer || !((Player)this).getAbilities().invulnerable);
-@@ -2937,6 +_,11 @@
-         }
-     }
- 
-+    // Pluto start - Expose some sound related functions
-+    public float pluto$GetSoundVolume() { return getSoundVolume(); }
-+    public float pluto$GetVoicePitch() { return getVoicePitch(); }
-+    // Pluto end - Expose some sound related functions
-+
-     public float getSoundVolume() {
-         return 1.0F;
-     }
 @@ -3093,10 +_,10 @@
      }
  

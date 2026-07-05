@@ -1,25 +1,22 @@
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -994,6 +_,22 @@
+@@ -995,6 +_,19 @@
       */
      <T> void setMemory(@NotNull MemoryKey<T> memoryKey, @Nullable T memoryValue);
  
 +    // Pluto start - Expose some sound related functions
 +    /**
-+     * Gets entity sound volume
-+     *
-+     * @return entity sound volume
-+     */
-+    float getSoundVolume();
-+
-+    /**
 +     * Gets entity voice pitch
 +     *
++     * @deprecated use {@link #getSoundPitch()}
 +     * @return entity voice pitch
 +     */
-+    float getVoicePitch();
++    @Deprecated
++    default float getVoicePitch() {
++        return getSoundPitch();
++    }
 +    // Pluto end - Expose some sound related functions
 +
      /**
-      * Get the {@link Sound} this entity will make when damaged.
+      * Get the sound volume at which this entity plays its sounds with.
       *
