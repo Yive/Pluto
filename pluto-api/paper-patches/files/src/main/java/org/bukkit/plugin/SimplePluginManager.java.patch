@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
 +++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
-@@ -597,7 +_,9 @@
+@@ -596,7 +_,9 @@
  
      // Paper start
      private void handlePluginException(String msg, Throwable ex, Plugin plugin) {
@@ -10,7 +10,7 @@
          callEvent(new com.destroystokyo.paper.event.server.ServerExceptionEvent(new com.destroystokyo.paper.exception.ServerPluginEnableDisableException(msg, ex, plugin)));
      }
      // Paper end
-@@ -667,9 +_,11 @@
+@@ -666,9 +_,11 @@
                              ));
                  }
              } catch (Throwable ex) {
