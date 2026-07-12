@@ -80,7 +80,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -197,7 +_,7 @@
+@@ -206,7 +_,7 @@
  
  // Bump compile tasks to 1GB memory to avoid OOMs
  tasks.withType<JavaCompile>().configureEach {
@@ -89,7 +89,7 @@
  }
  
  val scanJarForBadCalls by tasks.registering(io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
-@@ -237,7 +_,7 @@
+@@ -246,7 +_,7 @@
      jvmArgumentProviders.add(provider)
  }
  

@@ -21,7 +21,7 @@
          return player.mobCounts[mobCategory.ordinal()] + player.mobBackoffCounts[mobCategory.ordinal()]; // Paper - per player mob count backoff
      }
      // Paper end - Optional per player mob spawns
-@@ -748,6 +_,7 @@
+@@ -749,6 +_,7 @@
          Objects.checkFromToIndex(0, size, raw.length);
          for (int i = 0; i < size; ++i) {
              final LevelChunk levelChunk = raw[i];
@@ -29,7 +29,7 @@
  
              if (!this.isChunkNearPlayer((ChunkMap)(Object)this, levelChunk.getPos(), levelChunk)) {
                  continue;
-@@ -1383,6 +_,7 @@
+@@ -1384,6 +_,7 @@
                      visibleToPlayer = false;
                  }
                  // CraftBukkit end
