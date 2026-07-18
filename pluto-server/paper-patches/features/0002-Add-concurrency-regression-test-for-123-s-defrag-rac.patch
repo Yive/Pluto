@@ -1,0 +1,124 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soy-chrislo <christianrubioortiz@gmail.com>
+Date: Sat, 18 Jul 2026 12:37:45 -0500
+Subject: [PATCH] Add concurrency regression test for #123's defrag() race
+
+Two threads hammer the set for 3s: a TickThread simulating the main
+thread churns add()/remove() (which triggers defrag() on its own,
+gated by iteratorCount==0), while a plain thread simulates an async
+off-thread executor (mob spawning, or Pluto's Async Spawning Chunks)
+by repeatedly iterating via iterator(SEE_ADDITIONS)/finishedIterating().
+Verified this reproduces state corruption when the
+TickThread.isTickThread() guard from the previous commit is reverted,
+and passes cleanly with the guard in place -- same verification
+already done against Pufferfish's own 26.2 rebase.
+
+Registered ca.spottedleaf.moonrise under NormalTestSuite's
+@SelectPackages so JUnit Platform Suite actually discovers it -- no
+moonrise-package tests previously existed.
+
+diff --git a/src/test/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSetConcurrencyTest.java b/src/test/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSetConcurrencyTest.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..55cda48199bf275ec08ddc5d38965f5b8fda9f0e
+--- /dev/null
++++ b/src/test/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSetConcurrencyTest.java
+@@ -0,0 +1,86 @@
++package ca.spottedleaf.moonrise.common.list;
++
++import ca.spottedleaf.moonrise.common.util.TickThread;
++import java.util.List;
++import java.util.concurrent.CopyOnWriteArrayList;
++import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.atomic.AtomicBoolean;
++import org.bukkit.support.environment.Normal;
++import org.junit.jupiter.api.Test;
++
++import static org.junit.jupiter.api.Assertions.assertTrue;
++
++// Pufferfish/Pluto - regression test for pufferfish-gg/Pufferfish#123: defrag() run from an
++// off-thread iterator (e.g. async mob spawning, or Pluto's Async Spawning Chunks) can race a
++// concurrent main-thread remove()/defrag() and corrupt firstInvalidIndex, throwing
++// ArrayIndexOutOfBoundsException. finishRawIterator() now only defrags from the tick thread; this
++// hammers both paths concurrently to prove that holds under load. Reverting the
++// TickThread.isTickThread() guard in finishRawIterator() reproduces the corruption from #123
++// within this test's duration.
++public class IteratorSafeOrderedReferenceSetConcurrencyTest {
++
++    private static final long DURATION_MILLIS = 3000;
++
++    @Normal
++    @Test
++    public void concurrentAsyncIterationDoesNotCorruptState() throws InterruptedException {
++        final IteratorSafeOrderedReferenceSet<Object> set =
++            new IteratorSafeOrderedReferenceSet<>(16, 0.75f, 16, 0.01); // low maxFragFactor: forces frequent defrag()
++
++        for (int i = 0; i < 200; ++i) {
++            set.add(new Object());
++        }
++
++        final AtomicBoolean running = new AtomicBoolean(true);
++        final List<Throwable> failures = new CopyOnWriteArrayList<>();
++        final CountDownLatch ready = new CountDownLatch(2);
++
++        // simulates the main/tick thread: churns add/remove, which is what actually
++        // triggers defrag() in production (via remove()'s own iteratorCount==0 gate)
++        final TickThread mainThread = new TickThread(() -> {
++            ready.countDown();
++            try {
++                while (running.get()) {
++                    final Object element = new Object();
++                    set.add(element);
++                    set.remove(element);
++                }
++            } catch (final Throwable t) {
++                failures.add(t);
++            }
++        }, "test-tick-thread");
++
++        // simulates an async off-thread executor (mob-spawning, or Pluto's Async Spawning
++        // Chunks): repeatedly iterates the set
++        final Thread asyncThread = new Thread(() -> {
++            ready.countDown();
++            try {
++                while (running.get()) {
++                    final IteratorSafeOrderedReferenceSet.Iterator<Object> it =
++                        set.iterator(IteratorSafeOrderedReferenceSet.ITERATOR_FLAG_SEE_ADDITIONS);
++                    try {
++                        while (it.hasNext()) {
++                            it.next();
++                        }
++                    } finally {
++                        it.finishedIterating();
++                    }
++                }
++            } catch (final Throwable t) {
++                failures.add(t);
++            }
++        }, "test-async-executor-thread");
++
++        mainThread.start();
++        asyncThread.start();
++        ready.await();
++
++        Thread.sleep(DURATION_MILLIS);
++        running.set(false);
++
++        mainThread.join(5000);
++        asyncThread.join(5000);
++
++        assertTrue(failures.isEmpty(), "Concurrent iteration corrupted set state: " + failures);
++    }
++}
+diff --git a/src/test/java/org/bukkit/support/suite/NormalTestSuite.java b/src/test/java/org/bukkit/support/suite/NormalTestSuite.java
+index 625d88420c9f0f0828aae1ff9f22103b44ace76e..cc4885c3a6b9c238bc2a0cc407c185277d3d9451 100644
+--- a/src/test/java/org/bukkit/support/suite/NormalTestSuite.java
++++ b/src/test/java/org/bukkit/support/suite/NormalTestSuite.java
+@@ -9,7 +9,7 @@ import org.junit.platform.suite.api.SuiteDisplayName;
+ @Suite(failIfNoTests = false)
+ @SuiteDisplayName("Test suite for standalone tests, which don't need any registry values present")
+ @IncludeTags("Normal")
+-@SelectPackages({"org.bukkit", "io.papermc.paper", "com.destroystokyo.paper"})
++@SelectPackages({"org.bukkit", "io.papermc.paper", "com.destroystokyo.paper", "ca.spottedleaf.moonrise"})
+ @ConfigurationParameter(key = "TestSuite", value = "Normal")
+ public class NormalTestSuite {
+ }

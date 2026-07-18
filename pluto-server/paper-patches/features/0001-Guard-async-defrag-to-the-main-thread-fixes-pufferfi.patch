@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soy-chrislo <christianrubioortiz@gmail.com>
+Date: Sat, 18 Jul 2026 12:32:07 -0500
+Subject: [PATCH] Guard async defrag() to the main thread (fixes
+ pufferfish-gg/Pufferfish#123)
+
+Only iteratorCount was ever made atomic (upstream Pufferfish PR #109).
+firstInvalidIndex, listElements, and indexMap remain unsynchronized
+plain fields, and defrag() mutates all three. When finishRawIterator()
+runs off the main thread and triggers defrag() there, it can race a
+concurrent main-thread remove()/defrag(), corrupting firstInvalidIndex
+mid-read and throwing ArrayIndexOutOfBoundsException. This is exactly
+upstream Pufferfish's still-open issue #123
+(ArrayIndexOutOfBoundsException: Index -2 out of bounds for length 64,
+at defrag(), reached via finishRawIterator() on the async
+mob-spawning thread) -- filed against the same "Optimize mob
+spawning" code Pluto also carries, and explicitly foreseen but not
+fixed by PR #109's own description ("defragmentation running while
+another thread is iterating").
+
+Pluto is doubly exposed: both the original Pufferfish mob-spawning
+async path and Pluto's own Async Spawning Chunks feature call
+finishRawIterator() from a background thread through this same
+unguarded code.
+
+Fix: skip the async-triggered defrag() call in finishRawIterator()
+when off the tick thread. The next main-thread remove() re-checks the
+same iteratorCount==0 gate and compacts then, so fragmentation stays
+bounded on any live server. Verified against Pufferfish's own 26.2
+rebase, where the equivalent fix plus a concurrency stress test
+(reproducing the corruption with the guard reverted, passing clean
+with it restored) has already been applied and tested.
+
+IteratorSafeOrderedReferenceSet: finishRawIterator() only calls
+defrag() when TickThread.isTickThread().
+
+diff --git a/src/main/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSet.java b/src/main/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSet.java
+index adb643a87ad754052c6097aeefc701e7b73f9cbb..0ea06bfad5c11898a35b0a363f85df832fc43cb8 100644
+--- a/src/main/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSet.java
++++ b/src/main/java/ca/spottedleaf/moonrise/common/list/IteratorSafeOrderedReferenceSet.java
+@@ -121,7 +121,15 @@ public final class IteratorSafeOrderedReferenceSet<E> {
+ 
+     public void finishRawIterator() {
+         if (this.iteratorCount.decrementAndGet() == 0) { // Pufferfish - async mob spawning
+-            if (this.getFragFactor() >= this.maxFragFactor) {
++            // Pufferfish/Pluto - only defrag from the main/tick thread: defrag() mutates
++            // firstInvalidIndex/listElements/indexMap without synchronization, so calling it
++            // from an off-thread iterator (e.g. async mob spawning, or Pluto's Async Spawning
++            // Chunks) can race a concurrent main-thread remove()/defrag() and throw
++            // ArrayIndexOutOfBoundsException (see pufferfish-gg/Pufferfish#123, reproduced and
++            // fixed upstream in Pufferfish's own 26.2 rebase). The next main-thread remove()
++            // re-checks this same iteratorCount==0 gate and will compact then, so fragmentation
++            // stays bounded regardless.
++            if (ca.spottedleaf.moonrise.common.util.TickThread.isTickThread() && this.getFragFactor() >= this.maxFragFactor) {
+                 this.defrag();
+             }
+         }
