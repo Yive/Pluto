@@ -154,14 +154,6 @@ public class PufferfishConfig {
 				"disabling this option.",
 				"This can be overridden per-player with the permission pufferfish.usebooks");
 	}
-
-	public static boolean tpsCatchup;
-	private static void tpsCatchup() {
-		tpsCatchup = getBoolean("tps-catchup", true,
-				"If this setting is true, the server will run faster after a lag spike in",
-				"an attempt to maintain 20 TPS. This option (defaults to true per",
-				"spigot/paper) can cause mobs to move fast after a lag spike.");
-	}
 	
 	public static boolean enableSuffocationOptimization;
 	private static void suffocationOptimization() {

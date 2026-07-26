@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/ShelfBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ShelfBlockEntity.java
-@@ -121,6 +_,8 @@
+@@ -123,6 +_,8 @@
          return Container.stillValidBlockEntity(this, player);
      }
  
