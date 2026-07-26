@@ -28,7 +28,7 @@
              for (int i = 0; i < this.getInventory().getContainerSize(); i++) {
                  ItemStack itemStack = this.getInventory().getItem(i);
                  if (!itemStack.isEmpty()) {
-@@ -1464,7 +_,7 @@
+@@ -1453,7 +_,7 @@
              }
  
              boolean freeBottom = block.isPossibleToRespawnInThis(blockState);
