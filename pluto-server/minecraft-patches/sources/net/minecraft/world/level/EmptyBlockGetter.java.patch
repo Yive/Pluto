@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/EmptyBlockGetter.java
 +++ b/net/minecraft/world/level/EmptyBlockGetter.java
-@@ -16,6 +_,48 @@
+@@ -16,6 +_,38 @@
          return null;
      }
  
@@ -32,16 +32,6 @@
 +
 +    @Override
 +    public FluidState pluto$getFluidState(final long packedPos) {
-+        return Fluids.EMPTY.defaultFluidState();
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
-+        return Fluids.EMPTY.defaultFluidState();
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(final long packedPos) {
 +        return Fluids.EMPTY.defaultFluidState();
 +    }
 +    // Pluto end - Memory allocation optimisations

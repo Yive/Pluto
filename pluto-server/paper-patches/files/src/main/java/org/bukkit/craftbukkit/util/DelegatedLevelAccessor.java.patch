@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DelegatedLevelAccessor.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DelegatedLevelAccessor.java
-@@ -764,6 +_,58 @@
+@@ -764,6 +_,48 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  
@@ -43,16 +43,6 @@
 +    @Override
 +    public FluidState pluto$getFluidState(final long packedPos) {
 +        return this.delegate.pluto$getFluidState(packedPos);
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
-+        return this.delegate.pluto$getFluidStateIfLoaded(x, y, z);
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(final long packedPos) {
-+        return this.delegate.pluto$getFluidStateIfLoaded(packedPos);
 +    }
 +    // Pluto end - Memory allocation optimisations
 +

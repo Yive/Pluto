@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/chunk/ProtoChunk.java
 +++ b/net/minecraft/world/level/chunk/ProtoChunk.java
-@@ -197,6 +_,52 @@
+@@ -197,6 +_,27 @@
          return this.blockEntities.get(pos);
      }
  
@@ -11,18 +11,8 @@
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockState(final long packedPos) {
-+        return getBlockState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
-+    }
-+
-+    @Override
 +    public BlockState pluto$getBlockStateIfLoaded(final int x, final int y, final int z) {
 +        return getBlockState(x, y, z);
-+    }
-+
-+    @Override
-+    public BlockState pluto$getBlockStateIfLoaded(final long packedPos) {
-+        return getBlockState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +
 +    @Override
@@ -32,21 +22,6 @@
 +
 +        LevelChunkSection section = this.getSection(this.getSectionIndex(y));
 +        return section.hasOnlyAir() ? Fluids.EMPTY.defaultFluidState() : section.getFluidState(x & 15, y & 15, z & 15);
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidState(final long packedPos) {
-+        return pluto$getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
-+        return pluto$getFluidState(x, y, z);
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidStateIfLoaded(long packedPos) {
-+        return pluto$getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +    // Pluto end - Memory allocation optimisations
 +

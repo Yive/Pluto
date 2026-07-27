@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/PathNavigationRegion.java
 +++ b/net/minecraft/world/level/PathNavigationRegion.java
-@@ -123,6 +_,56 @@
+@@ -123,6 +_,30 @@
          return chunk.getBlockEntity(pos);
      }
  
@@ -14,19 +14,9 @@
 +    }
 +
 +    @Override
-+    public BlockState pluto$getBlockState(final long packedPos) {
-+        return pluto$getBlockState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
-+    }
-+
-+    @Override
 +    public @Nullable BlockState pluto$getBlockStateIfLoaded(final int x, final int y, final int z) {
 +        ChunkAccess chunk = getChunkIfLoaded(x >> 4, z >> 4);
 +        return chunk == null ? null : chunk.getBlockState(x, y, z);
-+    }
-+
-+    @Override
-+    public @Nullable BlockState pluto$getBlockStateIfLoaded(long packedPos) {
-+        return pluto$getBlockStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +
 +    @Override
@@ -35,22 +25,6 @@
 +            return Fluids.EMPTY.defaultFluidState();
 +
 +        return this.getChunk(x >> 4, z >> 4).pluto$getFluidState(x, y, z);
-+    }
-+
-+    @Override
-+    public FluidState pluto$getFluidState(final long packedPos) {
-+        return pluto$getFluidState(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
-+    }
-+
-+    @Override
-+    public @Nullable FluidState pluto$getFluidStateIfLoaded(final int x, final int y, final int z) {
-+        ChunkAccess chunk = getChunkIfLoaded(x >> 4, z >> 4);
-+        return chunk == null ? null : chunk.pluto$getFluidState(x, y, z);
-+    }
-+
-+    @Override
-+    public @Nullable FluidState pluto$getFluidStateIfLoaded(final long packedPos) {
-+        return pluto$getFluidStateIfLoaded(BlockPos.getX(packedPos), BlockPos.getY(packedPos), BlockPos.getZ(packedPos));
 +    }
 +    // Pluto end - Memory allocation optimisations
 +
