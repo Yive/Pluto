@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/ai/Brain.java
++++ b/net/minecraft/world/entity/ai/Brain.java
+@@ -383,6 +_,7 @@
+     }
+ 
+     public void tick(final ServerLevel level, final E body) {
++        if (body.pluto$behaviourTick++ % body.activatedPriority != 0) return; // Pluto - Improve DAB's maintainability
+         this.forgetOutdatedMemories();
+         this.tickSensors(level, body);
+         this.startEachNonRunningBehavior(level, body);

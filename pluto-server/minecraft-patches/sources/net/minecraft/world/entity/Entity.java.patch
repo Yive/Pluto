@@ -1,11 +1,12 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -387,6 +_,8 @@
+@@ -387,6 +_,9 @@
      public long activatedTick = Integer.MIN_VALUE;
      public boolean isTemporarilyActive;
      public long activatedImmunityTick = Integer.MIN_VALUE;
 +    public boolean activatedPriorityReset = false; // Pufferfish - DAB
 +    public int activatedPriority = gg.pufferfish.pufferfish.PufferfishConfig.maximumActivationPrio; // Pufferfish - DAB (golf score)
++    public int pluto$behaviourTick = 0; // Pluto - Improve DAB's maintainability
  
      public void inactiveTick() {
      }

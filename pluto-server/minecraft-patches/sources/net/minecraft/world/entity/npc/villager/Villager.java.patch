@@ -1,23 +1,10 @@
 --- a/net/minecraft/world/entity/npc/villager/Villager.java
 +++ b/net/minecraft/world/entity/npc/villager/Villager.java
-@@ -253,7 +_,10 @@
+@@ -253,6 +_,7 @@
          super.inactiveTick();
      }
      // Paper end - EAR 2
--
-+    // Pufferfish start
-+    public long nextGolemPanic = -1;
-+    private int behaviorTick = 0;
-+    // Pufferfish end
++    public long nextGolemPanic = -1; // Pufferfish
+ 
      @Override
      protected void customServerAiStep(final ServerLevel level) {
-         // Paper start - EAR 2
-@@ -263,7 +_,7 @@
-         // Paper end - EAR 2
-         ProfilerFiller profiler = Profiler.get();
-         profiler.push("villagerBrain");
--        if (!inactive) this.getBrain().tick(level, this); // Paper - EAR 2
-+        if (!inactive && this.behaviorTick++ % this.activatedPriority == 0) this.getBrain().tick(level, this); // Paper - EAR 2 // Pufferfish
-         profiler.pop();
-         if (this.assignProfessionWhenSpawned) {
-             this.assignProfessionWhenSpawned = false;
