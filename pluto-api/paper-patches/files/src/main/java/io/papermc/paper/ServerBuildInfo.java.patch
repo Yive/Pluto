@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/ServerBuildInfo.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfo.java
-@@ -19,6 +_,13 @@
+@@ -17,6 +_,13 @@
       */
      Key BRAND_PAPER_ID = Key.key("papermc", "paper");
  

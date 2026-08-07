@@ -8,7 +8,7 @@
      // Paper start - improve tick loop
      public final ca.spottedleaf.common.time.TickData tickTimes1s  = new ca.spottedleaf.common.time.TickData(java.util.concurrent.TimeUnit.SECONDS.toNanos(1L));
      public final ca.spottedleaf.common.time.TickData tickTimes5s  = new ca.spottedleaf.common.time.TickData(java.util.concurrent.TimeUnit.SECONDS.toNanos(5L));
-@@ -2747,6 +_,7 @@
+@@ -2746,6 +_,7 @@
      // CraftBukkit end
  
      private ProfilerFiller createProfiler() {

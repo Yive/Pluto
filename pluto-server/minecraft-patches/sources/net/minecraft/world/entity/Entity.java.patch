@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -387,6 +_,9 @@
+@@ -388,6 +_,9 @@
      public long activatedTick = Integer.MIN_VALUE;
      public boolean isTemporarilyActive;
      public long activatedImmunityTick = Integer.MIN_VALUE;
@@ -10,7 +10,7 @@
  
      public void inactiveTick() {
      }
-@@ -862,6 +_,14 @@
+@@ -863,6 +_,14 @@
              return;
          }
          // Paper end - entity despawn time limit
@@ -25,7 +25,7 @@
          this.baseTick();
      }
  
-@@ -889,7 +_,7 @@
+@@ -890,7 +_,7 @@
          }
  
          if (this instanceof ServerPlayer) this.handlePortal(); // CraftBukkit - Moved up to postTick
@@ -34,7 +34,7 @@
              this.spawnSprintParticle();
          }
  
-@@ -1221,10 +_,13 @@
+@@ -1222,10 +_,13 @@
                  this.minorHorizontalCollision = false;
              }
  
@@ -51,7 +51,7 @@
              }
  
              if (this.isRemoved()) {
-@@ -1258,7 +_,7 @@
+@@ -1259,7 +_,7 @@
                  if (!this.level().isClientSide() || this.isLocalInstanceAuthoritative()) {
                      Entity.MovementEmission emission = this.getMovementEmission();
                      if (emission.emitsAnything() && !this.isPassenger()) {
@@ -60,7 +60,7 @@
                      }
                  }
  
-@@ -1346,12 +_,16 @@
+@@ -1347,12 +_,16 @@
          float moveDistScale = 0.6F;
          float movedDistance = (float)(clippedMovement.length() * 0.6F);
          float horizontalMovedDistance = (float)(clippedMovement.horizontalDistance() * 0.6F);
@@ -79,7 +79,7 @@
              boolean onlyEffectStateEmittions = supportingPos.equals(effectPos);
              boolean producedSideEffects = this.vibrationAndSoundEffectsFromBlock(
                  effectPos, effectState, emission.emitsSounds(), onlyEffectStateEmittions, clippedMovement
-@@ -1434,6 +_,7 @@
+@@ -1435,6 +_,7 @@
              boolean wasOnFire = this.isOnFire();
              boolean wasFreezing = this.isFreezing();
              int previousRemainingFireTicks = this.getRemainingFireTicks();
@@ -87,7 +87,7 @@
              this.checkInsideBlocks(movements, this.insideEffectCollector);
              this.insideEffectCollector.applyAndClear(this);
              if (this.isInRain()) {
-@@ -1513,7 +_,7 @@
+@@ -1514,7 +_,7 @@
      protected void processFlappingMovement() {
          if (this.isFlapping()) {
              this.onFlap();
@@ -96,7 +96,7 @@
                  this.gameEvent(GameEvent.FLAP);
              }
          }
-@@ -1533,13 +_,13 @@
+@@ -1534,13 +_,13 @@
      }
  
      protected BlockPos getOnPos(final float offset) {
@@ -112,7 +112,7 @@
              return (!(offset <= 0.5) || !belowState.is(BlockTags.FENCES))
                      && !belowState.is(BlockTags.WALLS)
                      && !(belowState.getBlock() instanceof FenceGateBlock)
-@@ -1553,9 +_,45 @@
+@@ -1554,9 +_,45 @@
          }
      }
  
@@ -159,7 +159,7 @@
          return jumpFactorHere == 1.0 ? jumpFactorBelow : jumpFactorHere;
      }
  
-@@ -1564,7 +_,7 @@
+@@ -1565,7 +_,7 @@
          float speedFactorHere = state.getBlock().getSpeedFactor();
          if (!state.is(Blocks.WATER) && !state.is(Blocks.BUBBLE_COLUMN)) {
              return speedFactorHere == 1.0
@@ -168,7 +168,7 @@
                  : speedFactorHere;
          } else {
              return speedFactorHere;
-@@ -1960,9 +_,10 @@
+@@ -1961,9 +_,10 @@
      }
  
      protected BlockPos getPrimaryStepSoundBlockPos(final BlockPos affectingPos) {
@@ -182,7 +182,7 @@
      }
  
      protected void playCombinationStepSounds(final BlockState primaryStepSound, final BlockState secondaryStepSound) {
-@@ -2116,9 +_,24 @@
+@@ -2117,9 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -208,7 +208,7 @@
      }
  
      public boolean isInWaterOrRain() {
-@@ -2222,11 +_,11 @@
+@@ -2223,11 +_,11 @@
  
      @Deprecated
      protected BlockState getBlockStateOnLegacy() {
@@ -222,7 +222,7 @@
      }
  
      public boolean canSpawnSprintParticle() {
-@@ -2234,19 +_,25 @@
+@@ -2235,19 +_,25 @@
      }
  
      protected void spawnSprintParticle() {
@@ -254,7 +254,7 @@
              }
  
              this.level()
-@@ -5453,6 +_,36 @@
+@@ -5464,6 +_,36 @@
              return this.save;
          }
      }
