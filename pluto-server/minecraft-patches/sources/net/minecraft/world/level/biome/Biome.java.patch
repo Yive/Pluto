@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/biome/Biome.java
 +++ b/net/minecraft/world/level/biome/Biome.java
-@@ -137,7 +_,7 @@
+@@ -136,7 +_,7 @@
  
          if (level.isInsideBuildHeight(pos.getY()) && level.getBrightness(LightLayer.BLOCK, pos) < 10) {
              BlockState blockState = level.getBlockState(pos);

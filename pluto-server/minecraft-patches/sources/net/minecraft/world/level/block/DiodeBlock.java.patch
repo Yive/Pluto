@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/DiodeBlock.java
 +++ b/net/minecraft/world/level/block/DiodeBlock.java
-@@ -89,7 +_,7 @@
+@@ -85,7 +_,7 @@
                  dropResources(state, level, pos, blockEntity);
                  level.removeBlock(pos, false);
  
@@ -9,7 +9,7 @@
                      level.updateNeighborsAt(pos.relative(direction), this);
                  }
              }
-@@ -210,7 +_,7 @@
+@@ -206,7 +_,7 @@
  
      public boolean shouldPrioritize(final BlockGetter level, final BlockPos pos, final BlockState state) {
          Direction direction = state.getValue(FACING).getOpposite();

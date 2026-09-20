@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/boat/AbstractBoat.java
 +++ b/net/minecraft/world/entity/vehicle/boat/AbstractBoat.java
-@@ -324,7 +_,14 @@
+@@ -326,7 +_,14 @@
          if (!entities.isEmpty()) {
              boolean addNewPassengers = !this.level().isClientSide() && !(this.getControllingPassenger() instanceof Player);
  

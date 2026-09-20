@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/item/FallingBlockEntity.java
 +++ b/net/minecraft/world/entity/item/FallingBlockEntity.java
-@@ -213,6 +_,21 @@
+@@ -215,6 +_,21 @@
                                      return;
                                  }
                                  // CraftBukkit end
@@ -19,6 +19,6 @@
 +                                }
 +                                // Pluto end - Prevent x-ray exploits when players are inside certain blocks
 +
-                                 if (this.level().setBlock(pos, this.blockState, Block.UPDATE_ALL)) {
+                                 if (this.level().setBlockAndUpdate(pos, this.blockState)) {
                                      serverLevel.getChunkSource()
                                          .chunkMap

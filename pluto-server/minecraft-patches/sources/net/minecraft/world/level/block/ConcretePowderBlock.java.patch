@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/ConcretePowderBlock.java
 +++ b/net/minecraft/world/level/block/ConcretePowderBlock.java
-@@ -73,7 +_,7 @@
+@@ -58,7 +_,7 @@
          boolean touchesLiquid = false;
          BlockPos.MutableBlockPos testPos = pos.mutable();
  

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/FallingBlock.java
 +++ b/net/minecraft/world/level/block/FallingBlock.java
-@@ -47,7 +_,7 @@
+@@ -43,7 +_,7 @@
  
      @Override
      protected void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {

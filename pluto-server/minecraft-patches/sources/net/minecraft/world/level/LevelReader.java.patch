@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/LevelReader.java
 +++ b/net/minecraft/world/level/LevelReader.java
-@@ -94,6 +_,15 @@
+@@ -98,6 +_,15 @@
          return new BlockPos(pos.getX(), this.getHeight(type, pos.getX(), pos.getZ()), pos.getZ());
      }
  
@@ -16,7 +16,7 @@
      default boolean isEmptyBlock(final BlockPos pos) {
          return this.getBlockState(pos).isAir();
      }
-@@ -108,8 +_,13 @@
+@@ -112,8 +_,13 @@
              return false;
          }
  
@@ -32,17 +32,3 @@
              if (state.getLightDampening() > 0 && !state.liquid()) {
                  return false;
              }
-@@ -157,12 +_,11 @@
-         int y1 = Mth.ceil(box.maxY);
-         int z0 = Mth.floor(box.minZ);
-         int z1 = Mth.ceil(box.maxZ);
--        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
- 
-         for (int x = x0; x < x1; x++) {
-             for (int y = y0; y < y1; y++) {
-                 for (int z = z0; z < z1; z++) {
--                    BlockState blockState = this.getBlockState(pos.set(x, y, z));
-+                    BlockState blockState = this.pluto$getBlockState(x, y, z); // Pluto - Memory allocation optimisations
-                     if (!blockState.getFluidState().isEmpty()) {
-                         return true;
-                     }

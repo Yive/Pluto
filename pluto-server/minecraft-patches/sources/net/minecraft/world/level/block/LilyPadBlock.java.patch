@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LilyPadBlock.java
 +++ b/net/minecraft/world/level/block/LilyPadBlock.java
-@@ -58,8 +_,12 @@
+@@ -51,8 +_,12 @@
  
      @Override
      protected boolean mayPlaceOn(final BlockState state, final BlockGetter level, final BlockPos pos) {

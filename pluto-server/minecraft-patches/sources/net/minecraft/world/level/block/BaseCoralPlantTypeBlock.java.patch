@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BaseCoralPlantTypeBlock.java
 +++ b/net/minecraft/world/level/block/BaseCoralPlantTypeBlock.java
-@@ -45,8 +_,13 @@
+@@ -41,8 +_,13 @@
              return true;
          }
  

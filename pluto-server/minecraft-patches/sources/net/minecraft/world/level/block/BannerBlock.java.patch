@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BannerBlock.java
 +++ b/net/minecraft/world/level/block/BannerBlock.java
-@@ -40,7 +_,7 @@
+@@ -30,7 +_,7 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

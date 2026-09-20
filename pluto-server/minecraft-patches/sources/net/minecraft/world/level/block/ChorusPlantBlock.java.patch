@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/ChorusPlantBlock.java
 +++ b/net/minecraft/world/level/block/ChorusPlantBlock.java
-@@ -44,12 +_,17 @@
+@@ -36,12 +_,17 @@
      }
  
      public static BlockState getStateWithConnections(final BlockGetter level, final BlockPos pos, final BlockState defaultState) {
@@ -24,7 +24,7 @@
          Block block = defaultState.getBlock();
          return defaultState.trySetValue(DOWN, down.is(block) || down.is(Blocks.CHORUS_FLOWER) || down.is(BlockTags.SUPPORTS_CHORUS_PLANT))
              .trySetValue(UP, up.is(block) || up.is(Blocks.CHORUS_FLOWER))
-@@ -93,18 +_,27 @@
+@@ -85,18 +_,27 @@
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
          if (io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableChorusPlantUpdates) return true; // Paper - add option to disable block updates

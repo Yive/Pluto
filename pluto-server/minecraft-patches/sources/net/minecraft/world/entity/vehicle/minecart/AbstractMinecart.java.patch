@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/vehicle/minecart/AbstractMinecart.java
 +++ b/net/minecraft/world/entity/vehicle/minecart/AbstractMinecart.java
-@@ -341,10 +_,10 @@
+@@ -342,10 +_,10 @@
          int zt = Mth.floor(this.getZ());
          if (useExperimentalMovement(this.level())) {
              double y = this.getY() - 0.1 - 1.0E-5F;

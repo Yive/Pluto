@@ -41,7 +41,10 @@ import org.jspecify.annotations.Nullable;
 
 // TODO: Look into moving this into real time based instead of tick based.
 public class AsyncNaturalSpawner {
-    public static void spawnForChunk(ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnState state, List<MobCategory> spawningCategories) {
+    public static void spawnForChunk(
+        final ServerLevel level, final LevelChunk chunk, final NaturalSpawner.SpawnState state, final List<MobCategory> spawningCategories
+    ) {
+
         for (MobCategory mobCategory : spawningCategories) {
             int maxSpawns;
             if (level.paperConfig().entities.spawning.perPlayerMobSpawns) {
@@ -145,7 +148,7 @@ public class AsyncNaturalSpawner {
                             }
 
                             currentSpawnData = nextSpawnData.get();
-                            max = currentSpawnData.minCount() + level.pluto$threadSafeRandom().nextInt(1 + currentSpawnData.maxCount() - currentSpawnData.minCount());
+                            max = currentSpawnData.count().sample(level.pluto$threadSafeRandom());
                         }
 
                         // Paper start - PreCreatureSpawnEvent
@@ -158,7 +161,7 @@ public class AsyncNaturalSpawner {
                         if (doSpawning == NaturalSpawner.PreSpawnStatus.ABORT) {
                             return;
                         }
-                        if (doSpawning != NaturalSpawner.PreSpawnStatus.SUCCESS || !extraTest.test(currentSpawnData.type(), pos, chunk)) continue;
+                        if (doSpawning != NaturalSpawner.PreSpawnStatus.SUCCESS || !extraTest.test(currentSpawnData.type(), level, pos, chunk)) continue;
                         Mob mob = NaturalSpawner.getMobForSpawn(level, currentSpawnData.type());
                         if (mob == null) {
                             return;

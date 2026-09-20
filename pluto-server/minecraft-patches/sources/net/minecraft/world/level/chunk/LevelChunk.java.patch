@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -84,6 +_,8 @@
+@@ -83,6 +_,8 @@
          public String getType() {
              return "<null>";
          }
@@ -9,7 +9,7 @@
      };
      private final Map<BlockPos, LevelChunk.RebindableTickingBlockEntityWrapper> tickersInLevel = Maps.newHashMap();
      private boolean loaded;
-@@ -99,6 +_,18 @@
+@@ -98,6 +_,18 @@
      public boolean needsDecoration;
      // CraftBukkit end
  
@@ -28,7 +28,7 @@
      // Paper start
      boolean loadedTicketLevel;
      // Paper end
-@@ -161,6 +_,8 @@
+@@ -160,6 +_,8 @@
              }
          }
  
@@ -37,7 +37,7 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -466,6 +_,23 @@
+@@ -465,6 +_,23 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
  
@@ -61,7 +61,7 @@
      public @Nullable BlockEntity getBlockEntity(final BlockPos pos, final LevelChunk.EntityCreationType creationType) {
          // CraftBukkit start
          BlockEntity blockEntity = this.level.capturedBlockEntities.get(pos);
-@@ -522,6 +_,30 @@
+@@ -521,6 +_,30 @@
              );
      }
  
@@ -92,7 +92,7 @@
      @Override
      public void setBlockEntity(final BlockEntity blockEntity) {
          BlockPos pos = blockEntity.getBlockPos();
-@@ -932,17 +_,19 @@
+@@ -929,17 +_,19 @@
          private final T blockEntity;
          private final BlockEntityTicker<T> ticker;
          private boolean loggedInvalidBlockState;
@@ -113,7 +113,7 @@
                      try {
                          ProfilerFiller profiler = Profiler.get();
                          profiler.push(this::getType);
-@@ -1046,6 +_,8 @@
+@@ -1043,6 +_,8 @@
          public String toString() {
              return this.ticker + " <wrapped>";
          }

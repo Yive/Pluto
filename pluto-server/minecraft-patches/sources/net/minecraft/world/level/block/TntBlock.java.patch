@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/TntBlock.java
 +++ b/net/minecraft/world/level/block/TntBlock.java
-@@ -73,6 +_,7 @@
+@@ -69,6 +_,7 @@
  
      @Override
      public void wasExploded(final ServerLevel level, final BlockPos pos, final Explosion explosion) {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/frog/FrogAi.java
 +++ b/net/minecraft/world/entity/animal/frog/FrogAi.java
-@@ -211,14 +_,16 @@
+@@ -212,14 +_,16 @@
  
      private static <E extends Mob> boolean isAcceptableLandingSpot(final E body, final BlockPos targetPos) {
          Level level = body.level();

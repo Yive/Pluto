@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CeilingHangingSignBlock.java
 +++ b/net/minecraft/world/level/block/CeilingHangingSignBlock.java
-@@ -90,7 +_,10 @@
+@@ -80,7 +_,10 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

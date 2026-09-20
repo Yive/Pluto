@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/DelegatedLevelAccessor.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DelegatedLevelAccessor.java
-@@ -764,6 +_,48 @@
+@@ -749,6 +_,48 @@
          return this.delegate.getFluidIfLoaded(pos);
      }
  

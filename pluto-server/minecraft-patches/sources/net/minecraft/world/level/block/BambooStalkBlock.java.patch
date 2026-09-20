@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BambooStalkBlock.java
 +++ b/net/minecraft/world/level/block/BambooStalkBlock.java
-@@ -81,12 +_,18 @@
+@@ -74,12 +_,18 @@
  
      @Override
      public @Nullable BlockState getStateForPlacement(final BlockPlaceContext context) {
@@ -21,7 +21,7 @@
          if (belowState.is(BlockTags.SUPPORTS_BAMBOO)) {
              if (belowState.is(Blocks.BAMBOO_SAPLING)) {
                  return this.defaultBlockState().setValue(AGE, 0);
-@@ -94,7 +_,7 @@
+@@ -87,7 +_,7 @@
                  int age = belowState.getValue(AGE) > 0 ? 1 : 0;
                  return this.defaultBlockState().setValue(AGE, age);
              } else {
@@ -30,7 +30,7 @@
                  return aboveState.is(Blocks.BAMBOO)
                      ? this.defaultBlockState().setValue(AGE, aboveState.getValue(AGE))
                      : Blocks.BAMBOO_SAPLING.defaultBlockState();
-@@ -119,7 +_,7 @@
+@@ -112,7 +_,7 @@
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
          if (state.getValue(STAGE) == 0) {
@@ -39,7 +39,7 @@
                  int height = this.getHeightBelowUpToMax(level, pos) + 1;
                  if (height < level.paperConfig().maxGrowthHeight.bamboo.max) { // Paper - Configurable cactus/bamboo/reed growth height
                      this.growBamboo(state, level, pos, random, height);
-@@ -130,7 +_,7 @@
+@@ -123,7 +_,7 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
@@ -48,7 +48,7 @@
      }
  
      @Override
-@@ -159,7 +_,7 @@
+@@ -152,7 +_,7 @@
          int heightBelow = this.getHeightBelowUpToMax(level, pos);
          BlockPos growthPos = pos.above(heightAbove + 1);
          return heightAbove + heightBelow + 1 < ((Level) level).paperConfig().maxGrowthHeight.bamboo.max // Paper - Configurable cactus/bamboo/reed growth height
@@ -57,7 +57,7 @@
              && level.isInsideBuildHeight(growthPos)
              && level.isEmptyBlock(growthPos);
      }
-@@ -176,24 +_,32 @@
+@@ -169,24 +_,32 @@
          int totalHeight = heightAbove + heightBelow + 1;
          int newBamboo = 1 + random.nextInt(2);
  
@@ -98,7 +98,7 @@
          BambooLeaves leaves = BambooLeaves.NONE;
          boolean shouldUpdateOthers = false; // CraftBukkit
          if (height >= 1) {
-@@ -218,7 +_,7 @@
+@@ -211,7 +_,7 @@
          if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, pos.above(), this.defaultBlockState().setValue(AGE, age).setValue(LEAVES, leaves).setValue(STAGE, stage), Block.UPDATE_ALL)) {
              if (shouldUpdateOthers) {
                  level.setBlock(pos.below(), belowState.setValue(LEAVES, BambooLeaves.SMALL), Block.UPDATE_ALL);
@@ -107,7 +107,7 @@
              }
          }
          // CraftBukkit end
-@@ -227,7 +_,12 @@
+@@ -220,7 +_,12 @@
      protected int getHeightAboveUpToMax(final BlockGetter level, final BlockPos pos) {
          int height = 0;
  
@@ -121,7 +121,7 @@
              height++;
          }
  
-@@ -237,7 +_,12 @@
+@@ -230,7 +_,12 @@
      protected int getHeightBelowUpToMax(final BlockGetter level, final BlockPos pos) {
          int height = 0;
  

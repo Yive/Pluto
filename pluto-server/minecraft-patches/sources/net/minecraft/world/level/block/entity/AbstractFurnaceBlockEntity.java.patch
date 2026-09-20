@@ -1,25 +1,25 @@
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -200,7 +_,7 @@
+@@ -207,7 +_,7 @@
                  if (recipe != null) {
                      int maxStackSize = entity.getMaxStackSize();
                      ItemStack burnResult = recipe.value().assemble(input);
 -                    if (!burnResult.isEmpty() && canBurn(entity.items, maxStackSize, burnResult)) {
 +                    if (!burnResult.isEmpty() && canBurn(entity.items, maxStackSize, burnResult, entity)) { // Pluto - Cache canBurn result in Furnaces
                          if (!isLit) {
-                             int newLitTime = entity.getBurnDuration(level.fuelValues(), fuel);
+                             int newLitTime = entity.getBurnDuration(level, fuel);
                              // CraftBukkit start
-@@ -241,7 +_,7 @@
-                             if (entity.cookingTimer >= entity.cookingTotalTime) { // Paper - cook speed multiplier API
+@@ -256,7 +_,7 @@
+                             if (entity.cookingTimer >= entity.cookingTotalTime) {
                                  entity.cookingTimer = 0;
-                                 entity.cookingTotalTime = getTotalCookTime(level, entity, entity.recipeType, entity.cookSpeedMultiplier); // Paper - cook speed multiplier API
+                                 entity.cookingTotalTime = getTotalCookTime(recipe, entity);
 -                                if (burn(entity.items, ingredient, burnResult, recipe, level, entity.worldPosition)) { // CraftBukkit - add level & pos // Paper - make burn return a boolean again, add recipe
 +                                if (burn(entity.items, ingredient, burnResult, recipe, level, entity.worldPosition, entity)) { // CraftBukkit - add level & pos // Paper - make burn return a boolean again, add recipe // Pluto - Cache canBurn result in Furnaces
                                  entity.setRecipeUsed(recipe);
                                  } // Paper
                                  changed = true;
-@@ -280,22 +_,49 @@
-         }
+@@ -302,22 +_,49 @@
+         items.set(1, newFuel);
      }
  
 -    private static boolean canBurn(final NonNullList<ItemStack> items, final int maxStackSize, final ItemStack burnResult) {
@@ -70,4 +70,4 @@
 +        // Pluto end - Cache canBurn result in Furnaces
          ItemStack resultItemStack = items.get(2);
          // CraftBukkit start - fire FurnaceSmeltEvent
-         org.bukkit.craftbukkit.inventory.CraftItemStack apiIngredient = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(inputItemStack);
+         org.bukkit.inventory.ItemStack apiIngredient = org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitMirror(inputItemStack);

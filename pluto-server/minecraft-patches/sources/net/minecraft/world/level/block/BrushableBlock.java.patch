@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BrushableBlock.java
 +++ b/net/minecraft/world/level/block/BrushableBlock.java
-@@ -85,7 +_,7 @@
+@@ -68,7 +_,7 @@
              brushableBlockEntity.checkReset(level);
          }
  

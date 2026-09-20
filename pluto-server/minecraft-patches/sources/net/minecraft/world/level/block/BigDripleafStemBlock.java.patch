@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BigDripleafStemBlock.java
 +++ b/net/minecraft/world/level/block/BigDripleafStemBlock.java
-@@ -58,10 +_,15 @@
+@@ -51,10 +_,15 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
@@ -20,9 +20,9 @@
      }
  
      protected static boolean place(final LevelAccessor level, final BlockPos pos, final FluidState fluidState, final Direction facing) {
-@@ -104,7 +_,7 @@
+@@ -97,7 +_,7 @@
      @Override
-     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state, final BonemealSource source) {
          Optional<BlockPos> headPos = BlockUtil.getTopConnectedBlock(level, pos, state.getBlock(), Direction.UP, Blocks.BIG_DRIPLEAF);
 -        return headPos.filter(blockPos -> BigDripleafBlock.canPlaceAt(level, blockPos.above())).isPresent();
 +        return headPos.filter(blockPos -> BigDripleafBlock.canPlaceAt(level, blockPos.getX(), blockPos.getY() + 1, blockPos.getZ())).isPresent(); // Pluto - Memory allocation optimisations

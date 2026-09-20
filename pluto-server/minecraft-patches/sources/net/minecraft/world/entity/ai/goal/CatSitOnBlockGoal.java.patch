@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/goal/CatSitOnBlockGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/CatSitOnBlockGoal.java
-@@ -44,7 +_,7 @@
+@@ -56,7 +_,7 @@
  
      @Override
      protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {

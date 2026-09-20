@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CakeBlock.java
 +++ b/net/minecraft/world/level/block/CakeBlock.java
-@@ -153,7 +_,7 @@
+@@ -146,7 +_,7 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

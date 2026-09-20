@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/ComposterBlock.java
 +++ b/net/minecraft/world/level/block/ComposterBlock.java
-@@ -446,6 +_,8 @@
+@@ -305,6 +_,8 @@
          public boolean canTakeItemThroughFace(final int slot, final ItemStack itemStack, final Direction direction) {
              return false;
          }
@@ -9,7 +9,7 @@
      }
  
      public static class InputContainer extends SimpleContainer implements WorldlyContainer {
-@@ -497,6 +_,8 @@
+@@ -357,6 +_,8 @@
                  this.removeItemNoUpdate(0);
              }
          }
@@ -18,7 +18,7 @@
      }
  
      public static class OutputContainer extends SimpleContainer implements WorldlyContainer {
-@@ -545,5 +_,7 @@
+@@ -405,5 +_,7 @@
              }
              // CraftBukkit end
          }

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SpreadingSnowyBlock.java
 +++ b/net/minecraft/world/level/block/SpreadingSnowyBlock.java
-@@ -28,12 +_,11 @@
+@@ -24,12 +_,11 @@
  
      private static boolean canStayAlive(final BlockState state, final LevelReader level, final BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
@@ -16,7 +16,7 @@
          if (aboveState.is(Blocks.SNOW) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
              return true;
          }
-@@ -48,13 +_,12 @@
+@@ -44,13 +_,12 @@
  
      private static boolean canPropagate(final BlockState state, final LevelReader level, final BlockPos pos) {
          // Paper start - Perf: optimize dirt and snow spreading
@@ -33,7 +33,7 @@
      }
  
      @Override
-@@ -69,7 +_,7 @@
+@@ -65,7 +_,7 @@
                  return;
              }
  
@@ -42,7 +42,7 @@
                  // Paper end - Perf: optimize dirt and snow spreading
                  // CraftBukkit start
                  if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(level, pos, baseBlock.get().defaultBlockState()).isCancelled()) {
-@@ -81,21 +_,31 @@
+@@ -77,21 +_,31 @@
                  if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
                      BlockState defaultBlockState = this.defaultBlockState();
  

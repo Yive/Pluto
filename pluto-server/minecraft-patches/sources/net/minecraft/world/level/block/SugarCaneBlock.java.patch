@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/net/minecraft/world/level/block/SugarCaneBlock.java
-@@ -48,10 +_,18 @@
+@@ -41,10 +_,18 @@
  
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
@@ -21,7 +21,7 @@
                  height++;
              }
  
-@@ -88,17 +_,22 @@
+@@ -81,17 +_,22 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

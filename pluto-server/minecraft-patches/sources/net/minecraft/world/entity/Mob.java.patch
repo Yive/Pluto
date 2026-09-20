@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -215,15 +_,17 @@
+@@ -216,15 +_,17 @@
          return this.lookControl;
      }
  
@@ -20,7 +20,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -580,9 +_,8 @@
+@@ -576,9 +_,8 @@
      public boolean isSunBurnTick() {
          if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
              float br = this.getLightLevelDependentMagicValue();
@@ -31,7 +31,7 @@
                  return true;
              }
          }
-@@ -772,12 +_,41 @@
+@@ -768,13 +_,42 @@
          return this.isPassenger() || this.isLeashed();
      }
  
@@ -68,13 +68,14 @@
      public void checkDespawn() {
          if (this.level().getDifficulty() == Difficulty.PEACEFUL && !this.getType().isAllowedInPeaceful()) {
              this.discard(EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
-         } else if (!this.isPersistenceRequired() && !this.requiresCustomPersistence()) {
+         } else {
+             boolean isPersistent = this.isPersistenceRequired() || this.requiresCustomPersistence();
 -            Entity player = this.level().findNearbyPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING); // Paper - Affects Spawning API
 +            Entity player = this.level().plutoConfig().useFasterNearbyPlayerDespawnCheck ? pluto$getNearestPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING) : this.level().findNearbyPlayer(this, -1.0, EntitySelector.PLAYER_AFFECTS_SPAWNING); // Paper - Affects Spawning API // Pluto - Avoid looping over all players in a world per entity for despawns
              if (player != null) {
                  // Paper start - Configurable despawn distances
                  final io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DespawnRangePair despawnRangePair = this.level().paperConfig().entities.spawning.despawnRanges.get(this.getType().getCategory());
-@@ -825,16 +_,20 @@
+@@ -823,16 +_,20 @@
          int idBasedTickCount = this.tickCount + this.getId();
          if (idBasedTickCount % 2 != 0 && this.tickCount > 1) {
              profiler.push("targetSelector");
@@ -95,7 +96,7 @@
              this.goalSelector.tick();
              profiler.pop();
          }
-@@ -989,6 +_,8 @@
+@@ -987,6 +_,8 @@
                  return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
              }
  
@@ -104,7 +105,7 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -1025,6 +_,13 @@
+@@ -1023,6 +_,13 @@
                  }
                  return null;
              }

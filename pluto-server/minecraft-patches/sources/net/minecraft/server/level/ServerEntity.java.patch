@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -118,8 +_,10 @@
+@@ -128,8 +_,10 @@
          }
  
          if (!this.trackedPlayers.isEmpty() && this.entity instanceof ItemFrame frame /*&& this.tickCount % 10 == 0*/) { // CraftBukkit - moved tickCount below // Paper - Perf: Only tick item frames if players can see it
@@ -13,23 +13,3 @@
                  MapId id = frame.cachedMapId; // Paper - Perf: Cache map ids on item frames
                  MapItemSavedData data = MapItem.getSavedData(id, this.level);
                  if (data != null) {
-@@ -186,7 +_,10 @@
-                     packet = ClientboundEntityPositionSyncPacket.of(this.entity);
-                     sentPosition = true;
-                     sentRotation = true;
--                } else if ((!pos || !shouldSendRotation) && !(this.entity instanceof AbstractArrow)) {
-+                // Pufferfish start - Better checking for useless move packets
-+                } else if (pos || shouldSendRotation || this.entity instanceof AbstractArrow) {
-+                    if ((!pos || !shouldSendRotation) && !(this.entity instanceof AbstractArrow)) {
-+                    // Pufferfish end
-                     if (pos) {
-                         packet = new ClientboundMoveEntityPacket.Pos(this.entity.getId(), (short)xa, (short)ya, (short)za, this.entity.onGround());
-                         sentPosition = true;
-@@ -199,6 +_,7 @@
-                     sentPosition = true;
-                     sentRotation = true;
-                 }
-+                } // Pufferfish - Better checking for useless move packets
- 
-                 if (this.entity.needsSync || this.trackDelta || this.entity instanceof LivingEntity livingEntity && livingEntity.isFallFlying()) {
-                     Vec3 movement = this.entity.getDeltaMovement();

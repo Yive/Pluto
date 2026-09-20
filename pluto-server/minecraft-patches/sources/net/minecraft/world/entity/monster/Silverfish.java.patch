@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Silverfish.java
 +++ b/net/minecraft/world/entity/monster/Silverfish.java
-@@ -146,8 +_,7 @@
+@@ -145,8 +_,7 @@
              RandomSource random = this.mob.getRandom();
              if (getServerLevel(this.mob).getGameRules().get(GameRules.MOB_GRIEFING) && random.nextInt(reducedTickDelay(10)) == 0) {
                  this.selectedDirection = Direction.getRandom(random);

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SculkSensorBlock.java
 +++ b/net/minecraft/world/level/block/SculkSensorBlock.java
-@@ -257,10 +_,18 @@
+@@ -250,10 +_,18 @@
      }
  
      public static void tryResonateVibration(final @Nullable Entity sourceEntity, final Level level, final BlockPos pos, final int vibrationFrequency) {

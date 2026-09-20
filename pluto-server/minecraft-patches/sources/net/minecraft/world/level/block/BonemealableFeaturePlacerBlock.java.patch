@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/BonemealableFeaturePlacerBlock.java
 +++ b/net/minecraft/world/level/block/BonemealableFeaturePlacerBlock.java
-@@ -32,7 +_,7 @@
+@@ -21,7 +_,7 @@
  
      @Override
-     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state, final BonemealSource source) {
 -        return level.getBlockState(pos.above()).isAir();
 +        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir(); // Pluto - Memory allocation optimisations
      }

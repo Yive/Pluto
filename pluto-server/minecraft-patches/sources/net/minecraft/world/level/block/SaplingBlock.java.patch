@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SaplingBlock.java
 +++ b/net/minecraft/world/level/block/SaplingBlock.java
-@@ -44,7 +_,7 @@
+@@ -36,7 +_,7 @@
  
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {

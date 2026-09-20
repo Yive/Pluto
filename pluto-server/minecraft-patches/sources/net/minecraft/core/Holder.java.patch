@@ -9,7 +9,7 @@
      DataComponentMap components();
  
      Either<ResourceKey<T>, T> unwrap();
-@@ -120,6 +_,8 @@
+@@ -124,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return Stream.of();
          }
@@ -18,7 +18,7 @@
      }
  
      enum Kind {
-@@ -259,6 +_,8 @@
+@@ -263,6 +_,8 @@
          public Stream<TagKey<T>> tags() {
              return this.boundTags().stream();
          }

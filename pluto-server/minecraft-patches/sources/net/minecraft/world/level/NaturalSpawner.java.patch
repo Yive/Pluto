@@ -1,0 +1,27 @@
+--- a/net/minecraft/world/level/NaturalSpawner.java
++++ b/net/minecraft/world/level/NaturalSpawner.java
+@@ -72,15 +_,23 @@
+         return createState(spawnableChunkCount, level, chunkGetter, localMobCapCalculator, false);
+     }
+ 
++    // Pluto start - Async spawning chunks
++    public static NaturalSpawner.SpawnState createState(
++        final int spawnableChunkCount, final ServerLevel level, final NaturalSpawner.ChunkGetter chunkGetter, final LocalMobCapCalculator localMobCapCalculator, final boolean countMobs
++    ) {
++        return createState(spawnableChunkCount, level, level.getAllEntities(), chunkGetter, localMobCapCalculator, countMobs);
++    }
++    // Pluto end - Async spawning chunks
++
+     public static NaturalSpawner.SpawnState createState(
+         final int spawnableChunkCount,
+         final ServerLevel level,
++        final Iterable<Entity> entities, // Pluto - Async spawning chunks
+         final NaturalSpawner.ChunkGetter chunkGetter,
+         final LocalMobCapCalculator localMobCapCalculator,
+         final boolean countMobs
+     ) {
+         // Paper end - Optional per player mob spawns
+-        Iterable<Entity> entities = level.getAllEntities();
+         PotentialCalculator spawnPotential = new PotentialCalculator();
+         Object2IntOpenHashMap<MobCategory> mobCounts = new Object2IntOpenHashMap<>();
+ 

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/RedStoneOreBlock.java
 +++ b/net/minecraft/world/level/block/RedStoneOreBlock.java
-@@ -139,9 +_,13 @@
+@@ -132,9 +_,13 @@
          double offset = 0.5625;
          RandomSource random = level.getRandom();
  

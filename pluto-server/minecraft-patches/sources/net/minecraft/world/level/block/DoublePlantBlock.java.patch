@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/DoublePlantBlock.java
 +++ b/net/minecraft/world/level/block/DoublePlantBlock.java
-@@ -64,7 +_,7 @@
+@@ -59,7 +_,7 @@
      public @Nullable BlockState getStateForPlacement(final BlockPlaceContext context) {
          BlockPos pos = context.getClickedPos();
          Level level = context.getLevel();
@@ -9,7 +9,7 @@
      }
  
      @Override
-@@ -79,7 +_,7 @@
+@@ -74,7 +_,7 @@
              return super.canSurvive(state, level, pos);
          }
  
@@ -18,7 +18,7 @@
          return belowState.is(this) && belowState.getValue(HALF) == DoubleBlockHalf.LOWER;
      }
  
-@@ -127,10 +_,10 @@
+@@ -122,10 +_,10 @@
          // CraftBukkit end
          DoubleBlockHalf part = state.getValue(HALF);
          if (part == DoubleBlockHalf.UPPER) {
@@ -29,5 +29,5 @@
                  BlockState blockState = bottomState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
 +                BlockPos bottomPos = pos.below(); // Pluto - Memory allocation optimisations
                  level.setBlock(bottomPos, blockState, Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
-                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, bottomPos, Block.getId(bottomState));
+                 level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, bottomPos, Block.getId(bottomState));
              }

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/MossyCarpetBlock.java
 +++ b/net/minecraft/world/level/block/MossyCarpetBlock.java
-@@ -129,7 +_,7 @@
+@@ -122,7 +_,7 @@
          BlockState belowState = null;
          createSides |= state.getValue(BASE);
  
@@ -9,7 +9,7 @@
              EnumProperty<WallSide> property = getPropertyForFace(direction);
              WallSide side = canSupportAtFace(level, pos, direction) ? (createSides ? WallSide.LOW : state.getValue(property)) : WallSide.NONE;
              if (side == WallSide.LOW) {
-@@ -194,7 +_,7 @@
+@@ -187,7 +_,7 @@
              BlockState noCarpetBaseState = Blocks.PALE_MOSS_CARPET.defaultBlockState().setValue(BASE, false);
              BlockState aboveState = getUpdatedState(noCarpetBaseState, level, pos.above(), true);
  

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BubbleColumnBlock.java
 +++ b/net/minecraft/world/level/block/BubbleColumnBlock.java
-@@ -60,7 +_,7 @@
+@@ -53,7 +_,7 @@
      ) {
          if (!new io.papermc.paper.event.entity.EntityInsideBlockEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(level, pos)).callEvent()) { return; } // Paper - Add EntityInsideBlockEvent
          if (isPrecise) {
@@ -9,7 +9,7 @@
              boolean nothingAbove = stateAbove.getCollisionShape(level, pos).isEmpty() && stateAbove.getFluidState().isEmpty();
              if (nothingAbove) {
                  entity.onAboveBubbleColumn(state.getValue(DRAG_DOWN), pos);
-@@ -72,7 +_,7 @@
+@@ -65,7 +_,7 @@
  
      @Override
      protected void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
@@ -18,7 +18,7 @@
      }
  
      @Override
-@@ -188,7 +_,7 @@
+@@ -181,7 +_,7 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

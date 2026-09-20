@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LiquidBlock.java
 +++ b/net/minecraft/world/level/block/LiquidBlock.java
-@@ -241,6 +_,7 @@
+@@ -221,6 +_,7 @@
              for (Direction direction : POSSIBLE_FLOW_DIRECTIONS) {
                  BlockPos neighbourPos = pos.relative(direction.getOpposite());
                  if (level.getFluidState(neighbourPos).is(FluidTags.WATER)) {
@@ -8,7 +8,7 @@
                      Block convertToBlock = level.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
                      // CraftBukkit start
                      if (org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockFormEvent(level, pos, convertToBlock.defaultBlockState(), Block.UPDATE_ALL)) {
-@@ -251,6 +_,7 @@
+@@ -231,6 +_,7 @@
                  }
  
                  if (isOverSoulSoil && level.getBlockState(neighbourPos).is(Blocks.BLUE_ICE)) {

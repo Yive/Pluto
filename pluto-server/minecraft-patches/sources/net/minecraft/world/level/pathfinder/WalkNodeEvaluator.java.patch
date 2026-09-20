@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -129,7 +_,7 @@
+@@ -125,7 +_,7 @@
  
          double posHeight = this.getFloorLevel(new BlockPos(pos.x, pos.y, pos.z));
  
@@ -9,7 +9,7 @@
              Node node = this.findAcceptedNode(
                  pos.x + direction.getStepX(), pos.y, pos.z + direction.getStepZ(), jumpSize, posHeight, direction, blockPathTypeCurrent
              );
-@@ -139,7 +_,7 @@
+@@ -135,7 +_,7 @@
              }
          }
  

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/ChorusFlowerBlock.java
 +++ b/net/minecraft/world/level/block/ChorusFlowerBlock.java
-@@ -62,20 +_,25 @@
+@@ -51,20 +_,25 @@
  
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
@@ -30,7 +30,7 @@
                          if (!testState.is(this.plant)) {
                              if (testState.is(BlockTags.SUPPORTS_CHORUS_FLOWER)) {
                                  pillarOnSupportBlock = true;
-@@ -93,8 +_,10 @@
+@@ -82,8 +_,10 @@
                      growUpwards = true;
                  }
  
@@ -43,7 +43,7 @@
                      level.setBlock(pos, ChorusPlantBlock.getStateWithConnections(level, pos, this.plant.defaultBlockState()), Block.UPDATE_CLIENTS);
                      this.placeGrownFlower(level, above, currentAge);
                      } // CraftBukkit
-@@ -108,9 +_,16 @@
+@@ -97,9 +_,16 @@
  
                      for (int i = 0; i < numBranchAttempts; i++) {
                          Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
@@ -63,7 +63,7 @@
                              this.placeGrownFlower(level, target, currentAge + 1);
                              createdBranch = true;
                              } // CraftBukkit
-@@ -143,9 +_,11 @@
+@@ -132,9 +_,11 @@
          level.levelEvent(LevelEvent.SOUND_CHORUS_DEATH, pos, 0);
      }
  
@@ -78,7 +78,7 @@
                  return false;
              }
          }
-@@ -173,7 +_,12 @@
+@@ -162,7 +_,12 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
@@ -92,7 +92,7 @@
          if (!belowState.is(this.plant) && !belowState.is(BlockTags.SUPPORTS_CHORUS_FLOWER)) {
              if (!belowState.isAir()) {
                  return false;
-@@ -181,8 +_,8 @@
+@@ -170,8 +_,8 @@
  
              boolean oneNeighbor = false;
  
@@ -103,7 +103,7 @@
                  if (neighbor.is(this.plant)) {
                      if (oneNeighbor) {
                          return false;
-@@ -219,12 +_,17 @@
+@@ -208,12 +_,17 @@
              height++;
          }
  
@@ -123,7 +123,7 @@
              level.setBlock(target, ChorusPlantBlock.getStateWithConnections(level, target, chorus.defaultBlockState()), Block.UPDATE_CLIENTS);
              level.setBlock(target.below(), ChorusPlantBlock.getStateWithConnections(level, target.below(), chorus.defaultBlockState()), Block.UPDATE_CLIENTS);
          }
-@@ -238,12 +_,17 @@
+@@ -227,12 +_,17 @@
  
              for (int i = 0; i < stems; i++) {
                  Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);

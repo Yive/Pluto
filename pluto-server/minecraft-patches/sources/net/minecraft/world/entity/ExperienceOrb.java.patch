@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ExperienceOrb.java
 +++ b/net/minecraft/world/entity/ExperienceOrb.java
-@@ -180,7 +_,7 @@
+@@ -178,7 +_,7 @@
              this.applyEffectsFromBlocks();
              float friction = this.getAirDrag();
              if (this.onGround()) {
@@ -9,7 +9,7 @@
              }
  
              this.setDeltaMovement(this.getDeltaMovement().scale(friction));
-@@ -244,6 +_,13 @@
+@@ -242,6 +_,13 @@
      public BlockPos getBlockPosBelowThatAffectsMyMovement() {
          return this.getOnPos(0.999999F);
      }

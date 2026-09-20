@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BambooSaplingBlock.java
 +++ b/net/minecraft/world/level/block/BambooSaplingBlock.java
-@@ -38,14 +_,14 @@
+@@ -31,14 +_,14 @@
  
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
@@ -17,10 +17,10 @@
      }
  
      @Override
-@@ -75,7 +_,7 @@
+@@ -68,7 +_,7 @@
  
      @Override
-     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state) {
+     public boolean isValidBonemealTarget(final LevelReader level, final BlockPos pos, final BlockState state, final BonemealSource source) {
 -        return level.getBlockState(pos.above()).isAir() && level.isInsideBuildHeight(pos.above());
 +        return level.pluto$getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).isAir() && level.isInsideBuildHeight(pos.getY() + 1); // Pluto - Memory allocation optimisations
      }

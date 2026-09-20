@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BaseFireBlock.java
 +++ b/net/minecraft/world/level/block/BaseFireBlock.java
-@@ -43,8 +_,7 @@
+@@ -40,8 +_,7 @@
      }
  
      public static BlockState getState(final BlockGetter level, final BlockPos pos) {
@@ -10,7 +10,7 @@
          return SoulFireBlock.canSurviveOnBlock(belowState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(level, pos);
      }
  
-@@ -171,7 +_,7 @@
+@@ -168,7 +_,7 @@
      @Override
      protected void onPlace(final BlockState state, final Level level, final BlockPos pos, final BlockState oldState, final boolean movedByPiston, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
          if (!oldState.is(state.getBlock())) {
@@ -19,7 +19,7 @@
                  Optional<PortalShape> optionalShape = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
                  if (optionalShape.isPresent()) {
                      optionalShape.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
-@@ -212,11 +_,15 @@
+@@ -209,10 +_,14 @@
              return false;
          }
  
@@ -29,12 +29,11 @@
 +        final int y = pos.getY();
 +        final int z = pos.getZ();
 +        // Pluto end - Memory allocation optimisations
-         boolean hasObsidian = false;
  
 -        for (Direction face : Direction.values()) {
--            if (level.getBlockState(testPos.set(pos).move(face)).is(Blocks.OBSIDIAN)) {
+-            BlockState state = level.getBlockState(testPos.set(pos).move(face));
 +        for (Direction face : Direction.VALUES) { // Pluto - Avoid excessive calls to Enum#values
-+            if (level.pluto$getBlockState(x + face.getStepX(), y + face.getStepY(), z + face.getStepZ()).is(Blocks.OBSIDIAN)) { // Pluto - Memory allocation optimisations
-                 hasObsidian = true;
-                 break;
-             }
++            BlockState state = level.pluto$getBlockState(x + face.getStepX(), y + face.getStepY(), z + face.getStepZ()); // Pluto - Memory allocation optimisations
+             if (PortalShape.FRAME.test(state)) {
+                 Direction.Axis preferredAxis = forwardDirection.getAxis().isHorizontal()
+                     ? forwardDirection.getCounterClockWise().getAxis()

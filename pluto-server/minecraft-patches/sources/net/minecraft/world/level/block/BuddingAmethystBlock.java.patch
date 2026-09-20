@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BuddingAmethystBlock.java
 +++ b/net/minecraft/world/level/block/BuddingAmethystBlock.java
-@@ -27,8 +_,10 @@
+@@ -20,8 +_,10 @@
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
          if (random.nextInt(5) == 0) {
              Direction growDirection = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
@@ -13,7 +13,7 @@
              Block nextStage = null;
              if (canClusterGrowAtState(relativeState)) {
                  nextStage = Blocks.SMALL_AMETHYST_BUD;
-@@ -45,6 +_,7 @@
+@@ -38,6 +_,7 @@
                      .setValue(AmethystClusterBlock.FACING, growDirection)
                      .setValue(AmethystClusterBlock.WATERLOGGED, relativeState.getFluidState().is(Fluids.WATER));
                  // Paper start - Have Amethyst throw both spread and grow events

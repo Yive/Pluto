@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/ai/goal/CatLieOnBlockGoal.java
++++ b/net/minecraft/world/entity/ai/goal/CatLieOnBlockGoal.java
+@@ -52,6 +_,6 @@
+ 
+     @Override
+     protected boolean isValidTarget(final LevelReader level, final BlockPos pos) {
+-        return level.isEmptyBlock(pos.above()) && level.getBlockState(pos).is(BlockTags.CATS_CAN_LIE_ON);
++        return level.pluto$isEmptyBlock(pos.getX(), pos.getY() + 1, pos.getZ()) && level.getBlockState(pos).is(BlockTags.CATS_CAN_LIE_ON); // Pluto - Memory allocation optimisations
+     }
+ }

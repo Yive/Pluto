@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/RedstoneTorchBlock.java
 +++ b/net/minecraft/world/level/block/RedstoneTorchBlock.java
-@@ -49,7 +_,7 @@
+@@ -42,7 +_,7 @@
      private void notifyNeighbors(final Level level, final BlockPos pos, final BlockState state) {
          Orientation orientation = this.randomOrientation(level, state);
  

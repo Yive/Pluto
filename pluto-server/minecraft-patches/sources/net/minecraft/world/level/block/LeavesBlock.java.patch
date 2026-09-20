@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LeavesBlock.java
 +++ b/net/minecraft/world/level/block/LeavesBlock.java
-@@ -118,11 +_,14 @@
+@@ -115,11 +_,14 @@
  
      private static BlockState updateDistance(final BlockState state, final LevelAccessor level, final BlockPos pos) {
          int newDistance = 7;

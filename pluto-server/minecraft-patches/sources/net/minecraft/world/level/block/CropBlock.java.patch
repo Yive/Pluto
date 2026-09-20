@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CropBlock.java
 +++ b/net/minecraft/world/level/block/CropBlock.java
-@@ -77,10 +_,10 @@
+@@ -70,10 +_,10 @@
  
      @Override
      protected void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
@@ -13,7 +13,7 @@
                  // Spigot start
                  int modifier = 100;
                  if (this == Blocks.BEETROOTS) {
-@@ -116,12 +_,17 @@
+@@ -109,12 +_,17 @@
  
      protected static float getGrowthSpeed(final Block type, final BlockGetter level, final BlockPos pos) {
          float speed = 1.0F;
@@ -33,7 +33,7 @@
                  if (blockState.is(BlockTags.GROWS_CROPS)) {
                      blockSpeed = 1.0F;
                      if (blockState.getValueOrElse(FarmlandBlock.MOISTURE, 0) > 0) {
-@@ -137,19 +_,23 @@
+@@ -130,19 +_,23 @@
              }
          }
  
@@ -67,7 +67,7 @@
              if (diagonal) {
                  speed /= 2.0F;
              }
-@@ -164,7 +_,7 @@
+@@ -157,7 +_,7 @@
      }
  
      protected static boolean hasSufficientLight(final LevelReader level, final BlockPos pos) {

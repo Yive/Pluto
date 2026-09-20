@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/dimension/end/EnderDragonFight.java
 +++ b/net/minecraft/world/level/dimension/end/EnderDragonFight.java
-@@ -591,7 +_,7 @@
+@@ -596,7 +_,7 @@
              List<EndCrystal> crystals = Lists.newArrayList();
              BlockPos center = location.above(1);
  

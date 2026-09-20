@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-@@ -329,7 +_,9 @@
+@@ -334,7 +_,9 @@
              try {
                  jPlugin.setEnabled(true);
              } catch (Throwable ex) {
@@ -10,7 +10,7 @@
              }
  
              // Perhaps abort here, rather than continue going, but as it stands,
-@@ -354,7 +_,9 @@
+@@ -359,7 +_,9 @@
              try {
                  jPlugin.setEnabled(false);
              } catch (Throwable ex) {

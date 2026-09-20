@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/CocoaBlock.java
 +++ b/net/minecraft/world/level/block/CocoaBlock.java
-@@ -60,7 +_,10 @@
+@@ -53,7 +_,10 @@
  
      @Override
      protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {

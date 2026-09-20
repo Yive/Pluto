@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/AzaleaBlock.java
 +++ b/net/minecraft/world/level/block/AzaleaBlock.java
-@@ -45,7 +_,7 @@
+@@ -38,7 +_,7 @@
              return false;
          } else {
              int minHeight = TreeGrower.AZALEA.getMinimumHeight(serverLevel).orElse(0);
