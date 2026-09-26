@@ -88,7 +88,7 @@
 +    options.forkOptions.memoryMaximumSize = "4G" // Pufferfish
  }
  
- val scanJarForBadCalls by tasks.registering(io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
+ val scanJarForBadCalls = tasks.register<io.papermc.paperweight.tasks.ScanJarForBadCalls>("scanJarForBadCalls") {
 @@ -246,7 +_,7 @@
      jvmArgumentProviders.add(provider)
  }
