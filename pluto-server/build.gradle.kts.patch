@@ -57,10 +57,10 @@
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":pluto-api")) // Pluto - Branding
-     implementation("ca.spottedleaf:leafpile:1.2.2")
-     implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
-     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -171,14 +_,14 @@
+     implementation(platform("ca.spottedleaf.leafpile:bom:1.2.4"))
+     implementation("ca.spottedleaf.leafpile:common")
+     implementation("ca.spottedleaf.leafpile:concurrentutil")
+@@ -174,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -80,7 +80,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -206,7 +_,7 @@
+@@ -209,7 +_,7 @@
  
  // Bump compile tasks to 1GB memory to avoid OOMs
  tasks.withType<JavaCompile>().configureEach {
@@ -89,7 +89,7 @@
  }
  
  val scanJarForBadCalls = tasks.register<io.papermc.paperweight.tasks.ScanJarForBadCalls>("scanJarForBadCalls") {
-@@ -246,7 +_,7 @@
+@@ -249,7 +_,7 @@
      jvmArgumentProviders.add(provider)
  }
  

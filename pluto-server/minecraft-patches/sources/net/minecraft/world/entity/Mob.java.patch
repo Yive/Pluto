@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -216,15 +_,17 @@
+@@ -217,15 +_,17 @@
          return this.lookControl;
      }
  
@@ -20,7 +20,7 @@
              this.targetSelector.tick();
          }
      }
-@@ -576,9 +_,8 @@
+@@ -583,9 +_,8 @@
      public boolean isSunBurnTick() {
          if (!this.level().isClientSide() && this.level().environmentAttributes().getValue(EnvironmentAttributes.MONSTERS_BURN, this.position())) {
              float br = this.getLightLevelDependentMagicValue();
@@ -31,7 +31,7 @@
                  return true;
              }
          }
-@@ -768,13 +_,42 @@
+@@ -775,13 +_,42 @@
          return this.isPassenger() || this.isLeashed();
      }
  
@@ -66,7 +66,7 @@
 +
      @Override
      public void checkDespawn() {
-         if (this.level().getDifficulty() == Difficulty.PEACEFUL && !this.getType().isAllowedInPeaceful()) {
+         if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.despawnInPeacefulOverride.toBooleanOrElse(!this.getType().isAllowedInPeaceful())) { // Paper - allow changing despawnInPeaceful
              this.discard(EntityRemoveEvent.Cause.DESPAWN); // CraftBukkit - add Bukkit remove cause
          } else {
              boolean isPersistent = this.isPersistenceRequired() || this.requiresCustomPersistence();
@@ -75,7 +75,7 @@
              if (player != null) {
                  // Paper start - Configurable despawn distances
                  final io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DespawnRangePair despawnRangePair = this.level().paperConfig().entities.spawning.despawnRanges.get(this.getType().getCategory());
-@@ -823,16 +_,20 @@
+@@ -830,16 +_,20 @@
          int idBasedTickCount = this.tickCount + this.getId();
          if (idBasedTickCount % 2 != 0 && this.tickCount > 1) {
              profiler.push("targetSelector");
@@ -96,7 +96,7 @@
              this.goalSelector.tick();
              profiler.pop();
          }
-@@ -987,6 +_,8 @@
+@@ -994,6 +_,8 @@
                  return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
              }
  
@@ -105,7 +105,7 @@
              // Paper start
              private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
              private int maxStackSize = MAX_STACK;
-@@ -1023,6 +_,13 @@
+@@ -1030,6 +_,13 @@
                  }
                  return null;
              }

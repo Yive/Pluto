@@ -29,7 +29,7 @@
  
              if (!this.isChunkNearPlayer((ChunkMap)(Object)this, levelChunk.getPos(), levelChunk)) {
                  continue;
-@@ -1401,6 +_,7 @@
+@@ -1435,6 +_,7 @@
                      visibleToPlayer = false;
                  }
                  // CraftBukkit end
