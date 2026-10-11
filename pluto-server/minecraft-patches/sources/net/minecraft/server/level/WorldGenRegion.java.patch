@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/WorldGenRegion.java
 +++ b/net/minecraft/server/level/WorldGenRegion.java
-@@ -216,6 +_,24 @@
+@@ -240,6 +_,24 @@
      }
      // Paper end
  

@@ -89,8 +89,8 @@
  }
  
  val scanJarForBadCalls = tasks.register<io.papermc.paperweight.tasks.ScanJarForBadCalls>("scanJarForBadCalls") {
-@@ -248,7 +_,7 @@
-     jvmArgumentProviders.add(provider)
+@@ -258,7 +_,7 @@
+     )
  }
  
 -val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("src/generated/java").asFile.toPath()

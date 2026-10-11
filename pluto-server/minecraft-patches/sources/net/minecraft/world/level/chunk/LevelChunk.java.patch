@@ -28,7 +28,7 @@
      // Paper start
      boolean loadedTicketLevel;
      // Paper end
-@@ -160,6 +_,8 @@
+@@ -165,6 +_,8 @@
              }
          }
  
@@ -37,7 +37,7 @@
          this.postLoad = postLoad;
          this.blockTicks = blockTicks;
          this.fluidTicks = fluidTicks;
-@@ -465,6 +_,23 @@
+@@ -470,6 +_,23 @@
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
  
@@ -61,7 +61,7 @@
      public @Nullable BlockEntity getBlockEntity(final BlockPos pos, final LevelChunk.EntityCreationType creationType) {
          // CraftBukkit start
          BlockEntity blockEntity = this.level.capturedBlockEntities.get(pos);
-@@ -521,6 +_,30 @@
+@@ -526,6 +_,30 @@
              );
      }
  
@@ -92,7 +92,7 @@
      @Override
      public void setBlockEntity(final BlockEntity blockEntity) {
          BlockPos pos = blockEntity.getBlockPos();
-@@ -929,17 +_,19 @@
+@@ -934,17 +_,19 @@
          private final T blockEntity;
          private final BlockEntityTicker<T> ticker;
          private boolean loggedInvalidBlockState;
@@ -113,7 +113,7 @@
                      try {
                          ProfilerFiller profiler = Profiler.get();
                          profiler.push(this::getType);
-@@ -1043,6 +_,8 @@
+@@ -1048,6 +_,8 @@
          public String toString() {
              return this.ticker + " <wrapped>";
          }
