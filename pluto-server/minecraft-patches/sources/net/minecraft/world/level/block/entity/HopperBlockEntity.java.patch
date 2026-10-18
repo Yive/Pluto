@@ -43,7 +43,7 @@
                  changed |= action.getAsBoolean();
              }
  
-@@ -423,7 +_,18 @@
+@@ -410,7 +_,18 @@
      // Paper end - Perf: Optimize Hoppers
  
      private static boolean ejectItems(final Level level, final BlockPos blockPos, final HopperBlockEntity self) {
@@ -63,7 +63,7 @@
          if (container == null) {
              return false;
          }
-@@ -480,10 +_,44 @@
+@@ -499,10 +_,44 @@
          return true;
      }
  
@@ -111,7 +111,7 @@
          if (container != null) {
              Direction direction = Direction.DOWN;
              skipPullModeEventFire = skipHopperEvents; // Paper - Perf: Optimize Hoppers
-@@ -496,8 +_,9 @@
+@@ -517,8 +_,9 @@
  
              return false;
          } else {
@@ -122,7 +122,7 @@
                  && !blockState.is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
              if (!isBlocked) {
                  for (ItemEntity entity : getItemsAtAndAbove(level, hopper)) {
-@@ -657,7 +_,7 @@
+@@ -678,7 +_,7 @@
  
      private static @Nullable Container getSourceContainer(final Level level, final Hopper hopper, final BlockPos pos, final BlockState state) {
          // Paper start
@@ -131,7 +131,7 @@
          if (org.bukkit.event.inventory.HopperInventorySearchEvent.getHandlerList().getRegisteredListeners().length == 0) return inventory;
  
          final BlockPos hopperPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
-@@ -678,34 +_,37 @@
+@@ -699,34 +_,37 @@
      }
  
      public static @Nullable Container getContainerAt(final Level level, final BlockPos pos) {
@@ -178,7 +178,7 @@
              if (container instanceof ChestBlockEntity && block instanceof ChestBlock chestBlock) {
                  container = ChestBlock.getContainer(chestBlock, state, level, pos, true);
              }
-@@ -716,7 +_,10 @@
+@@ -737,7 +_,10 @@
          }
      }
  
