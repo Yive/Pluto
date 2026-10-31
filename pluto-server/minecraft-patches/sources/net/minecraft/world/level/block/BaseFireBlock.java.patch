@@ -10,7 +10,7 @@
          return SoulFireBlock.canSurviveOnBlock(belowState) ? Blocks.SOUL_FIRE.defaultBlockState() : ((FireBlock)Blocks.FIRE).getStateForPlacement(level, pos);
      }
  
-@@ -168,7 +_,7 @@
+@@ -169,7 +_,7 @@
      @Override
      protected void onPlace(final BlockState state, final Level level, final BlockPos pos, final BlockState oldState, final boolean movedByPiston, net.minecraft.world.item.context.UseOnContext context) { // CraftBukkit - context
          if (!oldState.is(state.getBlock())) {
@@ -19,7 +19,7 @@
                  Optional<PortalShape> optionalShape = PortalShape.findEmptyPortalShape(level, pos, Direction.Axis.X);
                  if (optionalShape.isPresent()) {
                      optionalShape.get().createPortalBlocks(level, (context == null) ? null : context.getPlayer()); // CraftBukkit - player
-@@ -209,10 +_,14 @@
+@@ -210,10 +_,14 @@
              return false;
          }
  

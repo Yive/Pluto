@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/throwableitemprojectile/AbstractThrownPotion.java
 +++ b/net/minecraft/world/entity/projectile/throwableitemprojectile/AbstractThrownPotion.java
-@@ -60,7 +_,7 @@
+@@ -58,7 +_,7 @@
                  this.douseFire(blockEffectPos);
                  this.douseFire(blockEffectPos.relative(hitDirection.getOpposite()));
  
