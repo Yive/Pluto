@@ -182,7 +182,7 @@
      }
  
      protected void playCombinationStepSounds(final BlockState primaryStepSound, final BlockState secondaryStepSound) {
-@@ -2160,9 +_,24 @@
+@@ -2165,9 +_,24 @@
          return this.wasTouchingWater;
      }
  
@@ -208,7 +208,7 @@
      }
  
      public boolean isInWaterOrRain() {
-@@ -2270,11 +_,11 @@
+@@ -2275,11 +_,11 @@
  
      @Deprecated
      protected BlockState getBlockStateOnLegacy() {
@@ -222,7 +222,7 @@
      }
  
      public boolean canSpawnSprintParticle() {
-@@ -2282,19 +_,25 @@
+@@ -2287,19 +_,25 @@
      }
  
      protected void spawnSprintParticle() {
@@ -254,7 +254,7 @@
              }
  
              this.level()
-@@ -5615,6 +_,36 @@
+@@ -5620,6 +_,36 @@
              return this.save;
          }
      }
