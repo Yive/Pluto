@@ -25,7 +25,7 @@
                  }
              }
  
-@@ -299,8 +_,13 @@
+@@ -303,8 +_,13 @@
      }
  
      private boolean isValidFireLocation(final BlockGetter level, final BlockPos pos) {
@@ -41,7 +41,7 @@
                  return true;
              }
          }
-@@ -315,8 +_,13 @@
+@@ -319,8 +_,13 @@
  
          int odds = 0;
  
