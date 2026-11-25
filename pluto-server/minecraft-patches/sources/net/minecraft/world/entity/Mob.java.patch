@@ -98,15 +98,6 @@
              this.goalSelector.tick();
              profiler.pop();
          }
-@@ -997,6 +_,8 @@
-                 return player.getVehicle() == Mob.this || player.isWithinEntityInteractionRange(Mob.this, 4.0);
-             }
- 
-+            @Override public boolean stillValid() { return !Mob.this.isRemoved(); } // Pluto - Hoppers cache containers
-+
-             // Paper start
-             private final List<org.bukkit.entity.HumanEntity> viewers = new java.util.ArrayList<>();
-             private int maxStackSize = MAX_STACK;
 @@ -1033,6 +_,13 @@
                  }
                  return null;

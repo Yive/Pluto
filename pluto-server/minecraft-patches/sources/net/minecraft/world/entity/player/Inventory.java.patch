@@ -44,12 +44,9 @@
          for (int i = 0; i < this.items.size(); i++) {
              ItemStack itemStack = this.getItem(i);
              if (!itemStack.isEmpty()) {
-@@ -579,8 +_,13 @@
-         return true;
+@@ -580,7 +_,10 @@
      }
  
-+    @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
-+
      public boolean contains(final ItemStack searchStack) {
 -        for (ItemStack itemStack : this) {
 +        // Pufferfish start - don't allocate iterators
