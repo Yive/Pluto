@@ -1,25 +1,16 @@
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
-@@ -179,6 +_,8 @@
-             return true;
-         }
- 
-+        @Override public boolean stillValid() { return true; } // Pluto - Hoppers cache containers
-+
-         @Override
-         public List<ItemStack> getContents() {
-             return this.items;
-@@ -207,6 +_,13 @@
-         public InventoryHolder getOwner() {
+@@ -208,6 +_,13 @@
              return this.owner;
          }
-+
+ 
 +        // Pluto start - Allow toggling snapshots for certain blocks
 +        @Override
 +        public InventoryHolder getOwner(boolean useSnapshot) {
 +            return getOwner();
 +        }
 +        // Pluto end - Allow toggling snapshots for certain blocks
- 
++
          @Override
          public void clearContent() {
+             this.items.clear();

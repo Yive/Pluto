@@ -14,12 +14,3 @@
      @Override
      public org.bukkit.@Nullable Location getLocation() {
          return (this.merchant instanceof net.minecraft.world.entity.npc.villager.AbstractVillager villager) ? villager.getBukkitEntity().getLocation() : null; // Paper - Fix inventories returning null Locations
-@@ -118,6 +_,8 @@
-     public boolean stillValid(final Player player) {
-         return this.merchant.getTradingPlayer() == player;
-     }
-+
-+    @Override public boolean stillValid() { return this.merchant.stillValid(); } // Pluto - Hoppers cache containers
- 
-     @Override
-     public void setChanged() {
