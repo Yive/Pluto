@@ -20,10 +20,11 @@
                  changed |= action.getAsBoolean();
              }
  
-@@ -477,8 +_,21 @@
+@@ -476,9 +_,21 @@
+     }
  
      public static boolean suckInItems(final Level level, final Hopper hopper) {
-         BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
+-        BlockPos blockPos = BlockPos.containing(hopper.getLevelX(), hopper.getLevelY() + 1.0, hopper.getLevelZ());
 -        BlockState blockState = level.getBlockState(blockPos);
 -        Container container = getSourceContainer(level, hopper, blockPos, blockState);
 +        // Pluto start - Entities search for hoppers
