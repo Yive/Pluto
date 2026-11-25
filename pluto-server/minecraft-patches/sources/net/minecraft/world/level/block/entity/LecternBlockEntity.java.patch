@@ -19,7 +19,7 @@
              return Container.stillValidBlockEntity(LecternBlockEntity.this, player) && LecternBlockEntity.this.hasBook();
          }
 +
-+        @Override public boolean stillValid() { return !LecternBlockEntity.this.isRemoved(); } // Pluto - Hoppers cache containers
++        @Override public boolean stillValid() { return Container.stillValidBlockEntity(LecternBlockEntity.this); } // Pluto - Hoppers cache containers
  
          @Override
          public boolean canPlaceItem(final int slot, final ItemStack itemStack) {

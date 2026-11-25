@@ -5,6 +5,6 @@
              return Container.stillValidBlockEntity(this.getContainerBlockEntity(), player);
          }
 +
-+        @Override default boolean stillValid() { return !getContainerBlockEntity().isRemoved(); } // Pluto - Hoppers cache containers
++        @Override default boolean stillValid() { return !Container.stillValidBlockEntity(this.getContainerBlockEntity()); } // Pluto - Hoppers cache containers
      }
  }
